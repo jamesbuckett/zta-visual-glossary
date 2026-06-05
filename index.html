@@ -556,7 +556,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">33</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">34</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -907,6 +907,15 @@
       types: ["Security Technology"], provenance: ["Open Source", "Vendor"],
       related: ["firewall", "zerotrust", "radius"],
       caption: "Logs from many sources are normalised and correlated into prioritised alerts for the SOC."
+    },
+    {
+      id: "quic", term: "QUIC", acronym: "Quick UDP Internet Connections",
+      aliases: ["HTTP/3", "gQUIC", "RFC 9000"],
+      tldr: "A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.",
+      explainer: `QUIC is a transport protocol that runs over UDP and combines connection setup, TLS 1.3 encryption, and multiplexed streams into one design. Because the transport and cryptographic handshakes happen together, a new connection is usually ready after a single round trip — or zero when resuming — where TCP-then-TLS needs several. Independent streams mean one lost packet stalls only its own stream, removing the head-of-line blocking that slows HTTP/2 over TCP. It is the foundation of HTTP/3 and ships in every major browser, with encryption built in rather than bolted on.`,
+      types: ["Protocol", "Network Technology", "Security Technology"], provenance: [],
+      related: ["tls", "tcpip", "http"],
+      caption: "Combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP."
     }
   ];
 
@@ -1551,6 +1560,26 @@
         <line class="flow-accent" x1="460" y1="145" x2="538" y2="145" marker-end="url(#ah-acc)"/>
         <text class="t-sm t-b" x="499" y="135" text-anchor="middle" fill="var(--accent)">alerts</text>
         <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">prioritised alerts from correlated events</text>
+      </svg>`,
+
+    quic: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="QUIC over UDP: one combined transport and TLS 1.3 handshake in a single round trip, then encrypted multiplexed streams with no head-of-line blocking.">
+        <text class="t-b" x="150" y="32" text-anchor="middle">Client</text>
+        <text class="t-b" x="570" y="32" text-anchor="middle">Server</text>
+        <line class="divider" x1="150" y1="44" x2="150" y2="250"/>
+        <line class="divider" x1="570" y1="44" x2="570" y2="250"/>
+        ${[
+          ["Initial — connection + TLS 1.3 keys", 80, "acc", 1],
+          ["handshake complete, keys agreed", 124, "mut", 0],
+        ].map(([t, y, m, dir]) => `
+          <line class="flow${m==='acc'?'-accent':''}" x1="${dir?150:570}" y1="${y}" x2="${dir?570:150}" y2="${y}" marker-end="url(#ah-${m})"/>
+          <text class="t-sm" x="360" y="${y-8}" text-anchor="middle">${t}</text>
+        `).join("")}
+        <text class="t-sm t-mut" x="360" y="158" text-anchor="middle">One round trip to first byte (0-RTT on resume)</text>
+        <rect class="zone-accent" x="150" y="172" width="420" height="78" rx="8"/>
+        <text class="t-b t-sm" x="360" y="194" text-anchor="middle" fill="var(--accent)">Encrypted, multiplexed streams</text>
+        ${[209, 223, 237].map((y) => `<line class="flow-accent" x1="180" y1="${y}" x2="540" y2="${y}" marker-end="url(#ah-acc)"/>`).join("")}
+        <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">Runs over UDP — a lost packet stalls only its own stream.</text>
       </svg>`
   };
 
