@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Generated screenshot / validation artifacts
+screenshots/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
