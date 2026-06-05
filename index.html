@@ -462,6 +462,52 @@
       padding: 0; margin: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
     }
 
+    /* ==================================================================
+       Table of contents (sticky left sidebar, desktop only)
+       ================================================================== */
+    .toc { display: none; }
+    .toc-label {
+      flex: none;
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted);
+      padding: 0 var(--space-3) var(--space-3);
+    }
+    .toc-count { font-size: 11px; color: var(--accent); }
+    .toc-scroll { overflow-y: auto; flex: 1; min-height: 0; }
+    .toc ul { list-style: none; margin: 0; padding: 0; }
+    .toc li { margin: 0; }
+    .toc-link {
+      display: block; padding: var(--space-2) var(--space-3);
+      border-left: 2px solid var(--border);
+      color: var(--text-muted); font-size: 13.5px; line-height: 1.4;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: color var(--transition), border-color var(--transition), background-color var(--transition);
+    }
+    .toc-link:hover { color: var(--text); border-left-color: var(--border-strong); background: var(--surface); }
+    .toc-link.is-active { color: var(--accent); border-left-color: var(--accent); font-weight: 700; }
+
+    @media (min-width: 1200px) {
+      main {
+        display: grid;
+        grid-template-columns: 224px minmax(0, 1fr);
+        gap: var(--space-6);
+        max-width: var(--max-width);
+        margin-inline: auto;
+        padding-inline: var(--space-5);
+        align-items: start;
+      }
+      main .container { max-width: none; margin-inline: 0; padding-inline: 0; }
+      .toc {
+        grid-column: 1; grid-row: 1;
+        display: flex; flex-direction: column;
+        position: sticky; top: 0;
+        max-height: 100vh;
+        padding-block: var(--space-5);
+      }
+      #browse-view, #detail-view { grid-column: 2; grid-row: 1; min-width: 0; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -509,6 +555,11 @@
   </header>
 
   <main>
+    <nav class="toc" id="toc" aria-label="Glossary terms">
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">33</span></span>
+      <div class="toc-scroll"><ul id="toc-list"></ul></div>
+    </nav>
+
     <!-- ===== Browse view (index) ===== -->
     <div id="browse-view">
       <section class="intro">
@@ -1691,11 +1742,40 @@
       </div>` : ""}`;
   }
 
+  /* ---- table of contents ---- */
+  function renderToc() {
+    const list = document.getElementById("toc-list");
+    const sorted = [...TERMS].sort((a, b) => a.term.localeCompare(b.term));
+    list.innerHTML = sorted.map(e => `<li><a class="toc-link" href="#${e.id}" data-toc="${e.id}">${esc(e.term)}</a></li>`).join("");
+    const c = document.getElementById("toc-count");
+    if (c) c.textContent = TERMS.length;
+  }
+  function setActiveToc(id) {
+    let active = null;
+    document.querySelectorAll(".toc-link").forEach(a => {
+      const on = a.dataset.toc === id;
+      a.classList.toggle("is-active", on);
+      if (on) { a.setAttribute("aria-current", "page"); active = a; }
+      else a.removeAttribute("aria-current");
+    });
+    // Reveal the active item within the TOC's own scroll (never the window).
+    if (active) {
+      const sc = active.closest(".toc-scroll");
+      if (sc) {
+        const ar = active.getBoundingClientRect(), sr = sc.getBoundingClientRect();
+        if (ar.top < sr.top || ar.bottom > sr.bottom) {
+          sc.scrollTop += (ar.top - sr.top) - (sr.height - ar.height) / 2;
+        }
+      }
+    }
+  }
+
   /* ---- routing ---- */
   function showBrowse() {
     els.detailView.hidden = true;
     els.browseView.hidden = false;
     document.title = "ZTA Visual Glossary — IT, Networking & Zero-Trust Terms, Explained Visually";
+    setActiveToc(null);
   }
   function showDetail(e) {
     els.detailContent.innerHTML = detailHtml(e);
@@ -1703,6 +1783,7 @@
     els.detailView.hidden = false;
     document.title = `${e.term} — ZTA Visual Glossary`;
     window.scrollTo({ top: 0, behavior: "auto" });
+    setActiveToc(e.id);
   }
   function route() {
     const id = location.hash.replace(/^#\/?/, "");
@@ -1775,6 +1856,7 @@
     document.getElementById("stat-diagrams").textContent = TERMS.length;
 
     renderFilters();
+    renderToc();
     renderGrid();
     route();
   })();
