@@ -979,6 +979,249 @@
       types: ["Protocol", "Security Technology"], provenance: [],
       related: ["idp", "saml", "oidc"],
       caption: "The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync."
+    },
+    {
+      id: "mfa", term: "MFA / Passkeys", acronym: "Multi-Factor Authentication (FIDO2 · WebAuthn)",
+      aliases: ["MFA", "2FA", "FIDO2", "WebAuthn", "passkey", "passwordless", "TOTP", "phishing-resistant"],
+      tldr: "Proving identity with more than a password — and passkeys that cannot be phished.",
+      explainer: `Multi-factor authentication requires two or more independent proofs of identity — something you know (a password), something you have (a phone or security key), or something you are (a fingerprint) — so a stolen password alone is not enough. Classic second factors like SMS codes and TOTP apps can still be phished, because a user can be tricked into typing them into a fake site. FIDO2 and WebAuthn close that gap: the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere. Passkeys are the consumer-friendly form — a discoverable FIDO credential synced across your devices that replaces the password entirely. For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be.`,
+      types: ["Security Technology", "Protocol"], provenance: [],
+      related: ["oauth", "oidc", "idp", "pkce"],
+      caption: "Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it."
+    },
+    {
+      id: "pki", term: "PKI", acronym: "Public Key Infrastructure",
+      aliases: ["certificate authority", "CA", "X.509", "root of trust", "certificate chain", "ACME"],
+      tldr: "The certificate-and-trust system that lets you prove who owns a public key.",
+      explainer: `Public Key Infrastructure is the machinery that binds a public key to an identity and lets a relying party trust that binding without prior contact. A Certificate Authority signs X.509 certificates vouching that a given key belongs to a given name; anyone holding the CA's certificate can verify the signature and walk the chain up to a trusted root. This is the foundation under TLS, mTLS, code signing, and SPIFFE — every padlock in a browser is a PKI trust decision. Certificates carry an expiry and can be revoked, and protocols like ACME (used by Let's Encrypt) automate issuance and renewal at scale. Get the root of trust wrong and everything built on it is compromised.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["tls", "mtls", "spiffe", "ssh"],
+      caption: "A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts."
+    },
+    {
+      id: "rbac", term: "RBAC & ABAC", acronym: "Role- / Attribute-Based Access Control",
+      aliases: ["role-based access control", "attribute-based access control", "authorization", "least privilege", "entitlements"],
+      tldr: "Two models for deciding who may do what — by role, or by attributes and context.",
+      explainer: `Once a system knows who you are (authentication), it must decide what you may do (authorization), and these are the two dominant models. Role-Based Access Control groups permissions into roles — billing-admin, read-only-auditor — and assigns people to roles, which is simple to reason about but coarse and prone to role explosion. Attribute-Based Access Control evaluates rules over attributes of the subject, resource, action, and environment — allow if department is finance AND the device is managed AND the time is business hours — giving fine-grained, context-aware decisions at the cost of complexity. Zero Trust leans toward ABAC because trust should depend on live context, not a static role. In practice a policy engine evaluates these rules at the decision point for every request.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["peppdp", "opa", "zerotrust", "idp"],
+      caption: "RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision."
+    },
+    {
+      id: "opa", term: "OPA", acronym: "Open Policy Agent",
+      aliases: ["Rego", "policy as code", "Gatekeeper", "policy engine"],
+      tldr: "A general-purpose policy engine that answers allow / deny from code, not config.",
+      explainer: `Open Policy Agent is a CNCF-graduated engine that decouples policy decisions from application logic. A service asks OPA a question — can subject X perform action Y on resource Z? — sending JSON context, and OPA evaluates rules written in its declarative Rego language and returns a structured decision. Because the same engine enforces policy across microservices, Kubernetes admission, CI pipelines, and API gateways, organisations express authorization once as version-controlled policy as code rather than scattering if-statements through every app. It is the canonical software implementation of a Zero Trust Policy Decision Point. Gatekeeper packages OPA as a Kubernetes admission controller to validate resources against policy before they are created.`,
+      types: ["Security Technology"], provenance: ["Open Source"],
+      related: ["peppdp", "rbac", "kubernetes", "zerotrust"],
+      caption: "Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites."
+    },
+    {
+      id: "servicemesh", term: "Service Mesh", acronym: "Service Mesh (Istio · Linkerd · Envoy)",
+      aliases: ["Istio", "Linkerd", "Envoy", "sidecar", "data plane", "control plane"],
+      tldr: "A networking layer that gives every service identity, mTLS, and traffic control for free.",
+      explainer: `A service mesh moves the cross-cutting concerns of service-to-service communication — mutual TLS, retries, timeouts, load balancing, and observability — out of application code and into a dedicated infrastructure layer. A proxy (commonly Envoy) is deployed beside each workload as a sidecar; together these proxies form the data plane that carries traffic, while a control plane (Istio, Linkerd) configures them and distributes identities and certificates. Because every call now flows through a mutually authenticated, policy-checked hop, the mesh delivers encrypted east-west traffic and workload identity without changing a line of app code. It is where SPIFFE identities, mTLS, and microsegmentation meet inside a Kubernetes cluster. The trade-off is operational complexity and the latency of an extra network hop.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"],
+      related: ["mtls", "spiffe", "kubernetes", "microseg"],
+      caption: "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default."
+    },
+    {
+      id: "edr", term: "EDR / XDR", acronym: "Endpoint / Extended Detection & Response",
+      aliases: ["endpoint detection", "XDR", "device posture", "endpoint security", "EDR agent"],
+      tldr: "Agents that watch endpoints for malicious behaviour — and feed device-trust signals.",
+      explainer: `Endpoint Detection and Response places a lightweight agent on laptops, servers, and workstations to continuously record process, file, network, and registry activity, then flags behaviour that matches known attack patterns and lets responders isolate or roll back a compromised host. Extended Detection and Response widens that lens, correlating endpoint telemetry with email, identity, and cloud signals so a multi-stage attack is seen as one incident rather than scattered alerts. For Zero Trust this is the Devices pillar in action: the agent's live health verdict — patched, encrypted, not infected — becomes a device-posture signal the policy engine weighs before granting access. A device that fails its posture check can be denied even with valid user credentials. EDR is reactive detection; posture turns it into an access input.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["siem", "soar", "zerotrust", "idsips"],
+      caption: "An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access."
+    },
+    {
+      id: "waf", term: "WAF", acronym: "Web Application Firewall",
+      aliases: ["OWASP CRS", "layer 7 firewall", "application firewall", "virtual patching"],
+      tldr: "A firewall that inspects HTTP to block web attacks a network firewall cannot see.",
+      explainer: `A Web Application Firewall sits in front of an application and inspects HTTP requests and responses at layer 7, blocking exploit attempts — SQL injection, cross-site scripting, path traversal — that a packet-filtering network firewall, which only sees ports and addresses, would happily pass. It matches traffic against rule sets such as the OWASP Core Rule Set and, increasingly, against learned models of normal behaviour, and can virtually patch a known vulnerability by dropping the malicious pattern until the code is fixed. WAFs run as reverse proxies, host modules, or cloud services, and commonly add rate limiting and bot mitigation. They are a control at the application edge, complementary to — not a replacement for — secure code.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["firewall", "http", "owasp", "websec"],
+      caption: "Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge."
+    },
+    {
+      id: "websec", term: "CSRF / XSS / CSP", acronym: "Web App Attacks & Content Security Policy",
+      aliases: ["cross-site request forgery", "cross-site scripting", "content security policy", "same-origin", "SameSite", "injection"],
+      tldr: "The two classic browser attacks — and the header that helps shut them down.",
+      explainer: `Cross-Site Scripting (XSS) injects attacker-controlled script into a page so it runs with the victim's session, stealing tokens or acting as the user; it is defeated by escaping output and validating input. Cross-Site Request Forgery (CSRF) tricks a logged-in user's browser into firing an unwanted state-changing request to a site where they are authenticated, defended with anti-CSRF tokens and SameSite cookies. Content Security Policy (CSP) is a response header that whitelists which script, style, and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through. Together they are the core of browser-side application security, sitting alongside CORS and PKCE in the same web-platform trust model. None is sufficient alone — defence in depth is the point.`,
+      types: ["Security Technology", "Protocol"], provenance: [],
+      related: ["cors", "http", "pkce", "waf"],
+      caption: "XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach."
+    },
+    {
+      id: "vault", term: "Secrets Management", acronym: "Secrets Management (HashiCorp Vault)",
+      aliases: ["HashiCorp Vault", "secret store", "dynamic secrets", "credential rotation", "KMS"],
+      tldr: "A central, audited vault for the passwords, keys, and tokens that machines need.",
+      explainer: `Applications need credentials — database passwords, API keys, certificates — and hard-coding them in config files or source control is a recipe for leaks. A secrets manager such as HashiCorp Vault stores these centrally, encrypted, behind authentication and fine-grained policy, and hands them out only to identities that prove they should have them. Its strongest pattern is dynamic secrets: rather than a long-lived shared password, Vault generates a short-lived credential on demand and revokes it automatically, shrinking the window a leaked secret is useful. Every access is authenticated, authorised, and logged, giving an audit trail and one-click rotation when something is exposed. In a Zero Trust system, workload identities (often SPIFFE) authenticate to the vault to retrieve exactly the secrets they need, just in time.`,
+      types: ["Security Technology"], provenance: ["Open Source"],
+      related: ["pki", "mtls", "spiffe", "kubernetes"],
+      caption: "A workload authenticates to the vault, which checks policy and issues a short-lived, automatically-revoked secret — never a hard-coded password."
+    },
+    {
+      id: "nist207", term: "NIST SP 800-207", acronym: "Zero Trust Architecture (NIST)",
+      aliases: ["800-207", "zero trust architecture", "trust algorithm", "policy engine", "policy administrator", "CISA ZTMM"],
+      tldr: "The reference document that defines Zero Trust and its policy components.",
+      explainer: `NIST Special Publication 800-207, published in 2020, is the vendor-neutral reference architecture that turned Zero Trust from a slogan into a defined model. It sets out seven tenets — every resource access is authenticated and authorised dynamically, no asset is trusted by network location, access is per-session and least-privilege — and names the logical components that enforce them. The Policy Decision Point splits into a Policy Engine, which runs the trust algorithm to grant or deny, and a Policy Administrator, which executes that decision; the Policy Enforcement Point sits in the data path and lets traffic through only when told. CISA's Zero Trust Maturity Model builds on it with five pillars — identity, devices, networks, applications, and data. It is the spec the PEP / PDP terms in this glossary come from.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["zerotrust", "peppdp", "ztna", "microseg"],
+      caption: "NIST 800-207's control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces."
+    },
+    {
+      id: "sbom", term: "SBOM & SLSA", acronym: "Software Supply-Chain Integrity",
+      aliases: ["software bill of materials", "SLSA", "provenance", "CycloneDX", "SPDX", "supply chain"],
+      tldr: "Knowing exactly what is in your software, and proving how it was built.",
+      explainer: `Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself. A Software Bill of Materials (SBOM) is a machine-readable inventory — in formats like CycloneDX or SPDX — of every component and version in a build, so when the next Log4Shell lands you can answer "are we affected?" in seconds instead of weeks. SLSA (Supply-chain Levels for Software Artifacts) is a complementary framework whose Build Track levels 1 to 3 raise the bar on how tamper-resistant your pipeline is, producing signed provenance that says exactly how and where an artifact was built. Together they make the supply chain auditable and verifiable. Software Supply Chain Failures is now a category in the OWASP Top 10:2025, reflecting how central this has become.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["sigstore", "docker", "cve", "opa"],
+      caption: "An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both."
+    },
+    {
+      id: "apigateway", term: "API Gateway", acronym: "API Gateway",
+      aliases: ["gateway", "rate limiting", "BFF", "Kong", "ingress", "API management"],
+      tldr: "A single front door for APIs that handles auth, rate limits, and routing.",
+      explainer: `An API gateway is a reverse proxy that sits between clients and a fleet of backend services, presenting one coherent entry point and handling the concerns no individual service should reimplement. It terminates TLS, validates OAuth tokens and API keys, enforces rate limits and quotas, routes and versions requests, and aggregates or transforms responses — so the services behind it stay small and focused on business logic. By centralising authentication and throttling, it is also a natural Zero Trust enforcement point at the application edge, rejecting unauthenticated or abusive traffic before it ever reaches a service. In microservice and gRPC architectures it is the standard pattern for north-south traffic. Push too much logic into it, though, and it becomes a bottleneck and a single point of failure.`,
+      types: ["Network Technology", "Security Technology"], provenance: [],
+      related: ["oauth", "grpc", "loadbalancer", "http"],
+      caption: "Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it."
+    },
+    {
+      id: "idsips", term: "IDS / IPS", acronym: "Intrusion Detection / Prevention System",
+      aliases: ["Snort", "Suricata", "signature detection", "NIDS", "intrusion detection"],
+      tldr: "Sensors that spot attacks in network traffic — and optionally block them inline.",
+      explainer: `An Intrusion Detection System inspects network traffic or host activity for signs of an attack — known exploit signatures, protocol anomalies, or traffic that deviates from a learned baseline — and raises an alert when it sees one. An Intrusion Prevention System is the same engine placed inline so it can act, dropping or resetting the malicious connection rather than merely reporting it. Open-source engines like Snort and Suricata pioneered the signature model, matching packets against community rule sets updated as new threats emerge. The detection feeds a SIEM for correlation and a SOC for response, and complements endpoint EDR by watching the wire instead of the host. The classic weakness is false positives in detection mode and the risk of blocking legitimate traffic in prevention mode.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["firewall", "siem", "edr", "soar"],
+      caption: "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow."
+    },
+    {
+      id: "ldap", term: "LDAP / Active Directory", acronym: "Lightweight Directory Access Protocol",
+      aliases: ["Active Directory", "AD", "directory service", "distinguished name", "DN", "OpenLDAP"],
+      tldr: "The directory that stores users, groups, and devices — and answers who is this?",
+      explainer: `LDAP is the protocol for querying and modifying a directory: a hierarchical database of entries — users, groups, computers, printers — each identified by a distinguished name and described by attributes. Microsoft Active Directory is the dominant enterprise implementation, combining an LDAP directory with Kerberos authentication and policy to become the identity backbone of most corporate networks. Applications bind to the directory to authenticate a user and to read group membership, which downstream systems map to permissions. It is the source of truth that protocols like RADIUS, SAML, and SCIM build on, and that identity providers federate outward to the cloud. Because it holds the keys to every account, the directory is a prime target — compromise it and you own the estate.`,
+      types: ["Protocol", "Security Technology"], provenance: [],
+      related: ["idp", "radius", "kerberos", "saml"],
+      caption: "Apps bind to the directory tree by distinguished name to authenticate a user and read the group memberships that drive their permissions."
+    },
+    {
+      id: "kerberos", term: "Kerberos", acronym: "Kerberos Authentication Protocol",
+      aliases: ["KDC", "ticket-granting ticket", "TGT", "service principal", "SPN", "single sign-on"],
+      tldr: "Ticket-based authentication that proves identity without sending passwords over the wire.",
+      explainer: `Kerberos lets a client prove its identity to many services using time-limited, encrypted tickets instead of repeatedly sending a password. After authenticating once to a trusted Key Distribution Center, the client receives a Ticket-Granting Ticket; to reach a service it presents that TGT and gets a service ticket the target can verify, all without the password ever crossing the network. This ticket exchange is what makes seamless single sign-on across a Windows domain possible, and it is the authentication half of Active Directory. Tickets expire quickly and rely on synchronised clocks, which is why Kerberos environments are sensitive to time drift. Attacks like pass-the-ticket and Kerberoasting target weaknesses in how tickets and service keys are handled.`,
+      types: ["Protocol", "Security Technology"], provenance: [],
+      related: ["ldap", "idp", "ssh"],
+      caption: "Authenticate once to the KDC for a ticket-granting ticket, then exchange it for per-service tickets — the password never travels."
+    },
+    {
+      id: "soar", term: "SOAR", acronym: "Security Orchestration, Automation & Response",
+      aliases: ["playbook", "automation", "incident response", "orchestration"],
+      tldr: "Automation that turns security alerts into executed response playbooks.",
+      explainer: `Security teams drown in alerts, most of which need the same repetitive triage steps, and SOAR exists to automate that toil. It connects to the tools an analyst would otherwise click through — SIEM, EDR, threat intelligence, ticketing, firewalls — and runs codified playbooks that enrich an alert, decide whether it is real, and take action: isolate a host, disable an account, block an IP, open a case. By orchestrating across systems, it cuts response time from hours of manual work to seconds and frees analysts for the judgement calls machines cannot make. SOAR is the automation-and-response layer that sits on top of SIEM detection in a modern SOC. Its risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["siem", "edr", "idsips"],
+      caption: "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically."
+    },
+    {
+      id: "pqc", term: "Post-Quantum Cryptography", acronym: "Post-Quantum Cryptography (PQC)",
+      aliases: ["PQC", "ML-KEM", "Kyber", "ML-DSA", "Dilithium", "quantum-safe", "harvest now decrypt later"],
+      tldr: "New algorithms designed to survive attack by a large quantum computer.",
+      explainer: `The public-key cryptography securing today's internet — RSA and elliptic-curve — rests on maths a sufficiently large quantum computer could break with Shor's algorithm, undoing key exchange and signatures at a stroke. Post-Quantum Cryptography replaces those with algorithms based on hard problems (chiefly structured lattices) that both classical and quantum computers struggle with. In August 2024 NIST finalised the first standards: FIPS 203 (ML-KEM, from CRYSTALS-Kyber) for key encapsulation, plus FIPS 204 (ML-DSA, from Dilithium) and FIPS 205 (SLH-DSA) for signatures. The urgency is harvest now, decrypt later — adversaries can record encrypted traffic today and decrypt it once quantum hardware arrives — so long-lived secrets need protecting now. The rollout is hybrid: PQC key exchange is being layered alongside classical algorithms in TLS rather than replacing them overnight.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["tls", "pki", "mtls"],
+      caption: "A quantum computer breaks RSA / ECC key exchange; lattice-based ML-KEM is layered into the TLS handshake to keep it secure."
+    },
+    {
+      id: "cilium", term: "Cilium / eBPF", acronym: "eBPF-Based Networking & Security",
+      aliases: ["eBPF", "Cilium", "network policy", "Hubble", "kernel"],
+      tldr: "Programmable, in-kernel networking and security policy for Kubernetes.",
+      explainer: `eBPF lets sandboxed programs run safely inside the Linux kernel, hooking into networking, security, and tracing events without kernel modules or patches — a quietly revolutionary capability. Cilium builds on it to provide networking, observability, and security for Kubernetes: it enforces identity-aware network policy, load-balances services, and can provide encrypted, mesh-like connectivity, all at kernel speed rather than through userspace proxies. Because policy is evaluated in the kernel against workload identity, Cilium implements microsegmentation efficiently — only sanctioned pod-to-pod flows are allowed, blocking lateral movement. Its Hubble component gives deep flow visibility for free. It is increasingly the default data plane for cloud-native clusters and an alternative path to service-mesh features without sidecars.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"],
+      related: ["kubernetes", "microseg", "servicemesh"],
+      caption: "eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows."
+    },
+    {
+      id: "tailscale", term: "Tailscale", acronym: "WireGuard-Based Mesh VPN",
+      aliases: ["Headscale", "mesh VPN", "tailnet", "DERP", "overlay network"],
+      tldr: "A zero-config mesh VPN that connects your devices directly over WireGuard.",
+      explainer: `Traditional VPNs backhaul every device through a central gateway; Tailscale instead builds a flat mesh in which your devices connect directly to each other over encrypted WireGuard tunnels. A central coordination server handles authentication (via your existing identity provider) and key distribution, then steps out of the data path, while NAT traversal and relay fallback (DERP) make peer-to-peer connectivity work even behind firewalls. The result is a private network — a tailnet — where access is governed by identity and ACLs rather than network location, which makes it a practical on-ramp to Zero Trust networking for small teams. It is a commercial product built on the open-source WireGuard, with an open-source control server, Headscale, for self-hosting. It is a peer to OpenZiti in the zero-trust overlay space.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Vendor"],
+      related: ["wireguard", "vpn", "zerotrust", "openziti"],
+      caption: "An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh."
+    },
+    {
+      id: "casb", term: "CASB", acronym: "Cloud Access Security Broker",
+      aliases: ["shadow IT", "SaaS security", "cloud security", "SSE"],
+      tldr: "A control point between users and SaaS apps that enforces cloud security policy.",
+      explainer: `As work moved to SaaS, security teams lost the choke point a corporate network used to give them, and a Cloud Access Security Broker restores it. Sitting between users and cloud apps — as a proxy in the traffic path or via API integration with the SaaS provider — a CASB gives visibility into which cloud services are actually being used (including unsanctioned shadow IT), enforces access and data policies, detects risky configurations, and applies data-loss-prevention controls to information moving in and out. It is one of the core components of a Secure Access Service Edge / Security Service Edge stack, alongside secure web gateways and ZTNA. The goal is consistent governance over data that now lives in dozens of third-party clouds. Inline proxying gives real-time control but can break apps; API mode is gentler but after-the-fact.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["sase", "dlp", "idp"],
+      caption: "User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud."
+    },
+    {
+      id: "dlp", term: "DLP", acronym: "Data Loss Prevention",
+      aliases: ["data leak prevention", "exfiltration", "data classification", "egress control"],
+      tldr: "Controls that detect and stop sensitive data from leaving where it should not.",
+      explainer: `Data Loss Prevention is the set of controls that keep sensitive information — card numbers, health records, source code, secrets — from leaving the organisation through email, uploads, USB drives, or chat. A DLP system inspects content against patterns and classifications, then warns, blocks, or encrypts when a transfer breaks policy, for example a spreadsheet of customer card numbers attached to an outbound message. It operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration, addressing the Data pillar of Zero Trust that network and identity controls leave untouched. Good DLP depends on good data classification — you can only protect what you have labelled. Overly blunt rules generate noise and tempt users to route around the control.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["casb", "sase", "siem"],
+      caption: "Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted."
+    },
+    {
+      id: "pam", term: "PAM", acronym: "Privileged Access Management",
+      aliases: ["privileged accounts", "just-in-time access", "credential vaulting", "session recording"],
+      tldr: "Tight control over the powerful admin accounts attackers most want.",
+      explainer: `A handful of privileged accounts — domain admins, root, cloud owners — can do catastrophic damage, so Privileged Access Management wraps them in extra control. It vaults the credentials so admins check them out rather than knowing them, brokers sessions through a gateway that records keystrokes for audit, and increasingly grants access just-in-time: privileges are elevated for a specific task and a short window, then automatically revoked, shrinking the standing attack surface to near zero. This enforces least privilege and provides the accountability trail regulators expect for sensitive systems. PAM is a focused, higher-assurance complement to ordinary identity management and a frequent first target in a breach. It overlaps with secrets management for the machine-credential case.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["idp", "vault", "rbac", "ssh"],
+      caption: "Admins check out a vaulted credential through a recorded gateway; access is elevated just-in-time and revoked when the task ends."
+    },
+    {
+      id: "cve", term: "CVE / CVSS", acronym: "Vulnerability IDs & Severity Scoring",
+      aliases: ["common vulnerabilities and exposures", "CVSS", "NVD", "severity score", "vulnerability"],
+      tldr: "The shared ID and 0–10 score that let everyone talk about the same flaw.",
+      explainer: `When a vulnerability is disclosed it needs a name everyone agrees on, and a CVE identifier — like CVE-2021-44228 for Log4Shell — is that shared reference, assigned under a programme coordinated by MITRE so vendors, scanners, and defenders all point at the same flaw. The Common Vulnerability Scoring System (CVSS) then rates its severity from 0 to 10 from characteristics like attack vector, complexity, and impact; the current CVSS v4.0 was released in November 2023. NIST's National Vulnerability Database enriches CVE records with CVSS scores and affected-product data that feed automated scanners. Together they let teams prioritise: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access. The score is guidance, not gospel — real risk depends on whether the flaw is exploitable in your context.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["sbom", "owasp", "siem"],
+      caption: "A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first."
+    },
+    {
+      id: "owasp", term: "OWASP Top 10", acronym: "Open Worldwide Application Security Project",
+      aliases: ["OWASP", "Top 10", "broken access control", "injection", "ASVS"],
+      tldr: "The community's ranked list of the most critical web application risks.",
+      explainer: `OWASP is a non-profit community that produces free, vendor-neutral application-security resources, and its Top 10 is the field's best-known awareness document: a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input. It is used everywhere as a baseline — developers code against it, WAFs ship rule sets named after it, and auditors check for it. The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one and adds Software Supply Chain Failures as a new category, reflecting where attacks have moved. OWASP also maintains deeper resources like the Application Security Verification Standard (ASVS) and the Cheat Sheet Series. The Top 10 is a floor for awareness, not a complete security programme.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["websec", "waf", "cve"],
+      caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures new in the 2025 edition."
+    },
+    {
+      id: "tpm", term: "TPM & Secure Boot", acronym: "Hardware Root of Trust",
+      aliases: ["trusted platform module", "secure boot", "measured boot", "attestation", "UEFI"],
+      tldr: "A hardware chip that protects keys and proves a machine booted clean.",
+      explainer: `A Trusted Platform Module is a tamper-resistant chip on the motherboard that generates and stores cryptographic keys so they never leave the hardware, and that measures the software loaded at boot. Secure Boot uses it to verify each stage of startup against trusted signatures, refusing to run firmware or a bootloader that has been tampered with, while measured boot records hashes of what actually loaded into the TPM's registers. A remote server can then ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted. This hardware root of trust underpins disk-encryption key release, device identity, and the device-posture checks Zero Trust relies on. It moves the foundation of trust from software, which malware can subvert, down into silicon.`,
+      types: ["Security Technology"], provenance: [],
+      related: ["edr", "pki", "mtls"],
+      caption: "Secure Boot verifies each startup stage and the TPM records what loaded, so a server can attest the device booted into a known-good state."
+    },
+    {
+      id: "sigstore", term: "Sigstore", acronym: "Keyless Artifact Signing (Cosign)",
+      aliases: ["Cosign", "Fulcio", "Rekor", "keyless signing", "transparency log"],
+      tldr: "Easy, keyless signing of software artifacts backed by a public transparency log.",
+      explainer: `Signing software has always been the right idea and a usability disaster — developers must guard long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key: its Cosign tool signs an artifact using a short-lived certificate that Fulcio issues against an OIDC identity (your Google, GitHub, or corporate login), so you sign as who you are rather than as a key you must hoard. Every signature is recorded in Rekor, a public, append-only transparency log, so anyone can verify that an artifact was signed by a given identity and detect tampering after the fact. This makes verifiable provenance practical at ecosystem scale and pairs naturally with SBOMs and SLSA. It is an open-source project under the OpenSSF, now signing a large share of container images and packages.`,
+      types: ["Security Technology"], provenance: ["Open Source"],
+      related: ["sbom", "pki", "docker"],
+      caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later."
+    },
+    {
+      id: "ztna", term: "ZTNA", acronym: "Zero Trust Network Access",
+      aliases: ["zero trust network access", "software-defined perimeter", "SDP", "identity-aware proxy", "BeyondCorp"],
+      tldr: "The VPN replacement that grants access to single apps, never the whole network.",
+      explainer: `Zero Trust Network Access is the access model that puts Zero Trust principles on the wire, and the technology category replacing the traditional VPN. Where a VPN drops an authenticated user onto the network and trusts them to roam, ZTNA brokers access to one specific application at a time, after verifying user identity and device posture on every request, and keeps everything else invisible. Applications sit behind a broker and are never exposed to the open internet — connections are established outbound from the app to the broker, so there is no inbound port to attack, the software-defined perimeter idea. Google's BeyondCorp was the influential early implementation; today ZTNA is a core component of SASE / SSE offerings. The shift is from connect then authenticate to authenticate, authorise, then connect — and only to what you need.`,
+      types: ["Security Technology", "Network Technology"], provenance: [],
+      related: ["zerotrust", "sase", "openziti", "vpn"],
+      caption: "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden."
     }
   ];
 
@@ -1785,6 +2028,594 @@
           <line class="flow-accent" x1="196" y1="138" x2="510" y2="${cy}" marker-end="url(#ah-acc)"/>
         `).join("")}
         <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">One change at the IdP fans out to every app — and offboarding revokes access everywhere.</text>
+      </svg>`,
+
+    mfa: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it.">
+        <text class="t-sm t-mut" x="110" y="24" text-anchor="middle">independent factors</text>
+        ${[["Know","password",36],["Have","phone / key",96],["Are","fingerprint",156]].map(([t,s,y])=>`
+          <rect class="box" x="24" y="${y}" width="172" height="48" rx="8"/>
+          <text class="t-sm t-b" x="40" y="${y+21}">${t}</text>
+          <text class="t-sm t-mut" x="40" y="${y+38}">${s}</text>
+          <line class="flow" x1="196" y1="${y+24}" x2="256" y2="128" marker-end="url(#ah-mut)"/>
+        `).join("")}
+        <rect class="box-accent" x="258" y="84" width="150" height="88" rx="12"/>
+        <text class="t-b" x="333" y="122" text-anchor="middle">Verified</text>
+        <text class="t-sm t-mut" x="333" y="142" text-anchor="middle">all factors</text>
+        <rect class="box-accent" x="500" y="78" width="196" height="54" rx="10"/>
+        <text class="t-sm t-b" x="598" y="100" text-anchor="middle">real-site.com</text>
+        <text class="t-sm" x="598" y="120" text-anchor="middle" fill="var(--state-ok)">passkey origin-bound</text>
+        <rect class="box" x="500" y="158" width="196" height="54" rx="10"/>
+        <text class="t-sm t-b" x="598" y="180" text-anchor="middle">phishing-site</text>
+        <text class="t-sm" x="598" y="200" text-anchor="middle" fill="var(--state-bad)">replay refused</text>
+        <line class="flow-ok" x1="408" y1="112" x2="498" y2="104" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" x1="408" y1="140" x2="498" y2="184" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">The credential is cryptographically tied to the real origin — a fake page cannot reuse it.</text>
+      </svg>`,
+
+    pki: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A root CA signs an intermediate, which signs the server certificate; the client walks the chain up to a root it already trusts.">
+        <rect class="box-accent" x="28" y="48" width="186" height="72" rx="12"/>
+        <text class="t-b" x="121" y="80" text-anchor="middle">Root CA</text>
+        <text class="t-sm t-mut" x="121" y="100" text-anchor="middle">trusted anchor</text>
+        <rect class="box" x="268" y="48" width="186" height="72" rx="10"/>
+        <text class="t-b" x="361" y="80" text-anchor="middle">Intermediate CA</text>
+        <text class="t-sm t-mut" x="361" y="100" text-anchor="middle">delegated</text>
+        <rect class="box" x="508" y="48" width="186" height="72" rx="10"/>
+        <text class="t-b" x="601" y="80" text-anchor="middle">Server cert</text>
+        <text class="t-sm t-mut" x="601" y="100" text-anchor="middle">binds key ↔ name</text>
+        <line class="flow-accent" x1="214" y1="84" x2="266" y2="84" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="240" y="74" text-anchor="middle">signs</text>
+        <line class="flow-accent" x1="454" y1="84" x2="506" y2="84" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="480" y="74" text-anchor="middle">signs</text>
+        <rect class="box" x="508" y="184" width="186" height="60" rx="10"/>
+        <text class="t-b" x="601" y="220" text-anchor="middle">Client / browser</text>
+        <line class="flow" x1="601" y1="182" x2="601" y2="122" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="616" y="158">presents</text>
+        <line class="flow-accent" x1="506" y1="150" x2="218" y2="150" marker-end="url(#ah-acc)"/>
+        <text class="t-sm" x="362" y="142" text-anchor="middle" fill="var(--accent)">verify chain up to a trusted root</text>
+      </svg>`,
+
+    rbac: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision.">
+        <text class="t-sm t-b" x="172" y="28" text-anchor="middle" fill="var(--accent)">RBAC — by role</text>
+        <text class="t-sm t-b" x="548" y="28" text-anchor="middle" fill="var(--accent)">ABAC — by attributes</text>
+        <line class="divider" x1="360" y1="42" x2="360" y2="256"/>
+        ${[["User · Alice",58],["Role · billing-admin",128],["Permissions",198]].map(([t,y],i)=>`
+          <rect class="${i===1?'box-accent':'box'}" x="64" y="${y}" width="216" height="48" rx="8"/>
+          <text class="t-sm t-b" x="172" y="${y+29}" text-anchor="middle">${t}</text>
+          ${i<2?`<line class="flow" x1="172" y1="${y+48}" x2="172" y2="${y+70}" marker-end="url(#ah-mut)"/>`:""}
+        `).join("")}
+        <rect class="box" x="396" y="56" width="288" height="104" rx="10"/>
+        <text class="t-sm t-b" x="412" y="80">attributes</text>
+        ${["subject · finance","resource · ledger","action · read","env · managed, 9–5"].map((t,i)=>`
+          <text class="t-sm t-mut" x="412" y="${102+i*18}">${t}</text>
+        `).join("")}
+        <line class="flow-accent" x1="540" y1="160" x2="540" y2="184" marker-end="url(#ah-acc)"/>
+        <rect class="box-accent" x="452" y="186" width="176" height="52" rx="10"/>
+        <text class="t-sm t-b" x="540" y="210" text-anchor="middle">Policy engine</text>
+        <text class="t-sm t-mut" x="540" y="228" text-anchor="middle">allow if all match</text>
+      </svg>`,
+
+    opa: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny.">
+        ${[["Service A",36],["Service B",110],["Service C",184]].map(([t,y])=>`
+          <rect class="box" x="24" y="${y}" width="172" height="54" rx="10"/>
+          <text class="t-b" x="110" y="${y+32}" text-anchor="middle">${t}</text>
+          <line class="flow" x1="196" y1="${y+27}" x2="296" y2="142" marker-end="url(#ah-mut)"/>
+        `).join("")}
+        <text class="t-sm t-mut" x="244" y="100" text-anchor="middle">context</text>
+        <rect class="box-accent" x="298" y="98" width="150" height="92" rx="12"/>
+        <text class="t-b" x="373" y="136" text-anchor="middle">OPA</text>
+        <text class="t-sm t-mut" x="373" y="156" text-anchor="middle">evaluates Rego</text>
+        <rect class="box" x="540" y="86" width="156" height="46" rx="8"/>
+        <text class="t-sm t-b" x="618" y="114" text-anchor="middle" fill="var(--state-ok)">allow</text>
+        <rect class="box" x="540" y="156" width="156" height="46" rx="8"/>
+        <text class="t-sm t-b" x="618" y="184" text-anchor="middle" fill="var(--state-bad)">deny</text>
+        <line class="flow-ok" x1="448" y1="128" x2="538" y2="108" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" x1="448" y1="160" x2="538" y2="178" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">One policy engine answers allow / deny for many call sites.</text>
+      </svg>`,
+
+    servicemesh: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config so every hop is mTLS by default.">
+        <rect class="box-accent" x="232" y="26" width="256" height="60" rx="12"/>
+        <text class="t-b" x="360" y="52" text-anchor="middle">Control plane</text>
+        <text class="t-sm t-mut" x="360" y="72" text-anchor="middle">identity · certs · config</text>
+        <rect class="box" x="30" y="150" width="124" height="74" rx="10"/>
+        <text class="t-sm t-b" x="92" y="192" text-anchor="middle">Service A</text>
+        <rect class="box-accent" x="158" y="150" width="86" height="74" rx="10"/>
+        <text class="t-sm t-b" x="201" y="184" text-anchor="middle">proxy</text>
+        <text class="t-sm t-mut" x="201" y="201" text-anchor="middle">sidecar</text>
+        <rect class="box-accent" x="476" y="150" width="86" height="74" rx="10"/>
+        <text class="t-sm t-b" x="519" y="184" text-anchor="middle">proxy</text>
+        <text class="t-sm t-mut" x="519" y="201" text-anchor="middle">sidecar</text>
+        <rect class="box" x="566" y="150" width="124" height="74" rx="10"/>
+        <text class="t-sm t-b" x="628" y="192" text-anchor="middle">Service B</text>
+        <line class="flow-accent" x1="244" y1="187" x2="476" y2="187" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
+        <text class="t-sm t-b" x="360" y="178" text-anchor="middle" fill="var(--accent)">mTLS</text>
+        <text class="t-sm t-mut" x="360" y="206" text-anchor="middle">data plane</text>
+        <line class="flow" x1="320" y1="86" x2="206" y2="148" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="400" y1="86" x2="514" y2="148" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Sidecars handle mTLS, retries, and telemetry — the app code is untouched.</text>
+      </svg>`,
+
+    edr: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access.">
+        <rect class="box" x="28" y="104" width="172" height="92" rx="10"/>
+        <text class="t-b" x="114" y="138" text-anchor="middle">Endpoint</text>
+        <text class="t-sm t-mut" x="114" y="158" text-anchor="middle">agent watches</text>
+        <text class="t-sm t-mut" x="114" y="176" text-anchor="middle">process · file · net</text>
+        <rect class="box-accent" x="268" y="98" width="184" height="104" rx="12"/>
+        <text class="t-b" x="360" y="138" text-anchor="middle">Detection</text>
+        <text class="t-sm t-mut" x="360" y="158" text-anchor="middle">scores behaviour</text>
+        <text class="t-sm t-mut" x="360" y="176" text-anchor="middle">&amp; device posture</text>
+        <line class="flow" x1="200" y1="150" x2="266" y2="150" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="233" y="140" text-anchor="middle">telemetry</text>
+        <rect class="box" x="528" y="84" width="168" height="50" rx="8"/>
+        <text class="t-sm t-b" x="612" y="113" text-anchor="middle" fill="var(--state-ok)">access granted</text>
+        <rect class="box" x="528" y="166" width="168" height="50" rx="8"/>
+        <text class="t-sm t-b" x="612" y="195" text-anchor="middle" fill="var(--state-bad)">quarantine host</text>
+        <line class="flow-ok" x1="452" y1="134" x2="526" y2="112" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" x1="452" y1="166" x2="526" y2="190" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">The live posture verdict becomes an input to every access decision.</text>
+      </svg>`,
+
+    waf: () => `
+      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge.">
+        <rect class="box" x="24" y="80" width="150" height="92" rx="10"/>
+        <text class="t-b" x="99" y="120" text-anchor="middle">Clients</text>
+        <text class="t-sm t-mut" x="99" y="140" text-anchor="middle">legit + hostile</text>
+        <rect class="box-accent" x="286" y="40" width="150" height="176" rx="12"/>
+        <text class="t-b" x="361" y="116" text-anchor="middle">WAF</text>
+        <text class="t-sm t-mut" x="361" y="136" text-anchor="middle">layer-7 inspection</text>
+        <text class="t-sm t-mut" x="361" y="154" text-anchor="middle">SQLi · XSS · traversal</text>
+        <rect class="box" x="546" y="84" width="150" height="88" rx="10"/>
+        <text class="t-b" x="621" y="124" text-anchor="middle">App</text>
+        <text class="t-sm t-mut" x="621" y="144" text-anchor="middle">secure code</text>
+        <line class="flow-ok" x1="174" y1="98" x2="284" y2="98" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" x1="436" y1="110" x2="544" y2="110" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" x="490" y="100" text-anchor="middle" fill="var(--state-ok)">benign</text>
+        <line class="flow-bad" x1="174" y1="158" x2="278" y2="158" marker-end="url(#ah-bad)"/>
+        <line class="stroke-bad" x1="270" y1="150" x2="286" y2="166" style="stroke-width:2.5"/>
+        <line class="stroke-bad" x1="286" y1="150" x2="270" y2="166" style="stroke-width:2.5"/>
+        <text class="t-sm" x="200" y="184" text-anchor="middle" fill="var(--state-bad)">injection dropped</text>
+        <text class="t-sm t-mut" x="360" y="244" text-anchor="middle">A network firewall sees only ports; the WAF reads the HTTP itself.</text>
+      </svg>`,
+
+    websec: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach.">
+        <text class="t-sm t-mut" x="244" y="30" text-anchor="middle">two classic browser attacks</text>
+        <text class="t-sm t-b" x="592" y="30" text-anchor="middle" fill="var(--state-ok)">the defence</text>
+        ${[
+          ["XSS","--cat-1","injected script runs","in your session",24],
+          ["CSRF","--cat-2","forged request rides","your cookies",256],
+          ["CSP","--cat-4","whitelist limits","what code can load",488]
+        ].map(([t,c,l1,l2,x])=>`
+          <rect x="${x}" y="50" width="208" height="150" rx="12" fill="color-mix(in srgb, var(${c}) 10%, var(--surface))" stroke="var(${c})" stroke-width="1.5"/>
+          <text class="t-b" x="${x+104}" y="92" text-anchor="middle" fill="var(${c})">${t}</text>
+          <text class="t-sm t-mut" x="${x+104}" y="126" text-anchor="middle">${l1}</text>
+          <text class="t-sm t-mut" x="${x+104}" y="146" text-anchor="middle">${l2}</text>
+        `).join("")}
+        <text class="t-sm t-mut" x="360" y="240" text-anchor="middle">Escape output, use anti-CSRF tokens and SameSite, and ship a CSP — defence in depth.</text>
+      </svg>`,
+
+    vault: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A workload authenticates to the vault, which checks policy and issues a short-lived, automatically-revoked secret.">
+        <rect class="box" x="28" y="104" width="166" height="80" rx="10"/>
+        <text class="t-b" x="111" y="138" text-anchor="middle">Workload</text>
+        <text class="t-sm t-mut" x="111" y="158" text-anchor="middle">proves identity</text>
+        <rect class="box-accent" x="268" y="92" width="184" height="104" rx="12"/>
+        <text class="t-b" x="360" y="132" text-anchor="middle">Vault</text>
+        <text class="t-sm t-mut" x="360" y="152" text-anchor="middle">checks policy</text>
+        <text class="t-sm t-mut" x="360" y="170" text-anchor="middle">audits access</text>
+        <rect class="box" x="526" y="104" width="170" height="80" rx="10"/>
+        <text class="t-sm t-b" x="611" y="134" text-anchor="middle">Dynamic secret</text>
+        <text class="t-sm t-mut" x="611" y="154" text-anchor="middle">short-lived · revoked</text>
+        <line class="flow" x1="194" y1="144" x2="266" y2="144" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="230" y="134" text-anchor="middle">auth</text>
+        <line class="flow-accent" x1="452" y1="144" x2="524" y2="144" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="488" y="134" text-anchor="middle">issue</text>
+        <text class="t-sm t-mut" x="360" y="248" text-anchor="middle">Generated on demand and revoked automatically — never a hard-coded password.</text>
+      </svg>`,
+
+    nist207: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="NIST 800-207 control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces.">
+        <rect class="zone-accent" x="176" y="22" width="368" height="96" rx="12"/>
+        <text class="t-sm t-mut" x="360" y="42" text-anchor="middle">Control plane</text>
+        <rect class="box-accent" x="194" y="52" width="156" height="54" rx="10"/>
+        <text class="t-sm t-b" x="272" y="78" text-anchor="middle">Policy Engine</text>
+        <text class="t-sm t-mut" x="272" y="95" text-anchor="middle">trust algorithm</text>
+        <rect class="box" x="368" y="52" width="156" height="54" rx="10"/>
+        <text class="t-sm t-b" x="446" y="78" text-anchor="middle">Policy Admin</text>
+        <text class="t-sm t-mut" x="446" y="95" text-anchor="middle">enacts decision</text>
+        <line class="flow" x1="350" y1="79" x2="366" y2="79" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="36" y="188" width="150" height="64" rx="10"/>
+        <text class="t-b" x="111" y="226" text-anchor="middle">Subject</text>
+        <rect class="box-accent" x="288" y="180" width="144" height="80" rx="12"/>
+        <text class="t-b" x="360" y="214" text-anchor="middle">PEP</text>
+        <text class="t-sm t-mut" x="360" y="234" text-anchor="middle">enforces, in-path</text>
+        <rect class="box" x="534" y="188" width="150" height="64" rx="10"/>
+        <text class="t-b" x="609" y="226" text-anchor="middle">Resource</text>
+        <line class="flow" x1="186" y1="220" x2="286" y2="220" marker-end="url(#ah-mut)"/>
+        <line class="flow-ok" x1="432" y1="220" x2="532" y2="220" marker-end="url(#ah-ok)"/>
+        <line class="flow-accent" x1="360" y1="118" x2="360" y2="178" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-b" x="404" y="150" fill="var(--accent)">allow / deny</text>
+        <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">Per-session, least-privilege decisions; no trust granted by network location.</text>
+      </svg>`,
+
+    sbom: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both.">
+        <rect class="box" x="24" y="66" width="156" height="76" rx="10"/>
+        <text class="t-sm t-b" x="102" y="98" text-anchor="middle">Components</text>
+        <text class="t-sm t-mut" x="102" y="118" text-anchor="middle">100s of deps</text>
+        <rect class="box-accent" x="262" y="58" width="160" height="92" rx="12"/>
+        <text class="t-b" x="342" y="98" text-anchor="middle">Build</text>
+        <text class="t-sm t-mut" x="342" y="118" text-anchor="middle">pipeline</text>
+        <rect class="box" x="504" y="66" width="170" height="76" rx="10"/>
+        <text class="t-sm t-b" x="589" y="98" text-anchor="middle">Signed artifact</text>
+        <text class="t-sm t-mut" x="589" y="118" text-anchor="middle">image / package</text>
+        <line class="flow" x1="180" y1="104" x2="260" y2="104" marker-end="url(#ah-mut)"/>
+        <line class="flow-accent" x1="422" y1="104" x2="502" y2="104" marker-end="url(#ah-acc)"/>
+        <rect class="box" x="200" y="186" width="150" height="58" rx="8"/>
+        <text class="t-sm t-b" x="275" y="210" text-anchor="middle">SBOM</text>
+        <text class="t-sm t-mut" x="275" y="228" text-anchor="middle">what's inside</text>
+        <rect class="box" x="372" y="186" width="170" height="58" rx="8"/>
+        <text class="t-sm t-b" x="457" y="210" text-anchor="middle">SLSA provenance</text>
+        <text class="t-sm t-mut" x="457" y="228" text-anchor="middle">how it was built</text>
+        <line class="flow-accent" x1="324" y1="150" x2="294" y2="184" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="420" y1="150" x2="450" y2="184" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="600" y="210" text-anchor="middle">verify both</text>
+        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">Answer "are we affected?" in seconds, and prove the build was not tampered with.</text>
+      </svg>`,
+
+    apigateway: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.">
+        <rect class="box" x="24" y="100" width="150" height="80" rx="10"/>
+        <text class="t-b" x="99" y="134" text-anchor="middle">Clients</text>
+        <text class="t-sm t-mut" x="99" y="154" text-anchor="middle">web · mobile</text>
+        <rect class="box-accent" x="240" y="40" width="180" height="200" rx="12"/>
+        <text class="t-b" x="330" y="76" text-anchor="middle">API Gateway</text>
+        ${["authenticate (OAuth)","rate-limit & quota","route & version","terminate TLS"].map((t,i)=>`
+          <text class="t-sm t-mut" x="330" y="${112+i*30}" text-anchor="middle">${t}</text>
+        `).join("")}
+        <line class="flow" x1="174" y1="140" x2="238" y2="140" marker-end="url(#ah-mut)"/>
+        ${[["Orders",44],["Users",120],["Billing",196]].map(([t,y])=>`
+          <rect class="box" x="506" y="${y}" width="180" height="56" rx="10"/>
+          <text x="596" y="${y+33}" text-anchor="middle">${t}</text>
+          <line class="flow-accent" x1="420" y1="140" x2="504" y2="${y+28}" marker-end="url(#ah-acc)"/>
+        `).join("")}
+        <text class="t-sm t-mut" x="240" y="270" text-anchor="middle">One front door; the services behind stay small and focused.</text>
+      </svg>`,
+
+    idsips: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.">
+        <text class="t-sm t-b" x="44" y="32" fill="var(--accent)">IDS — out of band</text>
+        <rect class="box" x="24" y="46" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="84" y="74" text-anchor="middle">Source</text>
+        <rect class="box" x="576" y="46" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="636" y="74" text-anchor="middle">Dest</text>
+        <line class="flow" x1="144" y1="69" x2="574" y2="69" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="360" y1="69" x2="360" y2="100" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="290" y="100" width="140" height="36" rx="8"/>
+        <text class="t-sm t-b" x="360" y="123" text-anchor="middle">IDS → alert</text>
+        <text class="t-sm t-mut" x="430" y="58" text-anchor="middle">mirrored copy</text>
+        <line class="divider" x1="20" y1="158" x2="700" y2="158"/>
+        <text class="t-sm t-b" x="44" y="186" fill="var(--accent)">IPS — inline</text>
+        <rect class="box" x="24" y="202" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="84" y="230" text-anchor="middle">Source</text>
+        <rect class="box" x="576" y="202" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="636" y="230" text-anchor="middle">Dest</text>
+        <rect class="box-accent" x="312" y="200" width="96" height="50" rx="8"/>
+        <text class="t-sm t-b" x="360" y="230" text-anchor="middle">IPS</text>
+        <line class="flow" x1="144" y1="225" x2="310" y2="225" marker-end="url(#ah-mut)"/>
+        <line class="flow-ok" x1="408" y1="225" x2="574" y2="225" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" x="492" y="216" text-anchor="middle" fill="var(--state-ok)">clean passes</text>
+        <line class="flow-bad" x1="360" y1="250" x2="360" y2="282" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" x="378" y="278" fill="var(--state-bad)">matched flow dropped</text>
+      </svg>`,
+
+    ldap: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An application binds to the directory tree by distinguished name to authenticate a user and read the group memberships that drive permissions.">
+        <rect class="box" x="20" y="108" width="150" height="60" rx="10"/>
+        <text class="t-b" x="95" y="134" text-anchor="middle">Application</text>
+        <text class="t-sm t-mut" x="95" y="153" text-anchor="middle">binds to read</text>
+        <rect class="box-accent" x="208" y="108" width="140" height="60" rx="10"/>
+        <text class="t-sm t-b" x="278" y="143" text-anchor="middle">dc=corp</text>
+        <rect class="box" x="384" y="62" width="150" height="48" rx="8"/>
+        <text class="t-sm t-b" x="459" y="91" text-anchor="middle">ou=People</text>
+        <rect class="box" x="384" y="166" width="150" height="48" rx="8"/>
+        <text class="t-sm t-b" x="459" y="195" text-anchor="middle">ou=Groups</text>
+        <rect class="box" x="556" y="62" width="140" height="48" rx="8"/>
+        <text class="t-sm" x="626" y="91" text-anchor="middle">uid=alice</text>
+        <rect class="box" x="556" y="166" width="140" height="48" rx="8"/>
+        <text class="t-sm" x="626" y="195" text-anchor="middle">cn=billing</text>
+        <line class="flow-accent" x1="170" y1="138" x2="206" y2="138" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="188" y="128" text-anchor="middle">bind</text>
+        <line class="flow" x1="348" y1="126" x2="384" y2="92" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="348" y1="150" x2="384" y2="186" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="534" y1="86" x2="554" y2="86" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="534" y1="190" x2="554" y2="190" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">A hierarchical directory: authenticate the user, read the groups that grant access.</text>
+      </svg>`,
+
+    kerberos: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Authenticate once to the KDC for a ticket-granting ticket, then exchange it for per-service tickets — the password never travels.">
+        <rect class="box" x="24" y="120" width="156" height="70" rx="10"/>
+        <text class="t-b" x="102" y="152" text-anchor="middle">Client</text>
+        <text class="t-sm t-mut" x="102" y="172" text-anchor="middle">authenticates once</text>
+        <rect class="box-accent" x="282" y="34" width="156" height="84" rx="12"/>
+        <text class="t-b" x="360" y="70" text-anchor="middle">KDC</text>
+        <text class="t-sm t-mut" x="360" y="90" text-anchor="middle">key distribution</text>
+        <text class="t-sm t-mut" x="360" y="108" text-anchor="middle">centre</text>
+        <rect class="box" x="540" y="120" width="156" height="70" rx="10"/>
+        <text class="t-b" x="618" y="152" text-anchor="middle">Service</text>
+        <text class="t-sm t-mut" x="618" y="172" text-anchor="middle">verifies ticket</text>
+        <line class="flow" x1="180" y1="138" x2="284" y2="96" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="208" y="108">① login</text>
+        <line class="flow-accent" x1="284" y1="110" x2="180" y2="158" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-b" x="250" y="150" fill="var(--accent)">② TGT</text>
+        <line class="flow-accent" x1="180" y1="178" x2="538" y2="178" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-b" x="360" y="200" text-anchor="middle" fill="var(--accent)">③ present service ticket</text>
+        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">Time-limited tickets prove identity — the password never crosses the network.</text>
+      </svg>`,
+
+    soar: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.">
+        <rect class="box" x="24" y="106" width="150" height="68" rx="10"/>
+        <text class="t-b" x="99" y="138" text-anchor="middle">Alert</text>
+        <text class="t-sm t-mut" x="99" y="158" text-anchor="middle">from SIEM</text>
+        <rect class="box-accent" x="240" y="46" width="190" height="188" rx="12"/>
+        <text class="t-b" x="335" y="78" text-anchor="middle">Playbook</text>
+        ${["enrich","decide","act"].map((t,i)=>`
+          <rect class="box" x="266" y="${100+i*40}" width="138" height="32" rx="6"/>
+          <text class="t-sm" x="335" y="${121+i*40}" text-anchor="middle">${t}</text>
+          ${i<2?`<line class="flow-accent" x1="335" y1="${132+i*40}" x2="335" y2="${140+i*40}" marker-end="url(#ah-acc)"/>`:""}
+        `).join("")}
+        <line class="flow" x1="174" y1="140" x2="238" y2="140" marker-end="url(#ah-mut)"/>
+        ${[["isolate host",60],["disable account",132],["block IP",204]].map(([t,y])=>`
+          <rect class="box" x="514" y="${y}" width="182" height="52" rx="10"/>
+          <text x="605" y="${y+31}" text-anchor="middle">${t}</text>
+          <line class="flow-accent" x1="430" y1="140" x2="512" y2="${y+26}" marker-end="url(#ah-acc)"/>
+        `).join("")}
+        <text class="t-sm t-mut" x="335" y="262" text-anchor="middle">Repetitive triage runs in seconds; humans gate the destructive actions.</text>
+      </svg>`,
+
+    pqc: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A quantum computer breaks RSA / ECC key exchange; lattice-based ML-KEM is layered into the TLS handshake to keep it secure.">
+        <rect class="box" x="36" y="38" width="190" height="68" rx="10"/>
+        <text class="t-sm t-b" x="131" y="68" text-anchor="middle">Quantum computer</text>
+        <text class="t-sm t-mut" x="131" y="88" text-anchor="middle">Shor's algorithm</text>
+        <rect class="box" x="330" y="38" width="220" height="68" rx="10"/>
+        <text class="t-sm t-b" x="440" y="68" text-anchor="middle">RSA / ECC key exchange</text>
+        <text class="t-sm" x="440" y="88" text-anchor="middle" fill="var(--state-bad)">broken</text>
+        <line class="flow-bad" x1="226" y1="72" x2="328" y2="72" marker-end="url(#ah-bad)"/>
+        <line class="stroke-bad" x1="432" y1="44" x2="448" y2="60" style="stroke-width:2.5"/>
+        <line class="stroke-bad" x1="448" y1="44" x2="432" y2="60" style="stroke-width:2.5"/>
+        <text class="t-sm t-mut" x="612" y="68" text-anchor="middle">harvest now,</text>
+        <text class="t-sm t-mut" x="612" y="86" text-anchor="middle">decrypt later</text>
+        <line class="divider" x1="20" y1="138" x2="700" y2="138"/>
+        <rect class="box-accent" x="36" y="170" width="280" height="80" rx="12"/>
+        <text class="t-sm t-b" x="176" y="202" text-anchor="middle">TLS handshake (hybrid)</text>
+        <text class="t-sm t-mut" x="176" y="222" text-anchor="middle">classical ECDHE + ML-KEM</text>
+        <text class="t-sm t-mut" x="176" y="240" text-anchor="middle">FIPS 203 · lattice-based</text>
+        <rect class="box" x="430" y="178" width="220" height="64" rx="10"/>
+        <text class="t-sm t-b" x="540" y="206" text-anchor="middle" fill="var(--state-ok)">quantum-safe</text>
+        <text class="t-sm t-mut" x="540" y="226" text-anchor="middle">layered, not replaced</text>
+        <line class="flow-ok" x1="316" y1="210" x2="428" y2="210" marker-end="url(#ah-ok)"/>
+      </svg>`,
+
+    cilium: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows.">
+        ${[["Pod A",70],["Pod B",290],["Pod C",510]].map(([t,x])=>`
+          <rect class="box" x="${x}" y="44" width="140" height="64" rx="10"/>
+          <text class="t-b" x="${x+70}" y="82" text-anchor="middle">${t}</text>
+        `).join("")}
+        <line class="flow-ok" x1="210" y1="76" x2="290" y2="76" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" x="250" y="66" text-anchor="middle" fill="var(--state-ok)">allowed</text>
+        <line class="flow-bad" x1="430" y1="76" x2="510" y2="76" marker-end="url(#ah-bad)"/>
+        <line class="stroke-bad" x1="462" y1="68" x2="478" y2="84" style="stroke-width:2.5"/>
+        <line class="stroke-bad" x1="478" y1="68" x2="462" y2="84" style="stroke-width:2.5"/>
+        <text class="t-sm" x="470" y="66" text-anchor="middle" fill="var(--state-bad)">blocked</text>
+        <rect class="zone-accent" x="40" y="150" width="640" height="96" rx="14"/>
+        <text class="t-b" x="360" y="186" text-anchor="middle">Linux kernel — eBPF</text>
+        <text class="t-sm t-mut" x="360" y="210" text-anchor="middle">identity-aware policy · load-balancing · flow visibility (Hubble)</text>
+        <line class="flow" x1="140" y1="108" x2="140" y2="148" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="360" y1="108" x2="360" y2="148" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="580" y1="108" x2="580" y2="148" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">Policy runs in the kernel against workload identity — no sidecar required.</text>
+      </svg>`,
+
+    tailscale: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh.">
+        <rect class="box-accent" x="238" y="22" width="244" height="60" rx="12"/>
+        <text class="t-sm t-b" x="360" y="48" text-anchor="middle">Coordination server</text>
+        <text class="t-sm t-mut" x="360" y="68" text-anchor="middle">auth via IdP · hands out keys</text>
+        ${[["Device A",70,150],["Device B",290,206],["Device C",512,150]].map(([t,x,y])=>`
+          <rect class="box" x="${x}" y="${y}" width="138" height="56" rx="10"/>
+          <text class="t-b" x="${x+69}" y="${y+33}" text-anchor="middle">${t}</text>
+        `).join("")}
+        <line class="flow" x1="320" y1="82" x2="170" y2="148" marker-end="url(#ah-mut)" style="stroke-dasharray:4 4"/>
+        <line class="flow" x1="360" y1="82" x2="360" y2="204" marker-end="url(#ah-mut)" style="stroke-dasharray:4 4"/>
+        <line class="flow" x1="400" y1="82" x2="552" y2="148" marker-end="url(#ah-mut)" style="stroke-dasharray:4 4"/>
+        <line class="flow-accent" x1="208" y1="186" x2="290" y2="216" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
+        <line class="flow-accent" x1="428" y1="216" x2="510" y2="186" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
+        <line class="flow-accent" x1="208" y1="172" x2="512" y2="172" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
+        <text class="t-sm t-b" x="360" y="166" text-anchor="middle" fill="var(--accent)">direct WireGuard tunnels</text>
+        <text class="t-sm t-mut" x="360" y="280" text-anchor="middle">The control server sets up keys, then steps out of the data path.</text>
+      </svg>`,
+
+    casb: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud.">
+        <rect class="box" x="24" y="100" width="150" height="72" rx="10"/>
+        <text class="t-b" x="99" y="132" text-anchor="middle">User</text>
+        <text class="t-sm t-mut" x="99" y="152" text-anchor="middle">on / off network</text>
+        <rect class="box-accent" x="244" y="46" width="180" height="178" rx="12"/>
+        <text class="t-b" x="334" y="80" text-anchor="middle">CASB</text>
+        ${["reveal shadow IT","enforce access","data controls (DLP)"].map((t,i)=>`
+          <text class="t-sm t-mut" x="334" y="${118+i*30}" text-anchor="middle">${t}</text>
+        `).join("")}
+        <line class="flow" x1="174" y1="136" x2="242" y2="136" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="506" y="60" width="190" height="56" rx="10"/>
+        <text class="t-sm t-b" x="601" y="84" text-anchor="middle">Sanctioned SaaS</text>
+        <text class="t-sm" x="601" y="103" text-anchor="middle" fill="var(--state-ok)">allowed by policy</text>
+        <rect class="box" x="506" y="154" width="190" height="56" rx="10"/>
+        <text class="t-sm t-b" x="601" y="178" text-anchor="middle">Shadow IT</text>
+        <text class="t-sm" x="601" y="197" text-anchor="middle" fill="var(--state-bad)">surfaced &amp; controlled</text>
+        <line class="flow-ok" x1="424" y1="120" x2="504" y2="92" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" x1="424" y1="150" x2="504" y2="178" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="256" text-anchor="middle">A restored choke point for data that now lives in dozens of clouds.</text>
+      </svg>`,
+
+    dlp: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted.">
+        <rect class="box" x="24" y="100" width="166" height="80" rx="10"/>
+        <text class="t-sm t-b" x="107" y="132" text-anchor="middle">Outbound content</text>
+        <text class="t-sm t-mut" x="107" y="152" text-anchor="middle">email · upload · USB</text>
+        <rect class="box-accent" x="258" y="92" width="178" height="96" rx="12"/>
+        <text class="t-b" x="347" y="130" text-anchor="middle">DLP</text>
+        <text class="t-sm t-mut" x="347" y="150" text-anchor="middle">match classifications</text>
+        <line class="flow" x1="190" y1="140" x2="256" y2="140" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="528" y="76" width="168" height="52" rx="10"/>
+        <text class="t-sm t-b" x="612" y="100" text-anchor="middle" fill="var(--state-ok)">allowed</text>
+        <text class="t-sm t-mut" x="612" y="118" text-anchor="middle">no sensitive data</text>
+        <rect class="box" x="528" y="158" width="168" height="52" rx="10"/>
+        <text class="t-sm t-b" x="612" y="182" text-anchor="middle" fill="var(--state-bad)">blocked</text>
+        <text class="t-sm t-mut" x="612" y="200" text-anchor="middle">card data by email</text>
+        <line class="flow-ok" x1="436" y1="126" x2="526" y2="104" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" x1="436" y1="156" x2="526" y2="182" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">A policy breach is warned, blocked, or encrypted before it leaves.</text>
+      </svg>`,
+
+    pam: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Admins check out a vaulted credential through a recorded gateway; access is elevated just-in-time and revoked when the task ends.">
+        <rect class="box" x="24" y="64" width="150" height="72" rx="10"/>
+        <text class="t-b" x="99" y="96" text-anchor="middle">Admin</text>
+        <text class="t-sm t-mut" x="99" y="116" text-anchor="middle">no standing access</text>
+        <rect class="box-accent" x="246" y="40" width="190" height="120" rx="12"/>
+        <text class="t-b" x="341" y="76" text-anchor="middle">PAM gateway</text>
+        <text class="t-sm t-mut" x="341" y="102" text-anchor="middle">vaults the credential</text>
+        <text class="t-sm t-mut" x="341" y="124" text-anchor="middle">records the session</text>
+        <rect class="box" x="516" y="64" width="180" height="72" rx="10"/>
+        <text class="t-b" x="606" y="96" text-anchor="middle">Target system</text>
+        <text class="t-sm t-mut" x="606" y="116" text-anchor="middle">root / cloud owner</text>
+        <line class="flow" x1="174" y1="100" x2="244" y2="100" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="209" y="90" text-anchor="middle">check out</text>
+        <line class="flow-accent" x1="436" y1="100" x2="514" y2="100" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="475" y="90" text-anchor="middle">brokered</text>
+        <rect class="box-soft" x="120" y="196" width="480" height="56" rx="10"/>
+        <circle cx="170" cy="224" r="6" class="fill-accent"/>
+        <text class="t-sm" x="170" y="248" text-anchor="middle">elevate</text>
+        <line class="flow-accent" x1="182" y1="224" x2="538" y2="224"/>
+        <text class="t-sm t-mut" x="360" y="218" text-anchor="middle">just-in-time window</text>
+        <circle cx="550" cy="224" r="6" class="bad"/>
+        <text class="t-sm" x="550" y="248" text-anchor="middle" fill="var(--state-bad)">revoke</text>
+      </svg>`,
+
+    cve: () => `
+      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A disclosed flaw gets a CVE id everyone shares and a 0 to 10 CVSS severity score, so teams can rank what to patch first.">
+        <rect class="box" x="24" y="56" width="150" height="68" rx="10"/>
+        <text class="t-sm t-b" x="99" y="88" text-anchor="middle">Disclosed flaw</text>
+        <text class="t-sm t-mut" x="99" y="108" text-anchor="middle">e.g. Log4Shell</text>
+        <rect class="box-accent" x="238" y="48" width="230" height="84" rx="12"/>
+        <text class="t-b" x="353" y="82" text-anchor="middle">CVE-2021-44228</text>
+        <text class="t-sm t-mut" x="353" y="104" text-anchor="middle">one shared identifier</text>
+        <line class="flow" x1="174" y1="90" x2="236" y2="90" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="520" y="56" width="176" height="68" rx="10"/>
+        <text class="t-sm t-b" x="608" y="88" text-anchor="middle">Patch priority</text>
+        <text class="t-sm t-mut" x="608" y="108" text-anchor="middle">rank by risk</text>
+        <line class="flow-accent" x1="468" y1="90" x2="518" y2="90" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="120" y="182">CVSS</text>
+        ${["--cat-4","--cat-3","--cat-2","--cat-1"].map((c,i)=>`
+          <rect x="${170+i*120}" y="190" width="120" height="22" rx="3" fill="var(${c})" opacity="0.85"/>
+        `).join("")}
+        <text class="t-sm t-mut" x="170" y="230">0</text>
+        <text class="t-sm t-mut" x="650" y="230" text-anchor="end">10</text>
+        <line class="stroke-bad" x1="638" y1="184" x2="638" y2="218" style="stroke-width:2.5"/>
+        <text class="t-sm t-b" x="624" y="180" text-anchor="end" fill="var(--state-bad)">9.8 critical</text>
+      </svg>`,
+
+    owasp: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ranked list of the ten most critical web app risks, led by Broken Access Control, with Software Supply Chain Failures new in the 2025 edition.">
+        <text class="t-sm t-mut" x="360" y="28" text-anchor="middle">OWASP Top 10 : 2025 — ranked web app risks</text>
+        ${[
+          ["01","Broken Access Control","still #1",true,false],
+          ["02","Security Misconfiguration","",false,false],
+          ["··","Cryptographic Failures · Injection · …","",false,false],
+          ["▸","Software Supply Chain Failures","new",false,true]
+        ].map(([n,t,tag,lead,isnew],i)=>`
+          <rect class="${lead?'box-accent':(isnew?'box':'box-soft')}" x="120" y="${50+i*52}" width="480" height="44" rx="8"/>
+          <text class="t-b" x="146" y="${77+i*52}">${n}</text>
+          <text class="t-sm" x="196" y="${77+i*52}">${t}</text>
+          ${tag?`<text class="t-sm t-b" x="584" y="${77+i*52}" text-anchor="end" fill="${isnew?'var(--state-ok)':'var(--accent)'}">${tag}</text>`:""}
+        `).join("")}
+        <text class="t-sm t-mut" x="360" y="276" text-anchor="middle">A baseline for awareness — used by developers, WAF rule sets, and auditors.</text>
+      </svg>`,
+
+    tpm: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Secure Boot verifies each startup stage and the TPM records what loaded, so a server can attest the device booted into a known-good state.">
+        <text class="t-sm t-b" x="360" y="24" text-anchor="middle" fill="var(--accent)">Secure Boot — each stage verifies the next</text>
+        ${[["Firmware",30],["Bootloader",270],["OS",510]].map(([t,x],i)=>`
+          <rect class="box" x="${x}" y="40" width="180" height="58" rx="10"/>
+          <text class="t-b" x="${x+90}" y="68" text-anchor="middle">${t}</text>
+          <text class="t-sm t-mut" x="${x+90}" y="86" text-anchor="middle">signature verified</text>
+          ${i<2?`<line class="flow-accent" x1="${x+180}" y1="69" x2="${x+240}" y2="69" marker-end="url(#ah-acc)"/>`:""}
+        `).join("")}
+        <rect class="box-accent" x="110" y="180" width="200" height="84" rx="12"/>
+        <text class="t-b" x="210" y="216" text-anchor="middle">TPM</text>
+        <text class="t-sm t-mut" x="210" y="238" text-anchor="middle">measures into PCRs</text>
+        ${[120,360,600].map((x)=>`<line class="flow" x1="${x}" y1="98" x2="${x<360?200:(x>360?260:210)}" y2="178" marker-end="url(#ah-mut)"/>`).join("")}
+        <rect class="box" x="410" y="180" width="200" height="84" rx="12"/>
+        <text class="t-b" x="510" y="216" text-anchor="middle">Verifier</text>
+        <text class="t-sm t-mut" x="510" y="238" text-anchor="middle">trusts known-good state</text>
+        <line class="flow-accent" x1="310" y1="222" x2="408" y2="222" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="359" y="212" text-anchor="middle">attest</text>
+      </svg>`,
+
+    sigstore: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.">
+        <rect class="box" x="24" y="48" width="150" height="68" rx="10"/>
+        <text class="t-sm t-b" x="99" y="80" text-anchor="middle">Developer</text>
+        <text class="t-sm t-mut" x="99" y="100" text-anchor="middle">OIDC login</text>
+        <rect class="box-accent" x="214" y="40" width="164" height="84" rx="12"/>
+        <text class="t-b" x="296" y="76" text-anchor="middle">Fulcio</text>
+        <text class="t-sm t-mut" x="296" y="98" text-anchor="middle">short-lived cert</text>
+        <rect class="box" x="418" y="48" width="170" height="68" rx="10"/>
+        <text class="t-sm t-b" x="503" y="80" text-anchor="middle">Cosign signs</text>
+        <text class="t-sm t-mut" x="503" y="100" text-anchor="middle">no long-lived key</text>
+        <line class="flow-accent" x1="174" y1="82" x2="212" y2="82" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="378" y1="82" x2="416" y2="82" marker-end="url(#ah-acc)"/>
+        <rect class="box" x="214" y="176" width="374" height="66" rx="12"/>
+        <text class="t-b" x="401" y="206" text-anchor="middle">Rekor</text>
+        <text class="t-sm t-mut" x="401" y="226" text-anchor="middle">public, append-only transparency log</text>
+        <line class="flow-accent" x1="503" y1="116" x2="430" y2="174" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="492" y="150">recorded</text>
+        <line class="flow" x1="214" y1="209" x2="120" y2="209" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="100" y="182" text-anchor="middle">anyone</text>
+        <text class="t-sm t-mut" x="100" y="200" text-anchor="middle">verifies</text>
+        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Sign as who you are, not as a key you must guard.</text>
+      </svg>`,
+
+    ztna: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.">
+        <rect class="box" x="24" y="100" width="150" height="76" rx="10"/>
+        <text class="t-b" x="99" y="132" text-anchor="middle">User</text>
+        <text class="t-sm t-mut" x="99" y="152" text-anchor="middle">+ device</text>
+        <rect class="box-accent" x="240" y="92" width="184" height="92" rx="12"/>
+        <text class="t-b" x="332" y="128" text-anchor="middle">ZTNA broker</text>
+        <text class="t-sm t-mut" x="332" y="150" text-anchor="middle">verify identity</text>
+        <text class="t-sm t-mut" x="332" y="168" text-anchor="middle">+ device posture</text>
+        <line class="flow" x1="174" y1="138" x2="238" y2="138" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="508" y="44" width="188" height="56" rx="10"/>
+        <text class="t-sm t-b" x="602" y="68" text-anchor="middle">App you may use</text>
+        <text class="t-sm" x="602" y="87" text-anchor="middle" fill="var(--state-ok)">per-app access</text>
+        ${[["Other app",120],["Other app",194]].map(([t,y])=>`
+          <rect class="box-soft" x="508" y="${y}" width="188" height="52" rx="10" style="stroke-dasharray:5 5"/>
+          <text class="t-sm t-mut" x="602" y="${y+24}" text-anchor="middle">${t}</text>
+          <text class="t-sm t-mut" x="602" y="${y+42}" text-anchor="middle">dark — never exposed</text>
+        `).join("")}
+        <line class="flow-ok" x1="424" y1="120" x2="506" y2="78" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Authenticate, authorise, then connect — and only to the one app.</text>
       </svg>`
   };
 
