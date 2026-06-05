@@ -1191,7 +1191,7 @@
       id: "owasp", term: "OWASP Top 10", acronym: "Open Worldwide Application Security Project",
       aliases: ["OWASP", "Top 10", "broken access control", "injection", "ASVS"],
       tldr: "The community's ranked list of the most critical web application risks.",
-      explainer: `OWASP is a non-profit community that produces free, vendor-neutral application-security resources, and its Top 10 is the field's best-known awareness document: a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input. It is used everywhere as a baseline — developers code against it, WAFs ship rule sets named after it, and auditors check for it. The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one and adds Software Supply Chain Failures as a new category, reflecting where attacks have moved. OWASP also maintains deeper resources like the Application Security Verification Standard (ASVS) and the Cheat Sheet Series. The Top 10 is a floor for awareness, not a complete security programme.`,
+      explainer: `OWASP is a non-profit community that produces free, vendor-neutral application-security resources, and its Top 10 is the field's best-known awareness document: a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input. It is used everywhere as a baseline — developers code against it, WAFs ship rule sets named after it, and auditors check for it. The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one and adds Software Supply Chain Failures — entering at number three — as a new category, reflecting where attacks have moved. OWASP also maintains deeper resources like the Application Security Verification Standard (ASVS) and the Cheat Sheet Series. The Top 10 is a floor for awareness, not a complete security programme.`,
       types: ["Security Technology"], provenance: [],
       related: ["websec", "waf", "cve"],
       caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures new in the 2025 edition."
@@ -2531,8 +2531,8 @@
         `).join("")}
         <text class="t-sm t-mut" x="170" y="230">0</text>
         <text class="t-sm t-mut" x="650" y="230" text-anchor="end">10</text>
-        <line class="stroke-bad" x1="638" y1="184" x2="638" y2="218" style="stroke-width:2.5"/>
-        <text class="t-sm t-b" x="624" y="180" text-anchor="end" fill="var(--state-bad)">9.8 critical</text>
+        <line class="stroke-bad" x1="648" y1="184" x2="648" y2="218" style="stroke-width:2.5"/>
+        <text class="t-sm t-b" x="650" y="180" text-anchor="end" fill="var(--state-bad)">10.0 critical</text>
       </svg>`,
 
     owasp: () => `
@@ -2541,8 +2541,8 @@
         ${[
           ["01","Broken Access Control","still #1",true,false],
           ["02","Security Misconfiguration","",false,false],
-          ["··","Cryptographic Failures · Injection · …","",false,false],
-          ["▸","Software Supply Chain Failures","new",false,true]
+          ["03","Software Supply Chain Failures","new",false,true],
+          ["··","Cryptographic Failures · Injection · …","",false,false]
         ].map(([n,t,tag,lead,isnew],i)=>`
           <rect class="${lead?'box-accent':(isnew?'box':'box-soft')}" x="120" y="${50+i*52}" width="480" height="44" rx="8"/>
           <text class="t-b" x="146" y="${77+i*52}">${n}</text>
