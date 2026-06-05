@@ -556,7 +556,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">40</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">41</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -970,6 +970,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"],
       related: ["zerotrust", "mtls", "spiffe", "vpn"],
       caption: "Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny)."
+    },
+    {
+      id: "scim", term: "SCIM", acronym: "System for Cross-domain Identity Management",
+      aliases: ["user provisioning", "deprovisioning", "SCIM 2.0", "RFC 7644"],
+      tldr: "Automates creating and removing user accounts across apps when people join or leave.",
+      explainer: `System for Cross-domain Identity Management is a standard for syncing user accounts between an identity provider and the apps that rely on it. Over a simple REST and JSON API — chiefly CRUD operations on /Users and /Groups resources — an IdP pushes joiners, movers, and leavers so every connected app stays in step automatically. Where SAML and OIDC handle the login itself, SCIM handles the account lifecycle around it: granting access on day one and revoking it the moment someone leaves. That closes the security gap left by orphaned accounts after offboarding.`,
+      types: ["Protocol", "Security Technology"], provenance: [],
+      related: ["idp", "saml", "oidc"],
+      caption: "The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync."
     }
   ];
 
@@ -1757,6 +1766,25 @@
         <text class="t-sm" x="508" y="178" text-anchor="middle" fill="var(--accent)">outbound bind</text>
         <text class="t-sm t-mut" x="360" y="274" text-anchor="middle">Default-deny: a service policy must explicitly allow identity A to the service.</text>
         <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">Services dial out to the fabric; nothing listens for inbound connections.</text>
+      </svg>`,
+
+    scim: () => `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SCIM: an identity provider pushes create, update, and deactivate operations over a REST and JSON API to the /Users and /Groups endpoints of several connected apps.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">SCIM 2.0 · REST + JSON · /Users · /Groups</text>
+        <rect class="box-accent" x="24" y="100" width="172" height="76" rx="12"/>
+        <text class="t-b" x="110" y="132" text-anchor="middle">Identity Provider</text>
+        <text class="t-sm t-mut" x="110" y="152" text-anchor="middle">source of truth</text>
+        ${[
+          ["create — joiner", 46, 73],
+          ["update — mover", 116, 143],
+          ["deactivate — leaver", 186, 213],
+        ].map(([label, by, cy]) => `
+          <rect class="box" x="512" y="${by}" width="184" height="54" rx="10"/>
+          <text class="t-sm t-b" x="604" y="${by+23}" text-anchor="middle">Connected app</text>
+          <text class="t-sm t-mut" x="604" y="${by+41}" text-anchor="middle">${label}</text>
+          <line class="flow-accent" x1="196" y1="138" x2="510" y2="${cy}" marker-end="url(#ah-acc)"/>
+        `).join("")}
+        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">One change at the IdP fans out to every app — and offboarding revokes access everywhere.</text>
       </svg>`
   };
 
