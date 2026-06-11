@@ -45,6 +45,11 @@
       --cat-6: #4F46E5;
       --cat-7: #7C3AED;
 
+      /* Text on filled accent / categorical backgrounds. --on-cat flips in
+         dark mode because the categorical fills lighten there. */
+      --on-accent: #FFFFFF;
+      --on-cat: #FFFFFF;
+
       /* Taxonomy dimensions: type = brand accent, provenance + domain = categorical. */
       --tag-type: var(--accent);
       --tag-prov: var(--cat-4);
@@ -101,6 +106,7 @@
       --cat-5: #60A5FA;
       --cat-6: #818CF8;
       --cat-7: #A78BFA;
+      --on-cat: #0B0B0C;
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
     }
@@ -301,15 +307,15 @@
     .chip.prov { color: var(--tag-prov); border-color: color-mix(in srgb, var(--tag-prov) 40%, var(--border)); background: color-mix(in srgb, var(--tag-prov) 7%, var(--surface)); }
     .chip.prov .dot { background: var(--tag-prov); }
     .chip.prov:hover { border-color: var(--tag-prov); background: color-mix(in srgb, var(--tag-prov) 13%, var(--surface)); }
-    .chip.type[aria-pressed="true"] { background: var(--tag-type); color: #fff; border-color: var(--tag-type); }
-    .chip.type[aria-pressed="true"] .dot { background: #fff; }
-    .chip.prov[aria-pressed="true"] { background: var(--tag-prov); color: #fff; border-color: var(--tag-prov); }
-    .chip.prov[aria-pressed="true"] .dot { background: #fff; }
+    .chip.type[aria-pressed="true"] { background: var(--tag-type); color: var(--on-accent); border-color: var(--tag-type); }
+    .chip.type[aria-pressed="true"] .dot { background: var(--on-accent); }
+    .chip.prov[aria-pressed="true"] { background: var(--tag-prov); color: var(--on-cat); border-color: var(--tag-prov); }
+    .chip.prov[aria-pressed="true"] .dot { background: var(--on-cat); }
     .chip.domain { color: var(--tag-domain); border-color: color-mix(in srgb, var(--tag-domain) 40%, var(--border)); background: color-mix(in srgb, var(--tag-domain) 7%, var(--surface)); }
     .chip.domain .dot { background: var(--tag-domain); }
     .chip.domain:hover { border-color: var(--tag-domain); background: color-mix(in srgb, var(--tag-domain) 13%, var(--surface)); }
-    .chip.domain[aria-pressed="true"] { background: var(--tag-domain); color: #fff; border-color: var(--tag-domain); }
-    .chip.domain[aria-pressed="true"] .dot { background: #fff; }
+    .chip.domain[aria-pressed="true"] { background: var(--tag-domain); color: var(--on-cat); border-color: var(--tag-domain); }
+    .chip.domain[aria-pressed="true"] .dot { background: var(--on-cat); }
 
     /* Non-interactive label variant (used on dense cards) */
     .chip.static { cursor: default; }
@@ -404,6 +410,17 @@
     .related-pill:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
     .related-pill svg { width: 14px; height: 14px; color: var(--text-muted); }
     .related-pill:hover svg { color: var(--accent); }
+
+    .detail-source { margin-top: var(--space-6); }
+    .source-link {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-size: var(--fs-small); font-weight: 700;
+      color: var(--accent); text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--transition);
+    }
+    .source-link:hover { border-bottom-color: var(--accent); }
+    .source-link svg { width: 14px; height: 14px; }
 
     /* ==================================================================
        Diagram frame + shared SVG grammar
@@ -515,6 +532,15 @@
       #browse-view, #detail-view { grid-column: 2; grid-row: 1; min-width: 0; }
     }
 
+    .noscript-note {
+      margin: var(--space-4) 0 0;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-size: var(--fs-small);
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -561,9 +587,11 @@
     </div>
   </header>
 
+  <noscript><div class="container"><p class="noscript-note">This glossary renders its 68 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
+
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">41</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">68</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -571,14 +599,14 @@
     <div id="browse-view">
       <section class="intro">
         <div class="container">
-          <h1>The visual glossary of how the internet&nbsp;keeps&nbsp;its&nbsp;secrets.</h1>
+          <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">0</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">68</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">0</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">68</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -658,6 +686,7 @@
       explainer: `TCP/IP is the foundational suite that lets dissimilar networks interconnect. IP handles addressing and routing of packets between hosts; TCP adds reliable, ordered, connection-oriented delivery on top, with UDP as the lightweight, fire-and-forget alternative. It is organised as layers — link, internet, transport, application — so each concern is solved independently. Almost every other protocol in this glossary runs on top of it.`,
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Addressing & Routing", "Transport & Web"],
       related: ["dns", "http", "nat", "bgp"],
+      source: { label: "RFC 1122 — Requirements for Internet Hosts", url: "https://www.rfc-editor.org/info/rfc1122" },
       caption: "Layered model — data is encapsulated down four layers, each adding its own header."
     },
     {
@@ -666,6 +695,7 @@
       explainer: `The Domain Name System resolves human-readable names like example.com into the numeric IP addresses machines actually route to. A resolver walks a hierarchy — root servers, the top-level domain, then the authoritative server for the domain — caching answers along the way to stay fast. Without it you would have to memorise IP addresses. It is also a powerful control point for security and filtering.`,
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Addressing & Routing"],
       related: ["tcpip", "http", "dhcp"],
+      source: { label: "RFC 1035 — Domain Names", url: "https://www.rfc-editor.org/info/rfc1035" },
       caption: "Recursive resolution — the resolver walks root, TLD, then authoritative, and caches the answer."
     },
     {
@@ -675,6 +705,7 @@
       explainer: `HTTP is the application protocol browsers and APIs use to fetch and submit resources via methods such as GET and POST. It is stateless: each request stands alone, with cookies or tokens carrying context between them. HTTPS is the very same protocol running inside a TLS-encrypted channel, so traffic is private and tamper-evident. It is now the default transport for nearly all web traffic.`,
       types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
       related: ["tls", "tcpip", "grpc"],
+      source: { label: "RFC 9110 — HTTP Semantics", url: "https://www.rfc-editor.org/info/rfc9110" },
       caption: "Request/response — the client asks, the server answers; HTTPS wraps the exchange in TLS."
     },
     {
@@ -683,6 +714,7 @@
       explainer: `Transport Layer Security, the successor to SSL, gives any TCP connection confidentiality, integrity, and server authentication. A handshake negotiates ciphers and uses the server's certificate plus public-key cryptography to agree on session keys, after which traffic is encrypted with fast symmetric crypto. It underpins HTTPS, secure email, and many VPNs. mTLS extends it so both sides present certificates.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Secure Channels & Crypto"],
       related: ["mtls", "ssh", "ipsec", "http"],
+      source: { label: "RFC 8446 — TLS 1.3", url: "https://www.rfc-editor.org/info/rfc8446" },
       caption: "Handshake sequence — negotiate, authenticate with a certificate, then exchange encrypted data."
     },
     {
@@ -691,6 +723,7 @@
       explainer: `The Border Gateway Protocol is how autonomous systems — large, independently run networks — advertise which IP ranges they can reach and choose paths between one another. It is policy-driven rather than purely shortest-path, reflecting commercial peering and transit relationships. BGP is what makes the internet a network of networks; a single misconfiguration can reroute or black-hole traffic globally.`,
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Addressing & Routing"],
       related: ["tcpip", "nat", "dns"],
+      source: { label: "RFC 4271 — BGP-4", url: "https://www.rfc-editor.org/info/rfc4271" },
       caption: "Inter-AS routing — autonomous systems advertise prefixes and select a path by policy."
     },
     {
@@ -699,6 +732,7 @@
       explainer: `A Virtual LAN partitions a single physical network into separate broadcast domains by tagging Ethernet frames (the 802.1Q standard). Devices on different VLANs cannot talk directly without passing through a router, even when plugged into the same switch — handy for separating, say, guest, voice, and server traffic. It improves security, performance, and manageability without extra cabling.`,
       types: ["Network Technology"], provenance: [], domains: ["Addressing & Routing"],
       related: ["microseg", "nat", "firewall"],
+      source: { label: "IEEE 802.1Q", url: "https://standards.ieee.org/ieee/802.1Q/10323/" },
       caption: "One switch, three isolated broadcast domains; traffic between them must pass through a router."
     },
     {
@@ -707,6 +741,7 @@
       explainer: `Network Address Translation rewrites the source and destination IP and port of packets as they cross a boundary, typically mapping many internal private addresses onto a single public one. It conserves scarce IPv4 address space and, as a side effect, hides internal network structure. The router keeps a translation table so replies are sent back to the correct internal host.`,
       types: ["Network Technology", "Protocol"], provenance: [], domains: ["Addressing & Routing"],
       related: ["tcpip", "firewall", "vpn"],
+      source: { label: "RFC 3022 — Traditional IP NAT", url: "https://www.rfc-editor.org/info/rfc3022" },
       caption: "Many private addresses are translated to one public address via the router's mapping table."
     },
     {
@@ -715,6 +750,7 @@
       explainer: `OAuth 2.0 is an authorization framework: instead of handing an app your credentials, you grant it a scoped, revocable access token issued by the resource's authorization server. The classic flow redirects you to log in, you consent, and the app receives a token to call the API on your behalf. It powers "Sign in with…" buttons and most API delegation. Crucially, it is about authorization, not authentication.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["jwt", "saml", "idp"],
+      source: { label: "RFC 6749 — OAuth 2.0 Framework", url: "https://www.rfc-editor.org/info/rfc6749" },
       caption: "Authorization-code flow — the user consents and the app receives a scoped access token."
     },
     {
@@ -723,6 +759,7 @@
       explainer: `A JSON Web Token packs claims — who you are, what you may do, when it expires — into three base64url-encoded parts: header, payload, and signature. The signature lets any holder verify the token has not been tampered with, without a database lookup, which makes JWTs popular for stateless sessions and API access. They are readable, not encrypted, so secrets never belong in the payload.`,
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "saml", "spiffe"],
+      source: { label: "RFC 7519 — JSON Web Token", url: "https://www.rfc-editor.org/info/rfc7519" },
       caption: "Token anatomy — header, payload, and signature; the signature makes it tamper-evident."
     },
     {
@@ -731,6 +768,7 @@
       explainer: `A Virtual Private Network builds an encrypted tunnel between a device (or a whole site) and a network, so traffic crosses the untrusted internet as if it were on a private link. It is used for remote access to corporate resources and to shield traffic on hostile networks. Its security and topology depend entirely on the underlying protocol — IPsec, WireGuard, or a TLS-based design.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Secure Channels & Crypto"],
       related: ["wireguard", "ipsec", "tls", "sase"],
+      source: { label: "NIST glossary — VPN", url: "https://csrc.nist.gov/glossary/term/virtual_private_network" },
       caption: "An encrypted tunnel carries private traffic across the untrusted public internet."
     },
     {
@@ -739,14 +777,16 @@
       explainer: `WireGuard is a VPN protocol designed for simplicity and speed, with a codebase small enough to audit by hand. Peers are identified by public keys; once configured, it establishes an encrypted tunnel with very low overhead and quick handshakes. It ships inside the Linux kernel and has rapidly become the modern default over heavier IPsec and OpenVPN stacks.`,
       types: ["Protocol", "Security Technology"], provenance: ["Open Source"], domains: ["Secure Channels & Crypto"],
       related: ["vpn", "ipsec", "tls"],
+      source: { label: "WireGuard whitepaper", url: "https://www.wireguard.com/papers/wireguard.pdf" },
       caption: "Two peers identified by public keys establish a lightweight encrypted tunnel."
     },
     {
       id: "zerotrust", term: "Zero Trust", acronym: "Zero Trust Architecture", aliases: ["ZTA", "ZTNA", "BeyondCorp"],
       tldr: "Trust nothing by default; verify every request regardless of network location.",
-      explainer: `Zero Trust is a security model that abandons the idea of a safe internal network. Every request must be authenticated, authorized, and encrypted based on identity and context — whether it originates inside or outside the old perimeter. It leans on strong identity, least-privilege access, and continuous verification rather than a hard shell around a soft, trusted interior.`,
+      explainer: `Zero Trust is a security model that abandons the idea of a safe internal network. Every request must be authenticated, authorised, and encrypted based on identity and context — whether it originates inside or outside the old perimeter. It leans on strong identity, least-privilege access, and continuous verification rather than a hard shell around a soft, trusted interior.`,
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core"],
       related: ["mtls", "microseg", "peppdp", "idp", "sase"],
+      source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
       caption: "Every request is verified at a policy gate — no implicit trust by network location."
     },
     {
@@ -755,6 +795,7 @@
       explainer: `A firewall sits at a network boundary and permits or blocks traffic according to rules based on addresses, ports, and — increasingly — application and identity. Stateful firewalls track the state of connections; next-generation firewalls inspect deeper into the traffic itself. It is the classic first line of network defence, separating trusted zones from untrusted ones.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Network Edge & Ops"],
       related: ["microseg", "nat", "vlan", "siem"],
+      source: { label: "NIST SP 800-41 Rev. 1 — Firewall Guidelines", url: "https://csrc.nist.gov/pubs/sp/800/41/r1/final" },
       caption: "Traffic is checked against an ordered rule set; matches are allowed or denied."
     },
     {
@@ -763,6 +804,7 @@
       explainer: `A load balancer distributes client requests across a pool of servers so no single one is overwhelmed, improving both capacity and resilience. It can route by simple round-robin or by load, health, or request content, and it removes unhealthy backends from rotation automatically. Operating at layer 4 (connections) or layer 7 (HTTP), it is also a natural place to terminate TLS.`,
       types: ["Network Technology"], provenance: ["Open Source", "Vendor"], domains: ["Network Edge & Ops"],
       related: ["tls", "kubernetes", "http"],
+      source: { label: "HAProxy documentation", url: "https://docs.haproxy.org/" },
       caption: "One entry point distributes requests across a pool of health-checked backends."
     },
     {
@@ -771,6 +813,7 @@
       explainer: `Docker popularised containers — lightweight, isolated processes that bundle an application with everything it needs to run, sharing the host's kernel instead of booting a whole virtual machine. Images are built in stacked, cacheable layers and run identically on any host, which makes "works on my machine" reproducible. It is the unit most modern deployment, including Kubernetes, builds upon.`,
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["kubernetes", "grpc"],
+      source: { label: "Docker documentation", url: "https://docs.docker.com/" },
       caption: "An image is a stack of read-only layers; containers share the host kernel."
     },
     {
@@ -779,6 +822,7 @@
       explainer: `Kubernetes is an orchestrator that runs containers across a cluster of machines. You declare the desired state — how many replicas, which images, what networking — and its control plane continuously reconciles reality to match, rescheduling failed workloads and scaling on demand. It turns a fleet of machines into one programmable platform. The pod is its smallest deployable unit.`,
       types: ["Development Framework", "Network Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["docker", "loadbalancer", "spiffe"],
+      source: { label: "Kubernetes documentation — Concepts", url: "https://kubernetes.io/docs/concepts/" },
       caption: "The control plane reconciles desired state, scheduling pods onto worker nodes."
     },
     {
@@ -787,14 +831,16 @@
       explainer: `React lets you build user interfaces as a tree of reusable components whose output is a function of their state and props. When state changes, it re-renders efficiently by diffing a lightweight virtual representation of the DOM and patching only what changed. Its declarative model — describe what the UI should look like, not the steps to mutate it — made it the dominant front-end approach.`,
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["django", "grpc"],
+      source: { label: "react.dev", url: "https://react.dev/" },
       caption: "A component tree renders from state; data flows down to children as props."
     },
     {
       id: "django", term: "Django", acronym: "Django (Python web framework)", aliases: ["MTV", "ORM"],
       tldr: "A batteries-included Python web framework for building sites fast.",
-      explainer: `Django is a high-level Python framework that ships with an ORM, an auto-generated admin interface, authentication, and routing out of the box, favouring convention over configuration. It follows an MTV pattern — model, template, view: requests are routed to a view, which pulls data through models and renders a template. Its philosophy is to handle the plumbing so you can focus on the application.`,
+      explainer: `Django is a high-level Python framework that ships with an ORM (object-relational mapper for database access), an auto-generated admin interface, authentication, and routing out of the box. It follows an MTV pattern — model, template, view: requests are routed to a view, which pulls data through models and renders a template. Its philosophy is to handle the plumbing so you can focus on the application.`,
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["react", "http"],
+      source: { label: "djangoproject.com", url: "https://www.djangoproject.com/" },
       caption: "MTV request flow — URL routing to a view, models for data, a template for the response."
     },
     {
@@ -803,23 +849,26 @@
       explainer: `gRPC lets services call one another as if invoking local functions, defining the contract in a .proto file from which client and server code is generated. It serialises data with compact binary Protocol Buffers and rides HTTP/2, enabling multiplexing and streaming with low latency. It is a common choice for internal microservice communication where REST and JSON prove too chatty.`,
       types: ["Protocol", "Development Framework"], provenance: ["Open Source"], domains: ["Transport & Web", "Platforms & Apps"],
       related: ["http", "kubernetes", "mtls"],
+      source: { label: "gRPC documentation", url: "https://grpc.io/docs/" },
       caption: "A .proto contract generates client and server stubs; calls ride HTTP/2 with streaming."
     },
     {
-      id: "mqtt", term: "MQTT", acronym: "Message Queuing Telemetry Transport", aliases: ["pub/sub", "broker", "IoT"],
+      id: "mqtt", term: "MQTT", acronym: "MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)", aliases: ["pub/sub", "broker", "IoT"],
       tldr: "A lightweight publish/subscribe protocol for IoT and constrained devices.",
       explainer: `MQTT is a messaging protocol built for low-bandwidth, high-latency, or unreliable networks. Clients publish messages to named topics on a central broker, and other clients subscribe to the topics they care about, which decouples senders from receivers. Its tiny footprint and tiered quality-of-service levels make it the default for sensors, telemetry, and large IoT fleets.`,
       types: ["Protocol"], provenance: ["Open Source"], domains: ["Transport & Web"],
       related: ["tcpip", "grpc"],
+      source: { label: "OASIS MQTT 5.0 specification", url: "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html" },
       caption: "Publishers send to topics on a broker, which fans messages out to subscribers."
     },
     {
       id: "ssh", term: "SSH", acronym: "Secure Shell", aliases: ["OpenSSH", "SCP", "key pair"],
       tldr: "An encrypted channel for remote login and command execution.",
-      explainer: `Secure Shell gives you an authenticated, encrypted connection to a remote machine — a safe replacement for the cleartext remote-access tools of the past. It authenticates with passwords or, preferably, public-key pairs, then secures the session for interactive shells, file transfer, and port forwarding. It is the everyday tool for administering servers securely.`,
+      explainer: `Secure Shell gives you an authenticated, encrypted connection to a remote machine — a safe replacement for the cleartext remote-access tools of the past. It first establishes an encrypted channel through key exchange, then authenticates inside it with passwords or, preferably, public-key pairs, and carries interactive shells, file transfer, and port forwarding. It is the everyday tool for administering servers securely.`,
       types: ["Protocol", "Security Technology"], provenance: ["Open Source"], domains: ["Secure Channels & Crypto"],
       related: ["tls", "vpn"],
-      caption: "Key-based handshake authenticates the peer, then secures an interactive session."
+      source: { label: "RFC 4251 — SSH Protocol Architecture", url: "https://www.rfc-editor.org/info/rfc4251" },
+      caption: "An encrypted channel is established first; key-based login then proves identity inside it."
     },
     {
       id: "dhcp", term: "DHCP", acronym: "Dynamic Host Configuration Protocol", aliases: ["DORA", "lease"],
@@ -827,6 +876,7 @@
       explainer: `The Dynamic Host Configuration Protocol lets a device that has just connected obtain its IP address, subnet mask, default gateway, and DNS servers with no manual setup. It works through a short Discover, Offer, Request, Acknowledge exchange with a DHCP server, which leases each address for a limited time. It is why your phone "just works" the moment it joins a new Wi-Fi network.`,
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Addressing & Routing"],
       related: ["dns", "nat", "tcpip"],
+      source: { label: "RFC 2131 — DHCP", url: "https://www.rfc-editor.org/info/rfc2131" },
       caption: "The DORA exchange — Discover, Offer, Request, Acknowledge — leases an address to a client."
     },
     {
@@ -835,6 +885,7 @@
       explainer: `Security Assertion Markup Language enables enterprise single sign-on: an identity provider authenticates the user and issues a digitally signed XML assertion that service providers trust, so users log in once for many applications. It predates OAuth and OIDC and remains widespread in corporate and SaaS access. The signature is what lets a service provider trust the assertion without ever seeing the password.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "idp", "jwt"],
+      source: { label: "OASIS SAML 2.0 Core", url: "https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf" },
       caption: "SSO via a signed assertion — the IdP authenticates, the service provider trusts the result."
     },
     {
@@ -843,7 +894,8 @@
       explainer: `RADIUS centralises network access control: when you connect to Wi-Fi, a VPN, or a switch port, that access device asks a RADIUS server to verify your credentials, decide what you are allowed to do, and log the session. It cleanly separates the device granting access from the system that holds identities. It is a long-standing backbone of enterprise and ISP network access — the classic AAA model.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["saml", "idp"],
-      caption: "AAA flow — the access device asks the RADIUS server to authenticate and authorize a user."
+      source: { label: "RFC 2865 — RADIUS", url: "https://www.rfc-editor.org/info/rfc2865" },
+      caption: "AAA flow — the access device asks the RADIUS server to authenticate and authorise a user."
     },
     {
       id: "ipsec", term: "IPsec", acronym: "Internet Protocol Security", aliases: ["IKE", "ESP", "tunnel mode"],
@@ -851,6 +903,7 @@
       explainer: `IPsec is a suite that secures traffic at the IP layer, so any application's packets can be encrypted and integrity-protected with no changes to the application. It runs in transport mode, protecting payloads host-to-host, or tunnel mode, wrapping whole packets between gateways — the basis of many site-to-site VPNs. Key exchange and negotiation are handled by the IKE protocol.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Secure Channels & Crypto"],
       related: ["vpn", "wireguard", "tls"],
+      source: { label: "RFC 4301 — IPsec Architecture", url: "https://www.rfc-editor.org/info/rfc4301" },
       caption: "Tunnel mode — a gateway encrypts and wraps whole packets for transit between sites."
     },
     {
@@ -859,6 +912,7 @@
       explainer: `Mutual TLS extends ordinary TLS — in which only the server presents a certificate — so the client must present one too. Each side verifies the other before any application data flows, giving strong two-way authentication without passwords. It is a cornerstone of zero-trust service-to-service communication and of service meshes, where every workload carries its own cryptographic identity.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Secure Channels & Crypto", "Zero-Trust Core"],
       related: ["tls", "zerotrust", "spiffe"],
+      source: { label: "RFC 8446 — TLS 1.3 (mutual authentication)", url: "https://www.rfc-editor.org/info/rfc8446" },
       caption: "Mutual handshake — both client and server present and verify certificates before data flows."
     },
     {
@@ -868,6 +922,7 @@
       explainer: `SPIFFE defines a universal identity for workloads — a SPIFFE ID — and a document that proves it, the SVID, typically an X.509 certificate or a JWT. SPIRE is the reference implementation that attests workloads and issues these short-lived identities automatically. Together they let services authenticate one another with mTLS instead of shared secrets — foundational plumbing for zero trust.`,
       types: ["Security Technology", "Development Framework"], provenance: ["Open Source"], domains: ["Identity & Access", "Zero-Trust Core"],
       related: ["mtls", "zerotrust", "jwt"],
+      source: { label: "spiffe.io", url: "https://spiffe.io/" },
       caption: "SPIRE attests a workload, then issues it a short-lived SVID identity for mTLS."
     },
     {
@@ -876,6 +931,7 @@
       explainer: `Microsegmentation pushes isolation right down to individual workloads or applications, so traffic between them is governed by fine-grained policy rather than a single flat internal network. If one host is compromised, lateral movement is contained because each segment permits only the flows it genuinely needs. It is a practical building block of zero-trust networking, usually enforced in software.`,
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Network Edge & Ops"],
       related: ["zerotrust", "vlan", "firewall"],
+      source: { label: "NIST SP 800-215 — Secure Enterprise Network Landscape", url: "https://csrc.nist.gov/pubs/sp/800/215/final" },
       caption: "Per-workload segments permit only required flows, containing lateral movement after a breach."
     },
     {
@@ -885,6 +941,7 @@
       explainer: `In policy-based access control, the Policy Enforcement Point sits in the request path and intercepts each access attempt, while the Policy Decision Point evaluates the rules and returns an allow or deny. Separating enforcement from decision lets a single central policy brain govern many enforcement points consistently. This pattern is the control core of zero-trust architectures.`,
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Identity & Access"],
       related: ["zerotrust", "idp"],
+      source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
       caption: "The enforcement point intercepts a request; the decision point evaluates policy and replies."
     },
     {
@@ -893,22 +950,25 @@
       explainer: `An Identity Provider is the central authority that verifies identities and issues the assertions or tokens — via SAML, OAuth, or OIDC — that applications trust, so each app does not manage passwords itself. It is the hub of single sign-on and the anchor of identity in zero-trust designs. Examples range from open-source Keycloak to managed cloud directory services.`,
       types: ["Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Identity & Access"],
       related: ["oauth", "saml", "zerotrust", "radius"],
+      source: { label: "NIST glossary — Identity Provider", url: "https://csrc.nist.gov/glossary/term/identity_provider" },
       caption: "A central identity provider authenticates users and issues tokens that many apps trust."
     },
     {
       id: "sase", term: "SASE", acronym: "Secure Access Service Edge", aliases: ["SSE", "ZTNA", "cloud security"],
       tldr: "Delivers networking and security together from the cloud edge, near the user.",
-      explainer: `Secure Access Service Edge converges wide-area networking with a stack of security services — secure web gateway, cloud access security broker, firewall-as-a-service, and zero-trust network access — delivered from cloud points of presence close to the user. Instead of backhauling traffic to a datacentre to be inspected, each request is checked and policy-enforced at the nearest edge. It is the cloud-delivered way most organisations now run zero trust.`,
+      explainer: `Secure Access Service Edge converges wide-area networking with a stack of security services — secure web gateway, cloud access security broker, firewall-as-a-service, and zero-trust network access — delivered from cloud points of presence close to the user. Instead of hauling all traffic back to a central datacentre for inspection (backhauling), each request is checked and policy-enforced at the nearest edge. It is the cloud-delivered way most organisations now run zero trust.`,
       types: ["Security Technology", "Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Zero-Trust Core"],
       related: ["zerotrust", "vpn", "sdwan", "firewall"],
+      source: { label: "NIST glossary — Secure Access Service Edge", url: "https://csrc.nist.gov/glossary/term/secure_access_service_edge" },
       caption: "User traffic is inspected and policy-checked at a nearby cloud edge, not backhauled to HQ."
     },
     {
       id: "sdwan", term: "SD-WAN", acronym: "Software-Defined Wide Area Network", aliases: ["overlay", "WAN", "edge"],
       tldr: "Software steers branch traffic across multiple links by policy, not fixed routing.",
-      explainer: `A Software-Defined WAN lays an intelligent overlay across a branch's transports — private MPLS circuits, broadband, and cellular — while a central controller steers each application over the best available path by policy and live link quality. It replaces rigid, device-by-device WAN configuration with centralised management, cutting cost by using cheap internet links alongside or instead of expensive private lines. It is frequently paired with SASE for security.`,
+      explainer: `A Software-Defined WAN lays an intelligent overlay across a branch's transports — private MPLS (Multiprotocol Label Switching) circuits, broadband, and cellular — while a central controller steers each application over the best available path by policy and live link quality. It replaces rigid, device-by-device WAN configuration with centralised management, cutting cost by using cheap internet links alongside or instead of expensive private lines. It is frequently paired with SASE for security.`,
       types: ["Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Addressing & Routing"],
       related: ["sase", "vpn", "bgp", "loadbalancer"],
+      source: { label: "MEF 70.1 — SD-WAN Service Attributes", url: "https://www.mef.net/wp-content/uploads/MEF-70.1.pdf" },
       caption: "A central controller steers each app over the best of several transport links by policy."
     },
     {
@@ -917,15 +977,17 @@
       explainer: `A SIEM ingests logs and events from across the estate — firewalls, servers, applications, and cloud services — then normalises, stores, and correlates them to surface suspicious patterns as prioritised alerts. It gives a security operations centre one place to detect, investigate, and report on threats, and to satisfy audit requirements. Modern platforms layer on analytics and automated response.`,
       types: ["Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Detection & Response"],
       related: ["firewall", "zerotrust", "radius"],
+      source: { label: "NIST glossary — SIEM", url: "https://csrc.nist.gov/glossary/term/security_information_and_event_management" },
       caption: "Logs from many sources are normalised and correlated into prioritised alerts for the SOC."
     },
     {
-      id: "quic", term: "QUIC", acronym: "Quick UDP Internet Connections",
+      id: "quic", term: "QUIC", acronym: "QUIC (a name, not an acronym — RFC 9000)",
       aliases: ["HTTP/3", "gQUIC", "RFC 9000"],
       tldr: "A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.",
-      explainer: `QUIC is a transport protocol that runs over UDP and combines connection setup, TLS 1.3 encryption, and multiplexed streams into one design. Because the transport and cryptographic handshakes happen together, a new connection is usually ready after a single round trip — or zero when resuming — where TCP-then-TLS needs several. Independent streams mean one lost packet stalls only its own stream, removing the head-of-line blocking that slows HTTP/2 over TCP. It is the foundation of HTTP/3 and ships in every major browser, with encryption built in rather than bolted on.`,
+      explainer: `QUIC is a transport protocol that runs over UDP and combines connection setup, TLS 1.3 encryption, and multiplexed streams into one design. Because the transport and cryptographic handshakes happen together, a new connection is usually ready after a single round trip — or zero when resuming — where TCP-then-TLS needs several. Independent streams mean one lost packet stalls only its own stream, removing the head-of-line blocking — one stalled packet holding up everything queued behind it — that slows HTTP/2 over TCP. It is the foundation of HTTP/3 and ships in every major browser, with encryption built in rather than bolted on.`,
       types: ["Protocol", "Network Technology", "Security Technology"], provenance: [], domains: ["Transport & Web", "Secure Channels & Crypto"],
       related: ["tls", "tcpip", "http"],
+      source: { label: "RFC 9000 — QUIC", url: "https://www.rfc-editor.org/info/rfc9000" },
       caption: "Combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP."
     },
     {
@@ -935,6 +997,7 @@
       explainer: `Cross-Origin Resource Sharing is how a server relaxes the browser's same-origin policy, telling the browser which foreign origins may read its responses. When script on one site calls another, the browser attaches an Origin header and only exposes the reply if the server returns a matching Access-Control-Allow-Origin. Requests that are not "simple" — custom headers, or methods like PUT — trigger a preflight OPTIONS check first. Crucially, CORS is enforced only by browsers: it governs in-browser JavaScript, not server-to-server calls, and is no substitute for real authorization.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Transport & Web"],
       related: ["http", "oauth", "zerotrust"],
+      source: { label: "WHATWG Fetch standard — CORS", url: "https://fetch.spec.whatwg.org/" },
       caption: "A simple request round-trips with Origin / Allow-Origin headers; a non-simple one adds a preflight OPTIONS check first."
     },
     {
@@ -944,6 +1007,7 @@
       explainer: `Proof Key for Code Exchange — pronounced "pixy" — hardens the OAuth 2.0 authorization-code flow against code interception. The client first invents a random secret, the code_verifier, and sends only its SHA-256 hash, the code_challenge, when it starts login. To swap the returned authorization code for tokens it must present the original verifier, which the server re-hashes and compares. A code stolen in transit is therefore useless without the matching verifier. Born for mobile and single-page apps that cannot keep a client secret, PKCE is now recommended for every client and is mandatory in OAuth 2.1.`,
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "oidc", "idp"],
+      source: { label: "RFC 7636 — PKCE", url: "https://www.rfc-editor.org/info/rfc7636" },
       caption: "The client commits to a hashed secret up front and proves it on redemption, so an intercepted code cannot be exchanged."
     },
     {
@@ -953,6 +1017,7 @@
       explainer: `OpenID Connect adds authentication to OAuth 2.0, which on its own only handles authorization. Alongside the usual access token, an OpenID Provider issues an ID Token — a signed JWT carrying claims such as who the user is (sub), who issued it (iss), and who it is for (aud). Apps can also call the UserInfo endpoint for profile details like name and email. Requesting the openid scope is what turns a plain OAuth exchange into an OIDC one, and it is the modern, JSON-based successor to SAML for single sign-on.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "jwt", "idp", "saml"],
+      source: { label: "OpenID Connect Core 1.0", url: "https://openid.net/specs/openid-connect-core-1_0.html" },
       caption: "OAuth grants an access token for APIs; OIDC adds a signed ID Token (a JWT) that attests who the user is."
     },
     {
@@ -962,15 +1027,17 @@
       explainer: `WebSocket turns a normal HTTP request into a long-lived, full-duplex connection so client and server can push messages at any time. It starts as an HTTP/1.1 GET carrying an Upgrade: websocket header; the server answers 101 Switching Protocols, and the same TCP socket then carries lightweight binary frames in both directions. That removes the request/response turn-taking of plain HTTP, which is why it powers chat, collaborative editing, live dashboards, and trading feeds. Run it as wss:// to wrap the connection in TLS.`,
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Transport & Web"],
       related: ["http", "tcpip", "webtransport"],
+      source: { label: "RFC 6455 — WebSocket Protocol", url: "https://www.rfc-editor.org/info/rfc6455" },
       caption: "An HTTP Upgrade handshake flips a single TCP connection into a persistent, two-way frame stream."
     },
     {
       id: "webtransport", term: "WebTransport", acronym: "Multiplexed streams and datagrams over HTTP/3",
       aliases: ["HTTP/3 transport", "datagrams", "WebTransport API"],
       tldr: "A newer browser transport over HTTP/3 offering multiplexed streams and fire-and-forget datagrams.",
-      explainer: `WebTransport gives browser code a low-latency session over HTTP/3 — and therefore over QUIC and UDP. Within one connection it offers reliable bidirectional and unidirectional streams plus unreliable datagrams, so an app can mix guaranteed delivery with fire-and-forget packets for things like game state or live media. Because it inherits QUIC's independent streams, one lost packet stalls only its own stream, avoiding the head-of-line blocking that WebSockets suffer over TCP. It is the emerging alternative to WebSockets: the API reached cross-browser support in 2026, though its W3C and IETF specifications are still drafts.`,
+      explainer: `WebTransport gives browser code a low-latency session over HTTP/3 — and therefore over QUIC and UDP. Within one connection it offers reliable bidirectional and unidirectional streams plus unreliable datagrams, so an app can mix guaranteed delivery with fire-and-forget packets for things like game state or live media. Because it inherits QUIC's independent streams, one lost packet stalls only its own stream, avoiding the head-of-line blocking — one stalled packet holding up everything queued behind it — that WebSockets suffer over TCP. It is the emerging alternative to WebSockets: the API reached cross-browser support in 2026, though its W3C and IETF specifications are still drafts.`,
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Transport & Web"],
       related: ["quic", "http", "websockets"],
+      source: { label: "W3C WebTransport (Working Draft)", url: "https://www.w3.org/TR/webtransport/" },
       caption: "One HTTP/3 connection carries many independent streams plus unreliable datagrams — no cross-stream head-of-line blocking."
     },
     {
@@ -980,15 +1047,17 @@
       explainer: `OpenZiti is an open-source zero-trust networking overlay, sponsored by NetFoundry, that replaces network-perimeter trust with per-connection, identity-based access. Every participant — app, device, or service — carries an x.509 identity, and a connection is allowed only when a policy explicitly grants that identity access to a named service across the mesh of edge routers. Services are "dark": they open no inbound ports and dial out to the fabric, so they are invisible to port scans and unreachable without authentication. Apps can embed the SDK directly or sit behind a tunneler, and every hop is mutually authenticated with mTLS — so unlike a VPN, being "on the network" grants nothing on its own.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Network Edge & Ops"],
       related: ["zerotrust", "mtls", "spiffe", "vpn"],
+      source: { label: "openziti.io", url: "https://openziti.io/" },
       caption: "Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny)."
     },
     {
       id: "scim", term: "SCIM", acronym: "System for Cross-domain Identity Management",
       aliases: ["user provisioning", "deprovisioning", "SCIM 2.0", "RFC 7644"],
       tldr: "Automates creating and removing user accounts across apps when people join or leave.",
-      explainer: `System for Cross-domain Identity Management is a standard for syncing user accounts between an identity provider and the apps that rely on it. Over a simple REST and JSON API — chiefly CRUD operations on /Users and /Groups resources — an IdP pushes joiners, movers, and leavers so every connected app stays in step automatically. Where SAML and OIDC handle the login itself, SCIM handles the account lifecycle around it: granting access on day one and revoking it the moment someone leaves. That closes the security gap left by orphaned accounts after offboarding.`,
+      explainer: `System for Cross-domain Identity Management is a standard for syncing user accounts between an identity provider and the apps that rely on it. Over a simple REST and JSON API — chiefly create-read-update-delete (CRUD) operations on /Users and /Groups resources — an IdP pushes joiners, movers, and leavers so every connected app stays in step automatically. Where SAML and OIDC handle the login itself, SCIM handles the account lifecycle around it: granting access on day one and revoking it the moment someone leaves. That closes the security gap left by orphaned accounts after offboarding.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["idp", "saml", "oidc"],
+      source: { label: "RFC 7644 — SCIM Protocol", url: "https://www.rfc-editor.org/info/rfc7644" },
       caption: "The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync."
     },
     {
@@ -998,6 +1067,7 @@
       explainer: `Multi-factor authentication requires two or more independent proofs of identity — something you know (a password), something you have (a phone or security key), or something you are (a fingerprint) — so a stolen password alone is not enough. Classic second factors like SMS codes and TOTP apps can still be phished, because a user can be tricked into typing them into a fake site. FIDO2 and WebAuthn close that gap: the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere. Passkeys are the consumer-friendly form — a discoverable FIDO credential synced across your devices that replaces the password entirely. For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be.`,
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "oidc", "idp", "pkce"],
+      source: { label: "W3C WebAuthn Level 2", url: "https://www.w3.org/TR/webauthn-2/" },
       caption: "Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it."
     },
     {
@@ -1007,6 +1077,7 @@
       explainer: `Public Key Infrastructure is the machinery that binds a public key to an identity and lets a relying party trust that binding without prior contact. A Certificate Authority signs X.509 certificates vouching that a given key belongs to a given name; anyone holding the CA's certificate can verify the signature and walk the chain up to a trusted root. This is the foundation under TLS, mTLS, code signing, and SPIFFE — every padlock in a browser is a PKI trust decision. Certificates carry an expiry and can be revoked, and protocols like ACME (used by Let's Encrypt) automate issuance and renewal at scale. Get the root of trust wrong and everything built on it is compromised.`,
       types: ["Security Technology"], provenance: [], domains: ["Secure Channels & Crypto", "Identity & Access"],
       related: ["tls", "mtls", "spiffe", "ssh"],
+      source: { label: "RFC 5280 — X.509 PKI Certificates", url: "https://www.rfc-editor.org/info/rfc5280" },
       caption: "A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts."
     },
     {
@@ -1016,24 +1087,27 @@
       explainer: `Once a system knows who you are (authentication), it must decide what you may do (authorization), and these are the two dominant models. Role-Based Access Control groups permissions into roles — billing-admin, read-only-auditor — and assigns people to roles, which is simple to reason about but coarse and prone to role explosion. Attribute-Based Access Control evaluates rules over attributes of the subject, resource, action, and environment — allow if department is finance AND the device is managed AND the time is business hours — giving fine-grained, context-aware decisions at the cost of complexity. Zero Trust leans toward ABAC because trust should depend on live context, not a static role. In practice a policy engine evaluates these rules at the decision point for every request.`,
       types: ["Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["peppdp", "opa", "zerotrust", "idp"],
+      source: { label: "NIST — Role Based Access Control project", url: "https://csrc.nist.gov/projects/role-based-access-control" },
       caption: "RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision."
     },
     {
       id: "opa", term: "OPA", acronym: "Open Policy Agent",
       aliases: ["Rego", "policy as code", "Gatekeeper", "policy engine"],
       tldr: "A general-purpose policy engine that answers allow / deny from code, not config.",
-      explainer: `Open Policy Agent is a CNCF-graduated engine that decouples policy decisions from application logic. A service asks OPA a question — can subject X perform action Y on resource Z? — sending JSON context, and OPA evaluates rules written in its declarative Rego language and returns a structured decision. Because the same engine enforces policy across microservices, Kubernetes admission, CI pipelines, and API gateways, organisations express authorization once as version-controlled policy as code rather than scattering if-statements through every app. It is the canonical software implementation of a Zero Trust Policy Decision Point. Gatekeeper packages OPA as a Kubernetes admission controller to validate resources against policy before they are created.`,
+      explainer: `Open Policy Agent is a CNCF-graduated engine that decouples policy decisions from application logic. A service asks OPA a question — can subject X perform action Y on resource Z? — sending JSON context, and OPA evaluates rules written in its declarative Rego language and returns a structured decision. Because the same engine enforces policy across microservices, Kubernetes admission, CI pipelines, and API gateways, organisations express authorization once as version-controlled policy as code rather than scattering if-statements through every app. It is the canonical software implementation of a Zero Trust Policy Decision Point. Gatekeeper packages OPA as a Kubernetes admission controller — a gate that checks each resource against policy at creation time, before it is admitted to the cluster.`,
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Identity & Access"],
       related: ["peppdp", "rbac", "kubernetes", "zerotrust"],
+      source: { label: "Open Policy Agent documentation", url: "https://www.openpolicyagent.org/docs" },
       caption: "Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites."
     },
     {
       id: "servicemesh", term: "Service Mesh", acronym: "Service Mesh (Istio · Linkerd · Envoy)",
       aliases: ["Istio", "Linkerd", "Envoy", "sidecar", "data plane", "control plane"],
       tldr: "A networking layer that gives every service identity, mTLS, and traffic control for free.",
-      explainer: `A service mesh moves the cross-cutting concerns of service-to-service communication — mutual TLS, retries, timeouts, load balancing, and observability — out of application code and into a dedicated infrastructure layer. A proxy (commonly Envoy) is deployed beside each workload as a sidecar; together these proxies form the data plane that carries traffic, while a control plane (Istio, Linkerd) configures them and distributes identities and certificates. Because every call now flows through a mutually authenticated, policy-checked hop, the mesh delivers encrypted east-west traffic and workload identity without changing a line of app code. It is where SPIFFE identities, mTLS, and microsegmentation meet inside a Kubernetes cluster. The trade-off is operational complexity and the latency of an extra network hop.`,
+      explainer: `A service mesh moves the cross-cutting concerns of service-to-service communication — mutual TLS, retries, timeouts, load balancing, and observability — out of application code and into a dedicated infrastructure layer. A proxy is deployed beside each workload as a sidecar (Envoy in Istio; Linkerd ships its own Rust micro-proxy); together these proxies form the data plane that carries traffic, while a control plane configures them and distributes identities and certificates. Because every call now flows through a mutually authenticated, policy-checked hop, the mesh delivers encrypted service-to-service (east-west) traffic and workload identity without changing a line of app code. It is where SPIFFE identities, mTLS, and microsegmentation meet inside a Kubernetes cluster. The trade-off is operational complexity and the latency of an extra network hop.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps"],
       related: ["mtls", "spiffe", "kubernetes", "microseg"],
+      source: { label: "NIST SP 800-204A — Service-Mesh Security", url: "https://csrc.nist.gov/pubs/sp/800/204/a/final" },
       caption: "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default."
     },
     {
@@ -1043,6 +1117,7 @@
       explainer: `Endpoint Detection and Response places a lightweight agent on laptops, servers, and workstations to continuously record process, file, network, and registry activity, then flags behaviour that matches known attack patterns and lets responders isolate or roll back a compromised host. Extended Detection and Response widens that lens, correlating endpoint telemetry with email, identity, and cloud signals so a multi-stage attack is seen as one incident rather than scattered alerts. For Zero Trust this is the Devices pillar in action: the agent's live health verdict — patched, encrypted, not infected — becomes a device-posture signal the policy engine weighs before granting access. A device that fails its posture check can be denied even with valid user credentials. EDR is reactive detection; posture turns it into an access input.`,
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
       related: ["siem", "soar", "zerotrust", "idsips"],
+      source: { label: "NIST glossary — Endpoint Detection & Response", url: "https://csrc.nist.gov/glossary/term/endpoint_detection_and_response" },
       caption: "An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access."
     },
     {
@@ -1052,6 +1127,7 @@
       explainer: `A Web Application Firewall sits in front of an application and inspects HTTP requests and responses at layer 7, blocking exploit attempts — SQL injection, cross-site scripting, path traversal — that a packet-filtering network firewall, which only sees ports and addresses, would happily pass. It matches traffic against rule sets such as the OWASP Core Rule Set and, increasingly, against learned models of normal behaviour, and can virtually patch a known vulnerability by dropping the malicious pattern until the code is fixed. WAFs run as reverse proxies, host modules, or cloud services, and commonly add rate limiting and bot mitigation. They are a control at the application edge, complementary to — not a replacement for — secure code.`,
       types: ["Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Detection & Response"],
       related: ["firewall", "http", "owasp", "websec"],
+      source: { label: "OWASP — Web Application Firewall", url: "https://owasp.org/www-community/Web_Application_Firewall" },
       caption: "Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge."
     },
     {
@@ -1061,6 +1137,7 @@
       explainer: `Cross-Site Scripting (XSS) injects attacker-controlled script into a page so it runs with the victim's session, stealing tokens or acting as the user; it is defeated by escaping output and validating input. Cross-Site Request Forgery (CSRF) tricks a logged-in user's browser into firing an unwanted state-changing request to a site where they are authenticated, defended with anti-CSRF tokens and SameSite cookies. Content Security Policy (CSP) is a response header that whitelists which script, style, and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through. Together they are the core of browser-side application security, sitting alongside CORS and PKCE in the same web-platform trust model. None is sufficient alone — defence in depth is the point.`,
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Transport & Web"],
       related: ["cors", "http", "pkce", "waf"],
+      source: { label: "W3C Content Security Policy Level 3", url: "https://www.w3.org/TR/CSP3/" },
       caption: "XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach."
     },
     {
@@ -1070,15 +1147,17 @@
       explainer: `Applications need credentials — database passwords, API keys, certificates — and hard-coding them in config files or source control is a recipe for leaks. A secrets manager such as HashiCorp Vault stores these centrally, encrypted, behind authentication and fine-grained policy, and hands them out only to identities that prove they should have them. Its strongest pattern is dynamic secrets: rather than a long-lived shared password, Vault generates a short-lived credential on demand and revokes it automatically, shrinking the window a leaked secret is useful. Every access is authenticated, authorised, and logged, giving an audit trail and one-click rotation when something is exposed. In a Zero Trust system, workload identities (often SPIFFE) authenticate to the vault to retrieve exactly the secrets they need, just in time.`,
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Secure Channels & Crypto"],
       related: ["pki", "mtls", "spiffe", "kubernetes"],
+      source: { label: "HashiCorp Vault documentation", url: "https://developer.hashicorp.com/vault" },
       caption: "A workload authenticates to the vault, which checks policy and issues a short-lived, automatically-revoked secret — never a hard-coded password."
     },
     {
       id: "nist207", term: "NIST SP 800-207", acronym: "Zero Trust Architecture (NIST)",
       aliases: ["800-207", "zero trust architecture", "trust algorithm", "policy engine", "policy administrator", "CISA ZTMM"],
       tldr: "The reference document that defines Zero Trust and its policy components.",
-      explainer: `NIST Special Publication 800-207, published in 2020, is the vendor-neutral reference architecture that turned Zero Trust from a slogan into a defined model. It sets out seven tenets — every resource access is authenticated and authorised dynamically, no asset is trusted by network location, access is per-session and least-privilege — and names the logical components that enforce them. The Policy Decision Point splits into a Policy Engine, which runs the trust algorithm to grant or deny, and a Policy Administrator, which executes that decision; the Policy Enforcement Point sits in the data path and lets traffic through only when told. CISA's Zero Trust Maturity Model builds on it with five pillars — identity, devices, networks, applications, and data. It is the spec the PEP / PDP terms in this glossary come from.`,
+      explainer: `NIST Special Publication 800-207, published in 2020, is the vendor-neutral reference architecture that turned Zero Trust from a slogan into a defined model. It sets out seven tenets — every resource access is authenticated and authorised dynamically, no asset is trusted by network location, access is per-session and least-privilege — and names the logical components that enforce them. The Policy Decision Point splits into a Policy Engine, which runs the trust algorithm to grant or deny, and a Policy Administrator, which executes that decision; the Policy Enforcement Point sits in the data path and lets traffic through only when told. CISA's Zero Trust Maturity Model builds on it with five pillars — identity, devices, networks, applications & workloads, and data. It is the spec the PEP / PDP terms in this glossary come from.`,
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Governance & Supply Chain"],
       related: ["zerotrust", "peppdp", "ztna", "microseg"],
+      source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
       caption: "NIST 800-207's control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces."
     },
     {
@@ -1088,15 +1167,17 @@
       explainer: `Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself. A Software Bill of Materials (SBOM) is a machine-readable inventory — in formats like CycloneDX or SPDX — of every component and version in a build, so when the next Log4Shell lands you can answer "are we affected?" in seconds instead of weeks. SLSA (Supply-chain Levels for Software Artifacts) is a complementary framework whose Build Track levels 1 to 3 raise the bar on how tamper-resistant your pipeline is, producing signed provenance that says exactly how and where an artifact was built. Together they make the supply chain auditable and verifiable. Software Supply Chain Failures is now a category in the OWASP Top 10:2025, reflecting how central this has become.`,
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain"],
       related: ["sigstore", "docker", "cve", "opa"],
+      source: { label: "CISA — Software Bill of Materials", url: "https://www.cisa.gov/sbom" },
       caption: "An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both."
     },
     {
       id: "apigateway", term: "API Gateway", acronym: "API Gateway",
       aliases: ["gateway", "rate limiting", "BFF", "Kong", "ingress", "API management"],
       tldr: "A single front door for APIs that handles auth, rate limits, and routing.",
-      explainer: `An API gateway is a reverse proxy that sits between clients and a fleet of backend services, presenting one coherent entry point and handling the concerns no individual service should reimplement. It terminates TLS, validates OAuth tokens and API keys, enforces rate limits and quotas, routes and versions requests, and aggregates or transforms responses — so the services behind it stay small and focused on business logic. By centralising authentication and throttling, it is also a natural Zero Trust enforcement point at the application edge, rejecting unauthenticated or abusive traffic before it ever reaches a service. In microservice and gRPC architectures it is the standard pattern for north-south traffic. Push too much logic into it, though, and it becomes a bottleneck and a single point of failure.`,
+      explainer: `An API gateway is a reverse proxy that sits between clients and a fleet of backend services, presenting one coherent entry point and handling the concerns no individual service should reimplement. It terminates TLS, validates OAuth tokens and API keys, enforces rate limits and quotas, routes and versions requests, and aggregates or transforms responses — so the services behind it stay small and focused on business logic. By centralising authentication and throttling, it is also a natural Zero Trust enforcement point at the application edge, rejecting unauthenticated or abusive traffic before it ever reaches a service. In microservice and gRPC architectures it is the standard pattern for client-to-backend (north-south) traffic. Push too much logic into it, though, and it becomes a bottleneck and a single point of failure.`,
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Transport & Web"],
       related: ["oauth", "grpc", "loadbalancer", "http"],
+      source: { label: "NIST SP 800-204 — Microservices Security", url: "https://csrc.nist.gov/pubs/sp/800/204/final" },
       caption: "Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it."
     },
     {
@@ -1106,6 +1187,7 @@
       explainer: `An Intrusion Detection System inspects network traffic or host activity for signs of an attack — known exploit signatures, protocol anomalies, or traffic that deviates from a learned baseline — and raises an alert when it sees one. An Intrusion Prevention System is the same engine placed inline so it can act, dropping or resetting the malicious connection rather than merely reporting it. Open-source engines like Snort and Suricata pioneered the signature model, matching packets against community rule sets updated as new threats emerge. The detection feeds a SIEM for correlation and a SOC for response, and complements endpoint EDR by watching the wire instead of the host. The classic weakness is false positives in detection mode and the risk of blocking legitimate traffic in prevention mode.`,
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response", "Network Edge & Ops"],
       related: ["firewall", "siem", "edr", "soar"],
+      source: { label: "NIST SP 800-94 — Guide to IDPS", url: "https://csrc.nist.gov/pubs/sp/800/94/final" },
       caption: "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow."
     },
     {
@@ -1115,6 +1197,7 @@
       explainer: `LDAP is the protocol for querying and modifying a directory: a hierarchical database of entries — users, groups, computers, printers — each identified by a distinguished name and described by attributes. Microsoft Active Directory is the dominant enterprise implementation, combining an LDAP directory with Kerberos authentication and policy to become the identity backbone of most corporate networks. Applications bind to the directory to authenticate a user and to read group membership, which downstream systems map to permissions. It is the source of truth that protocols like RADIUS, SAML, and SCIM build on, and that identity providers federate outward to the cloud. Because it holds the keys to every account, the directory is a prime target — compromise it and you own the estate.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["idp", "radius", "kerberos", "saml"],
+      source: { label: "RFC 4511 — LDAP Protocol", url: "https://www.rfc-editor.org/info/rfc4511" },
       caption: "Apps bind to the directory tree by distinguished name to authenticate a user and read the group memberships that drive their permissions."
     },
     {
@@ -1124,6 +1207,7 @@
       explainer: `Kerberos lets a client prove its identity to many services using time-limited, encrypted tickets instead of repeatedly sending a password. After authenticating once to a trusted Key Distribution Center, the client receives a Ticket-Granting Ticket; to reach a service it presents that TGT and gets a service ticket the target can verify, all without the password ever crossing the network. This ticket exchange is what makes seamless single sign-on across a Windows domain possible, and it is the authentication half of Active Directory. Tickets expire quickly and rely on synchronised clocks, which is why Kerberos environments are sensitive to time drift. Attacks like pass-the-ticket and Kerberoasting target weaknesses in how tickets and service keys are handled.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["ldap", "idp", "ssh"],
+      source: { label: "RFC 4120 — Kerberos V5", url: "https://www.rfc-editor.org/info/rfc4120" },
       caption: "Authenticate once to the KDC for a ticket-granting ticket, then exchange it for per-service tickets — the password never travels."
     },
     {
@@ -1133,6 +1217,7 @@
       explainer: `Security teams drown in alerts, most of which need the same repetitive triage steps, and SOAR exists to automate that toil. It connects to the tools an analyst would otherwise click through — SIEM, EDR, threat intelligence, ticketing, firewalls — and runs codified playbooks that enrich an alert, decide whether it is real, and take action: isolate a host, disable an account, block an IP, open a case. By orchestrating across systems, it cuts response time from hours of manual work to seconds and frees analysts for the judgement calls machines cannot make. SOAR is the automation-and-response layer that sits on top of SIEM detection in a modern SOC. Its risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval.`,
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
       related: ["siem", "edr", "idsips"],
+      source: { label: "NIST glossary — SOAR", url: "https://csrc.nist.gov/glossary/term/security_orchestration_automation_and_response" },
       caption: "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically."
     },
     {
@@ -1142,6 +1227,7 @@
       explainer: `The public-key cryptography securing today's internet — RSA and elliptic-curve — rests on maths a sufficiently large quantum computer could break with Shor's algorithm, undoing key exchange and signatures at a stroke. Post-Quantum Cryptography replaces those with algorithms based on hard problems (chiefly structured lattices) that both classical and quantum computers struggle with. In August 2024 NIST finalised the first standards: FIPS 203 (ML-KEM, from CRYSTALS-Kyber) for key encapsulation, plus FIPS 204 (ML-DSA, from Dilithium) and FIPS 205 (SLH-DSA) for signatures. The urgency is harvest now, decrypt later — adversaries can record encrypted traffic today and decrypt it once quantum hardware arrives — so long-lived secrets need protecting now. The rollout is hybrid: PQC key exchange is being layered alongside classical algorithms in TLS rather than replacing them overnight.`,
       types: ["Security Technology"], provenance: [], domains: ["Secure Channels & Crypto"],
       related: ["tls", "pki", "mtls"],
+      source: { label: "NIST Post-Quantum Cryptography project", url: "https://csrc.nist.gov/projects/post-quantum-cryptography" },
       caption: "A quantum computer breaks RSA / ECC key exchange; lattice-based ML-KEM is layered into the TLS handshake to keep it secure."
     },
     {
@@ -1151,15 +1237,17 @@
       explainer: `eBPF lets sandboxed programs run safely inside the Linux kernel, hooking into networking, security, and tracing events without kernel modules or patches — a quietly revolutionary capability. Cilium builds on it to provide networking, observability, and security for Kubernetes: it enforces identity-aware network policy, load-balances services, and can provide encrypted, mesh-like connectivity, all at kernel speed rather than through userspace proxies. Because policy is evaluated in the kernel against workload identity, Cilium implements microsegmentation efficiently — only sanctioned pod-to-pod flows are allowed, blocking lateral movement. Its Hubble component gives deep flow visibility for free. It is increasingly the default data plane for cloud-native clusters and an alternative path to service-mesh features without sidecars.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops"],
       related: ["kubernetes", "microseg", "servicemesh"],
+      source: { label: "cilium.io", url: "https://cilium.io/" },
       caption: "eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows."
     },
     {
       id: "tailscale", term: "Tailscale", acronym: "WireGuard-Based Mesh VPN",
       aliases: ["Headscale", "mesh VPN", "tailnet", "DERP", "overlay network"],
       tldr: "A zero-config mesh VPN that connects your devices directly over WireGuard.",
-      explainer: `Traditional VPNs backhaul every device through a central gateway; Tailscale instead builds a flat mesh in which your devices connect directly to each other over encrypted WireGuard tunnels. A central coordination server handles authentication (via your existing identity provider) and key distribution, then steps out of the data path, while NAT traversal and relay fallback (DERP) make peer-to-peer connectivity work even behind firewalls. The result is a private network — a tailnet — where access is governed by identity and ACLs rather than network location, which makes it a practical on-ramp to Zero Trust networking for small teams. It is a commercial product built on the open-source WireGuard, with an open-source control server, Headscale, for self-hosting. It is a peer to OpenZiti in the zero-trust overlay space.`,
+      explainer: `Traditional VPNs backhaul every device through a central gateway; Tailscale instead builds a flat mesh in which your devices connect directly to each other over encrypted WireGuard tunnels. A central coordination server handles authentication (via your existing identity provider) and key distribution, then steps out of the data path, while NAT traversal and relay fallback (DERP) make peer-to-peer connectivity work even behind firewalls. The result is a private network — a tailnet — where access is governed by identity and access-control lists (ACLs) rather than network location, which makes it a practical on-ramp to Zero Trust networking for small teams. It is a commercial product built on the open-source WireGuard; Headscale, an independent community project, reimplements the control server for self-hosting. It is a peer to OpenZiti in the zero-trust overlay space.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Vendor"], domains: ["Secure Channels & Crypto", "Network Edge & Ops"],
       related: ["wireguard", "vpn", "zerotrust", "openziti"],
+      source: { label: "How Tailscale works (architecture)", url: "https://tailscale.com/blog/how-tailscale-works" },
       caption: "An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh."
     },
     {
@@ -1169,6 +1257,7 @@
       explainer: `As work moved to SaaS, security teams lost the choke point a corporate network used to give them, and a Cloud Access Security Broker restores it. Sitting between users and cloud apps — as a proxy in the traffic path or via API integration with the SaaS provider — a CASB gives visibility into which cloud services are actually being used (including unsanctioned shadow IT), enforces access and data policies, detects risky configurations, and applies data-loss-prevention controls to information moving in and out. It is one of the core components of a Secure Access Service Edge / Security Service Edge stack, alongside secure web gateways and ZTNA. The goal is consistent governance over data that now lives in dozens of third-party clouds. Inline proxying gives real-time control but can break apps; API mode is gentler but after-the-fact.`,
       types: ["Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Detection & Response"],
       related: ["sase", "dlp", "idp"],
+      source: { label: "NIST glossary — Cloud Access Security Broker", url: "https://csrc.nist.gov/glossary/term/cloud_access_security_broker" },
       caption: "User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud."
     },
     {
@@ -1178,6 +1267,7 @@
       explainer: `Data Loss Prevention is the set of controls that keep sensitive information — card numbers, health records, source code, secrets — from leaving the organisation through email, uploads, USB drives, or chat. A DLP system inspects content against patterns and classifications, then warns, blocks, or encrypts when a transfer breaks policy, for example a spreadsheet of customer card numbers attached to an outbound message. It operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration, addressing the Data pillar of Zero Trust that network and identity controls leave untouched. Good DLP depends on good data classification — you can only protect what you have labelled. Overly blunt rules generate noise and tempt users to route around the control.`,
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
       related: ["casb", "sase", "siem"],
+      source: { label: "NIST glossary — Data Loss Prevention", url: "https://csrc.nist.gov/glossary/term/data_loss_prevention" },
       caption: "Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted."
     },
     {
@@ -1187,6 +1277,7 @@
       explainer: `A handful of privileged accounts — domain admins, root, cloud owners — can do catastrophic damage, so Privileged Access Management wraps them in extra control. It vaults the credentials so admins check them out rather than knowing them, brokers sessions through a gateway that records keystrokes for audit, and increasingly grants access just-in-time: privileges are elevated for a specific task and a short window, then automatically revoked, shrinking the standing attack surface to near zero. This enforces least privilege and provides the accountability trail regulators expect for sensitive systems. PAM is a focused, higher-assurance complement to ordinary identity management and a frequent first target in a breach. It overlaps with secrets management for the machine-credential case.`,
       types: ["Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["idp", "vault", "rbac", "ssh"],
+      source: { label: "NIST glossary — Privileged Access Management", url: "https://csrc.nist.gov/glossary/term/privileged_access_management" },
       caption: "Admins check out a vaulted credential through a recorded gateway; access is elevated just-in-time and revoked when the task ends."
     },
     {
@@ -1196,6 +1287,7 @@
       explainer: `When a vulnerability is disclosed it needs a name everyone agrees on, and a CVE identifier — like CVE-2021-44228 for Log4Shell — is that shared reference, assigned under a programme coordinated by MITRE so vendors, scanners, and defenders all point at the same flaw. The Common Vulnerability Scoring System (CVSS) then rates its severity from 0 to 10 from characteristics like attack vector, complexity, and impact; the current CVSS v4.0 was released in November 2023. NIST's National Vulnerability Database enriches CVE records with CVSS scores and affected-product data that feed automated scanners. Together they let teams prioritise: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access. The score is guidance, not gospel — real risk depends on whether the flaw is exploitable in your context.`,
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain"],
       related: ["sbom", "owasp", "siem"],
+      source: { label: "CVE Program", url: "https://www.cve.org/" },
       caption: "A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first."
     },
     {
@@ -1205,15 +1297,17 @@
       explainer: `OWASP is a non-profit community that produces free, vendor-neutral application-security resources, and its Top 10 is the field's best-known awareness document: a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input. It is used everywhere as a baseline — developers code against it, WAFs ship rule sets named after it, and auditors check for it. The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one and adds Software Supply Chain Failures — entering at number three — as a new category, reflecting where attacks have moved. OWASP also maintains deeper resources like the Application Security Verification Standard (ASVS) and the Cheat Sheet Series. The Top 10 is a floor for awareness, not a complete security programme.`,
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain", "Transport & Web"],
       related: ["websec", "waf", "cve"],
+      source: { label: "OWASP Top 10:2025", url: "https://owasp.org/Top10/2025/" },
       caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures new in the 2025 edition."
     },
     {
       id: "tpm", term: "TPM & Secure Boot", acronym: "Hardware Root of Trust",
       aliases: ["trusted platform module", "secure boot", "measured boot", "attestation", "UEFI"],
       tldr: "A hardware chip that protects keys and proves a machine booted clean.",
-      explainer: `A Trusted Platform Module is a tamper-resistant chip on the motherboard that generates and stores cryptographic keys so they never leave the hardware, and that measures the software loaded at boot. Secure Boot uses it to verify each stage of startup against trusted signatures, refusing to run firmware or a bootloader that has been tampered with, while measured boot records hashes of what actually loaded into the TPM's registers. A remote server can then ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted. This hardware root of trust underpins disk-encryption key release, device identity, and the device-posture checks Zero Trust relies on. It moves the foundation of trust from software, which malware can subvert, down into silicon.`,
+      explainer: `A Trusted Platform Module is a tamper-resistant chip on the motherboard that generates and stores cryptographic keys so they never leave the hardware, and that measures the software loaded at boot. Secure Boot has the firmware verify each stage of startup against trusted signatures, refusing to run a bootloader that has been tampered with, while measured boot records hashes of what actually loaded into the TPM's Platform Configuration Registers (PCRs). A remote server can then ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted. This hardware root of trust underpins disk-encryption key release, device identity, and the device-posture checks Zero Trust relies on. It moves the foundation of trust from software, which malware can subvert, down into silicon.`,
       types: ["Security Technology"], provenance: [], domains: ["Secure Channels & Crypto"],
       related: ["edr", "pki", "mtls"],
+      source: { label: "TCG TPM 2.0 Library Specification", url: "https://trustedcomputinggroup.org/resource/tpm-library-specification/" },
       caption: "Secure Boot verifies each startup stage and the TPM records what loaded, so a server can attest the device booted into a known-good state."
     },
     {
@@ -1223,6 +1317,7 @@
       explainer: `Signing software has always been the right idea and a usability disaster — developers must guard long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key: its Cosign tool signs an artifact using a short-lived certificate that Fulcio issues against an OIDC identity (your Google, GitHub, or corporate login), so you sign as who you are rather than as a key you must hoard. Every signature is recorded in Rekor, a public, append-only transparency log, so anyone can verify that an artifact was signed by a given identity and detect tampering after the fact. This makes verifiable provenance practical at ecosystem scale and pairs naturally with SBOMs and SLSA. It is an open-source project under the OpenSSF, now signing a large share of container images and packages.`,
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Governance & Supply Chain", "Secure Channels & Crypto"],
       related: ["sbom", "pki", "docker"],
+      source: { label: "sigstore.dev", url: "https://www.sigstore.dev/" },
       caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later."
     },
     {
@@ -1232,6 +1327,7 @@
       explainer: `Zero Trust Network Access is the access model that puts Zero Trust principles on the wire, and the technology category replacing the traditional VPN. Where a VPN drops an authenticated user onto the network and trusts them to roam, ZTNA brokers access to one specific application at a time, after verifying user identity and device posture on every request, and keeps everything else invisible. Applications sit behind a broker and are never exposed to the open internet — connections are established outbound from the app to the broker, so there is no inbound port to attack, the software-defined perimeter idea. Google's BeyondCorp was the influential early implementation; today ZTNA is a core component of SASE / SSE offerings. The shift is from connect then authenticate to authenticate, authorise, then connect — and only to what you need.`,
       types: ["Security Technology", "Network Technology"], provenance: [], domains: ["Zero-Trust Core"],
       related: ["zerotrust", "sase", "openziti", "vpn"],
+      source: { label: "NIST SP 1800-35 — Implementing Zero Trust", url: "https://csrc.nist.gov/pubs/sp/1800/35/final" },
       caption: "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden."
     }
   ];
@@ -1633,20 +1729,22 @@
       </svg>`,
 
     ssh: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SSH authenticates with a key pair, then opens an encrypted session for shell, transfer, and tunnels.">
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SSH first opens an encrypted channel via key exchange, then authenticates with a key pair inside it for shell, transfer, and tunnels.">
         <text class="t-b" x="150" y="32" text-anchor="middle">Client</text>
         <text class="t-b" x="570" y="32" text-anchor="middle">Server</text>
         <line class="divider" x1="150" y1="44" x2="150" y2="272"/>
         <line class="divider" x1="570" y1="44" x2="570" y2="272"/>
-        <line class="flow" x1="150" y1="84" x2="570" y2="84" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" x="360" y="76" text-anchor="middle">offer public key</text>
-        <line class="flow" x1="570" y1="130" x2="150" y2="130" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" x="360" y="122" text-anchor="middle">challenge (nonce)</text>
-        <line class="flow-accent" x1="150" y1="176" x2="570" y2="176" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="360" y="168" text-anchor="middle">signed proof — no password sent</text>
-        <rect class="zone-accent" x="150" y="206" width="420" height="60" rx="8"/>
-        <text class="t-b t-sm" x="360" y="232" text-anchor="middle" fill="var(--accent)">Encrypted session</text>
-        <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">shell · file transfer · port forwarding</text>
+        <line class="flow" x1="150" y1="80" x2="570" y2="80" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" x="360" y="72" text-anchor="middle">key exchange — channel encrypted</text>
+        <line class="flow" x1="150" y1="124" x2="570" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" x="360" y="116" text-anchor="middle">offer public key</text>
+        <line class="flow" x1="570" y1="168" x2="150" y2="168" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" x="360" y="160" text-anchor="middle">key accepted — send proof</text>
+        <line class="flow-accent" x1="150" y1="212" x2="570" y2="212" marker-end="url(#ah-acc)"/>
+        <text class="t-sm" x="360" y="204" text-anchor="middle">signed proof over session ID — no password sent</text>
+        <rect class="zone-accent" x="150" y="228" width="420" height="44" rx="8"/>
+        <text class="t-b t-sm" x="360" y="248" text-anchor="middle" fill="var(--accent)">Authenticated session</text>
+        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">shell · file transfer · port forwarding</text>
       </svg>`,
 
     dhcp: () => `
@@ -1682,7 +1780,7 @@
       </svg>`,
 
     radius: () => `
-      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The access device asks a central RADIUS server to authenticate and authorize a connecting user.">
+      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The access device asks a central RADIUS server to authenticate and authorise a connecting user.">
         <rect class="box" x="30" y="106" width="140" height="56" rx="10"/>
         <text class="t-sm t-b" x="100" y="134" text-anchor="middle">User device</text>
         <text class="t-sm t-mut" x="100" y="152" text-anchor="middle">supplicant</text>
@@ -1922,7 +2020,7 @@
       </svg>`,
 
     pkce: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="PKCE: the client sends a hashed code_challenge when authorizing and proves the original code_verifier when redeeming, so an intercepted authorization code cannot be exchanged.">
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="PKCE: the client sends a hashed code_challenge when authorising and proves the original code_verifier when redeeming, so an intercepted authorization code cannot be exchanged.">
         <text class="t-b" x="150" y="28" text-anchor="middle">Client app</text>
         <text class="t-b" x="560" y="28" text-anchor="middle">Authorization server</text>
         <line class="divider" x1="150" y1="40" x2="150" y2="224"/>
@@ -1949,7 +2047,7 @@
         <text class="t-b" x="111" y="143" text-anchor="middle">Provider</text>
         <rect class="box" x="300" y="48" width="384" height="58" rx="10"/>
         <text class="t-b t-sm" x="318" y="73">Access token</text>
-        <text class="t-sm t-mut" x="318" y="91">opaque — authorizes calls to the resource API</text>
+        <text class="t-sm t-mut" x="318" y="91">opaque — authorises calls to the resource API</text>
         <rect class="box-accent" x="300" y="126" width="384" height="80" rx="10"/>
         <text class="t-b t-sm" x="318" y="151" fill="var(--accent)">ID Token — a signed JWT</text>
         <text class="t-sm t-mut" x="318" y="171">claims: sub (who) · iss (issuer) · aud (audience)</text>
@@ -2368,7 +2466,7 @@
         <text class="t-sm t-b" x="250" y="150" fill="var(--accent)">② TGT</text>
         <line class="flow-accent" x1="180" y1="178" x2="538" y2="178" marker-end="url(#ah-acc)"/>
         <text class="t-sm t-b" x="360" y="200" text-anchor="middle" fill="var(--accent)">③ present service ticket</text>
-        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">Time-limited tickets prove identity — the password never crosses the network.</text>
+        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">The TGT is traded back at the KDC for each service ticket — the password never crosses the network.</text>
       </svg>`,
 
     soar: () => `
@@ -2740,8 +2838,8 @@
 
     const active = [...state.types, ...state.prov, ...state.domains];
     const bits = [];
-    if (state.q) bits.push(`matching “${esc(state.q)}”`);
-    if (active.length) bits.push(`filtered by ${active.map(esc).join(", ")}`);
+    if (state.q) bits.push(`matching “${state.q}”`);
+    if (active.length) bits.push(`filtered by ${active.join(", ")}`);
     els.activeSummary.textContent = bits.join(" · ");
 
     const anyFilter = state.q || active.length;
@@ -2796,6 +2894,14 @@
         ${esc(byId[id].term)}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
       </button>`).join("");
+    const source = e.source ? `
+      <div class="detail-source">
+        <div class="detail-section-label">Primary source</div>
+        <a class="source-link" href="${esc(e.source.url)}" target="_blank" rel="noopener noreferrer">
+          ${esc(e.source.label)}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>` : "";
 
     return `
       <button class="back-link" type="button" data-back>
@@ -2819,6 +2925,7 @@
         <div class="detail-section-label">Tags — click to browse</div>
         <div class="chip-row">${typeChips}${provChips}${domainChips}</div>
       </div>
+      ${source}
       ${related ? `<div class="related">
         <div class="detail-section-label">Related terms</div>
         <div class="related-list">${related}</div>
@@ -2909,14 +3016,15 @@
 
   // Detail view: back button, related pills, tag filters
   els.detailContent.addEventListener("click", (ev) => {
-    if (ev.target.closest("[data-back]")) { history.length > 1 ? history.back() : (location.hash = ""); return; }
+    if (ev.target.closest("[data-back]")) { location.hash = ""; return; }
     const pill = ev.target.closest("[data-goto]");
     if (pill) { goTo(pill.dataset.goto); return; }
     const tag = ev.target.closest(".chip[data-filter]");
     if (tag && !tag.classList.contains("static")) {
-      state.types.clear(); state.prov.clear();
-      toggleFilter(tag.dataset.filter, tag.dataset.value);
+      state.types.clear(); state.prov.clear(); state.domains.clear();
+      stateSet(tag.dataset.filter).add(tag.dataset.value);
       renderActiveChips();
+      renderGrid();
       location.hash = "";
     }
   });
