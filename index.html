@@ -587,11 +587,11 @@
     </div>
   </header>
 
-  <noscript><div class="container"><p class="noscript-note">This glossary renders its 70 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
+  <noscript><div class="container"><p class="noscript-note">This glossary renders its 74 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">70</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">74</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">70</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">74</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">70</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">74</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1349,6 +1349,46 @@
       related: ["zerotrust", "sase", "openziti", "vpn"],
       source: { label: "NIST SP 1800-35 — Implementing Zero Trust", url: "https://csrc.nist.gov/pubs/sp/1800/35/final" },
       caption: "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden."
+    },
+    {
+      id: "dpu", term: "DPU", acronym: "Data Processing Unit",
+      aliases: ["data processing unit", "SmartNIC", "infrastructure processor", "IPU", "infrastructure processing unit"],
+      tldr: "A programmable processor on the network card that offloads networking, storage, and security from the host — and runs them in its own isolated trust domain.",
+      explainer: `A Data Processing Unit is a system-on-chip that fuses a high-speed network interface with its own general-purpose CPU cores (typically Arm) and hardware accelerators, so the data-center "infrastructure" work — packet switching, encryption, storage virtualization, telemetry, firewalling — runs on the card instead of stealing host CPU cycles. NVIDIA frames it as the third pillar of computing after the CPU and GPU. What separates a DPU from an ordinary SmartNIC, and what makes it matter for zero trust, is that its cores run their own operating system in a domain the host cannot see or control: traffic passes through the DPU before it ever reaches the host. Security policy therefore executes out-of-band — even if the host OS is completely compromised, the microsegmentation, line-rate encryption, intrusion detection, and keys living on the DPU stay intact, and the enforcement an attacker would want to disable sits on a separate processor they cannot reach. That makes the DPU the hardware foundation for putting a zero-trust enforcement point on every server. NVIDIA BlueField, AWS Nitro, Intel IPU, and AMD Pensando are the leading implementations.`,
+      types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Platforms & Apps"],
+      related: ["bluefield", "doca", "supernic", "microseg", "ipsec", "tpm"],
+      source: { label: "Wikipedia — Data processing unit", url: "https://en.wikipedia.org/wiki/Data_processing_unit" },
+      caption: "Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised."
+    },
+    {
+      id: "bluefield", term: "BlueField", acronym: "NVIDIA Data Processing Unit (DPU)",
+      aliases: ["NVIDIA BlueField", "BlueField-3", "BlueField-2", "BlueField-4", "BF3", "ConnectX", "DPU"],
+      tldr: "NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data center's networking, storage, and zero-trust security on the card.",
+      explainer: `BlueField is NVIDIA's DPU product line — the concrete silicon behind the concept. Each chip pairs an NVIDIA ConnectX network ASIC with a cluster of Arm cores running their own Linux, onboard memory, and accelerators for crypto, compression, and storage. BlueField-3, the current production generation, delivers 400 Gb/s and 16 Arm cores; BlueField-4, announced in late 2025, scales to 800 Gb/s for the AI-factory era and is in early availability rather than general release. Because the Arm subsystem is isolated from the host across PCIe, operators run infrastructure and security services directly on the card. The zero-trust mechanisms are concrete: a hardware root of trust with DICE-based measured boot and remote attestation proves the card and its software are unmodified; line-rate IPsec/TLS encrypts traffic at wire speed with no host CPU cost; and DOCA Argus performs agentless host introspection — reading the host's processes and memory from the DPU to catch reverse shells, injected code, or hidden processes that host-resident malware would conceal and could never disable. It is programmed with the DOCA framework.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Platforms & Apps"],
+      related: ["dpu", "doca", "supernic", "tpm", "microseg", "ipsec"],
+      source: { label: "NVIDIA — BlueField Networking Platform", url: "https://www.nvidia.com/en-us/networking/products/data-processing-unit/" },
+      caption: "A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust."
+    },
+    {
+      id: "supernic", term: "SuperNIC", acronym: "NVIDIA AI-Network Accelerator",
+      aliases: ["NVIDIA SuperNIC", "BlueField-3 SuperNIC", "ConnectX SuperNIC", "Spectrum-X", "RoCE", "AI networking"],
+      tldr: "A network accelerator tuned for AI: line-rate GPU-to-GPU Ethernet (RoCE) with the congestion control huge training clusters need — the DPU's performance-focused sibling.",
+      explainer: `A SuperNIC is NVIDIA's class of network accelerator built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets. Where a DPU is an "infrastructure computer," a SuperNIC is a throughput engine: it delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU, with the adaptive routing and congestion control that let thousands of GPUs exchange gradients without the network becoming the bottleneck, as a pillar of NVIDIA's Spectrum-X Ethernet platform. The name covers two structurally different products, a common point of confusion: the BlueField-3 SuperNIC is a slimmed-down DPU with a few Arm cores, while the ConnectX-7/8 SuperNICs are pure network adapters with no separate operating system. Either way the remit is performance over policy, so its zero-trust story is thinner than a full DPU's — the agentless host-introspection services (DOCA Argus, App Shield) run only on BlueField in DPU mode — though SuperNICs still encrypt traffic in flight at line rate. Think of the DPU and SuperNIC as siblings: one optimizes infrastructure and security, the other the AI network fabric.`,
+      types: ["Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops"],
+      related: ["dpu", "bluefield", "doca", "ipsec"],
+      source: { label: "NVIDIA — What Is a SuperNIC?", url: "https://blogs.nvidia.com/blog/what-is-a-supernic/" },
+      caption: "Built for AI's east-west traffic: each GPU gets line-rate RoCE Ethernet with the adaptive routing and congestion control that keep huge training jobs from stalling."
+    },
+    {
+      id: "doca", term: "DOCA", acronym: "NVIDIA DPU Software Framework",
+      aliases: ["NVIDIA DOCA", "DOCA SDK", "DOCA Argus", "App Shield", "DOCA Flow"],
+      tldr: "The SDK for BlueField — 'what CUDA is to the GPU, DOCA is to the DPU' — with libraries and services to offload networking, storage, and zero-trust security.",
+      explainer: `DOCA is NVIDIA's software framework for programming BlueField DPUs and SuperNICs — the developer platform NVIDIA positions as the DPU's equivalent of CUDA for the GPU. It is layered: hardware drivers at the base, C/C++ libraries in the middle, and production-ready containerized microservices on top, exposed through industry-standard interfaces such as DPDK, SPDK, and Netlink rather than a closed silo. Several components are squarely zero-trust tooling. DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes to detect reverse shells, injected code, and hidden processes — agentless intrusion detection that host malware cannot see or switch off; App Shield adds process-integrity monitoring; and the IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed. By standardizing the interface, DOCA also keeps that security and networking software portable across BlueField generations. Without DOCA a BlueField card is an uninitialized accelerator; with it, the silicon becomes running zero-trust enforcement.`,
+      types: ["Development Framework", "Security Technology"], provenance: ["Vendor"], domains: ["Platforms & Apps", "Network Edge & Ops"],
+      related: ["bluefield", "dpu", "supernic", "edr", "microseg"],
+      source: { label: "NVIDIA — DOCA Software Framework", url: "https://developer.nvidia.com/networking/doca" },
+      caption: "DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement."
     }
   ];
 
@@ -2796,6 +2836,98 @@
         `).join("")}
         <line class="flow-ok" x1="424" y1="120" x2="506" y2="78" marker-end="url(#ah-ok)"/>
         <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Authenticate, authorise, then connect — and only to the one app.</text>
+      </svg>`,
+
+    dpu: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A DPU runs networking and security on its own cores in a trust domain isolated from the host, so policy holds even if the host is compromised.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">A DPU runs security in its own domain — isolated from the host</text>
+        <rect class="box" x="24" y="132" width="104" height="56" rx="10"/>
+        <text class="t-b" x="76" y="158" text-anchor="middle">Network</text>
+        <text class="t-sm t-mut" x="76" y="176" text-anchor="middle">all traffic</text>
+        <line class="flow" x1="128" y1="160" x2="210" y2="160" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="214" y="108" width="212" height="130" rx="12"/>
+        <text class="t-b" x="320" y="136" text-anchor="middle">DPU</text>
+        <text class="t-sm t-mut" x="320" y="156" text-anchor="middle">Arm cores · own OS</text>
+        <text class="t-sm" x="320" y="186" text-anchor="middle">firewall · microsegment</text>
+        <text class="t-sm" x="320" y="206" text-anchor="middle">encrypt · detect · keys</text>
+        <line class="divider" x1="448" y1="104" x2="448" y2="244"/>
+        <text class="t-sm t-mut" x="448" y="260" text-anchor="middle">trust boundary</text>
+        <line class="flow" x1="426" y1="150" x2="470" y2="150" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="470" y="108" width="212" height="130" rx="10"/>
+        <text class="t-b" x="576" y="136" text-anchor="middle">Host</text>
+        <text class="t-sm t-mut" x="576" y="156" text-anchor="middle">CPU + GPU</text>
+        <text class="t-sm" x="576" y="186" text-anchor="middle">tenant apps</text>
+        <text class="t-sm t-b" x="576" y="208" text-anchor="middle" fill="var(--state-bad)">untrusted</text>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Even if the host is fully compromised, the DPU's enforcement and keys stay out of reach.</text>
+      </svg>`,
+
+    bluefield: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="BlueField pairs a ConnectX NIC with Arm cores, accelerators, and a hardware root of trust, running the data center's networking, storage, and security on the card.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">BlueField: a NIC that is also a computer, with its own root of trust</text>
+        <rect class="box" x="20" y="134" width="96" height="52" rx="10"/>
+        <text class="t-sm t-b" x="68" y="164" text-anchor="middle">Network</text>
+        <line class="flow" x1="116" y1="160" x2="136" y2="160" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="140" y="66" width="440" height="184" rx="12"/>
+        <text class="t-b" x="360" y="92" text-anchor="middle">BlueField DPU</text>
+        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">BlueField-3 · 400 Gb/s · own Linux</text>
+        ${[
+          ["ConnectX","NIC · 400G",150],
+          ["16 Arm","cores",258],
+          ["accel","crypto·storage",366],
+          ["Root of Trust","attestation",474]
+        ].map(([a,b,x])=>`
+          <rect class="box" x="${x}" y="150" width="98" height="80" rx="8"/>
+          <text class="t-sm t-b" x="${x+49}" y="184" text-anchor="middle">${a}</text>
+          <text class="t-sm t-mut" x="${x+49}" y="202" text-anchor="middle">${b}</text>
+        `).join("")}
+        <line class="flow" x1="580" y1="160" x2="600" y2="160" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="604" y="134" width="96" height="52" rx="10"/>
+        <text class="t-sm t-b" x="652" y="158" text-anchor="middle">Host</text>
+        <text class="t-sm t-mut" x="652" y="176" text-anchor="middle">PCIe</text>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Networking, storage, and security run on the card — isolated from the host it serves.</text>
+      </svg>`,
+
+    supernic: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SuperNICs give each GPU line-rate RoCE Ethernet through a Spectrum-X fabric, carrying east-west GPU-to-GPU traffic for AI training.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">SuperNIC: line-rate GPU-to-GPU Ethernet for AI clusters</text>
+        <rect class="box-accent" x="288" y="128" width="144" height="60" rx="10"/>
+        <text class="t-b" x="360" y="152" text-anchor="middle">Spectrum-X</text>
+        <text class="t-sm t-mut" x="360" y="172" text-anchor="middle">Ethernet fabric</text>
+        ${[
+          ["node 1",40,68],
+          ["node 2",40,196],
+          ["node 3",530,132]
+        ].map(([n,x,y])=>`
+          <rect class="box" x="${x}" y="${y}" width="150" height="62" rx="10"/>
+          <text class="t-sm t-b" x="${x+75}" y="${y+28}" text-anchor="middle">GPU + SuperNIC</text>
+          <text class="t-sm t-mut" x="${x+75}" y="${y+47}" text-anchor="middle">${n}</text>
+        `).join("")}
+        <line class="flow-accent" x1="190" y1="104" x2="290" y2="146" marker-start="url(#ah-acc)" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="190" y1="222" x2="290" y2="170" marker-start="url(#ah-acc)" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="528" y1="160" x2="432" y2="158" marker-start="url(#ah-acc)" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="360" y="112" text-anchor="middle">RoCE · 400 Gb/s per GPU</text>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Adaptive routing and congestion control keep thousands of GPUs from stalling the network.</text>
+      </svg>`,
+
+    doca: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="DOCA is a layered SDK — services, libraries, runtime and drivers — that programs BlueField and SuperNIC silicon, the DPU's equivalent of CUDA for the GPU.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">DOCA is to the DPU what CUDA is to the GPU</text>
+        ${[
+          ["Security & network services","Argus · App Shield · IPsec gateway",44,"box-accent"],
+          ["DOCA libraries","Flow · crypto · DPDK / SPDK",98,"box-accent"],
+          ["DOCA runtime + drivers","standards-based interfaces",152,"box-accent"],
+          ["BlueField DPU / SuperNIC","the silicon",206,"box"]
+        ].map(([a,b,y,cls])=>`
+          <rect class="${cls}" x="150" y="${y}" width="420" height="46" rx="8"/>
+          <text class="t-sm t-b" x="360" y="${y+20}" text-anchor="middle">${a}</text>
+          <text class="t-sm t-mut" x="360" y="${y+38}" text-anchor="middle">${b}</text>
+        `).join("")}
+        <line class="flow-accent" x1="120" y1="50" x2="120" y2="246" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="600" y="72" text-anchor="start">you</text>
+        <text class="t-sm t-mut" x="600" y="86" text-anchor="start">program</text>
+        <text class="t-sm t-mut" x="600" y="228" text-anchor="start">runs on</text>
+        <text class="t-sm t-mut" x="600" y="242" text-anchor="start">silicon</text>
+        <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Without DOCA, BlueField is an idle accelerator; with it, the silicon runs zero-trust enforcement.</text>
       </svg>`
   };
 
