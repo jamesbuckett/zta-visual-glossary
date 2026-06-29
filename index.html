@@ -587,11 +587,11 @@
     </div>
   </header>
 
-  <noscript><div class="container"><p class="noscript-note">This glossary renders its 74 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
+  <noscript><div class="container"><p class="noscript-note">This glossary renders its 76 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">74</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">76</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">74</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">76</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">74</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">76</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1389,6 +1389,26 @@
       related: ["bluefield", "dpu", "supernic", "edr", "microseg"],
       source: { label: "NVIDIA — DOCA Software Framework", url: "https://developer.nvidia.com/networking/doca" },
       caption: "DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement."
+    },
+    {
+      id: "ovs", term: "Open vSwitch", acronym: "OVS — multilayer virtual switch",
+      aliases: ["OVS", "openvswitch", "vSwitch", "OpenFlow", "OVSDB", "virtual switch", "ovs-vswitchd"],
+      tldr: "The open-source programmable switch inside the hypervisor — it wires VMs and containers to the network and forwards their packets by flow rules.",
+      explainer: `Open vSwitch is a production-grade, multilayer virtual switch (Apache 2.0) that runs in the hypervisor or host and connects virtual machines, containers, and the physical NIC. Where a plain Linux bridge forwards by MAC address, OVS is programmable: an external controller installs OpenFlow rules into its flow tables and the OVSDB management protocol configures its bridges and ports, so forwarding, tunnelling (VXLAN/Geneve), and filtering are driven by policy rather than hard-wired. It also speaks the operational protocols data centres expect — NetFlow, sFlow, IPFIX, LACP, 802.1ag — and is the default switch under OpenStack and many Kubernetes networks. Because its data plane is just flow tables, it can be offloaded to hardware: a SmartNIC or DPU executes the same OVS flows at line rate, freeing host CPU. OVS forwards packets on its own, but it needs a control plane to decide what those flows should be — which is where OVN comes in.`,
+      types: ["Network Technology"], provenance: ["Open Source"], domains: ["Network Edge & Ops", "Platforms & Apps"],
+      related: ["ovn", "kubernetes", "cilium", "dpu", "bluefield"],
+      source: { label: "Open vSwitch — openvswitch.org", url: "https://www.openvswitch.org/" },
+      caption: "VMs and containers plug into OVS, which forwards them by OpenFlow rules — and can offload those flows to a DPU at line rate."
+    },
+    {
+      id: "ovn", term: "Open Virtual Network", acronym: "OVN — SDN control plane for OVS",
+      aliases: ["OVN", "ovn-kubernetes", "logical switch", "logical router", "Neutron OVN", "northbound database", "distributed firewall"],
+      tldr: "An SDN control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.",
+      explainer: `Open Virtual Network is the SDN control plane that sits on top of Open vSwitch and gives it real network abstractions. Instead of writing raw flows, you declare logical switches, logical routers, and Access Control Lists in OVN's northbound database; OVN's daemons translate that intent into OpenFlow and program every OVS instance across the cluster, so one logical network spans many hosts as an overlay. Routing, DHCP, DNS, and a stateful distributed firewall run in the data plane on each node rather than at a central choke point — which is what makes OVN a microsegmentation engine: per-port ACLs isolate workloads from one another east-west, not just at the perimeter. It is the networking layer behind OpenStack Neutron and the ovn-kubernetes CNI that enforces Kubernetes NetworkPolicy. If OVS is the distributed switch, OVN is the brain that turns thousands of them into one programmable, segmented virtual network.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Network Edge & Ops", "Platforms & Apps"],
+      related: ["ovs", "microseg", "kubernetes", "cilium", "servicemesh"],
+      source: { label: "OVN — ovn.org", url: "https://www.ovn.org/en/" },
+      caption: "OVN compiles logical switches, routers, and ACLs into the flows every OVS node runs — one segmented virtual network across the whole cluster."
     }
   ];
 
@@ -2928,6 +2948,56 @@
         <text class="t-sm t-mut" x="600" y="228" text-anchor="start">runs on</text>
         <text class="t-sm t-mut" x="600" y="242" text-anchor="start">silicon</text>
         <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Without DOCA, BlueField is an idle accelerator; with it, the silicon runs zero-trust enforcement.</text>
+      </svg>`,
+
+    ovs: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Open vSwitch is a programmable virtual switch in each host: VMs and containers attach to it and it forwards their packets by OpenFlow rules, with the data plane offloadable to a DPU.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">Open vSwitch: a programmable switch inside each host</text>
+        ${[["VM",88],["Pod",148],["Pod",208]].map(([t,y])=>`
+          <rect class="box" x="24" y="${y}" width="110" height="44" rx="10"/>
+          <text class="t-sm t-b" x="79" y="${y+27}" text-anchor="middle">${t}</text>
+        `).join("")}
+        <line class="flow" x1="134" y1="110" x2="226" y2="118" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="134" y1="170" x2="226" y2="152" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="134" y1="230" x2="226" y2="188" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="270" y="34" width="120" height="34" rx="8"/>
+        <text class="t-sm t-b" x="330" y="55" text-anchor="middle">OpenFlow / OVSDB</text>
+        <line class="flow" x1="330" y1="68" x2="330" y2="78" marker-end="url(#ah-mut)" style="stroke-dasharray:5 5"/>
+        <rect class="box-accent" x="230" y="80" width="200" height="150" rx="12"/>
+        <text class="t-b" x="330" y="110" text-anchor="middle">Open vSwitch</text>
+        <text class="t-sm t-mut" x="330" y="132" text-anchor="middle">flow table</text>
+        <text class="t-sm" x="330" y="164" text-anchor="middle">match &#8594; action</text>
+        <text class="t-sm t-mut" x="330" y="190" text-anchor="middle">VXLAN / Geneve</text>
+        <line class="flow-accent" x1="430" y1="155" x2="518" y2="158" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="474" y="145" text-anchor="middle">uplink</text>
+        <rect class="box" x="520" y="130" width="160" height="56" rx="8"/>
+        <text class="t-sm t-b" x="600" y="154" text-anchor="middle">Physical NIC</text>
+        <text class="t-sm t-mut" x="600" y="174" text-anchor="middle">network</text>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Data plane is just flow tables — a DPU can run them at line rate.</text>
+      </svg>`,
+
+    ovn: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OVN is an SDN control plane that compiles logical switches, routers, and ACLs into OpenFlow and programs every Open vSwitch node, forming one segmented virtual network across many hosts.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">OVN: one logical network compiled onto many OVS hosts</text>
+        <rect class="box-accent" x="190" y="38" width="340" height="58" rx="12"/>
+        <text class="t-b" x="360" y="63" text-anchor="middle">OVN northbound</text>
+        <text class="t-sm t-mut" x="360" y="83" text-anchor="middle">logical switches · routers · ACLs</text>
+        <line class="flow-accent" x1="360" y1="96" x2="360" y2="116" marker-end="url(#ah-acc)"/>
+        <rect class="box" x="296" y="118" width="128" height="34" rx="8"/>
+        <text class="t-sm t-b" x="360" y="139" text-anchor="middle">ovn-northd</text>
+        <text class="t-sm t-mut" x="436" y="139" text-anchor="start">compiles to flows</text>
+        <line class="flow-accent" x1="360" y1="152" x2="124" y2="176" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="360" y1="152" x2="360" y2="176" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="360" y1="152" x2="596" y2="176" marker-end="url(#ah-acc)"/>
+        ${[["node 1",40],["node 2",280],["node 3",520]].map(([n,x])=>`
+          <rect class="box" x="${x}" y="180" width="160" height="64" rx="10"/>
+          <text class="t-b" x="${x+80}" y="210" text-anchor="middle">OVS</text>
+          <text class="t-sm t-mut" x="${x+80}" y="230" text-anchor="middle">${n}</text>
+        `).join("")}
+        <line class="flow-accent" x1="200" y1="212" x2="280" y2="212" style="stroke-dasharray:5 5"/>
+        <line class="flow-accent" x1="440" y1="212" x2="520" y2="212" style="stroke-dasharray:5 5"/>
+        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">one logical network · Geneve overlay</text>
+        <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Routing, DHCP, and stateful ACLs on every node — east-west microsegmentation.</text>
       </svg>`
   };
 
