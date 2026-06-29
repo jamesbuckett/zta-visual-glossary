@@ -1301,6 +1301,16 @@
       caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures new in the 2025 edition."
     },
     {
+      id: "bola", term: "BOLA", acronym: "Broken Object Level Authorization",
+      aliases: ["IDOR", "insecure direct object reference", "API1:2023", "object-level authorization", "broken access control"],
+      tldr: "Swap the ID in an API request and read another user's object — because the server never checked it was yours.",
+      explainer: `Broken Object Level Authorization is the most common and damaging API flaw: an endpoint exposes objects by identifier — GET /orders/1001 — authenticates the caller, but never checks that the caller is allowed to touch that specific object. An attacker simply changes the ID to 1002 and the API hands back another user's record, because authentication answered "who are you?" while no one answered "is this yours?". It is the API-era name for IDOR (Insecure Direct Object Reference), and it tops the OWASP API Security Top 10 (API1:2023) precisely because APIs expose so many object-by-ID endpoints that one missed check is easy to find and trivial to automate. The fix is a server-side ownership or policy check on every request that takes a client-supplied identifier, ideally enforced at the data-access layer so no endpoint can forget it. Unpredictable IDs such as UUIDs raise the bar but are obscurity, not authorization — the check is what counts.`,
+      types: ["Security Technology"], provenance: [], domains: ["Identity & Access", "Transport & Web"],
+      related: ["owasp", "apigateway", "rbac", "websec"],
+      source: { label: "OWASP API Security Top 10 — API1:2023 BOLA", url: "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/" },
+      caption: "Same caller, same token — only the object ID changes; with no ownership check the API returns the victim's object."
+    },
+    {
       id: "tpm", term: "TPM & Secure Boot", acronym: "Hardware Root of Trust",
       aliases: ["trusted platform module", "secure boot", "measured boot", "attestation", "UEFI"],
       tldr: "A hardware chip that protects keys and proves a machine booted clean.",
@@ -2659,6 +2669,34 @@
           ${tag?`<text class="t-sm t-b" x="584" y="${77+i*52}" text-anchor="end" fill="${isnew?'var(--state-ok)':'var(--accent)'}">${tag}</text>`:""}
         `).join("")}
         <text class="t-sm t-mut" x="360" y="276" text-anchor="middle">A baseline for awareness — used by developers, WAF rule sets, and auditors.</text>
+      </svg>`,
+
+    bola: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Same caller, same token — only the object ID changes; with no ownership check the API returns the victim's object.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">Same caller, same valid token — only the object ID differs</text>
+        <rect class="box" x="24" y="104" width="150" height="96" rx="10"/>
+        <text class="t-b" x="99" y="148" text-anchor="middle">Caller A</text>
+        <text class="t-sm t-mut" x="99" y="170" text-anchor="middle">logged in</text>
+        <rect class="box-accent" x="300" y="92" width="156" height="120" rx="12"/>
+        <text class="t-b" x="378" y="122" text-anchor="middle">API</text>
+        <text class="t-sm t-mut" x="378" y="142" text-anchor="middle">/orders/{id}</text>
+        <text class="t-sm t-b" x="378" y="170" text-anchor="middle" fill="var(--state-ok)">verifies identity</text>
+        <text class="t-sm t-b" x="378" y="192" text-anchor="middle" fill="var(--state-bad)">not ownership</text>
+        <line class="flow" x1="174" y1="132" x2="298" y2="132" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="236" y="122" text-anchor="middle">GET /orders/1001</text>
+        <line class="flow" x1="174" y1="184" x2="298" y2="184" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="236" y="205" text-anchor="middle">GET /orders/1002</text>
+        <rect class="box" x="566" y="96" width="138" height="58" rx="10"/>
+        <text class="t-sm t-b" x="635" y="120" text-anchor="middle">Order 1001</text>
+        <text class="t-sm t-mut" x="635" y="140" text-anchor="middle">owner: A</text>
+        <rect class="box" x="566" y="196" width="138" height="58" rx="10"/>
+        <text class="t-sm t-b" x="635" y="220" text-anchor="middle">Order 1002</text>
+        <text class="t-sm t-mut" x="635" y="240" text-anchor="middle">owner: B</text>
+        <line class="flow-ok" x1="456" y1="128" x2="564" y2="125" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-b" x="510" y="116" text-anchor="middle" fill="var(--state-ok)">own data</text>
+        <line class="flow-bad" x1="456" y1="186" x2="564" y2="223" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-b" x="512" y="180" text-anchor="middle" fill="var(--state-bad)">victim's data</text>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Fix: verify the caller owns the requested object on every request — IDs are not authorization.</text>
       </svg>`,
 
     tpm: () => `
