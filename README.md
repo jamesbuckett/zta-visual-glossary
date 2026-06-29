@@ -9,7 +9,7 @@
 
 ## About
 
-Explains 69 IT, networking, and zero-trust terms on one self-contained HTML page. Each entry pairs a one-line TL;DR, a tight explainer, and a custom inline-SVG diagram — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar, filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
+Explains 70 IT, networking, and zero-trust terms on one self-contained HTML page. Each entry pairs a one-line TL;DR, a tight explainer, and a custom inline-SVG diagram — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar, filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
 
 ## Usage
 

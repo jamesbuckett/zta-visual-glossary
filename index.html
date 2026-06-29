@@ -587,11 +587,11 @@
     </div>
   </header>
 
-  <noscript><div class="container"><p class="noscript-note">This glossary renders its 69 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
+  <noscript><div class="container"><p class="noscript-note">This glossary renders its 70 entries with JavaScript — enable it to search, filter, and browse.</p></div></noscript>
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">69</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">70</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">69</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">70</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">69</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">70</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1259,6 +1259,16 @@
       related: ["sase", "dlp", "idp"],
       source: { label: "NIST glossary — Cloud Access Security Broker", url: "https://csrc.nist.gov/glossary/term/cloud_access_security_broker" },
       caption: "User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud."
+    },
+    {
+      id: "pac", term: "PAC File", acronym: "Proxy Auto-Configuration",
+      aliases: ["proxy auto-config", "FindProxyForURL", "WPAD", "wpad.dat", "proxy.pac", "automatic proxy configuration", "explicit proxy"],
+      tldr: "A snippet of JavaScript the browser runs for every URL to decide: go direct, or through which proxy?",
+      explainer: `A Proxy Auto-Configuration file is a small JavaScript file exporting one function — FindProxyForURL(url, host) — that the browser or OS calls for every request to decide how to reach it. The function returns a string such as "PROXY swg.example.com:8080; DIRECT" or "DIRECT", and built-in helpers like shExpMatch(), dnsDomainIs(), and isInNet() let rules match on hostname, domain, or IP range — so internal traffic goes direct while everything else is steered through a proxy. The browser locates the file from a manually configured URL or via WPAD (Web Proxy Auto-Discovery), which finds wpad.dat through DHCP option 252 or DNS. In a zero-trust deployment this is the classic, agentless way to funnel web traffic through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup. It is also an attack surface: WPAD discovery has been repeatedly abused — a poisoned response can route all of a victim's traffic through an attacker's proxy — which is why modern browsers strip the path and query from HTTPS URLs before passing them to the script and tightly sandbox what it can do.`,
+      types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Transport & Web", "Network Edge & Ops"],
+      related: ["sase", "casb", "dns", "http"],
+      source: { label: "MDN — Proxy Auto-Configuration (PAC) file", url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file" },
+      caption: "The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway."
     },
     {
       id: "dlp", term: "DLP", acronym: "Data Loss Prevention",
@@ -2584,6 +2594,29 @@
         <line class="flow-ok" x1="424" y1="120" x2="504" y2="92" marker-end="url(#ah-ok)"/>
         <line class="flow-bad" x1="424" y1="150" x2="504" y2="178" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-mut" x="360" y="256" text-anchor="middle">A restored choke point for data that now lives in dozens of clouds.</text>
+      </svg>`,
+
+    pac: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The browser calls FindProxyForURL for every URL; matching rules return DIRECT or a proxy, steering web traffic through a Secure Web Gateway.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">One JavaScript function, evaluated per request: FindProxyForURL(url, host)</text>
+        <rect class="box" x="24" y="116" width="138" height="72" rx="12"/>
+        <text class="t-b" x="93" y="148" text-anchor="middle">Browser / OS</text>
+        <text class="t-sm t-mut" x="93" y="168" text-anchor="middle">wants a URL</text>
+        <line class="flow" x1="162" y1="152" x2="246" y2="152" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="204" y="142" text-anchor="middle">each request</text>
+        <rect class="box-accent" x="248" y="96" width="216" height="116" rx="12"/>
+        <text class="t-b" x="356" y="124" text-anchor="middle">FindProxyForURL</text>
+        <text class="t-sm t-b" x="356" y="158" text-anchor="middle" fill="var(--state-ok)">internal host &#8594; DIRECT</text>
+        <text class="t-sm t-b" x="356" y="184" text-anchor="middle" fill="var(--accent)">else &#8594; PROXY swg:8080</text>
+        <line class="flow-ok" x1="464" y1="132" x2="560" y2="118" marker-end="url(#ah-ok)"/>
+        <rect class="box" x="562" y="92" width="134" height="56" rx="10"/>
+        <text class="t-sm t-b" x="629" y="116" text-anchor="middle">Internet</text>
+        <text class="t-sm t-mut" x="629" y="136" text-anchor="middle">direct</text>
+        <line class="flow-accent" x1="464" y1="180" x2="560" y2="194" marker-end="url(#ah-acc)"/>
+        <rect class="box-accent" x="562" y="170" width="134" height="64" rx="10"/>
+        <text class="t-sm t-b" x="629" y="196" text-anchor="middle">Secure Web</text>
+        <text class="t-sm t-b" x="629" y="214" text-anchor="middle">Gateway</text>
+        <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Found via a configured URL or WPAD (DHCP / DNS) — which also makes WPAD an attack surface.</text>
       </svg>`,
 
     dlp: () => `
