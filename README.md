@@ -1,6 +1,6 @@
 # ZTA Visual Glossary
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/jamesbuckett/zta-visual-glossary)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/jamesbuckett/zta-visual-glossary?style=social)](https://github.com/jamesbuckett/zta-visual-glossary/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/jamesbuckett/zta-visual-glossary)](https://github.com/jamesbuckett/zta-visual-glossary/commits)
 [![Open issues](https://img.shields.io/github/issues/jamesbuckett/zta-visual-glossary)](https://github.com/jamesbuckett/zta-visual-glossary/issues)
