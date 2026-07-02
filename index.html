@@ -968,7 +968,7 @@
       explainer: `A Software-Defined WAN lays an intelligent overlay across a branch's transports — private MPLS (Multiprotocol Label Switching) circuits, broadband, and cellular — while a central controller steers each application over the best available path by policy and live link quality. It replaces rigid, device-by-device WAN configuration with centralised management, cutting cost by using cheap internet links alongside or instead of expensive private lines. It is frequently paired with SASE for security.`,
       types: ["Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Addressing & Routing"],
       related: ["sase", "vpn", "bgp", "loadbalancer"],
-      source: { label: "MEF 70.1 — SD-WAN Service Attributes", url: "https://www.mef.net/wp-content/uploads/MEF-70.1.pdf" },
+      source: { label: "MEF 70.2 — SD-WAN Service Attributes", url: "https://www.mplify.net/wp-content/uploads/MEF-70.2.pdf" },
       caption: "A central controller steers each app over the best of several transport links by policy."
     },
     {
@@ -1004,7 +1004,7 @@
       id: "pkce", term: "PKCE", acronym: "Proof Key for Code Exchange",
       aliases: ["pixy", "code_verifier", "code_challenge", "RFC 7636"],
       tldr: "Stops a stolen OAuth authorization code from being redeemed by anyone but the app that began the flow.",
-      explainer: `Proof Key for Code Exchange — pronounced "pixy" — hardens the OAuth 2.0 authorization-code flow against code interception. The client first invents a random secret, the code_verifier, and sends only its SHA-256 hash, the code_challenge, when it starts login. To swap the returned authorization code for tokens it must present the original verifier, which the server re-hashes and compares. A code stolen in transit is therefore useless without the matching verifier. Born for mobile and single-page apps that cannot keep a client secret, PKCE is now recommended for every client and is mandatory in OAuth 2.1.`,
+      explainer: `Proof Key for Code Exchange — pronounced "pixy" — hardens the OAuth 2.0 authorization-code flow against code interception. The client first invents a random secret, the code_verifier, and sends only its SHA-256 hash, the code_challenge, when it starts login. To swap the returned authorization code for tokens it must present the original verifier, which the server re-hashes and compares. A code stolen in transit is therefore useless without the matching verifier. Born for mobile and single-page apps that cannot keep a client secret, PKCE is now recommended for every client and is mandatory in the OAuth 2.1 draft.`,
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "oidc", "idp"],
       source: { label: "RFC 7636 — PKCE", url: "https://www.rfc-editor.org/info/rfc7636" },
@@ -1044,7 +1044,7 @@
       id: "openziti", term: "OpenZiti", acronym: "Open-source zero-trust networking overlay",
       aliases: ["Ziti", "NetFoundry", "ZTNA", "zero trust overlay"],
       tldr: "An open-source overlay that gives every app an identity and a default-deny, encrypted path — a zero-trust VPN replacement.",
-      explainer: `OpenZiti is an open-source zero-trust networking overlay, sponsored by NetFoundry, that replaces network-perimeter trust with per-connection, identity-based access. Every participant — app, device, or service — carries an x.509 identity, and a connection is allowed only when a policy explicitly grants that identity access to a named service across the mesh of edge routers. Services are "dark": they open no inbound ports and dial out to the fabric, so they are invisible to port scans and unreachable without authentication. Apps can embed the SDK directly or sit behind a tunneler, and every hop is mutually authenticated with mTLS — so unlike a VPN, being "on the network" grants nothing on its own.`,
+      explainer: `OpenZiti is an open-source zero-trust networking overlay, sponsored by NetFoundry, that replaces network-perimeter trust with per-connection, identity-based access. Every participant — app, device, or service — carries an X.509 identity, and a connection is allowed only when a policy explicitly grants that identity access to a named service across the mesh of edge routers. Services are "dark": they open no inbound ports and dial out to the fabric, so they are invisible to port scans and unreachable without authentication. Apps can embed the SDK directly or sit behind a tunneler, and every hop is mutually authenticated with mTLS — so unlike a VPN, being "on the network" grants nothing on its own.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Network Edge & Ops"],
       related: ["zerotrust", "mtls", "spiffe", "vpn"],
       source: { label: "openziti.io", url: "https://openziti.io/" },
@@ -1304,11 +1304,11 @@
       id: "owasp", term: "OWASP Top 10", acronym: "Open Worldwide Application Security Project",
       aliases: ["OWASP", "Top 10", "broken access control", "injection", "ASVS"],
       tldr: "The community's ranked list of the most critical web application risks.",
-      explainer: `OWASP is a non-profit community that produces free, vendor-neutral application-security resources, and its Top 10 is the field's best-known awareness document: a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input. It is used everywhere as a baseline — developers code against it, WAFs ship rule sets named after it, and auditors check for it. The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one and adds Software Supply Chain Failures — entering at number three — as a new category, reflecting where attacks have moved. OWASP also maintains deeper resources like the Application Security Verification Standard (ASVS) and the Cheat Sheet Series. The Top 10 is a floor for awareness, not a complete security programme.`,
+      explainer: `OWASP is a non-profit community that produces free, vendor-neutral application-security resources, and its Top 10 is the field's best-known awareness document: a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input. It is used everywhere as a baseline — developers code against it, WAFs ship rule sets named after it, and auditors check for it. The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one and adds Software Supply Chain Failures — entering at number three, expanded from 2021's Vulnerable and Outdated Components — reflecting where attacks have moved. OWASP also maintains deeper resources like the Application Security Verification Standard (ASVS) and the Cheat Sheet Series. The Top 10 is a floor for awareness, not a complete security programme.`,
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain", "Transport & Web"],
       related: ["websec", "waf", "cve"],
       source: { label: "OWASP Top 10:2025", url: "https://owasp.org/Top10/2025/" },
-      caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures new in the 2025 edition."
+      caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures entering at number three in the 2025 edition."
     },
     {
       id: "bola", term: "BOLA", acronym: "Broken Object Level Authorization",
@@ -1357,7 +1357,7 @@
       explainer: `A Data Processing Unit is a system-on-chip that fuses a high-speed network interface with its own general-purpose CPU cores (typically Arm) and hardware accelerators, so the data-center "infrastructure" work — packet switching, encryption, storage virtualization, telemetry, firewalling — runs on the card instead of stealing host CPU cycles. NVIDIA frames it as the third pillar of computing after the CPU and GPU. What separates a DPU from an ordinary SmartNIC, and what makes it matter for zero trust, is that its cores run their own operating system in a domain the host cannot see or control: traffic passes through the DPU before it ever reaches the host. Security policy therefore executes out-of-band — even if the host OS is completely compromised, the microsegmentation, line-rate encryption, intrusion detection, and keys living on the DPU stay intact, and the enforcement an attacker would want to disable sits on a separate processor they cannot reach. That makes the DPU the hardware foundation for putting a zero-trust enforcement point on every server. NVIDIA BlueField, AWS Nitro, Intel IPU, and AMD Pensando are the leading implementations.`,
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Platforms & Apps"],
       related: ["bluefield", "doca", "supernic", "microseg", "ipsec", "tpm"],
-      source: { label: "Wikipedia — Data processing unit", url: "https://en.wikipedia.org/wiki/Data_processing_unit" },
+      source: { label: "NVIDIA — What Is a DPU?", url: "https://blogs.nvidia.com/blog/whats-a-dpu-data-processing-unit/" },
       caption: "Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised."
     },
     {
@@ -1374,7 +1374,7 @@
       id: "supernic", term: "SuperNIC", acronym: "NVIDIA AI-Network Accelerator",
       aliases: ["NVIDIA SuperNIC", "BlueField-3 SuperNIC", "ConnectX SuperNIC", "Spectrum-X", "RoCE", "AI networking"],
       tldr: "A network accelerator tuned for AI: line-rate GPU-to-GPU Ethernet (RoCE) with the congestion control huge training clusters need — the DPU's performance-focused sibling.",
-      explainer: `A SuperNIC is NVIDIA's class of network accelerator built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets. Where a DPU is an "infrastructure computer," a SuperNIC is a throughput engine: it delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU, with the adaptive routing and congestion control that let thousands of GPUs exchange gradients without the network becoming the bottleneck, as a pillar of NVIDIA's Spectrum-X Ethernet platform. The name covers two structurally different products, a common point of confusion: the BlueField-3 SuperNIC is a slimmed-down DPU with a few Arm cores, while the ConnectX-7/8 SuperNICs are pure network adapters with no separate operating system. Either way the remit is performance over policy, so its zero-trust story is thinner than a full DPU's — the agentless host-introspection services (DOCA Argus, App Shield) run only on BlueField in DPU mode — though SuperNICs still encrypt traffic in flight at line rate. Think of the DPU and SuperNIC as siblings: one optimizes infrastructure and security, the other the AI network fabric.`,
+      explainer: `A SuperNIC is NVIDIA's class of network accelerator built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets. Where a DPU is an "infrastructure computer," a SuperNIC is a throughput engine: it delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU, with the adaptive routing and congestion control that let thousands of GPUs exchange gradients without the network becoming the bottleneck, as a pillar of NVIDIA's Spectrum-X Ethernet platform. The name covers two structurally different products, a common point of confusion: the BlueField-3 SuperNIC is a slimmed-down DPU with eight Arm cores, while the ConnectX-8/9 SuperNICs are pure network adapters with no separate operating system. Either way the remit is performance over policy, so its zero-trust story is thinner than a full DPU's — the agentless host-introspection services (DOCA Argus, App Shield) run only on BlueField in DPU mode — though SuperNICs still encrypt traffic in flight at line rate. Think of the DPU and SuperNIC as siblings: one optimizes infrastructure and security, the other the AI network fabric.`,
       types: ["Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops"],
       related: ["dpu", "bluefield", "doca", "ipsec"],
       source: { label: "NVIDIA — What Is a SuperNIC?", url: "https://blogs.nvidia.com/blog/what-is-a-supernic/" },
@@ -2748,12 +2748,12 @@
       </svg>`,
 
     owasp: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ranked list of the ten most critical web app risks, led by Broken Access Control, with Software Supply Chain Failures new in the 2025 edition.">
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ranked list of the ten most critical web app risks, led by Broken Access Control, with Software Supply Chain Failures entering at number three in the 2025 edition.">
         <text class="t-sm t-mut" x="360" y="28" text-anchor="middle">OWASP Top 10 : 2025 — ranked web app risks</text>
         ${[
           ["01","Broken Access Control","still #1",true,false],
           ["02","Security Misconfiguration","",false,false],
-          ["03","Software Supply Chain Failures","new",false,true],
+          ["03","Software Supply Chain Failures","expanded",false,true],
           ["··","Cryptographic Failures · Injection · …","",false,false]
         ].map(([n,t,tag,lead,isnew],i)=>`
           <rect class="${lead?'box-accent':(isnew?'box':'box-soft')}" x="120" y="${50+i*52}" width="480" height="44" rx="8"/>
