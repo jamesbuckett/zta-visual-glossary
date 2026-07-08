@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">76</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">77</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">76</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">77</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">76</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">77</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1276,7 +1276,7 @@
       tldr: "Controls that detect and stop sensitive data from leaving where it should not.",
       explainer: `Data Loss Prevention is the set of controls that keep sensitive information — card numbers, health records, source code, secrets — from leaving the organisation through email, uploads, USB drives, or chat. A DLP system inspects content against patterns and classifications, then warns, blocks, or encrypts when a transfer breaks policy, for example a spreadsheet of customer card numbers attached to an outbound message. It operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration, addressing the Data pillar of Zero Trust that network and identity controls leave untouched. Good DLP depends on good data classification — you can only protect what you have labelled. Overly blunt rules generate noise and tempt users to route around the control.`,
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
-      related: ["casb", "sase", "siem"],
+      related: ["ndlp", "casb", "sase", "siem"],
       source: { label: "NIST glossary — Data Loss Prevention", url: "https://csrc.nist.gov/glossary/term/data_loss_prevention" },
       caption: "Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted."
     },
@@ -1409,6 +1409,16 @@
       related: ["ovs", "microseg", "kubernetes", "cilium", "servicemesh"],
       source: { label: "OVN — ovn.org", url: "https://www.ovn.org/en/" },
       caption: "OVN compiles logical switches, routers, and ACLs into the flows every OVS node runs — one segmented virtual network across the whole cluster."
+    },
+    {
+      id: "ndlp", term: "nDLP", acronym: "Network Data Loss Prevention",
+      aliases: ["network DLP", "data in motion", "egress inspection", "TLS inspection", "inline DLP"],
+      tldr: "DLP for data in motion — traffic is inspected inline at the network edge and sensitive content is stopped before it leaves.",
+      explainer: `Network Data Loss Prevention is DLP applied to data in motion. Sitting inline where traffic leaves the organisation — a secure web gateway, email gateway, next-generation firewall, or the cloud edge of a SASE/SSE stack — it inspects email, web uploads, and file transfers against the organisation's data classifications using pattern matching, exact data matching, and machine-learning classifiers, then blocks, quarantines, or encrypts a transfer that breaks policy and alerts the security team. Because most traffic is TLS-encrypted, inline inspection depends on TLS interception — decrypt, inspect, re-encrypt at a proxy the fleet is configured to trust — which carries privacy and performance trade-offs; traffic it cannot decrypt it cannot content-inspect. Its strength is agentless coverage: any device on the monitored path is covered, managed or not. Its blind spots are the channels that never touch the network path — USB drives, clipboard, printing — which is why it pairs with endpoint DLP rather than replacing it.`,
+      types: ["Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Detection & Response"],
+      related: ["dlp", "sase", "casb", "tls", "firewall"],
+      source: { label: "Fortinet cyberglossary — Network Data Loss Prevention (nDLP)", url: "https://www.fortinet.com/resources/cyberglossary/network-dlp" },
+      caption: "Egress traffic is decrypted and inspected inline at the network edge; clean transfers continue re-encrypted, a policy breach is blocked before it leaves."
     }
   ];
 
@@ -2998,6 +3008,29 @@
         <line class="flow-accent" x1="440" y1="212" x2="520" y2="212" style="stroke-dasharray:5 5"/>
         <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">one logical network · Geneve overlay</text>
         <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Routing, DHCP, and stateful ACLs on every node — east-west microsegmentation.</text>
+      </svg>`,
+
+    ndlp: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Egress traffic is decrypted and inspected inline at the network edge; clean transfers continue re-encrypted, a policy breach is blocked before it leaves.">
+        <rect class="box" x="24" y="106" width="158" height="80" rx="10"/>
+        <text class="t-sm t-b" x="103" y="138" text-anchor="middle">Users &amp; workloads</text>
+        <text class="t-sm t-mut" x="103" y="158" text-anchor="middle">email · upload · FTP</text>
+        <rect class="zone-accent" x="240" y="48" width="250" height="196" rx="14"/>
+        <text class="t-sm t-mut" x="365" y="72" text-anchor="middle">network egress · SSE edge</text>
+        <rect class="box-accent" x="264" y="90" width="202" height="102" rx="12"/>
+        <text class="t-b" x="365" y="124" text-anchor="middle">nDLP</text>
+        <text class="t-sm t-mut" x="365" y="146" text-anchor="middle">decrypt TLS · inspect</text>
+        <text class="t-sm t-mut" x="365" y="164" text-anchor="middle">match classifications</text>
+        <line class="flow" x1="182" y1="146" x2="238" y2="146" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="546" y="70" width="150" height="72" rx="10"/>
+        <text class="t-sm t-b" x="621" y="98" text-anchor="middle">Internet · SaaS</text>
+        <text class="t-sm t-mut" x="621" y="118" text-anchor="middle">clean, re-encrypted</text>
+        <line class="flow-ok" x1="466" y1="128" x2="544" y2="106" marker-end="url(#ah-ok)"/>
+        <rect class="box" x="546" y="170" width="150" height="72" rx="10"/>
+        <text class="t-sm t-b" x="621" y="198" text-anchor="middle" fill="var(--state-bad)">blocked</text>
+        <text class="t-sm t-mut" x="621" y="218" text-anchor="middle">card data in upload</text>
+        <line class="flow-bad" x1="466" y1="156" x2="544" y2="204" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="282" text-anchor="middle">USB · clipboard · print never cross this path — pair with endpoint DLP.</text>
       </svg>`
   };
 
