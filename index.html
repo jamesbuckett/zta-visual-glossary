@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">78</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">79</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">78</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">79</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">78</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">79</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -749,7 +749,7 @@
       tldr: "Lets an app access your data on another service without your password.",
       explainer: `OAuth 2.0 is an authorization framework: instead of handing an app your credentials, you grant it a scoped, revocable access token issued by the resource's authorization server. The classic flow redirects you to log in, you consent, and the app receives a token to call the API on your behalf. It powers "Sign in with…" buttons and most API delegation. Crucially, it is about authorization, not authentication.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
-      related: ["jwt", "saml", "idp"],
+      related: ["jwt", "saml", "idp", "obo"],
       source: { label: "RFC 6749 — OAuth 2.0 Framework", url: "https://www.rfc-editor.org/info/rfc6749" },
       caption: "Authorization-code flow — the user consents and the app receives a scoped access token."
     },
@@ -1429,6 +1429,16 @@
       related: ["firewall", "nat", "tls", "apigateway"],
       source: { label: "RFC 5853 — SIP Session Border Control (SBC) Deployments", url: "https://datatracker.ietf.org/doc/html/rfc5853" },
       caption: "Enterprise calls terminate on the SBC at the border and re-originate encrypted toward the carrier — topology hidden, toll fraud and DoS dropped at the edge."
+    },
+    {
+      id: "obo", term: "OBO / Token Exchange", acronym: "On-Behalf-Of (OAuth 2.0 Token Exchange)",
+      aliases: ["on-behalf-of", "RFC 8693", "delegation", "impersonation", "act claim", "middle tier"],
+      tldr: "Lets a middle-tier service swap the user's token for a downstream-scoped one, so identity and least privilege survive the whole call chain.",
+      explainer: `When a client calls API A and API A must call API B, the middle tier faces a choice: call B as itself with a powerful service credential, or carry the user's context forward. On-Behalf-Of token exchange does the latter properly. API A presents the access token it received to the authorisation server and exchanges it for a new one — audience-restricted to B and scoped to what the user may do there — so B authorises the real subject rather than a generic service account. The pattern is standardised as OAuth 2.0 Token Exchange (RFC 8693), which distinguishes impersonation from delegation and records the acting party in the token's act claim; Microsoft's identity platform ships the same idea as its OBO flow. Zero trust needs it because the alternatives are worse: forwarding the original token downstream breaks audience restriction, and calling with the service's own credentials leaves B unable to tell users apart — the classic confused-deputy setup.`,
+      types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
+      related: ["oauth", "jwt", "oidc", "apigateway"],
+      source: { label: "RFC 8693 — OAuth 2.0 Token Exchange", url: "https://www.rfc-editor.org/info/rfc8693" },
+      caption: "API A exchanges the user's token for one scoped to API B, so the downstream hop authorises the real user — a forwarded token fails its audience check."
     }
   ];
 
@@ -3064,6 +3074,33 @@
         <text class="t-sm t-mut" x="621" y="218" text-anchor="middle">toll fraud · DoS</text>
         <line class="flow-bad" x1="544" y1="206" x2="492" y2="170" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-mut" x="360" y="282" text-anchor="middle">Both legs terminate on the SBC — enterprise and carrier never talk directly.</text>
+      </svg>`,
+
+    obo: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="API A exchanges the user's token for one scoped to API B, so the downstream hop authorises the real user — a forwarded token fails its audience check.">
+        <rect class="box" x="24" y="56" width="140" height="80" rx="10"/>
+        <text class="t-sm t-b" x="94" y="88" text-anchor="middle">User + app</text>
+        <text class="t-sm t-mut" x="94" y="108" text-anchor="middle">signed in</text>
+        <rect class="box-accent" x="250" y="56" width="180" height="80" rx="12"/>
+        <text class="t-b" x="340" y="88" text-anchor="middle">API A</text>
+        <text class="t-sm t-mut" x="340" y="110" text-anchor="middle">middle tier</text>
+        <rect class="box" x="546" y="56" width="150" height="80" rx="10"/>
+        <text class="t-sm t-b" x="621" y="88" text-anchor="middle">API B</text>
+        <text class="t-sm t-mut" x="621" y="108" text-anchor="middle">downstream</text>
+        <line class="flow" x1="164" y1="96" x2="248" y2="96" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="206" y="86" text-anchor="middle">token A</text>
+        <line class="flow-ok" x1="430" y1="80" x2="544" y2="80" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-mut" x="487" y="70" text-anchor="middle">token B</text>
+        <line class="flow-bad" x1="430" y1="116" x2="544" y2="116" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="487" y="132" text-anchor="middle">token A · denied</text>
+        <rect class="box" x="250" y="190" width="180" height="72" rx="10"/>
+        <text class="t-sm t-b" x="340" y="218" text-anchor="middle">Authorisation server</text>
+        <text class="t-sm t-mut" x="340" y="238" text-anchor="middle">RFC 8693 exchange</text>
+        <line class="flow" x1="310" y1="136" x2="310" y2="188" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="298" y="166" text-anchor="end">token A in</text>
+        <line class="flow-accent" x1="370" y1="188" x2="370" y2="136" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="382" y="166" text-anchor="start">token B out</text>
+        <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">token B is audience-scoped to API B; the act claim records who acts for whom.</text>
       </svg>`
   };
 
