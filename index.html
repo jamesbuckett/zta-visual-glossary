@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">77</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">78</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">77</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">78</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">77</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">78</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -794,7 +794,7 @@
       tldr: "Filters network traffic against a set of allow and deny rules.",
       explainer: `A firewall sits at a network boundary and permits or blocks traffic according to rules based on addresses, ports, and — increasingly — application and identity. Stateful firewalls track the state of connections; next-generation firewalls inspect deeper into the traffic itself. It is the classic first line of network defence, separating trusted zones from untrusted ones.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Network Edge & Ops"],
-      related: ["microseg", "nat", "vlan", "siem"],
+      related: ["microseg", "nat", "vlan", "siem", "sbc"],
       source: { label: "NIST SP 800-41 Rev. 1 — Firewall Guidelines", url: "https://csrc.nist.gov/pubs/sp/800/41/r1/final" },
       caption: "Traffic is checked against an ordered rule set; matches are allowed or denied."
     },
@@ -1419,6 +1419,16 @@
       related: ["dlp", "sase", "casb", "tls", "firewall"],
       source: { label: "Fortinet cyberglossary — Network Data Loss Prevention (nDLP)", url: "https://www.fortinet.com/resources/cyberglossary/network-dlp" },
       caption: "Egress traffic is decrypted and inspected inline at the network edge; clean transfers continue re-encrypted, a policy breach is blocked before it leaves."
+    },
+    {
+      id: "sbc", term: "SBC", acronym: "Session Border Controller",
+      aliases: ["SIP", "VoIP", "B2BUA", "SIP trunking", "RTP", "toll fraud"],
+      tldr: "The border guard for VoIP — calls terminate on it, are policed and normalised, then re-originated toward the far side.",
+      explainer: `A Session Border Controller is the border element for real-time communications. Deployed where VoIP traffic crosses a network boundary — between an organisation's phone system and its SIP trunk provider, or at a carrier's peering edge — it acts as a back-to-back user agent: each call's SIP signalling, and usually its RTP media, terminates on the SBC and is re-originated toward the far side, so the two networks never touch directly. That position lets it hide internal topology, encrypt signalling and media (SIP over TLS, SRTP), police access against denial-of-service and toll fraud, maintain NAT bindings, repair the SIP dialects of different vendors, transcode codecs, and enforce call-admission limits so voice quality holds. It exists because ordinary firewalls handle VoIP poorly — SIP embeds addresses inside its messages and negotiates dynamic media ports per call. Microsoft Teams Direct Routing requires a certified SBC; SIP trunk providers commonly expect one at the customer edge.`,
+      types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Network Edge & Ops"],
+      related: ["firewall", "nat", "tls", "apigateway"],
+      source: { label: "RFC 5853 — SIP Session Border Control (SBC) Deployments", url: "https://datatracker.ietf.org/doc/html/rfc5853" },
+      caption: "Enterprise calls terminate on the SBC at the border and re-originate encrypted toward the carrier — topology hidden, toll fraud and DoS dropped at the edge."
     }
   ];
 
@@ -3031,6 +3041,29 @@
         <text class="t-sm t-mut" x="621" y="218" text-anchor="middle">card data in upload</text>
         <line class="flow-bad" x1="466" y1="156" x2="544" y2="204" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-mut" x="360" y="282" text-anchor="middle">USB · clipboard · print never cross this path — pair with endpoint DLP.</text>
+      </svg>`,
+
+    sbc: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Enterprise calls terminate on the SBC at the border and re-originate encrypted toward the carrier — topology hidden, toll fraud and DoS dropped at the edge.">
+        <rect class="box" x="24" y="106" width="158" height="80" rx="10"/>
+        <text class="t-sm t-b" x="103" y="138" text-anchor="middle">IP-PBX · UC platform</text>
+        <text class="t-sm t-mut" x="103" y="158" text-anchor="middle">SIP + RTP</text>
+        <rect class="zone-accent" x="240" y="48" width="250" height="196" rx="14"/>
+        <text class="t-sm t-mut" x="365" y="72" text-anchor="middle">network border</text>
+        <rect class="box-accent" x="264" y="90" width="202" height="102" rx="12"/>
+        <text class="t-b" x="365" y="124" text-anchor="middle">SBC</text>
+        <text class="t-sm t-mut" x="365" y="146" text-anchor="middle">terminate · re-originate</text>
+        <text class="t-sm t-mut" x="365" y="164" text-anchor="middle">hide topology · TLS · SRTP</text>
+        <line class="flow" x1="182" y1="146" x2="238" y2="146" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="546" y="70" width="150" height="72" rx="10"/>
+        <text class="t-sm t-b" x="621" y="98" text-anchor="middle">SIP trunk · carrier</text>
+        <text class="t-sm t-mut" x="621" y="118" text-anchor="middle">provider network</text>
+        <line class="flow-accent" x1="466" y1="128" x2="544" y2="106" marker-end="url(#ah-acc)"/>
+        <rect class="box" x="546" y="170" width="150" height="72" rx="10"/>
+        <text class="t-sm t-b" x="621" y="198" text-anchor="middle" fill="var(--state-bad)">dropped</text>
+        <text class="t-sm t-mut" x="621" y="218" text-anchor="middle">toll fraud · DoS</text>
+        <line class="flow-bad" x1="544" y1="206" x2="492" y2="170" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="360" y="282" text-anchor="middle">Both legs terminate on the SBC — enterprise and carrier never talk directly.</text>
       </svg>`
   };
 
