@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">79</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">81</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">79</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">81</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
             <span class="stat"><b>2</b><span>Provenance flags</span></span>
             <span class="stat"><b>9</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">79</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">81</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1439,6 +1439,26 @@
       related: ["oauth", "jwt", "oidc", "apigateway"],
       source: { label: "RFC 8693 — OAuth 2.0 Token Exchange", url: "https://www.rfc-editor.org/info/rfc8693" },
       caption: "API A exchanges the user's token for one scoped to API B, so the downstream hop authorises the real user — a forwarded token fails its audience check."
+    },
+    {
+      id: "rlhf", term: "RLHF", acronym: "Reinforcement Learning from Human Feedback",
+      aliases: ["human feedback", "reward model", "PPO", "preference tuning", "alignment", "InstructGPT", "RLAIF"],
+      tldr: "Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.",
+      explainer: `RLHF is how a raw language model becomes one that follows instructions usefully and declines what it should. It runs in three stages. Supervised fine-tuning first teaches the base model to imitate human-written demonstrations. Then labellers are shown several candidate answers to the same prompt and rank them, and those comparisons train a separate reward model to predict which output a human would prefer. Finally reinforcement learning — classically PPO — optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference so it cannot drift into degenerate text that happens to score well. The technique came from Christiano et al. in 2017 and was scaled to language models by InstructGPT, whose 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3. It matters beyond answer quality: refusal behaviour and safety policy are installed here, at training time, which is why they are a property of the weights rather than a runtime control anything downstream can inspect, audit, or enforce. Its weakness is reward hacking — the policy optimises the reward model, which is only a proxy for human judgement — and the three-model pipeline is expensive and notoriously fiddly to keep stable.`,
+      types: ["Development Framework"], provenance: [], domains: ["AI & Models"],
+      related: ["dpo"],
+      source: { label: "Ouyang et al. — Training language models to follow instructions with human feedback", url: "https://arxiv.org/abs/2203.02155" },
+      caption: "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash."
+    },
+    {
+      id: "dpo", term: "DPO", acronym: "Direct Preference Optimization",
+      aliases: ["direct preference optimization", "preference pairs", "reference model", "offline alignment", "chosen rejected", "IPO", "KTO"],
+      tldr: "RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.",
+      explainer: `DPO reaches the same objective as RLHF by a much shorter route. Rafailov et al. showed that the KL-constrained reward maximisation RLHF solves has a closed-form optimum, which lets the reward be rewritten in terms of the policy itself — "your language model is secretly a reward model". The consequence is practical: drop the separate reward model and the PPO loop, and train directly on the same preference data — triples of prompt, chosen answer, rejected answer — using an ordinary classification loss that raises the model's log-probability of the chosen answer and lowers it for the rejected one, each measured against a frozen reference copy of the model. That reference does the job RLHF gave to the KL penalty. One training loop, nothing sampled from the model mid-run, no reward model to babysit — which is why DPO and its descendants became the default for open-weight instruction tuning. The trade-off is that it is offline: it learns only from pairs somebody already collected, so it cannot explore responses that dataset never contained, and it can over-optimise on prompts far from the reference model's distribution.`,
+      types: ["Development Framework"], provenance: [], domains: ["AI & Models"],
+      related: ["rlhf"],
+      source: { label: "Rafailov et al. — Direct Preference Optimization: Your Language Model is Secretly a Reward Model", url: "https://arxiv.org/abs/2305.18290" },
+      caption: "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference."
     }
   ];
 
@@ -3101,6 +3121,60 @@
         <line class="flow-accent" x1="370" y1="188" x2="370" y2="136" marker-end="url(#ah-acc)"/>
         <text class="t-sm t-mut" x="382" y="166" text-anchor="start">token B out</text>
         <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">token B is audience-scoped to API B; the act claim records who acts for whom.</text>
+      </svg>`,
+
+    rlhf: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.">
+        <rect class="box" x="24" y="60" width="192" height="86" rx="10"/>
+        <text class="t-sm t-b" x="120" y="88" text-anchor="middle">1 · Fine-tuning</text>
+        <text class="t-sm t-mut" x="120" y="110" text-anchor="middle">base model imitates</text>
+        <text class="t-sm t-mut" x="120" y="128" text-anchor="middle">written demonstrations</text>
+        <line class="flow" x1="216" y1="103" x2="256" y2="103" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="264" y="60" width="192" height="86" rx="12"/>
+        <text class="t-sm t-b" x="360" y="88" text-anchor="middle">2 · Reward model</text>
+        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">learns to score what</text>
+        <text class="t-sm t-mut" x="360" y="128" text-anchor="middle">a human would prefer</text>
+        <line class="flow" x1="456" y1="103" x2="496" y2="103" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="504" y="60" width="192" height="86" rx="12"/>
+        <text class="t-sm t-b" x="600" y="88" text-anchor="middle">3 · PPO</text>
+        <text class="t-sm t-mut" x="600" y="110" text-anchor="middle">RL tunes the policy</text>
+        <text class="t-sm t-mut" x="600" y="128" text-anchor="middle">against that score</text>
+        <rect class="box" x="264" y="196" width="192" height="72" rx="10"/>
+        <text class="t-sm t-b" x="360" y="224" text-anchor="middle">Human rankings</text>
+        <text class="t-sm t-mut" x="360" y="246" text-anchor="middle">A &gt; B &gt; C on one prompt</text>
+        <line class="flow-accent" x1="360" y1="194" x2="360" y2="150" marker-end="url(#ah-acc)"/>
+        <rect class="box" x="504" y="196" width="192" height="72" rx="10"/>
+        <text class="t-sm t-b" x="600" y="224" text-anchor="middle">Frozen reference</text>
+        <text class="t-sm t-mut" x="600" y="246" text-anchor="middle">KL penalty · anti-drift</text>
+        <line class="flow" x1="600" y1="194" x2="600" y2="150" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">three models in play — policy, reward model, and frozen reference — the cost DPO removes.</text>
+      </svg>`,
+
+    dpo: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference.">
+        <rect class="box" x="24" y="76" width="164" height="96" rx="10"/>
+        <text class="t-sm t-b" x="106" y="106" text-anchor="middle">Preference pair</text>
+        <text class="t-sm t-mut" x="106" y="130" text-anchor="middle">prompt +</text>
+        <text class="t-sm t-mut" x="106" y="148" text-anchor="middle">chosen / rejected</text>
+        <line class="flow" x1="188" y1="124" x2="248" y2="124" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="256" y="76" width="164" height="96" rx="12"/>
+        <text class="t-b" x="338" y="114" text-anchor="middle">Policy</text>
+        <text class="t-sm t-mut" x="338" y="140" text-anchor="middle">model being trained</text>
+        <line class="flow" x1="420" y1="124" x2="480" y2="124" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="488" y="76" width="200" height="96" rx="12"/>
+        <text class="t-sm t-b" x="588" y="106" text-anchor="middle">DPO loss</text>
+        <text class="t-sm t-mut" x="588" y="130" text-anchor="middle">one classification step on</text>
+        <text class="t-sm t-mut" x="588" y="148" text-anchor="middle">the log-prob ratio</text>
+        <rect class="box" x="256" y="212" width="164" height="64" rx="10"/>
+        <text class="t-sm t-b" x="338" y="238" text-anchor="middle">Frozen reference</text>
+        <text class="t-sm t-mut" x="338" y="258" text-anchor="middle">replaces the KL leash</text>
+        <line class="flow" x1="338" y1="210" x2="338" y2="176" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="590" y="192" text-anchor="middle">log-probability</text>
+        <line class="flow-ok" x1="536" y1="252" x2="536" y2="204" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-mut" x="536" y="270" text-anchor="middle">chosen</text>
+        <line class="flow-bad" x1="644" y1="204" x2="644" y2="252" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="644" y="270" text-anchor="middle">rejected</text>
+        <text class="t-sm t-mut" x="360" y="292" text-anchor="middle">no reward model, no RL loop — the same preference data, one gradient step.</text>
       </svg>`
   };
 
@@ -3110,7 +3184,7 @@
      ==================================================================== */
   const TYPE_TAGS = ["Protocol", "Network Technology", "Security Technology", "Development Framework"];
   const PROV_TAGS = ["Open Source", "Vendor"];
-  const DOMAIN_TAGS = ["Zero-Trust Core", "Identity & Access", "Secure Channels & Crypto", "Transport & Web", "Addressing & Routing", "Network Edge & Ops", "Platforms & Apps", "Detection & Response", "Governance & Supply Chain"];
+  const DOMAIN_TAGS = ["Zero-Trust Core", "Identity & Access", "Secure Channels & Crypto", "Transport & Web", "Addressing & Routing", "Network Edge & Ops", "Platforms & Apps", "Detection & Response", "Governance & Supply Chain", "AI & Models"];
   const byId = Object.fromEntries(TERMS.map(t => [t.id, t]));
   const state = { q: "", types: new Set(), prov: new Set(), domains: new Set() };
   const stateSet = (kind) => kind === "type" ? state.types : kind === "prov" ? state.prov : state.domains;
