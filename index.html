@@ -603,9 +603,9 @@
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
             <span class="stat"><b id="stat-total">81</b><span>Terms</span></span>
-            <span class="stat"><b id="stat-types">4</b><span>Type tags</span></span>
-            <span class="stat"><b>2</b><span>Provenance flags</span></span>
-            <span class="stat"><b>9</b><span>Domains</span></span>
+            <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
+            <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
+            <span class="stat"><b id="stat-domains">10</b><span>Domains</span></span>
             <span class="stat"><b id="stat-diagrams">81</b><span>Diagrams</span></span>
           </div>
         </div>
@@ -1445,7 +1445,7 @@
       aliases: ["human feedback", "reward model", "PPO", "preference tuning", "alignment", "InstructGPT", "RLAIF"],
       tldr: "Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.",
       explainer: `RLHF is how a raw language model becomes one that follows instructions usefully and declines what it should. It runs in three stages. Supervised fine-tuning first teaches the base model to imitate human-written demonstrations. Then labellers are shown several candidate answers to the same prompt and rank them, and those comparisons train a separate reward model to predict which output a human would prefer. Finally reinforcement learning — classically PPO — optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference so it cannot drift into degenerate text that happens to score well. The technique came from Christiano et al. in 2017 and was scaled to language models by InstructGPT, whose 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3. It matters beyond answer quality: refusal behaviour and safety policy are installed here, at training time, which is why they are a property of the weights rather than a runtime control anything downstream can inspect, audit, or enforce. Its weakness is reward hacking — the policy optimises the reward model, which is only a proxy for human judgement — and the three-model pipeline is expensive and notoriously fiddly to keep stable.`,
-      types: ["Development Framework"], provenance: [], domains: ["AI & Models"],
+      types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["dpo"],
       source: { label: "Ouyang et al. — Training language models to follow instructions with human feedback", url: "https://arxiv.org/abs/2203.02155" },
       caption: "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash."
@@ -1455,7 +1455,7 @@
       aliases: ["direct preference optimization", "preference pairs", "reference model", "offline alignment", "chosen rejected", "IPO", "KTO"],
       tldr: "RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.",
       explainer: `DPO reaches the same objective as RLHF by a much shorter route. Rafailov et al. showed that the KL-constrained reward maximisation RLHF solves has a closed-form optimum, which lets the reward be rewritten in terms of the policy itself — "your language model is secretly a reward model". The consequence is practical: drop the separate reward model and the PPO loop, and train directly on the same preference data — triples of prompt, chosen answer, rejected answer — using an ordinary classification loss that raises the model's log-probability of the chosen answer and lowers it for the rejected one, each measured against a frozen reference copy of the model. That reference does the job RLHF gave to the KL penalty. One training loop, nothing sampled from the model mid-run, no reward model to babysit — which is why DPO and its descendants became the default for open-weight instruction tuning. The trade-off is that it is offline: it learns only from pairs somebody already collected, so it cannot explore responses that dataset never contained, and it can over-optimise on prompts far from the reference model's distribution.`,
-      types: ["Development Framework"], provenance: [], domains: ["AI & Models"],
+      types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["rlhf"],
       source: { label: "Rafailov et al. — Direct Preference Optimization: Your Language Model is Secretly a Reward Model", url: "https://arxiv.org/abs/2305.18290" },
       caption: "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference."
@@ -3182,7 +3182,7 @@
      ENGINE — search, filter, routing, rendering. Data-driven; no term
      names are hard-coded below.
      ==================================================================== */
-  const TYPE_TAGS = ["Protocol", "Network Technology", "Security Technology", "Development Framework"];
+  const TYPE_TAGS = ["Protocol", "Network Technology", "Security Technology", "Development Framework", "Method"];
   const PROV_TAGS = ["Open Source", "Vendor"];
   const DOMAIN_TAGS = ["Zero-Trust Core", "Identity & Access", "Secure Channels & Crypto", "Transport & Web", "Addressing & Routing", "Network Edge & Ops", "Platforms & Apps", "Detection & Response", "Governance & Supply Chain", "AI & Models"];
   const byId = Object.fromEntries(TERMS.map(t => [t.id, t]));
@@ -3495,6 +3495,9 @@
     document.getElementById("year").textContent = new Date().getFullYear();
     document.getElementById("stat-total").textContent = TERMS.length;
     document.getElementById("stat-diagrams").textContent = TERMS.length;
+    document.getElementById("stat-types").textContent = TYPE_TAGS.length;
+    document.getElementById("stat-prov").textContent = PROV_TAGS.length;
+    document.getElementById("stat-domains").textContent = DOMAIN_TAGS.length;
 
     renderFilters();
     renderToc();
