@@ -940,7 +940,7 @@
       tldr: "The enforce-here, decide-there split at the heart of access control.",
       explainer: `In policy-based access control, the Policy Enforcement Point sits in the request path and intercepts each access attempt, while the Policy Decision Point evaluates the rules and returns an allow or deny. Separating enforcement from decision lets a single central policy brain govern many enforcement points consistently. This pattern is the control core of zero-trust architectures.`,
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Identity & Access"],
-      related: ["zerotrust", "idp"],
+      related: ["zerotrust", "idp", "rlhf", "dpo"],
       source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
       caption: "The enforcement point intercepts a request; the decision point evaluates policy and replies."
     },
@@ -1096,7 +1096,7 @@
       tldr: "A general-purpose policy engine that answers allow / deny from code, not config.",
       explainer: `Open Policy Agent is a CNCF-graduated engine that decouples policy decisions from application logic. A service asks OPA a question — can subject X perform action Y on resource Z? — sending JSON context, and OPA evaluates rules written in its declarative Rego language and returns a structured decision. Because the same engine enforces policy across microservices, Kubernetes admission, CI pipelines, and API gateways, organisations express authorization once as version-controlled policy as code rather than scattering if-statements through every app. It is the canonical software implementation of a Zero Trust Policy Decision Point. Gatekeeper packages OPA as a Kubernetes admission controller — a gate that checks each resource against policy at creation time, before it is admitted to the cluster.`,
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Identity & Access"],
-      related: ["peppdp", "rbac", "kubernetes", "zerotrust"],
+      related: ["peppdp", "rbac", "kubernetes", "zerotrust", "rlhf"],
       source: { label: "Open Policy Agent documentation", url: "https://www.openpolicyagent.org/docs" },
       caption: "Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites."
     },
@@ -1166,7 +1166,7 @@
       tldr: "Knowing exactly what is in your software, and proving how it was built.",
       explainer: `Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself. A Software Bill of Materials (SBOM) is a machine-readable inventory — in formats like CycloneDX or SPDX — of every component and version in a build, so when the next Log4Shell lands you can answer "are we affected?" in seconds instead of weeks. SLSA (Supply-chain Levels for Software Artifacts) is a complementary framework whose Build Track levels 1 to 3 raise the bar on how tamper-resistant your pipeline is, producing signed provenance that says exactly how and where an artifact was built. Together they make the supply chain auditable and verifiable. Software Supply Chain Failures is now a category in the OWASP Top 10:2025, reflecting how central this has become.`,
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain"],
-      related: ["sigstore", "docker", "cve", "opa"],
+      related: ["sigstore", "docker", "cve", "opa", "rlhf", "dpo"],
       source: { label: "CISA — Software Bill of Materials", url: "https://www.cisa.gov/sbom" },
       caption: "An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both."
     },
@@ -1336,7 +1336,7 @@
       tldr: "Easy, keyless signing of software artifacts backed by a public transparency log.",
       explainer: `Signing software has always been the right idea and a usability disaster — developers must guard long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key: its Cosign tool signs an artifact using a short-lived certificate that Fulcio issues against an OIDC identity (your Google, GitHub, or corporate login), so you sign as who you are rather than as a key you must hoard. Every signature is recorded in Rekor, a public, append-only transparency log, so anyone can verify that an artifact was signed by a given identity and detect tampering after the fact. This makes verifiable provenance practical at ecosystem scale and pairs naturally with SBOMs and SLSA. It is an open-source project under the OpenSSF, now signing a large share of container images and packages.`,
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Governance & Supply Chain", "Secure Channels & Crypto"],
-      related: ["sbom", "pki", "docker"],
+      related: ["sbom", "pki", "docker", "dpo"],
       source: { label: "sigstore.dev", url: "https://www.sigstore.dev/" },
       caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later."
     },
