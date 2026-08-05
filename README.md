@@ -23,10 +23,18 @@ open index.html          # macOS
 
 Use the search box to filter terms, the sticky A–Z sidebar to jump around, and click any entry to expand its explainer and diagram. Prefer not to download it? Visit the [live page](https://zta-visual-glossary.vercel.app).
 
+For grepping or quick reference, [glossary.txt](glossary.txt) lists every term in plain text — expansion, TL;DR, type tags, and aliases. Regenerate it after editing a term:
+
+```bash
+npm run glossary
+```
+
 ## Project Structure
 
 ```text
 index.html       # the whole glossary — markup, styles, term data, and inline SVGs
+glossary.txt     # plain-text listing of every term, generated from index.html
+glossary.mjs     # regenerates glossary.txt (npm run glossary)
 screenshot.mjs   # Playwright capture across desktop / tablet / mobile viewports
 validate.mjs     # static linter enforcing the style-guide design rules
 _launch.mjs      # shared Chromium launcher used by the tooling
