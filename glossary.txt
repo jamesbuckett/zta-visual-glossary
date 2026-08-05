@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-82 terms, alphabetical. Generated from index.html by glossary.mjs.
+83 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -217,6 +217,10 @@ QUIC — QUIC (a name, not an acronym — RFC 9000)
 RADIUS — Remote Authentication Dial-In User Service
     A protocol for centralized authentication, authorization, and accounting.
     [Protocol, Security Technology] · aka AAA, NAS, 802.1X
+
+RAG — Retrieval-Augmented Generation
+    Look the answer up before answering — retrieve the relevant passages at query time and put them in the prompt, so the model works from sources rather than memory.
+    [Method] · aka retrieval-augmented generation, vector database, embeddings, chunking, semantic search, hybrid search, reranking, grounding, prompt injection, context window
 
 RBAC & ABAC — Role- / Attribute-Based Access Control
     Two models for deciding who may do what — by role, or by attributes and context.

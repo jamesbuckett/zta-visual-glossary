@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">82</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">83</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">82</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">83</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">10</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">82</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">83</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -940,7 +940,7 @@
       tldr: "The enforce-here, decide-there split at the heart of access control.",
       explainer: `In policy-based access control, the Policy Enforcement Point sits in the request path and intercepts each access attempt, while the Policy Decision Point evaluates the rules and returns an allow or deny. Separating enforcement from decision lets a single central policy brain govern many enforcement points consistently. This pattern is the control core of zero-trust architectures.`,
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Identity & Access"],
-      related: ["zerotrust", "idp", "rlhf", "dpo"],
+      related: ["zerotrust", "idp", "rlhf", "dpo", "rag"],
       source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
       caption: "The enforcement point intercepts a request; the decision point evaluates policy and replies."
     },
@@ -1086,7 +1086,7 @@
       tldr: "Two models for deciding who may do what — by role, or by attributes and context.",
       explainer: `Once a system knows who you are (authentication), it must decide what you may do (authorization), and these are the two dominant models. Role-Based Access Control groups permissions into roles — billing-admin, read-only-auditor — and assigns people to roles, which is simple to reason about but coarse and prone to role explosion. Attribute-Based Access Control evaluates rules over attributes of the subject, resource, action, and environment — allow if department is finance AND the device is managed AND the time is business hours — giving fine-grained, context-aware decisions at the cost of complexity. Zero Trust leans toward ABAC because trust should depend on live context, not a static role. In practice a policy engine evaluates these rules at the decision point for every request.`,
       types: ["Security Technology"], provenance: [], domains: ["Identity & Access"],
-      related: ["peppdp", "opa", "zerotrust", "idp"],
+      related: ["peppdp", "opa", "zerotrust", "idp", "rag"],
       source: { label: "NIST — Role Based Access Control project", url: "https://csrc.nist.gov/projects/role-based-access-control" },
       caption: "RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision."
     },
@@ -1446,7 +1446,7 @@
       tldr: "Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.",
       explainer: `RLHF is how a raw language model becomes one that follows instructions usefully and declines what it should. It runs in three stages. Supervised fine-tuning first teaches the base model to imitate human-written demonstrations. Then labellers are shown several candidate answers to the same prompt and rank them, and those comparisons train a separate reward model to predict which output a human would prefer. Finally reinforcement learning — classically PPO — optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference so it cannot drift into degenerate text that happens to score well. The technique came from Christiano et al. in 2017 and was scaled to language models by InstructGPT, whose 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3. It matters beyond answer quality: refusal behaviour and safety policy are installed here, at training time, which is why they are a property of the weights rather than a runtime control anything downstream can inspect, audit, or enforce. Its weakness is reward hacking — the policy optimises the reward model, which is only a proxy for human judgement — and the three-model pipeline is expensive and notoriously fiddly to keep stable.`,
       types: ["Method"], provenance: [], domains: ["AI & Models"],
-      related: ["dpo", "peppdp", "opa", "sbom"],
+      related: ["dpo", "peppdp", "opa", "sbom", "rag"],
       source: { label: "Ouyang et al. — Training language models to follow instructions with human feedback", url: "https://arxiv.org/abs/2203.02155" },
       caption: "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash."
     },
@@ -1456,7 +1456,7 @@
       tldr: "RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.",
       explainer: `DPO reaches the same objective as RLHF by a much shorter route. Rafailov et al. showed that the KL-constrained reward maximisation RLHF solves has a closed-form optimum, which lets the reward be rewritten in terms of the policy itself — "your language model is secretly a reward model". The consequence is practical: drop the separate reward model and the PPO loop, and train directly on the same preference data — triples of prompt, chosen answer, rejected answer — using an ordinary classification loss that raises the model's log-probability of the chosen answer and lowers it for the rejected one, each measured against a frozen reference copy of the model. That reference does the job RLHF gave to the KL penalty. One training loop, nothing sampled from the model mid-run, no reward model to babysit — which is why DPO and its descendants became the default for open-weight instruction tuning. The trade-off is that it is offline: it learns only from pairs somebody already collected, so it cannot explore responses that dataset never contained, and it can over-optimise on prompts far from the reference model's distribution.`,
       types: ["Method"], provenance: [], domains: ["AI & Models"],
-      related: ["rlhf", "peppdp", "sbom", "sigstore"],
+      related: ["rlhf", "peppdp", "sbom", "sigstore", "rag"],
       source: { label: "Rafailov et al. — Direct Preference Optimization: Your Language Model is Secretly a Reward Model", url: "https://arxiv.org/abs/2305.18290" },
       caption: "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference."
     },
@@ -1469,6 +1469,16 @@
       related: ["jwt", "oauth", "oidc", "pki"],
       source: { label: "PASETO specification — paseto-standard", url: "https://github.com/paseto-standard/paseto-spec" },
       caption: "The version segment fixes the cipher suite before parsing begins — JWT's alg header is a field the attacker can rewrite, and PASETO simply does not have one."
+    },
+    {
+      id: "rag", term: "RAG", acronym: "Retrieval-Augmented Generation",
+      aliases: ["retrieval-augmented generation", "vector database", "embeddings", "chunking", "semantic search", "hybrid search", "reranking", "grounding", "prompt injection", "context window"],
+      tldr: "Look the answer up before answering — retrieve the relevant passages at query time and put them in the prompt, so the model works from sources rather than memory.",
+      explainer: `RAG answers a question by looking things up first. Ahead of any query, documents are split into chunks, each chunk is turned into a vector by an embedding model, and those vectors go into an index. When a question arrives it is embedded the same way, the nearest chunks come back, and those passages are pasted into the prompt — so the model answers from text placed in front of it rather than from what it absorbed during training. That buys three things the weights cannot: knowledge that changed after the training cut-off, private corpora that were never in the training set, and citations a reader can check. Re-indexing a document takes minutes; retraining does not. Quality is decided by the retrieval far more than by the model — chunk boundaries that separate a table from its heading, or a semantic search that misses an exact error code, are the everyday failures, which is why serious systems run hybrid keyword-plus-vector search and rerank the top-k before anything reaches the prompt. The part that belongs in this glossary is the authorisation. Retrieval must run as the asking user, or an index built by an ingestion account that could read everything becomes a confused deputy, laundering documents into answers for people who were never allowed to open them — filter at retrieval time, because instructing the model to keep a secret is not access control. Retrieved text is untrusted input as well, which is the indirect prompt-injection path, and grounding lowers hallucination without removing it.`,
+      types: ["Method"], provenance: [], domains: ["AI & Models"],
+      related: ["rlhf", "dpo", "rbac", "peppdp"],
+      source: { label: "Lewis et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", url: "https://arxiv.org/abs/2005.11401" },
+      caption: "Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled."
     }
   ];
 
@@ -3228,6 +3238,38 @@
         <text class="t-sm t-mut" x="423" y="310" text-anchor="middle">by the version</text>
         <text class="t-sm t-mut" x="520" y="290" text-anchor="start">no field to rewrite —</text>
         <text class="t-sm t-mut" x="520" y="308" text-anchor="start">downgrade is off the table</text>
+      </svg>`,
+
+    rag: () => `
+      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.">
+        <text class="t-sm t-mut" x="24" y="22">Index time — once, ahead of any question</text>
+        ${[
+          ["Documents", "wiki, tickets, PDFs", 24, 140, "box"],
+          ["Chunk", "split with overlap", 196, 124, "box"],
+          ["Embed", "text to vector", 352, 124, "box"],
+          ["Vector index", "vectors + metadata", 508, 164, "data"]
+        ].map(([n, s, x, w, cls], i) => `
+          <rect class="${cls}" x="${x}" y="32" width="${w}" height="48" rx="8"/>
+          <text class="t-b" x="${x + w/2}" y="56" text-anchor="middle">${n}</text>
+          <text class="t-sm t-mut" x="${x + w/2}" y="72" text-anchor="middle">${s}</text>
+          ${i < 3 ? `<line class="flow" x1="${x + w}" y1="56" x2="${x + w + 32}" y2="56" marker-end="url(#ah-mut)"/>` : ""}
+        `).join("")}
+        <path class="flow-accent" d="M590 80 V104 H255 V132" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="24" y="124">Query time — as the asking user</text>
+        ${[
+          ["Question", "from a user", 24, 129, "box", "flow-accent", "ah-acc"],
+          ["Retrieve top-k", "hybrid, reranked", 185, 140, "box", "flow-accent", "ah-acc"],
+          ["Permission filter", "as the asking user", 357, 150, "box-accent", "flow-ok", "ah-ok"],
+          ["Answer", "grounded, cited", 539, 133, "box", "", ""]
+        ].map(([n, s, x, w, cls, flow, mark]) => `
+          <rect class="${cls}" x="${x}" y="132" width="${w}" height="48" rx="8"/>
+          <text class="t-b" x="${x + w/2}" y="156" text-anchor="middle">${n}</text>
+          <text class="t-sm t-mut" x="${x + w/2}" y="172" text-anchor="middle">${s}</text>
+          ${flow ? `<line class="${flow}" x1="${x + w}" y1="156" x2="${x + w + 32}" y2="156" marker-end="url(#${mark})"/>` : ""}
+        `).join("")}
+        <line class="flow-bad" x1="432" y1="180" x2="432" y2="214" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="432" y="234" text-anchor="middle">a document this user may not read —</text>
+        <text class="t-sm t-mut" x="432" y="250" text-anchor="middle">dropped before the prompt is assembled</text>
       </svg>`
   };
 
