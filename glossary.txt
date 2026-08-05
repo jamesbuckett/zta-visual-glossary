@@ -1,0 +1,331 @@
+ZTA VISUAL GLOSSARY — TERM REFERENCE
+81 terms, alphabetical. Generated from index.html by glossary.mjs.
+Format: TERM — expansion / full name
+         TL;DR
+         [type tags] · aliases
+
+========================================================================
+
+API Gateway — API Gateway
+    A single front door for APIs that handles auth, rate limits, and routing.
+    [Network Technology, Security Technology] · aka gateway, rate limiting, BFF, Kong, ingress, API management
+
+BGP — Border Gateway Protocol
+    The routing protocol that stitches the internet's networks together.
+    [Protocol, Network Technology] · aka autonomous system, peering
+
+BlueField — NVIDIA Data Processing Unit (DPU)
+    NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data center's networking, storage, and zero-trust security on the card.
+    [Network Technology, Security Technology] · aka NVIDIA BlueField, BlueField-3, BlueField-2, BlueField-4, BF3, ConnectX, DPU
+
+BOLA — Broken Object Level Authorization
+    Swap the ID in an API request and read another user's object — because the server never checked it was yours.
+    [Security Technology] · aka IDOR, insecure direct object reference, API1:2023, object-level authorization, broken access control
+
+CASB — Cloud Access Security Broker
+    A control point between users and SaaS apps that enforces cloud security policy.
+    [Security Technology] · aka shadow IT, SaaS security, cloud security, SSE
+
+Cilium / eBPF — eBPF-Based Networking & Security
+    Programmable, in-kernel networking and security policy for Kubernetes.
+    [Network Technology, Security Technology] · aka eBPF, Cilium, network policy, Hubble, kernel
+
+CORS — Cross-Origin Resource Sharing
+    A browser rule that lets a server declare which other origins may read its responses.
+    [Protocol, Security Technology] · aka same-origin policy, preflight, Access-Control-Allow-Origin
+
+CSRF / XSS / CSP — Web App Attacks & Content Security Policy
+    The two classic browser attacks — and the header that helps shut them down.
+    [Security Technology, Protocol] · aka cross-site request forgery, cross-site scripting, content security policy, same-origin, SameSite, injection
+
+CVE / CVSS — Vulnerability IDs & Severity Scoring
+    The shared ID and 0–10 score that let everyone talk about the same flaw.
+    [Security Technology] · aka common vulnerabilities and exposures, CVSS, NVD, severity score, vulnerability
+
+DHCP — Dynamic Host Configuration Protocol
+    Automatically hands out IP addresses to devices joining a network.
+    [Protocol, Network Technology] · aka DORA, lease
+
+Django — Django (Python web framework)
+    A batteries-included Python web framework for building sites fast.
+    [Development Framework] · aka MTV, ORM
+
+DLP — Data Loss Prevention
+    Controls that detect and stop sensitive data from leaving where it should not.
+    [Security Technology] · aka data leak prevention, exfiltration, data classification, egress control
+
+DNS — Domain Name System
+    The internet's phonebook: turns human names into IP addresses.
+    [Protocol, Network Technology] · aka DNSSEC, resolver
+
+DOCA — NVIDIA DPU Software Framework
+    The SDK for BlueField — 'what CUDA is to the GPU, DOCA is to the DPU' — with libraries and services to offload networking, storage, and zero-trust security.
+    [Development Framework, Security Technology] · aka NVIDIA DOCA, DOCA SDK, DOCA Argus, App Shield, DOCA Flow
+
+Docker — Docker containers
+    Packages an app and its dependencies into a portable container.
+    [Development Framework] · aka container, OCI image
+
+DPO — Direct Preference Optimization
+    RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.
+    [Method] · aka direct preference optimization, preference pairs, reference model, offline alignment, chosen rejected, IPO, KTO
+
+DPU — Data Processing Unit
+    A programmable processor on the network card that offloads networking, storage, and security from the host — and runs them in its own isolated trust domain.
+    [Network Technology, Security Technology] · aka data processing unit, SmartNIC, infrastructure processor, IPU, infrastructure processing unit
+
+EDR / XDR — Endpoint / Extended Detection & Response
+    Agents that watch endpoints for malicious behaviour — and feed device-trust signals.
+    [Security Technology] · aka endpoint detection, XDR, device posture, endpoint security, EDR agent
+
+Firewall — Network Firewall
+    Filters network traffic against a set of allow and deny rules.
+    [Network Technology, Security Technology] · aka NGFW, iptables, packet filter
+
+gRPC — gRPC Remote Procedure Call
+    A fast, contract-first RPC framework using Protocol Buffers over HTTP/2.
+    [Protocol, Development Framework] · aka protobuf, Protocol Buffers, RPC
+
+HTTP / HTTPS — HyperText Transfer Protocol (Secure)
+    The request/response protocol of the web; HTTPS is HTTP wrapped in TLS.
+    [Protocol] · aka HTTP, HTTPS, HTTP/2, web
+
+Identity Provider — Identity Provider (IdP)
+    The trusted service that authenticates users and vouches for who they are.
+    [Security Technology] · aka IdP, SSO, OIDC, Keycloak
+
+IDS / IPS — Intrusion Detection / Prevention System
+    Sensors that spot attacks in network traffic — and optionally block them inline.
+    [Security Technology] · aka Snort, Suricata, signature detection, NIDS, intrusion detection
+
+IPsec — Internet Protocol Security
+    Encrypts and authenticates IP traffic at the network layer.
+    [Protocol, Security Technology] · aka IKE, ESP, tunnel mode
+
+JWT — JSON Web Token
+    A signed, self-contained token that carries identity claims.
+    [Security Technology, Protocol] · aka bearer token, claims
+
+Kerberos — Kerberos Authentication Protocol
+    Ticket-based authentication that proves identity without sending passwords over the wire.
+    [Protocol, Security Technology] · aka KDC, ticket-granting ticket, TGT, service principal, SPN, single sign-on
+
+Kubernetes — Kubernetes (K8s)
+    Automates deploying, scaling, and healing containerized apps across machines.
+    [Development Framework, Network Technology] · aka K8s, orchestration, pod
+
+LDAP / Active Directory — Lightweight Directory Access Protocol
+    The directory that stores users, groups, and devices — and answers who is this?
+    [Protocol, Security Technology] · aka Active Directory, AD, directory service, distinguished name, DN, OpenLDAP
+
+Load Balancer — Load Balancer
+    Spreads incoming traffic across many backend servers.
+    [Network Technology] · aka LB, reverse proxy, HAProxy
+
+MFA / Passkeys — Multi-Factor Authentication (FIDO2 · WebAuthn)
+    Proving identity with more than a password — and passkeys that cannot be phished.
+    [Security Technology, Protocol] · aka MFA, 2FA, FIDO2, WebAuthn, passkey, passwordless, TOTP, phishing-resistant
+
+Microsegmentation — Network Microsegmentation
+    Divides a network into tiny zones, each with its own access policy.
+    [Network Technology, Security Technology] · aka segmentation, lateral movement, east-west
+
+MQTT — MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)
+    A lightweight publish/subscribe protocol for IoT and constrained devices.
+    [Protocol] · aka pub/sub, broker, IoT
+
+mTLS — Mutual TLS
+    TLS where both client and server prove identity with certificates.
+    [Protocol, Security Technology] · aka mutual TLS, client certificate
+
+NAT — Network Address Translation
+    Lets many private devices share one public IP address.
+    [Network Technology, Protocol] · aka PAT, masquerade
+
+nDLP — Network Data Loss Prevention
+    DLP for data in motion — traffic is inspected inline at the network edge and sensitive content is stopped before it leaves.
+    [Security Technology] · aka network DLP, data in motion, egress inspection, TLS inspection, inline DLP
+
+NIST SP 800-207 — Zero Trust Architecture (NIST)
+    The reference document that defines Zero Trust and its policy components.
+    [Security Technology] · aka 800-207, zero trust architecture, trust algorithm, policy engine, policy administrator, CISA ZTMM
+
+OAuth 2.0 — Open Authorization 2.0
+    Lets an app access your data on another service without your password.
+    [Protocol, Security Technology] · aka OAuth, OIDC, access token
+
+OBO / Token Exchange — On-Behalf-Of (OAuth 2.0 Token Exchange)
+    Lets a middle-tier service swap the user's token for a downstream-scoped one, so identity and least privilege survive the whole call chain.
+    [Protocol, Security Technology] · aka on-behalf-of, RFC 8693, delegation, impersonation, act claim, middle tier
+
+OIDC — OpenID Connect
+    An identity layer on top of OAuth 2.0 that tells an app who the user is.
+    [Protocol, Security Technology] · aka OpenID Connect, ID Token, OpenID Provider, SSO
+
+OPA — Open Policy Agent
+    A general-purpose policy engine that answers allow / deny from code, not config.
+    [Security Technology] · aka Rego, policy as code, Gatekeeper, policy engine
+
+Open Virtual Network — OVN — SDN control plane for OVS
+    An SDN control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.
+    [Network Technology, Security Technology] · aka OVN, ovn-kubernetes, logical switch, logical router, Neutron OVN, northbound database, distributed firewall
+
+Open vSwitch — OVS — multilayer virtual switch
+    The open-source programmable switch inside the hypervisor — it wires VMs and containers to the network and forwards their packets by flow rules.
+    [Network Technology] · aka OVS, openvswitch, vSwitch, OpenFlow, OVSDB, virtual switch, ovs-vswitchd
+
+OpenZiti — Open-source zero-trust networking overlay
+    An open-source overlay that gives every app an identity and a default-deny, encrypted path — a zero-trust VPN replacement.
+    [Network Technology, Security Technology] · aka Ziti, NetFoundry, ZTNA, zero trust overlay
+
+OWASP Top 10 — Open Worldwide Application Security Project
+    The community's ranked list of the most critical web application risks.
+    [Security Technology] · aka OWASP, Top 10, broken access control, injection, ASVS
+
+PAC File — Proxy Auto-Configuration
+    A snippet of JavaScript the browser runs for every URL to decide: go direct, or through which proxy?
+    [Network Technology, Security Technology] · aka proxy auto-config, FindProxyForURL, WPAD, wpad.dat, proxy.pac, automatic proxy configuration, explicit proxy
+
+PAM — Privileged Access Management
+    Tight control over the powerful admin accounts attackers most want.
+    [Security Technology] · aka privileged accounts, just-in-time access, credential vaulting, session recording
+
+PEP / PDP — Policy Enforcement Point / Policy Decision Point
+    The enforce-here, decide-there split at the heart of access control.
+    [Security Technology] · aka policy enforcement, policy decision, policy engine
+
+PKCE — Proof Key for Code Exchange
+    Stops a stolen OAuth authorization code from being redeemed by anyone but the app that began the flow.
+    [Security Technology, Protocol] · aka pixy, code_verifier, code_challenge, RFC 7636
+
+PKI — Public Key Infrastructure
+    The certificate-and-trust system that lets you prove who owns a public key.
+    [Security Technology] · aka certificate authority, CA, X.509, root of trust, certificate chain, ACME
+
+Post-Quantum Cryptography — Post-Quantum Cryptography (PQC)
+    New algorithms designed to survive attack by a large quantum computer.
+    [Security Technology] · aka PQC, ML-KEM, Kyber, ML-DSA, Dilithium, quantum-safe, harvest now decrypt later
+
+QUIC — QUIC (a name, not an acronym — RFC 9000)
+    A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.
+    [Protocol, Network Technology, Security Technology] · aka HTTP/3, gQUIC, RFC 9000
+
+RADIUS — Remote Authentication Dial-In User Service
+    A protocol for centralized authentication, authorization, and accounting.
+    [Protocol, Security Technology] · aka AAA, NAS, 802.1X
+
+RBAC & ABAC — Role- / Attribute-Based Access Control
+    Two models for deciding who may do what — by role, or by attributes and context.
+    [Security Technology] · aka role-based access control, attribute-based access control, authorization, least privilege, entitlements
+
+React — React (UI library)
+    A JavaScript library for building user interfaces from composable components.
+    [Development Framework] · aka ReactJS, JSX, component
+
+RLHF — Reinforcement Learning from Human Feedback
+    Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.
+    [Method] · aka human feedback, reward model, PPO, preference tuning, alignment, InstructGPT, RLAIF
+
+SAML — Security Assertion Markup Language
+    An XML standard for single sign-on between identity and service providers.
+    [Protocol, Security Technology] · aka SSO, assertion, federation
+
+SASE — Secure Access Service Edge
+    Delivers networking and security together from the cloud edge, near the user.
+    [Security Technology, Network Technology] · aka SSE, ZTNA, cloud security
+
+SBC — Session Border Controller
+    The border guard for VoIP — calls terminate on it, are policed and normalised, then re-originated toward the far side.
+    [Network Technology, Security Technology] · aka SIP, VoIP, B2BUA, SIP trunking, RTP, toll fraud
+
+SBOM & SLSA — Software Supply-Chain Integrity
+    Knowing exactly what is in your software, and proving how it was built.
+    [Security Technology] · aka software bill of materials, SLSA, provenance, CycloneDX, SPDX, supply chain
+
+SCIM — System for Cross-domain Identity Management
+    Automates creating and removing user accounts across apps when people join or leave.
+    [Protocol, Security Technology] · aka user provisioning, deprovisioning, SCIM 2.0, RFC 7644
+
+SD-WAN — Software-Defined Wide Area Network
+    Software steers branch traffic across multiple links by policy, not fixed routing.
+    [Network Technology] · aka overlay, WAN, edge
+
+Secrets Management — Secrets Management (HashiCorp Vault)
+    A central, audited vault for the passwords, keys, and tokens that machines need.
+    [Security Technology] · aka HashiCorp Vault, secret store, dynamic secrets, credential rotation, KMS
+
+Service Mesh — Service Mesh (Istio · Linkerd · Envoy)
+    A networking layer that gives every service identity, mTLS, and traffic control for free.
+    [Network Technology, Security Technology] · aka Istio, Linkerd, Envoy, sidecar, data plane, control plane
+
+SIEM — Security Information and Event Management
+    Collects logs from everywhere and correlates them into security alerts.
+    [Security Technology] · aka SOC, log management, correlation
+
+Sigstore — Keyless Artifact Signing (Cosign)
+    Easy, keyless signing of software artifacts backed by a public transparency log.
+    [Security Technology] · aka Cosign, Fulcio, Rekor, keyless signing, transparency log
+
+SOAR — Security Orchestration, Automation & Response
+    Automation that turns security alerts into executed response playbooks.
+    [Security Technology] · aka playbook, automation, incident response, orchestration
+
+SPIFFE / SPIRE — Secure Production Identity Framework For Everyone
+    A standard and engine for giving workloads cryptographic identities.
+    [Security Technology, Development Framework] · aka SVID, SPIRE, workload identity
+
+SSH — Secure Shell
+    An encrypted channel for remote login and command execution.
+    [Protocol, Security Technology] · aka OpenSSH, SCP, key pair
+
+SuperNIC — NVIDIA AI-Network Accelerator
+    A network accelerator tuned for AI: line-rate GPU-to-GPU Ethernet (RoCE) with the congestion control huge training clusters need — the DPU's performance-focused sibling.
+    [Network Technology] · aka NVIDIA SuperNIC, BlueField-3 SuperNIC, ConnectX SuperNIC, Spectrum-X, RoCE, AI networking
+
+Tailscale — WireGuard-Based Mesh VPN
+    A zero-config mesh VPN that connects your devices directly over WireGuard.
+    [Network Technology, Security Technology] · aka Headscale, mesh VPN, tailnet, DERP, overlay network
+
+TCP/IP — Transmission Control Protocol / Internet Protocol
+    The layered addressing-and-delivery system that moves data across the internet.
+    [Protocol, Network Technology] · aka internet protocol suite, UDP
+
+TLS — Transport Layer Security
+    Encrypts data in transit and authenticates the server you are talking to.
+    [Protocol, Security Technology] · aka SSL
+
+TPM & Secure Boot — Hardware Root of Trust
+    A hardware chip that protects keys and proves a machine booted clean.
+    [Security Technology] · aka trusted platform module, secure boot, measured boot, attestation, UEFI
+
+VLAN — Virtual Local Area Network
+    Splits one physical switch into several isolated logical networks.
+    [Network Technology] · aka 802.1Q, trunk
+
+VPN — Virtual Private Network
+    An encrypted tunnel that extends a private network over the public internet.
+    [Network Technology, Security Technology] · aka tunnel, remote access
+
+WAF — Web Application Firewall
+    A firewall that inspects HTTP to block web attacks a network firewall cannot see.
+    [Security Technology] · aka OWASP CRS, layer 7 firewall, application firewall, virtual patching
+
+WebSockets — WebSocket Protocol (RFC 6455)
+    Upgrades an HTTP connection into a persistent, two-way channel for live data.
+    [Protocol, Network Technology] · aka ws, wss, RFC 6455, Sec-WebSocket-Key
+
+WebTransport — Multiplexed streams and datagrams over HTTP/3
+    A newer browser transport over HTTP/3 offering multiplexed streams and fire-and-forget datagrams.
+    [Protocol, Network Technology] · aka HTTP/3 transport, datagrams, WebTransport API
+
+WireGuard — WireGuard VPN protocol
+    A fast, modern, minimal VPN protocol built on current cryptography.
+    [Protocol, Security Technology] · aka wg
+
+Zero Trust — Zero Trust Architecture
+    Trust nothing by default; verify every request regardless of network location.
+    [Security Technology] · aka ZTA, ZTNA, BeyondCorp
+
+ZTNA — Zero Trust Network Access
+    The VPN replacement that grants access to single apps, never the whole network.
+    [Security Technology, Network Technology] · aka zero trust network access, software-defined perimeter, SDP, identity-aware proxy, BeyondCorp

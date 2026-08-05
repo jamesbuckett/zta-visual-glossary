@@ -59,6 +59,7 @@ const warn = (rule, msg) => warnings.push({ rule, msg });
   const dir = path.dirname(path.resolve(target));
   const whitelist = new Set([
     'screenshot.mjs', 'validate.mjs', 'a11y.mjs', 'run-evals.mjs', '_launch.mjs',
+    'glossary.mjs',
   ]);
   const stray = fs.readdirSync(dir).filter((f) => {
     if (whitelist.has(f)) return false;
