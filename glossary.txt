@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-81 terms, alphabetical. Generated from index.html by glossary.mjs.
+82 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -189,6 +189,10 @@ PAC File — Proxy Auto-Configuration
 PAM — Privileged Access Management
     Tight control over the powerful admin accounts attackers most want.
     [Security Technology] · aka privileged accounts, just-in-time access, credential vaulting, session recording
+
+PASETO — Platform-Agnostic Security Tokens
+    A JWT alternative with no algorithm field — the version prefix pins the cryptography, so there is nothing for an attacker to downgrade.
+    [Security Technology, Protocol] · aka v4.local, v4.public, PASERK, JWT alternative, versioned protocols, algorithm confusion, implicit assertion, footer
 
 PEP / PDP — Policy Enforcement Point / Policy Decision Point
     The enforce-here, decide-there split at the heart of access control.
