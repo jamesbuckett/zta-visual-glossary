@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">86</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">87</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">86</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">87</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">86</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">87</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1166,7 +1166,7 @@
       tldr: "Knowing exactly what is in your software, and proving how it was built.",
       explainer: `Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself. A Software Bill of Materials (SBOM) is a machine-readable inventory — in formats like CycloneDX or SPDX — of every component and version in a build, so when the next Log4Shell lands you can answer "are we affected?" in seconds instead of weeks. SLSA (Supply-chain Levels for Software Artifacts) is a complementary framework whose Build Track levels 1 to 3 raise the bar on how tamper-resistant your pipeline is, producing signed provenance that says exactly how and where an artifact was built. Together they make the supply chain auditable and verifiable. Software Supply Chain Failures is now a category in the OWASP Top 10:2025, reflecting how central this has become.`,
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain"],
-      related: ["sigstore", "docker", "cve", "opa", "rlhf", "dpo"],
+      related: ["sigstore", "docker", "cve", "opa", "dora", "rlhf", "dpo"],
       source: { label: "CISA — Software Bill of Materials", url: "https://www.cisa.gov/sbom" },
       caption: "An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both."
     },
@@ -1509,6 +1509,16 @@
       related: ["pam", "vault", "idp", "ssh"],
       source: { label: "Palo Alto Networks — Idira Privileged Access Management", url: "https://www.paloaltonetworks.com/idira/human/privileged-access-management" },
       caption: "The Vault holds the credential and the recording; PSM opens the session and injects the credential at the proxy, so the administrator gets access without ever seeing the password — which only holds if the direct route to the target is closed."
+    },
+    {
+      id: "dora", term: "DORA", acronym: "Digital Operational Resilience Act",
+      aliases: ["Digital Operational Resilience Act", "Regulation (EU) 2022/2554", "2022/2554", "operational resilience", "ICT risk management", "TLPT", "threat-led penetration testing", "TIBER-EU", "register of information", "CTPP", "critical ICT third-party provider", "Lead Overseer", "ESAs"],
+      tldr: "The EU regulation that makes surviving an IT failure a supervisory matter for financial firms — and, for the first time, lets European regulators oversee the cloud providers those firms depend on.",
+      explainer: `DORA is Regulation (EU) 2022/2554. It entered into force in January 2023 and has applied since 17 January 2025. Its premise is that a bank's ability to keep operating through an ICT failure is a supervisory question rather than an internal IT concern, so it binds around twenty categories of regulated firm — banks, insurers, investment firms, crypto-asset service providers, trading venues — and, unusually, reaches their suppliers as well. Five pillars carry it. ICT risk management puts the framework and its failures on the management body, which cannot delegate the accountability. Incident management requires major ICT incidents to be classified against common criteria and reported to the competent authority on a clock: an initial notification, an intermediate report as the picture firms up, and a final report with root cause. Resilience testing mandates a standing programme and, for the most significant entities, threat-led penetration testing at least every three years against live production systems on the TIBER-EU model — not a scoped annual pen test. Third-party risk has the most operational bite: firms maintain a register of information describing every ICT service dependency and where it runs, hold contracts guaranteeing audit and exit rights, and must show they have reasoned about concentration. Information sharing rounds it out with explicit cover to exchange threat intelligence. The genuinely new mechanism is the Oversight Framework. The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud and core-banking platforms — and assign each a Lead Overseer able to inspect them directly and to recommend that firms stop using them. European financial regulators supervising hyperscalers had no precedent. The honest limitation is that DORA specifies process rather than controls: it tells you to manage ICT risk without saying which architecture counts, so two firms can both be compliant with very different security postures. The register of information in particular absorbed enormous effort and is often kept as a compliance artefact rather than something operations uses. And designating a provider critical does not make it less concentrated — oversight buys visibility, not diversification.`,
+      types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain", "Detection & Response"],
+      related: ["nist207", "sbom", "siem", "soar"],
+      source: { label: "Regulation (EU) 2022/2554 — Digital Operational Resilience Act", url: "https://eur-lex.europa.eu/eli/reg/2022/2554/oj" },
+      caption: "The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before — a Lead Overseer reaching past the regulated firm to the provider itself."
     }
   ];
 
@@ -3426,6 +3436,37 @@
 
         <path class="flow-bad" d="M75 172 V226 H630 V178" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-mut" x="352" y="246" text-anchor="middle">the direct route — if this still exists, the broker is optional</text>
+      </svg>`,
+
+    dora: () => `
+      <svg class="dg" viewBox="0 0 720 240" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before, a Lead Overseer reaching past the regulated firm to the provider itself.">
+        <rect class="box" x="30" y="40" width="200" height="56" rx="8"/>
+        <text class="t-sm t-b" x="130" y="66" text-anchor="middle">ESAs — Lead Overseer</text>
+        <text class="t-sm t-mut" x="130" y="82" text-anchor="middle">EBA · ESMA · EIOPA</text>
+
+        <rect class="data" x="290" y="104" width="160" height="56" rx="8"/>
+        <text class="t-sm t-b" x="370" y="130" text-anchor="middle">Register of information</text>
+        <text class="t-sm t-mut" x="370" y="146" text-anchor="middle">every ICT dependency</text>
+
+        <rect class="box" x="30" y="168" width="200" height="56" rx="8"/>
+        <text class="t-b" x="130" y="194" text-anchor="middle">Financial entity</text>
+        <text class="t-sm t-mut" x="130" y="210" text-anchor="middle">bank, insurer, fund</text>
+
+        <rect class="box-accent" x="500" y="168" width="200" height="56" rx="8"/>
+        <text class="t-sm t-b" x="600" y="194" text-anchor="middle">Critical ICT third-party</text>
+        <text class="t-sm t-mut" x="600" y="210" text-anchor="middle">cloud, core banking</text>
+
+        <path class="flow" d="M130 96 V164" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="122" y="136" text-anchor="end">supervises</text>
+
+        <path class="flow" d="M190 166 V150 H286" marker-end="url(#ah-mut)"/>
+        <path class="flow" d="M290 116 H210 V100" marker-end="url(#ah-mut)"/>
+
+        <line class="flow" x1="230" y1="196" x2="496" y2="196" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="364" y="186" text-anchor="middle">outsourced ICT service</text>
+
+        <path class="flow-accent" d="M230 68 H600 V164" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-b" x="415" y="58" text-anchor="middle" fill="var(--accent)">direct oversight — new under DORA</text>
       </svg>`
   };
 

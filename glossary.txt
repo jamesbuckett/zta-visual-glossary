@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-86 terms, alphabetical. Generated from index.html by glossary.mjs.
+87 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -69,6 +69,10 @@ DOCA — NVIDIA DPU Software Framework
 Docker — Docker containers
     Packages an app and its dependencies into a portable container.
     [Development Framework] · aka container, OCI image
+
+DORA — Digital Operational Resilience Act
+    The EU regulation that makes surviving an IT failure a supervisory matter for financial firms — and, for the first time, lets European regulators oversee the cloud providers those firms depend on.
+    [Security Technology] · aka Digital Operational Resilience Act, Regulation (EU) 2022/2554, 2022/2554, operational resilience, ICT risk management, TLPT, threat-led penetration testing, TIBER-EU, register of information, CTPP, critical ICT third-party provider, Lead Overseer, ESAs
 
 DPO — Direct Preference Optimization
     RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.
