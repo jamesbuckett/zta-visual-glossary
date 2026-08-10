@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-88 terms, alphabetical. Generated from index.html by glossary.mjs.
+89 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -89,6 +89,10 @@ EDR / XDR — Endpoint / Extended Detection & Response
 FAPI 2.0 — Financial-grade API Security Profile
     The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.
     [Protocol, Security Technology] · aka FAPI, Financial-grade API, FAPI 2.0 Security Profile, PAR, pushed authorization requests, DPoP, sender-constrained tokens, RFC 9126, RFC 9449, RFC 8705, attacker model, open banking, JARM, private_key_jwt
+
+FIDO2 — WebAuthn + CTAP
+    WebAuthn plus CTAP — registration mints a key pair scoped to one site's origin, so there is no shared secret to steal and a look-alike domain has no credential to ask for.
+    [Protocol, Security Technology] · aka WebAuthn, CTAP, CTAP2, FIDO, FIDO Alliance, passkey, passwordless, security key, relying party ID, discoverable credential, resident key, user verification, attestation, YubiKey, cross-device authentication
 
 Firewall — Network Firewall
     Filters network traffic against a set of allow and deny rules.

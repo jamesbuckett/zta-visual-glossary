@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">88</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">89</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">88</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">89</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">88</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">89</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1066,7 +1066,7 @@
       tldr: "Proving identity with more than a password — and passkeys that cannot be phished.",
       explainer: `Multi-factor authentication requires two or more independent proofs of identity — something you know (a password), something you have (a phone or security key), or something you are (a fingerprint) — so a stolen password alone is not enough. Classic second factors like SMS codes and TOTP apps can still be phished, because a user can be tricked into typing them into a fake site. FIDO2 and WebAuthn close that gap: the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere. Passkeys are the consumer-friendly form — a discoverable FIDO credential synced across your devices that replaces the password entirely. For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be.`,
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
-      related: ["oauth", "oidc", "idp", "pkce"],
+      related: ["fido2", "oauth", "oidc", "idp", "pkce"],
       source: { label: "W3C WebAuthn Level 2", url: "https://www.w3.org/TR/webauthn-2/" },
       caption: "Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it."
     },
@@ -1529,6 +1529,16 @@
       related: ["oauth", "oidc", "pkce", "mtls"],
       source: { label: "FAPI 2.0 Security Profile — OpenID Foundation", url: "https://openid.net/specs/fapi-security-profile-2_0-final.html" },
       caption: "PAR keeps the authorization request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API."
+    },
+    {
+      id: "fido2", term: "FIDO2", acronym: "WebAuthn + CTAP",
+      aliases: ["WebAuthn", "CTAP", "CTAP2", "FIDO", "FIDO Alliance", "passkey", "passwordless", "security key", "relying party ID", "discoverable credential", "resident key", "user verification", "attestation", "YubiKey", "cross-device authentication"],
+      tldr: "WebAuthn plus CTAP — registration mints a key pair scoped to one site's origin, so there is no shared secret to steal and a look-alike domain has no credential to ask for.",
+      explainer: `FIDO2 is the umbrella name for two specifications that together replace the shared secret with a key pair: WebAuthn, the W3C browser API a site calls to create and use credentials, and CTAP, the FIDO Alliance protocol a browser speaks to an external authenticator over USB, NFC, or Bluetooth. Registration runs once — the authenticator generates a key pair scoped to the site's Relying Party ID, keeps the private key, which is the whole point since it never leaves the device, and hands back a public key and a credential ID for the site to store. Every later sign-in is a challenge and a signature over it. The property that matters follows from that scoping. The client tells the authenticator which origin is asking, and the authenticator will only sign for a credential whose RP ID matches, so on a look-alike domain there is simply no credential to offer — nothing to phish, and an adversary-in-the-middle proxy that will happily relay a password and a TOTP code gets nothing here, because the signature it needs would have to be over the wrong origin. The rest of the design follows. The relying party stores only public keys, so breaching it yields nothing replayable. User verification, a PIN or a biometric, is what separates a genuine second factor from a bare user-presence touch. A signature counter lets a site notice a cloned authenticator, and attestation lets a high-assurance deployment insist on a certified model, though most consumer sites request none to avoid the privacy and enrolment friction. Authenticators are either platform — Touch ID, Windows Hello, backed by the secure element — or roaming, meaning a security key, and CTAP 2.2's cross-device flow lets a phone authenticate a desktop login over Bluetooth, using proximity deliberately, because that is what stops the relay being remote. The honest complication is passkeys. Syncing a discoverable credential through iCloud Keychain or Google Password Manager is what made FIDO2 usable at consumer scale, but it moves the private key into a cloud account, so the guarantee becomes as strong as that account rather than as strong as the hardware. Device-bound credentials still exist for deployments that need the original property, and the two are worth telling apart before writing "phishing-resistant MFA" in an audit.`,
+      types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access", "Secure Channels & Crypto"],
+      related: ["mfa", "pki", "tpm", "idp"],
+      source: { label: "FIDO Alliance — FIDO2", url: "https://fidoalliance.org/fido2/" },
+      caption: "Registration leaves the private key in the authenticator and only a public key with the site; at sign-in the authenticator signs a challenge, and for a look-alike origin it holds no credential at all."
     }
   ];
 
@@ -3510,6 +3520,34 @@
 
         <path class="flow-bad" d="M470 230 H625 V200" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-b" x="560" y="222" fill="var(--state-bad)">rejected</text>
+      </svg>`,
+
+    fido2: () => `
+      <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Registration leaves the private key in the authenticator and only a public key with the site; at sign-in the authenticator signs a challenge, and for a look-alike origin it holds no credential at all.">
+        <text class="t-sm t-mut" x="20" y="20">The site stores only a public key — there is no shared secret to steal or phish</text>
+
+        <rect class="box-accent" x="20" y="44" width="220" height="88" rx="8"/>
+        <text class="t-b" x="130" y="72" text-anchor="middle">Authenticator</text>
+        <text class="t-sm t-mut" x="130" y="92" text-anchor="middle">private key</text>
+        <text class="t-sm t-mut" x="130" y="110" text-anchor="middle">bound to bank.example</text>
+
+        <rect class="data" x="480" y="44" width="220" height="88" rx="8"/>
+        <text class="t-b" x="590" y="72" text-anchor="middle">Relying party</text>
+        <text class="t-sm t-mut" x="590" y="92" text-anchor="middle">public key + credential ID</text>
+        <text class="t-sm t-mut" x="590" y="110" text-anchor="middle">nothing replayable</text>
+
+        <line class="flow" x1="478" y1="70" x2="242" y2="70" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="360" y="60" text-anchor="middle">challenge</text>
+
+        <line class="flow-accent" x1="242" y1="110" x2="478" y2="110" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="360" y="100" text-anchor="middle">signature + user verification</text>
+
+        <rect class="box" x="180" y="190" width="280" height="52" rx="8"/>
+        <text class="t-sm t-b" x="320" y="212" text-anchor="middle">bank-secure.example</text>
+        <text class="t-sm t-mut" x="320" y="228" text-anchor="middle">an attacker-controlled origin</text>
+
+        <path class="flow-bad" d="M200 188 V136" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="214" y="166">no credential for this RP ID</text>
       </svg>`
   };
 
