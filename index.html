@@ -605,7 +605,7 @@
             <span class="stat"><b id="stat-total">84</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
-            <span class="stat"><b id="stat-domains">10</b><span>Domains</span></span>
+            <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
             <span class="stat"><b id="stat-diagrams">84</b><span>Diagrams</span></span>
           </div>
         </div>
@@ -820,7 +820,7 @@
       id: "kubernetes", term: "Kubernetes", acronym: "Kubernetes (K8s)", aliases: ["K8s", "orchestration", "pod"],
       tldr: "Automates deploying, scaling, and healing containerized apps across machines.",
       explainer: `Kubernetes is an orchestrator that runs containers across a cluster of machines. You declare the desired state — how many replicas, which images, what networking — and its control plane continuously reconciles reality to match, rescheduling failed workloads and scaling on demand. It turns a fleet of machines into one programmable platform. The pod is its smallest deployable unit.`,
-      types: ["Development Framework", "Network Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
+      types: ["Development Framework", "Network Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Kubernetes"],
       related: ["docker", "keda", "loadbalancer", "spiffe"],
       source: { label: "Kubernetes documentation — Concepts", url: "https://kubernetes.io/docs/concepts/" },
       caption: "The control plane reconciles desired state, scheduling pods onto worker nodes."
@@ -1105,7 +1105,7 @@
       aliases: ["Istio", "Linkerd", "Envoy", "sidecar", "data plane", "control plane"],
       tldr: "A networking layer that gives every service identity, mTLS, and traffic control for free.",
       explainer: `A service mesh moves the cross-cutting concerns of service-to-service communication — mutual TLS, retries, timeouts, load balancing, and observability — out of application code and into a dedicated infrastructure layer. A proxy is deployed beside each workload as a sidecar (Envoy in Istio; Linkerd ships its own Rust micro-proxy); together these proxies form the data plane that carries traffic, while a control plane configures them and distributes identities and certificates. Because every call now flows through a mutually authenticated, policy-checked hop, the mesh delivers encrypted service-to-service (east-west) traffic and workload identity without changing a line of app code. It is where SPIFFE identities, mTLS, and microsegmentation meet inside a Kubernetes cluster. The trade-off is operational complexity and the latency of an extra network hop.`,
-      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps"],
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps", "Kubernetes"],
       related: ["mtls", "spiffe", "kubernetes", "microseg"],
       source: { label: "NIST SP 800-204A — Service-Mesh Security", url: "https://csrc.nist.gov/pubs/sp/800/204/a/final" },
       caption: "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default."
@@ -1235,7 +1235,7 @@
       aliases: ["eBPF", "Cilium", "network policy", "Hubble", "kernel"],
       tldr: "Programmable, in-kernel networking and security policy for Kubernetes.",
       explainer: `eBPF lets sandboxed programs run safely inside the Linux kernel, hooking into networking, security, and tracing events without kernel modules or patches — a quietly revolutionary capability. Cilium builds on it to provide networking, observability, and security for Kubernetes: it enforces identity-aware network policy, load-balances services, and can provide encrypted, mesh-like connectivity, all at kernel speed rather than through userspace proxies. Because policy is evaluated in the kernel against workload identity, Cilium implements microsegmentation efficiently — only sanctioned pod-to-pod flows are allowed, blocking lateral movement. Its Hubble component gives deep flow visibility for free. It is increasingly the default data plane for cloud-native clusters and an alternative path to service-mesh features without sidecars.`,
-      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops"],
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops", "Kubernetes"],
       related: ["kubernetes", "microseg", "servicemesh"],
       source: { label: "cilium.io", url: "https://cilium.io/" },
       caption: "eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows."
@@ -1405,7 +1405,7 @@
       aliases: ["OVN", "ovn-kubernetes", "logical switch", "logical router", "Neutron OVN", "northbound database", "distributed firewall"],
       tldr: "An SDN control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.",
       explainer: `Open Virtual Network is the SDN control plane that sits on top of Open vSwitch and gives it real network abstractions. Instead of writing raw flows, you declare logical switches, logical routers, and Access Control Lists in OVN's northbound database; OVN's daemons translate that intent into OpenFlow and program every OVS instance across the cluster, so one logical network spans many hosts as an overlay. Routing, DHCP, DNS, and a stateful distributed firewall run in the data plane on each node rather than at a central choke point — which is what makes OVN a microsegmentation engine: per-port ACLs isolate workloads from one another east-west, not just at the perimeter. It is the networking layer behind OpenStack Neutron and the ovn-kubernetes CNI that enforces Kubernetes NetworkPolicy. If OVS is the distributed switch, OVN is the brain that turns thousands of them into one programmable, segmented virtual network.`,
-      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Network Edge & Ops", "Platforms & Apps"],
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Network Edge & Ops", "Platforms & Apps", "Kubernetes"],
       related: ["ovs", "microseg", "kubernetes", "cilium", "servicemesh"],
       source: { label: "OVN — ovn.org", url: "https://www.ovn.org/en/" },
       caption: "OVN compiles logical switches, routers, and ACLs into the flows every OVS node runs — one segmented virtual network across the whole cluster."
@@ -1485,7 +1485,7 @@
       aliases: ["Kubernetes Event-driven Autoscaling", "ScaledObject", "ScaledJob", "TriggerAuthentication", "scale to zero", "scaler", "external metrics", "HPA", "Horizontal Pod Autoscaler", "consumer lag"],
       tldr: "Scales Kubernetes workloads on the event source itself — queue depth, consumer lag, a Prometheus query — and all the way down to zero, which CPU-based autoscaling cannot do.",
       explainer: `Kubernetes' built-in Horizontal Pod Autoscaler scales on what the pods are doing — CPU and memory — which is the wrong signal for anything event-driven. A worker blocked on a queue read burns almost no CPU while a million messages pile up behind it, so the HPA sees a healthy, idle deployment and does nothing. KEDA fixes the signal without replacing the mechanism. You write a ScaledObject pointing at an existing Deployment, or a ScaledJob for batch work, and declare triggers — Kafka consumer lag, SQS queue depth, a Prometheus query, a cron window — drawn from eighty-odd built-in scalers. Three components do the work: the operator watches ScaledObjects and owns the HPA lifecycle, a metrics API server publishes each scaler's reading through Kubernetes' external metrics API, and admission webhooks reject broken configuration at apply time. The split is the part worth remembering. KEDA drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning it to zero after a cooldown (five minutes by default); from one replica upward it hands over to an ordinary HPA reading those external metrics, so the familiar scaling behaviour still applies. Scale-to-zero is the thing a plain HPA has never done, and it is why a KEDA cluster feels close to serverless for queue consumers. The security question is credentials. Every scaler must authenticate to whatever it polls, and the TriggerAuthentication resource keeps those credentials out of the ScaledObject — sourced from a Secret, a bound service account token, Vault, a cloud secret manager, or best of all a pod identity provider so nothing long-lived is stored at all. That makes the operator a cross-tenant credential aggregation point, one controller able to reach every queue, topic, and database the cluster scales on: prefer namespaced TriggerAuthentication over the cluster-wide variant, and grant each scaler read-only metadata rights — queue length, not message consumption. The honest limitation is that KEDA scales pods, not machines. Scaling to zero saves nothing until Cluster Autoscaler or Karpenter drains the nodes underneath, and the first event after an idle period pays a full cold start — fine for a backlog worker, wrong for a synchronous request path.`,
-      types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
+      types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Kubernetes"],
       related: ["kubernetes", "docker", "vault", "spiffe"],
       source: { label: "KEDA documentation — Concepts", url: "https://keda.sh/docs/latest/concepts/" },
       caption: "The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds."
@@ -3329,7 +3329,7 @@
      ==================================================================== */
   const TYPE_TAGS = ["Protocol", "Network Technology", "Security Technology", "Development Framework", "Method"];
   const PROV_TAGS = ["Open Source", "Vendor"];
-  const DOMAIN_TAGS = ["Zero-Trust Core", "Identity & Access", "Secure Channels & Crypto", "Transport & Web", "Addressing & Routing", "Network Edge & Ops", "Platforms & Apps", "Detection & Response", "Governance & Supply Chain", "AI & Models"];
+  const DOMAIN_TAGS = ["Zero-Trust Core", "Identity & Access", "Secure Channels & Crypto", "Transport & Web", "Addressing & Routing", "Network Edge & Ops", "Platforms & Apps", "Detection & Response", "Governance & Supply Chain", "AI & Models", "Kubernetes"];
   const byId = Object.fromEntries(TERMS.map(t => [t.id, t]));
   const state = { q: "", types: new Set(), prov: new Set(), domains: new Set() };
   const stateSet = (kind) => kind === "type" ? state.types : kind === "prov" ? state.prov : state.domains;
