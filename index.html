@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">87</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">88</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">87</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">88</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">87</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">88</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -749,7 +749,7 @@
       tldr: "Lets an app access your data on another service without your password.",
       explainer: `OAuth 2.0 is an authorization framework: instead of handing an app your credentials, you grant it a scoped, revocable access token issued by the resource's authorization server. The classic flow redirects you to log in, you consent, and the app receives a token to call the API on your behalf. It powers "Sign in with…" buttons and most API delegation. Crucially, it is about authorization, not authentication.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
-      related: ["jwt", "saml", "idp", "obo"],
+      related: ["jwt", "saml", "idp", "obo", "fapi"],
       source: { label: "RFC 6749 — OAuth 2.0 Framework", url: "https://www.rfc-editor.org/info/rfc6749" },
       caption: "Authorization-code flow — the user consents and the app receives a scoped access token."
     },
@@ -1519,6 +1519,16 @@
       related: ["nist207", "sbom", "siem", "soar"],
       source: { label: "Regulation (EU) 2022/2554 — Digital Operational Resilience Act", url: "https://eur-lex.europa.eu/eli/reg/2022/2554/oj" },
       caption: "The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before — a Lead Overseer reaching past the regulated firm to the provider itself."
+    },
+    {
+      id: "fapi", term: "FAPI 2.0", acronym: "Financial-grade API Security Profile",
+      aliases: ["FAPI", "Financial-grade API", "FAPI 2.0 Security Profile", "PAR", "pushed authorization requests", "DPoP", "sender-constrained tokens", "RFC 9126", "RFC 9449", "RFC 8705", "attacker model", "open banking", "JARM", "private_key_jwt"],
+      tldr: "The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.",
+      explainer: `FAPI 2.0 is the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, final since February 2025. The name began as Financial-grade API and the first version came out of open banking, but 2.0 is written for any API exposing high-value data — the specification names e-health and e-government alongside finance. It is a profile rather than a new protocol: it takes the options OAuth deliberately leaves open and closes them. Four mandates carry it. Pushed Authorization Requests are required, so the client sends the full authorization request to the authorization server over a client-authenticated back channel and gets back an opaque request_uri; the browser then carries only that handle, leaving nothing in the URL to tamper with or to leak through referrers, history, and logs. PKCE with S256 is required. The authorization response must carry the iss parameter from RFC 9207, which closes the mix-up attack that appears once a client talks to more than one authorization server. Most consequentially, access tokens must be sender-constrained — bound either to an mTLS client certificate or to a DPoP key — which retires the bearer token: an attacker who lifts a token from a log, a proxy, or a compromised resource server cannot spend it without the matching private key. Client authentication is mTLS or private_key_jwt, so no shared secrets. Set against FAPI 1.0 this is as much a simplification as a hardening: 1.0 offered Baseline and Advanced tiers and required either JARM or the hybrid flow, where 2.0 has one profile, a plain authorization code response, and the ID token off the front channel entirely. What makes it unusual is the companion Attacker Model, which states six attacker types — from a web attacker up to one who controls the network — and four security goals, backed by a formal model and a machine-checked proof that the profile meets them. Very few deployed security profiles can point at anything like that. The cost is operational: mTLS or DPoP means real key management in the client, and PAR adds a round trip before the user sees a consent screen, which is why adoption clusters in regulated ecosystems that were told to implement it rather than spreading on merit.`,
+      types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access", "Transport & Web"],
+      related: ["oauth", "oidc", "pkce", "mtls"],
+      source: { label: "FAPI 2.0 Security Profile — OpenID Foundation", url: "https://openid.net/specs/fapi-security-profile-2_0-final.html" },
+      caption: "PAR keeps the authorization request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API."
     }
   ];
 
@@ -3467,6 +3477,39 @@
 
         <path class="flow-accent" d="M230 68 H600 V164" marker-end="url(#ah-acc)"/>
         <text class="t-sm t-b" x="415" y="58" text-anchor="middle" fill="var(--accent)">direct oversight — new under DORA</text>
+      </svg>`,
+
+    fapi: () => `
+      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="PAR keeps the authorization request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API.">
+        <text class="t-sm t-mut" x="20" y="20">The token is bound to a key the client holds — copying it is not enough</text>
+
+        <rect class="box-accent" x="250" y="38" width="220" height="56" rx="8"/>
+        <text class="t-sm t-b" x="360" y="64" text-anchor="middle">Authorization server</text>
+        <text class="t-sm t-mut" x="360" y="80" text-anchor="middle">PAR in, bound token out</text>
+
+        <rect class="box" x="20" y="140" width="150" height="56" rx="8"/>
+        <text class="t-b" x="95" y="164" text-anchor="middle">Client</text>
+        <text class="t-sm t-mut" x="95" y="180" text-anchor="middle">holds the key</text>
+
+        <rect class="box" x="550" y="140" width="150" height="56" rx="8"/>
+        <text class="t-b" x="625" y="164" text-anchor="middle">API</text>
+        <text class="t-sm t-mut" x="625" y="180" text-anchor="middle">checks the binding</text>
+
+        <path class="flow-accent" d="M60 140 V112 H300 V96" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="168" y="104" text-anchor="middle">PAR — pushed, authenticated</text>
+
+        <path class="flow-accent" d="M420 96 V126 H140 V138" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="360" y="142" text-anchor="middle">access token, bound to the key</text>
+
+        <line class="flow-ok" x1="170" y1="168" x2="548" y2="168" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-mut" x="360" y="186" text-anchor="middle">token + proof of possession</text>
+
+        <rect class="box" x="250" y="212" width="220" height="48" rx="8"/>
+        <text class="t-sm t-b" x="360" y="236" text-anchor="middle">Attacker with the token</text>
+        <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">but not the key</text>
+
+        <path class="flow-bad" d="M470 230 H625 V200" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-b" x="560" y="222" fill="var(--state-bad)">rejected</text>
       </svg>`
   };
 

@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-87 terms, alphabetical. Generated from index.html by glossary.mjs.
+88 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -85,6 +85,10 @@ DPU — Data Processing Unit
 EDR / XDR — Endpoint / Extended Detection & Response
     Agents that watch endpoints for malicious behaviour — and feed device-trust signals.
     [Security Technology] · aka endpoint detection, XDR, device posture, endpoint security, EDR agent
+
+FAPI 2.0 — Financial-grade API Security Profile
+    The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.
+    [Protocol, Security Technology] · aka FAPI, Financial-grade API, FAPI 2.0 Security Profile, PAR, pushed authorization requests, DPoP, sender-constrained tokens, RFC 9126, RFC 9449, RFC 8705, attacker model, open banking, JARM, private_key_jwt
 
 Firewall — Network Firewall
     Filters network traffic against a set of allow and deny rules.
