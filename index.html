@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">84</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">85</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">84</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">85</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">84</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">85</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1336,7 +1336,7 @@
       tldr: "Easy, keyless signing of software artifacts backed by a public transparency log.",
       explainer: `Signing software has always been the right idea and a usability disaster — developers must guard long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key: its Cosign tool signs an artifact using a short-lived certificate that Fulcio issues against an OIDC identity (your Google, GitHub, or corporate login), so you sign as who you are rather than as a key you must hoard. Every signature is recorded in Rekor, a public, append-only transparency log, so anyone can verify that an artifact was signed by a given identity and detect tampering after the fact. This makes verifiable provenance practical at ecosystem scale and pairs naturally with SBOMs and SLSA. It is an open-source project under the OpenSSF, now signing a large share of container images and packages.`,
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Governance & Supply Chain", "Secure Channels & Crypto"],
-      related: ["sbom", "pki", "docker", "dpo"],
+      related: ["sbom", "pki", "docker", "spinnaker", "dpo"],
       source: { label: "sigstore.dev", url: "https://www.sigstore.dev/" },
       caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later."
     },
@@ -1489,6 +1489,16 @@
       related: ["kubernetes", "docker", "vault", "spiffe"],
       source: { label: "KEDA documentation — Concepts", url: "https://keda.sh/docs/latest/concepts/" },
       caption: "The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds."
+    },
+    {
+      id: "spinnaker", term: "Spinnaker", acronym: "Multi-Cloud Continuous Delivery",
+      aliases: ["continuous delivery", "CD", "deployment pipeline", "blue/green", "red/black", "canary deployment", "Kayenta", "Fiat", "Clouddriver", "server group", "immutable infrastructure"],
+      tldr: "The deployment half of the pipeline — takes a built artifact and rolls it out across clouds, with blue/green and canary as configurable strategies rather than hand-written scripts.",
+      explainer: `Spinnaker is a continuous delivery platform, open-sourced by Netflix in 2015 and now governed by the Continuous Delivery Foundation. It owns the part of the pipeline that begins once CI has produced an artifact. Its model is deliberately opinionated: an application is a set of clusters, a cluster is a set of server groups, and a server group is the deployable thing — a VM image, a container, a Kubernetes manifest — together with its configuration. Around that sits the pipeline, a sequence of stages triggered by a Jenkins build, a new image, a schedule, or a person. What made it notable is that deployment strategies are first-class rather than scripts each team maintains: blue/green (Netflix's red/black by another name), rolling blue/green, and canary are configuration, and Spinnaker runs the health checks, the traffic cutover, and the rollback. Kayenta goes further and automates the canary judgement, comparing the canary's metrics against a baseline and passing or failing the stage on the statistics rather than on someone watching a dashboard. Rosco bakes immutable images with Packer, Helm, or Kustomize, which is the immutable-infrastructure argument made concrete — you replace a server group instead of mutating a running one, so what was tested is what runs. Spinnaker is itself eleven microservices: Deck the UI, Gate the API front door, Orca the orchestrator, Clouddriver the cloud integration and cache, and so on. That is where the security weight sits. To deploy anywhere it must hold credentials for every cloud account it manages, which makes it among the most privileged systems in an estate — whoever controls its pipelines controls production, without needing to touch a cloud console. Fiat is the answer to that: the authorisation service resolves a user's roles from the identity provider into permissions on specific applications, accounts, and service accounts, so a team can run its own pipelines without gaining a route into anyone else's. Treat pipeline definitions as production code, because they execute with those credentials. The honest limitation is operational cost — eleven services to run, secure, and upgrade is a great deal of platform for a team that only ships to Kubernetes, which is why much of that audience moved to lighter GitOps tooling. Spinnaker's remaining advantage is breadth: many clouds, VMs and containers alike, with the deployment strategies already built.`,
+      types: ["Development Framework"], provenance: ["Open Source"], domains: ["Governance & Supply Chain", "Platforms & Apps"],
+      related: ["sigstore", "sbom", "kubernetes", "rbac"],
+      source: { label: "Spinnaker documentation — Concepts", url: "https://spinnaker.io/docs/concepts/" },
+      caption: "CI hands off the artifact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all."
     }
   ];
 
@@ -3320,6 +3330,54 @@
         <path class="flow-accent" d="M548 177 H645 V155" marker-end="url(#ah-acc)"/>
 
         <text class="t-sm t-mut" x="400" y="230" text-anchor="middle">1 &#8596; N — an ordinary HPA, reading the scaler's metric</text>
+      </svg>`,
+
+    spinnaker: () => `
+      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CI hands off the artifact; the pipeline drives a strategy, here a canary judged automatically by Kayenta, while Fiat decides which applications and cloud accounts the user may touch at all.">
+        <text class="t-sm t-mut" x="20" y="22">Pipeline — CI hands off the artifact, Spinnaker takes it to production</text>
+
+        <rect class="box" x="20" y="100" width="120" height="52" rx="8"/>
+        <text class="t-b" x="80" y="124" text-anchor="middle">Artifact</text>
+        <text class="t-sm t-mut" x="80" y="140" text-anchor="middle">from CI</text>
+        <line class="flow" x1="140" y1="126" x2="172" y2="126" marker-end="url(#ah-mut)"/>
+
+        <rect class="box" x="174" y="100" width="120" height="52" rx="8"/>
+        <text class="t-b" x="234" y="124" text-anchor="middle">Bake</text>
+        <text class="t-sm t-mut" x="234" y="140" text-anchor="middle">immutable image</text>
+
+        <path class="flow" d="M294 126 H317 V80 H336" marker-end="url(#ah-mut)"/>
+        <path class="flow-accent" d="M317 126 V172 H336" marker-end="url(#ah-acc)"/>
+
+        <rect class="box" x="340" y="56" width="140" height="48" rx="8"/>
+        <text class="t-sm t-b" x="410" y="78" text-anchor="middle">Baseline v1</text>
+        <text class="t-sm t-mut" x="410" y="94" text-anchor="middle">current traffic</text>
+
+        <rect class="box-accent" x="340" y="148" width="140" height="48" rx="8"/>
+        <text class="t-sm t-b" x="410" y="170" text-anchor="middle">Canary v2</text>
+        <text class="t-sm t-mut" x="410" y="186" text-anchor="middle">a slice of traffic</text>
+
+        <path class="flow" d="M480 80 H500 V126 H516" marker-end="url(#ah-mut)"/>
+        <path class="flow-accent" d="M480 172 H500 V126" />
+
+        <rect class="box-accent" x="520" y="100" width="170" height="52" rx="8"/>
+        <text class="t-b" x="605" y="124" text-anchor="middle">Kayenta</text>
+        <text class="t-sm t-mut" x="605" y="140" text-anchor="middle">compares the metrics</text>
+
+        <path class="flow-ok" d="M605 152 V194 H525 V210" marker-end="url(#ah-ok)"/>
+        <path class="flow-bad" d="M605 194 H650 V210" marker-end="url(#ah-bad)"/>
+
+        <rect class="box" x="465" y="212" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="525" y="233" text-anchor="middle">Promote</text>
+        <text class="t-sm t-mut" x="525" y="249" text-anchor="middle">cut traffic over</text>
+
+        <rect class="box" x="600" y="212" width="100" height="46" rx="8"/>
+        <text class="t-sm t-b" x="650" y="233" text-anchor="middle">Roll back</text>
+        <text class="t-sm t-mut" x="650" y="249" text-anchor="middle">automatic</text>
+
+        <rect class="box-accent" x="20" y="212" width="250" height="46" rx="8"/>
+        <text class="t-sm t-b" x="145" y="233" text-anchor="middle">Fiat — authorisation</text>
+        <text class="t-sm t-mut" x="145" y="249" text-anchor="middle">which apps and accounts, per user</text>
+        <path class="flow-accent" d="M156 210 V136" marker-end="url(#ah-acc)"/>
       </svg>`
   };
 

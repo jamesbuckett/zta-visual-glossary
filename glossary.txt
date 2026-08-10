@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-84 terms, alphabetical. Generated from index.html by glossary.mjs.
+85 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -285,6 +285,10 @@ SOAR — Security Orchestration, Automation & Response
 SPIFFE / SPIRE — Secure Production Identity Framework For Everyone
     A standard and engine for giving workloads cryptographic identities.
     [Security Technology, Development Framework] · aka SVID, SPIRE, workload identity
+
+Spinnaker — Multi-Cloud Continuous Delivery
+    The deployment half of the pipeline — takes a built artifact and rolls it out across clouds, with blue/green and canary as configurable strategies rather than hand-written scripts.
+    [Development Framework] · aka continuous delivery, CD, deployment pipeline, blue/green, red/black, canary deployment, Kayenta, Fiat, Clouddriver, server group, immutable infrastructure
 
 SSH — Secure Shell
     An encrypted channel for remote login and command execution.
