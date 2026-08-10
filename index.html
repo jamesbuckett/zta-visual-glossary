@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">83</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">84</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">83</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">84</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">10</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">83</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">84</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -821,7 +821,7 @@
       tldr: "Automates deploying, scaling, and healing containerized apps across machines.",
       explainer: `Kubernetes is an orchestrator that runs containers across a cluster of machines. You declare the desired state — how many replicas, which images, what networking — and its control plane continuously reconciles reality to match, rescheduling failed workloads and scaling on demand. It turns a fleet of machines into one programmable platform. The pod is its smallest deployable unit.`,
       types: ["Development Framework", "Network Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
-      related: ["docker", "loadbalancer", "spiffe"],
+      related: ["docker", "keda", "loadbalancer", "spiffe"],
       source: { label: "Kubernetes documentation — Concepts", url: "https://kubernetes.io/docs/concepts/" },
       caption: "The control plane reconciles desired state, scheduling pods onto worker nodes."
     },
@@ -1479,6 +1479,16 @@
       related: ["rlhf", "dpo", "rbac", "peppdp"],
       source: { label: "Lewis et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", url: "https://arxiv.org/abs/2005.11401" },
       caption: "Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled."
+    },
+    {
+      id: "keda", term: "KEDA", acronym: "Kubernetes Event-driven Autoscaling",
+      aliases: ["Kubernetes Event-driven Autoscaling", "ScaledObject", "ScaledJob", "TriggerAuthentication", "scale to zero", "scaler", "external metrics", "HPA", "Horizontal Pod Autoscaler", "consumer lag"],
+      tldr: "Scales Kubernetes workloads on the event source itself — queue depth, consumer lag, a Prometheus query — and all the way down to zero, which CPU-based autoscaling cannot do.",
+      explainer: `Kubernetes' built-in Horizontal Pod Autoscaler scales on what the pods are doing — CPU and memory — which is the wrong signal for anything event-driven. A worker blocked on a queue read burns almost no CPU while a million messages pile up behind it, so the HPA sees a healthy, idle deployment and does nothing. KEDA fixes the signal without replacing the mechanism. You write a ScaledObject pointing at an existing Deployment, or a ScaledJob for batch work, and declare triggers — Kafka consumer lag, SQS queue depth, a Prometheus query, a cron window — drawn from eighty-odd built-in scalers. Three components do the work: the operator watches ScaledObjects and owns the HPA lifecycle, a metrics API server publishes each scaler's reading through Kubernetes' external metrics API, and admission webhooks reject broken configuration at apply time. The split is the part worth remembering. KEDA drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning it to zero after a cooldown (five minutes by default); from one replica upward it hands over to an ordinary HPA reading those external metrics, so the familiar scaling behaviour still applies. Scale-to-zero is the thing a plain HPA has never done, and it is why a KEDA cluster feels close to serverless for queue consumers. The security question is credentials. Every scaler must authenticate to whatever it polls, and the TriggerAuthentication resource keeps those credentials out of the ScaledObject — sourced from a Secret, a bound service account token, Vault, a cloud secret manager, or best of all a pod identity provider so nothing long-lived is stored at all. That makes the operator a cross-tenant credential aggregation point, one controller able to reach every queue, topic, and database the cluster scales on: prefer namespaced TriggerAuthentication over the cluster-wide variant, and grant each scaler read-only metadata rights — queue length, not message consumption. The honest limitation is that KEDA scales pods, not machines. Scaling to zero saves nothing until Cluster Autoscaler or Karpenter drains the nodes underneath, and the first event after an idle period pays a full cold start — fine for a backlog worker, wrong for a synchronous request path.`,
+      types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
+      related: ["kubernetes", "docker", "vault", "spiffe"],
+      source: { label: "KEDA documentation — Concepts", url: "https://keda.sh/docs/latest/concepts/" },
+      caption: "The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds."
     }
   ];
 
@@ -3270,6 +3280,46 @@
         <line class="flow-bad" x1="432" y1="180" x2="432" y2="214" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-mut" x="432" y="234" text-anchor="middle">a document this user may not read —</text>
         <text class="t-sm t-mut" x="432" y="250" text-anchor="middle">dropped before the prompt is assembled</text>
+      </svg>`,
+
+    keda: () => `
+      <svg class="dg" viewBox="0 0 720 268" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric, and every poll needs a credential, which is what TriggerAuthentication holds.">
+        <text class="t-sm t-mut" x="20" y="22">The signal is the event source — not the pods' CPU</text>
+
+        <rect class="box" x="20" y="76" width="160" height="54" rx="8"/>
+        <text class="t-b" x="100" y="100" text-anchor="middle">Event source</text>
+        <text class="t-sm t-mut" x="100" y="116" text-anchor="middle">queue depth · lag</text>
+
+        <rect class="box-accent" x="20" y="168" width="160" height="54" rx="8"/>
+        <text class="t-sm t-b" x="100" y="192" text-anchor="middle">TriggerAuthentication</text>
+        <text class="t-sm t-mut" x="100" y="208" text-anchor="middle">prefer pod identity</text>
+        <path class="flow-accent" d="M100 166 V134" marker-end="url(#ah-acc)"/>
+
+        <path class="flow" d="M180 103 H193 V71 H206" marker-end="url(#ah-mut)"/>
+        <path class="flow" d="M193 103 V177 H206" marker-end="url(#ah-mut)"/>
+
+        <rect class="box-accent" x="210" y="44" width="170" height="54" rx="8"/>
+        <text class="t-b" x="295" y="68" text-anchor="middle">keda-operator</text>
+        <text class="t-sm t-mut" x="295" y="84" text-anchor="middle">polls every 30s</text>
+
+        <rect class="box-accent" x="210" y="150" width="170" height="54" rx="8"/>
+        <text class="t-sm t-b" x="295" y="174" text-anchor="middle">keda-metrics-apiserver</text>
+        <text class="t-sm t-mut" x="295" y="190" text-anchor="middle">external metrics API</text>
+
+        <rect class="box" x="424" y="150" width="124" height="54" rx="8"/>
+        <text class="t-b" x="486" y="174" text-anchor="middle">HPA</text>
+        <text class="t-sm t-mut" x="486" y="190" text-anchor="middle">scales 1 &#8596; N</text>
+        <line class="flow" x1="380" y1="177" x2="420" y2="177" marker-end="url(#ah-mut)"/>
+
+        <rect class="data" x="590" y="97" width="110" height="54" rx="8"/>
+        <text class="t-b" x="645" y="121" text-anchor="middle">Workload</text>
+        <text class="t-sm t-mut" x="645" y="137" text-anchor="middle">0 &#8594; N pods</text>
+
+        <path class="flow-accent" d="M380 71 H645 V93" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-b" x="505" y="62" text-anchor="middle" fill="var(--accent)">0 &#8596; 1 — the operator itself</text>
+        <path class="flow-accent" d="M548 177 H645 V155" marker-end="url(#ah-acc)"/>
+
+        <text class="t-sm t-mut" x="400" y="230" text-anchor="middle">1 &#8596; N — an ordinary HPA, reading the scaler's metric</text>
       </svg>`
   };
 

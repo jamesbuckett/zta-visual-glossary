@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-83 terms, alphabetical. Generated from index.html by glossary.mjs.
+84 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -105,6 +105,10 @@ IPsec — Internet Protocol Security
 JWT — JSON Web Token
     A signed, self-contained token that carries identity claims.
     [Security Technology, Protocol] · aka bearer token, claims
+
+KEDA — Kubernetes Event-driven Autoscaling
+    Scales Kubernetes workloads on the event source itself — queue depth, consumer lag, a Prometheus query — and all the way down to zero, which CPU-based autoscaling cannot do.
+    [Development Framework] · aka Kubernetes Event-driven Autoscaling, ScaledObject, ScaledJob, TriggerAuthentication, scale to zero, scaler, external metrics, HPA, Horizontal Pod Autoscaler, consumer lag
 
 Kerberos — Kerberos Authentication Protocol
     Ticket-based authentication that proves identity without sending passwords over the wire.
