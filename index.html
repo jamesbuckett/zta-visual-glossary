@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">89</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">90</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">89</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">90</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">89</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">90</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1086,7 +1086,7 @@
       tldr: "Two models for deciding who may do what — by role, or by attributes and context.",
       explainer: `Once a system knows who you are (authentication), it must decide what you may do (authorization), and these are the two dominant models. Role-Based Access Control groups permissions into roles — billing-admin, read-only-auditor — and assigns people to roles, which is simple to reason about but coarse and prone to role explosion. Attribute-Based Access Control evaluates rules over attributes of the subject, resource, action, and environment — allow if department is finance AND the device is managed AND the time is business hours — giving fine-grained, context-aware decisions at the cost of complexity. Zero Trust leans toward ABAC because trust should depend on live context, not a static role. In practice a policy engine evaluates these rules at the decision point for every request.`,
       types: ["Security Technology"], provenance: [], domains: ["Identity & Access"],
-      related: ["peppdp", "opa", "zerotrust", "idp", "rag"],
+      related: ["peppdp", "opa", "immuta", "zerotrust", "idp", "rag"],
       source: { label: "NIST — Role Based Access Control project", url: "https://csrc.nist.gov/projects/role-based-access-control" },
       caption: "RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision."
     },
@@ -1539,6 +1539,16 @@
       related: ["mfa", "pki", "tpm", "idp"],
       source: { label: "FIDO Alliance — FIDO2", url: "https://fidoalliance.org/fido2/" },
       caption: "Registration leaves the private key in the authenticator and only a public key with the site; at sign-in the authenticator signs a challenge, and for a look-alike origin it holds no credential at all."
+    },
+    {
+      id: "immuta", term: "Immuta", acronym: "Policy-Based Access Control for Data Platforms",
+      aliases: ["data access control", "data governance", "attribute-based access control", "ABAC", "dynamic masking", "row-level security", "column masking", "subscription policy", "data policy", "policy pushdown", "k-anonymity", "differential privacy", "Snowflake", "Databricks", "Unity Catalog"],
+      tldr: "Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point in front of many query engines.",
+      explainer: `Immuta is a commercial control plane for who may read what inside a data platform. The problem it addresses is role explosion: expressing "analysts in the EU may query this table, but the salary column is masked and rows outside their region are hidden" through native grants alone means a role per combination, multiplied by every table, decaying the moment somebody changes team. Immuta separates the decision from the enforcement instead. Data sources are registered and classified, with sensitive columns tagged as personal or health data, and policy is written once against attributes rather than roles — subscription policies decide who may see a table at all, data policies mask columns or filter rows according to the requesting user's attributes, pulled from Okta or Active Directory. The part worth understanding is the enforcement. Immuta does not sit in the query path. It compiles its policies into the target platform's own governance primitives — Snowflake row access policies and column masking policies, the Databricks equivalents — writing them through a managed schema inside the warehouse, so users query natively at full engine speed and the policy still applies whether the query arrives from a BI tool, a notebook, or a service account that never went near the console. In this glossary's vocabulary Immuta is a Policy Decision Point for data and the warehouse is the Policy Enforcement Point. Masking ranges from hashing and regex replacement to k-anonymity and differential privacy, and every query is logged alongside the policy that shaped it, which is the audit artefact regulators actually ask for. The same machinery is now aimed at AI agents, treating an agent as a subject with attributes so retrieval runs under the asking identity rather than a service account that can read everything. Two honest caveats. Enforcement fidelity is bounded by the target: Immuta can only express what the underlying platform can enforce, so behaviour differs by connector and the abstraction leaks. And the native catalogues have grown — Unity Catalog and Snowflake's own governance features cover the straightforward cases — so the case for a separate vendor now rests on breadth across several platforms at once, plus the authoring and audit layer, rather than on capability the warehouse lacks.`,
+      types: ["Security Technology"], provenance: ["Vendor"], domains: ["Identity & Access", "Governance & Supply Chain"],
+      related: ["rbac", "peppdp", "opa", "dlp"],
+      source: { label: "Immuta documentation", url: "https://documentation.immuta.com/latest/" },
+      caption: "Policy is authored once against user attributes and compiled into each warehouse's own row and column controls, so the analyst queries the platform directly and the decision point stays in one place."
     }
   ];
 
@@ -3548,6 +3558,37 @@
 
         <path class="flow-bad" d="M200 188 V136" marker-end="url(#ah-bad)"/>
         <text class="t-sm t-mut" x="214" y="166">no credential for this RP ID</text>
+      </svg>`,
+
+    immuta: () => `
+      <svg class="dg" viewBox="0 0 720 266" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Policy is authored once against user attributes and compiled into each warehouse's own row and column controls, so the analyst queries the platform directly and the decision point stays in one place.">
+        <text class="t-sm t-mut" x="20" y="20">One policy, compiled into each platform's own controls</text>
+
+        <rect class="box-accent" x="20" y="40" width="200" height="76" rx="8"/>
+        <text class="t-b" x="120" y="68" text-anchor="middle">Immuta</text>
+        <text class="t-sm t-mut" x="120" y="88" text-anchor="middle">policy on attributes</text>
+        <text class="t-sm t-mut" x="120" y="104" text-anchor="middle">decision point</text>
+
+        <rect class="box" x="440" y="40" width="250" height="56" rx="8"/>
+        <text class="t-sm t-b" x="565" y="64" text-anchor="middle">Snowflake</text>
+        <text class="t-sm t-mut" x="565" y="80" text-anchor="middle">native row + column policy</text>
+
+        <rect class="box" x="440" y="120" width="250" height="56" rx="8"/>
+        <text class="t-sm t-b" x="565" y="144" text-anchor="middle">Databricks</text>
+        <text class="t-sm t-mut" x="565" y="160" text-anchor="middle">native row + column policy</text>
+
+        <path class="flow-accent" d="M220 78 H360 V68 H436" marker-end="url(#ah-acc)"/>
+        <path class="flow-accent" d="M360 78 V148 H436" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="290" y="68" text-anchor="middle">pushed down natively</text>
+
+        <rect class="box" x="20" y="172" width="200" height="56" rx="8"/>
+        <text class="t-b" x="120" y="196" text-anchor="middle">Analyst</text>
+        <text class="t-sm t-mut" x="120" y="212" text-anchor="middle">attributes from the IdP</text>
+
+        <path class="flow-ok" d="M220 200 H390 V162 H436" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-mut" x="335" y="220" text-anchor="middle">queries natively — no proxy</text>
+
+        <text class="t-sm t-mut" x="360" y="250" text-anchor="middle">rows filtered and columns masked by the policy already in the platform</text>
       </svg>`
   };
 

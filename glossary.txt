@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-89 terms, alphabetical. Generated from index.html by glossary.mjs.
+90 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -113,6 +113,10 @@ Identity Provider — Identity Provider (IdP)
 IDS / IPS — Intrusion Detection / Prevention System
     Sensors that spot attacks in network traffic — and optionally block them inline.
     [Security Technology] · aka Snort, Suricata, signature detection, NIDS, intrusion detection
+
+Immuta — Policy-Based Access Control for Data Platforms
+    Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point in front of many query engines.
+    [Security Technology] · aka data access control, data governance, attribute-based access control, ABAC, dynamic masking, row-level security, column masking, subscription policy, data policy, policy pushdown, k-anonymity, differential privacy, Snowflake, Databricks, Unity Catalog
 
 IPsec — Internet Protocol Security
     Encrypts and authenticates IP traffic at the network layer.
