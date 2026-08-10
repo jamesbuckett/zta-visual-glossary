@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-85 terms, alphabetical. Generated from index.html by glossary.mjs.
+86 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -41,6 +41,10 @@ CSRF / XSS / CSP — Web App Attacks & Content Security Policy
 CVE / CVSS — Vulnerability IDs & Severity Scoring
     The shared ID and 0–10 score that let everyone talk about the same flaw.
     [Security Technology] · aka common vulnerabilities and exposures, CVSS, NVD, severity score, vulnerability
+
+CyberArk PAM — Privileged Access Manager (now Idira, by Palo Alto Networks)
+    The commercial PAM deployment most enterprises actually run — a hardened credential vault, scheduled rotation, and a proxy that opens privileged sessions so the administrator never learns the password.
+    [Security Technology] · aka CyberArk, Idira, Idira PAM, Privileged Access Manager, Digital Vault, Enterprise Password Vault, CPM, PVWA, PSM, Privileged Session Manager, Privileged Threat Analytics, Privilege Cloud, Conjur, credential injection
 
 DHCP — Dynamic Host Configuration Protocol
     Automatically hands out IP addresses to devices joining a network.

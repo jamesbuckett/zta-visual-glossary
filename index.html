@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">85</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">86</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">85</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">86</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">85</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">86</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1286,7 +1286,7 @@
       tldr: "Tight control over the powerful admin accounts attackers most want.",
       explainer: `A handful of privileged accounts — domain admins, root, cloud owners — can do catastrophic damage, so Privileged Access Management wraps them in extra control. It vaults the credentials so admins check them out rather than knowing them, brokers sessions through a gateway that records keystrokes for audit, and increasingly grants access just-in-time: privileges are elevated for a specific task and a short window, then automatically revoked, shrinking the standing attack surface to near zero. This enforces least privilege and provides the accountability trail regulators expect for sensitive systems. PAM is a focused, higher-assurance complement to ordinary identity management and a frequent first target in a breach. It overlaps with secrets management for the machine-credential case.`,
       types: ["Security Technology"], provenance: [], domains: ["Identity & Access"],
-      related: ["idp", "vault", "rbac", "ssh"],
+      related: ["cyberark", "idp", "vault", "rbac", "ssh"],
       source: { label: "NIST glossary — Privileged Access Management", url: "https://csrc.nist.gov/glossary/term/privileged_access_management" },
       caption: "Admins check out a vaulted credential through a recorded gateway; access is elevated just-in-time and revoked when the task ends."
     },
@@ -1499,6 +1499,16 @@
       related: ["sigstore", "sbom", "kubernetes", "rbac"],
       source: { label: "Spinnaker documentation — Concepts", url: "https://spinnaker.io/docs/concepts/" },
       caption: "CI hands off the artifact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all."
+    },
+    {
+      id: "cyberark", term: "CyberArk PAM", acronym: "Privileged Access Manager (now Idira, by Palo Alto Networks)",
+      aliases: ["CyberArk", "Idira", "Idira PAM", "Privileged Access Manager", "Digital Vault", "Enterprise Password Vault", "CPM", "PVWA", "PSM", "Privileged Session Manager", "Privileged Threat Analytics", "Privilege Cloud", "Conjur", "credential injection"],
+      tldr: "The commercial PAM deployment most enterprises actually run — a hardened credential vault, scheduled rotation, and a proxy that opens privileged sessions so the administrator never learns the password.",
+      explainer: `CyberArk is the product most people mean when they say PAM, and it is worth knowing as an architecture rather than a brand. Five components carry the design. The Digital Vault is a deliberately isolated, hardened server holding every privileged credential; other components reach it only over its own protocol on TCP 1858, and it is built so that ordinary operating-system administration of the host does not grant access to the contents. The Central Policy Manager connects out to managed systems to rotate, verify, and reconcile passwords on a schedule, so a credential that leaks has a short useful life. Password Vault Web Access is the portal where people request and check out access. The Privileged Session Manager is the piece that matters most architecturally: instead of handing the credential to the administrator's workstation, it opens the RDP or SSH session from a hardened proxy, injects the credential there, and streams a recording back to the Vault — so the human never learns the password and every keystroke is auditable. Privileged Threat Analytics watches that activity for anomalies. Around the core sit the SaaS edition, endpoint privilege management, and Conjur for application and machine secrets. The obvious objection is concentration: you have gathered every privileged credential in the estate into one system, which makes it both the most valuable target you own and a dependency your administrators cannot work without — the vault hardening, the separation of duties, and the disaster-recovery replica are load-bearing, not optional. The subtler failure is coverage. A session broker only controls what cannot be reached around it, so accounts that were never onboarded and direct network routes to the target hosts quietly reinstate the risk the deployment was bought to remove, and the session archive becomes sensitive in its own right because recorded keystrokes contain secrets. One naming note: Palo Alto Networks completed its acquisition of CyberArk in February 2026 and launched the Idira platform that May, folding the CyberArk line into it, so the product is now Idira Privileged Access Manager even though most practitioners still say CyberArk.`,
+      types: ["Security Technology"], provenance: ["Vendor"], domains: ["Identity & Access"],
+      related: ["pam", "vault", "idp", "ssh"],
+      source: { label: "Palo Alto Networks — Idira Privileged Access Management", url: "https://www.paloaltonetworks.com/idira/human/privileged-access-management" },
+      caption: "The Vault holds the credential and the recording; PSM opens the session and injects the credential at the proxy, so the administrator gets access without ever seeing the password — which only holds if the direct route to the target is closed."
     }
   ];
 
@@ -3378,6 +3388,44 @@
         <text class="t-sm t-b" x="145" y="233" text-anchor="middle">Fiat — authorisation</text>
         <text class="t-sm t-mut" x="145" y="249" text-anchor="middle">which apps and accounts, per user</text>
         <path class="flow-accent" d="M156 210 V136" marker-end="url(#ah-acc)"/>
+      </svg>`,
+
+    cyberark: () => `
+      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The Vault holds the credential and the recording; PSM opens the session and injects the credential at the proxy, so the administrator gets access without ever seeing the password, which only holds if the direct route to the target is closed.">
+        <text class="t-sm t-mut" x="20" y="20">The administrator gets a session, never the password</text>
+
+        <rect class="data" x="250" y="34" width="170" height="52" rx="8"/>
+        <text class="t-b" x="335" y="58" text-anchor="middle">Digital Vault</text>
+        <text class="t-sm t-mut" x="335" y="74" text-anchor="middle">credentials + recordings</text>
+
+        <rect class="box" x="450" y="34" width="140" height="52" rx="8"/>
+        <text class="t-b" x="520" y="58" text-anchor="middle">CPM</text>
+        <text class="t-sm t-mut" x="520" y="74" text-anchor="middle">rotates on schedule</text>
+        <line class="flow" x1="420" y1="60" x2="448" y2="60" marker-end="url(#ah-mut)"/>
+        <path class="flow" d="M520 86 V100 H630 V116" marker-end="url(#ah-mut)"/>
+
+        <path class="flow-accent" d="M335 86 V106" marker-end="url(#ah-acc)"/>
+
+        <rect class="box" x="20" y="120" width="110" height="52" rx="8"/>
+        <text class="t-b" x="75" y="144" text-anchor="middle">Admin</text>
+        <text class="t-sm t-mut" x="75" y="160" text-anchor="middle">workstation</text>
+
+        <rect class="box-accent" x="200" y="110" width="170" height="72" rx="8"/>
+        <text class="t-b" x="285" y="134" text-anchor="middle">PSM</text>
+        <text class="t-sm t-mut" x="285" y="152" text-anchor="middle">credential injected here</text>
+        <text class="t-sm t-mut" x="285" y="168" text-anchor="middle">session recorded</text>
+
+        <rect class="box" x="560" y="120" width="140" height="52" rx="8"/>
+        <text class="t-b" x="630" y="144" text-anchor="middle">Target system</text>
+        <text class="t-sm t-mut" x="630" y="160" text-anchor="middle">server, DB, cloud</text>
+
+        <line class="flow-accent" x1="130" y1="146" x2="198" y2="146" marker-end="url(#ah-acc)"/>
+        <line class="flow-accent" x1="370" y1="146" x2="558" y2="146" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="464" y="136" text-anchor="middle">brokered session</text>
+        <text class="t-sm t-mut" x="200" y="200" text-anchor="middle">no credential reaches the admin</text>
+
+        <path class="flow-bad" d="M75 172 V226 H630 V178" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="352" y="246" text-anchor="middle">the direct route — if this still exists, the broker is optional</text>
       </svg>`
   };
 
