@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-91 terms, alphabetical. Generated from index.html by glossary.mjs.
+92 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -8,7 +8,7 @@ Format: TERM — expansion / full name
 
 Alpaca — Local HTTP Proxy for Command-Line Tools
     A proxy you run on your own machine so curl, git, and npm can get out through the corporate one — it reads the PAC file and answers the NTLM or Kerberos challenge that command-line tools cannot.
-    [Network Technology, Security Technology] · aka samuong/alpaca, local HTTP proxy, NTLM proxy, CNTLM, proxy authentication, 407 Proxy Authentication Required, Proxy-Authenticate, Negotiate, SPNEGO, http_proxy, https_proxy, corporate proxy, NTLM_CREDENTIALS, ALPACA_PROXY_AUTH_ALLOWLIST, localhost:3128
+    [Network Technology, Security Technology] · aka samuong/alpaca, local HTTP proxy, NTLM proxy, proxy authentication, 407 Proxy Authentication Required, Proxy-Authenticate, Negotiate, SPNEGO, http_proxy, https_proxy, corporate proxy, NTLM_CREDENTIALS, ALPACA_PROXY_AUTH_ALLOWLIST, localhost:3128
 
 API Gateway — API Gateway
     A single front door for APIs that handles auth, rate limits, and routing.
@@ -33,6 +33,10 @@ CASB — Cloud Access Security Broker
 Cilium / eBPF — eBPF-Based Networking & Security
     Programmable, in-kernel networking and security policy for Kubernetes.
     [Network Technology, Security Technology] · aka eBPF, Cilium, network policy, Hubble, kernel
+
+Cntlm — NTLM Authentication Proxy
+    The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
+    [Network Technology, Security Technology] · aka CNTLM, cntlm.conf, NTLM proxy, NTLMv2, NTLM2SR, LM hash, PassNTLMv2, PassNT, PassLM, magic dialect detection, parent proxy, gateway mode, NoProxy, SOCKS5 proxy, port tunnelling, ISA Server
 
 CORS — Cross-Origin Resource Sharing
     A browser rule that lets a server declare which other origins may read its responses.
