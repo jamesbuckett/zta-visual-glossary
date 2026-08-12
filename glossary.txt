@@ -1,10 +1,14 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-90 terms, alphabetical. Generated from index.html by glossary.mjs.
+91 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
 
 ========================================================================
+
+Alpaca — Local HTTP Proxy for Command-Line Tools
+    A proxy you run on your own machine so curl, git, and npm can get out through the corporate one — it reads the PAC file and answers the NTLM or Kerberos challenge that command-line tools cannot.
+    [Network Technology, Security Technology] · aka samuong/alpaca, local HTTP proxy, NTLM proxy, CNTLM, proxy authentication, 407 Proxy Authentication Required, Proxy-Authenticate, Negotiate, SPNEGO, http_proxy, https_proxy, corporate proxy, NTLM_CREDENTIALS, ALPACA_PROXY_AUTH_ALLOWLIST, localhost:3128
 
 API Gateway — API Gateway
     A single front door for APIs that handles auth, rate limits, and routing.

@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">90</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">91</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">90</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">91</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">90</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">91</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1266,7 +1266,7 @@
       tldr: "A snippet of JavaScript the browser runs for every URL to decide: go direct, or through which proxy?",
       explainer: `A Proxy Auto-Configuration file is a small JavaScript file exporting one function — FindProxyForURL(url, host) — that the browser or OS calls for every request to decide how to reach it. The function returns a string such as "PROXY swg.example.com:8080; DIRECT" or "DIRECT", and built-in helpers like shExpMatch(), dnsDomainIs(), and isInNet() let rules match on hostname, domain, or IP range — so internal traffic goes direct while everything else is steered through a proxy. The browser locates the file from a manually configured URL or via WPAD (Web Proxy Auto-Discovery), which finds wpad.dat through DHCP option 252 or DNS. In a zero-trust deployment this is the classic, agentless way to funnel web traffic through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup. It is also an attack surface: WPAD discovery has been repeatedly abused — a poisoned response can route all of a victim's traffic through an attacker's proxy — which is why modern browsers strip the path and query from HTTPS URLs before passing them to the script and tightly sandbox what it can do.`,
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Transport & Web", "Network Edge & Ops"],
-      related: ["sase", "casb", "dns", "http"],
+      related: ["sase", "casb", "dns", "http", "alpaca"],
       source: { label: "MDN — Proxy Auto-Configuration (PAC) file", url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file" },
       caption: "The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway."
     },
@@ -1549,6 +1549,16 @@
       related: ["rbac", "peppdp", "opa", "dlp"],
       source: { label: "Immuta documentation", url: "https://documentation.immuta.com/latest/" },
       caption: "Policy is authored once against user attributes and compiled into each warehouse's own row and column controls, so the analyst queries the platform directly and the decision point stays in one place."
+    },
+    {
+      id: "alpaca", term: "Alpaca", acronym: "Local HTTP Proxy for Command-Line Tools",
+      aliases: ["samuong/alpaca", "local HTTP proxy", "NTLM proxy", "CNTLM", "proxy authentication", "407 Proxy Authentication Required", "Proxy-Authenticate", "Negotiate", "SPNEGO", "http_proxy", "https_proxy", "corporate proxy", "NTLM_CREDENTIALS", "ALPACA_PROXY_AUTH_ALLOWLIST", "localhost:3128"],
+      tldr: "A proxy you run on your own machine so curl, git, and npm can get out through the corporate one — it reads the PAC file and answers the NTLM or Kerberos challenge that command-line tools cannot.",
+      explainer: `Alpaca is a small Apache-2.0 Go binary that runs a plain HTTP proxy on loopback — localhost:3128 by default — and it exists because of a specific gap in the corporate egress path. Browsers know how to evaluate a proxy auto-configuration script and how to answer a 407 Proxy Authentication Required challenge with NTLM or Kerberos; curl, git, npm, pip, and docker mostly do not. They understand one thing: an http_proxy environment variable naming a single host and port. Alpaca fills the gap by being that host and port, which is the same niche CNTLM occupied a decade earlier. Point the tools at it and, for each request, it evaluates FindProxyForURL from the PAC file — taken from system settings on macOS and Linux/GNOME, or from the -C flag — to decide DIRECT or which upstream proxy to use, opens a CONNECT tunnel for HTTPS so it sees only the host and port, and when the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself. Credentials come from a Kerberos ticket already sitting in the system cache (macOS only in this build, read through Apple's GSS.framework), an MD4-hashed NTLM value in NTLM_CREDENTIALS generated by alpaca -H, a shell prompt, the system keyring, or BASIC_CREDENTIALS; where several are configured it tries those schemes the proxy actually advertises, in Chrome's preference order — Negotiate, then NTLM, then Basic. A considerate touch for laptops: when the PAC-nominated proxies are unreachable, as on public WiFi, it falls back to direct rather than making you unset the environment variables at every network change. Two things deserve saying plainly. Credential forwarding is permissive by default, because Alpaca treats the PAC as the trust root and will authenticate to whatever proxy that PAC names — so a PAC fetched over plain HTTP, or discovered through WPAD on a shared segment, is enough for a network-position attacker to collect an NTLMv2 hash or a Kerberos service ticket; ALPACA_PROXY_AUTH_ALLOWLIST pins credentials to named DNS suffixes and is worth setting. The other is architectural: the listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress. Alpaca is an honest compatibility shim for the perimeter model rather than a zero-trust component — the identity presented upstream is a human's proxy credential standing in for whatever tool happened to connect, which is exactly the substitution a zero-trust design is trying to remove.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Transport & Web", "Network Edge & Ops", "Identity & Access"],
+      related: ["pac", "kerberos", "ldap", "sase", "http"],
+      source: { label: "Alpaca — local HTTP proxy for command-line tools (GitHub)", url: "https://github.com/samuong/alpaca" },
+      caption: "The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too."
     }
   ];
 
@@ -3589,6 +3599,43 @@
         <text class="t-sm t-mut" x="335" y="220" text-anchor="middle">queries natively — no proxy</text>
 
         <text class="t-sm t-mut" x="360" y="250" text-anchor="middle">rows filtered and columns masked by the policy already in the platform</text>
+      </svg>`,
+
+    alpaca: () => `
+      <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
+        <text class="t-sm t-mut" x="20" y="20">One local proxy stands in for the PAC file and the 407 handshake</text>
+
+        <rect class="zone" x="16" y="36" width="440" height="124" rx="10"/>
+        <text class="t-sm t-mut" x="30" y="54">your machine</text>
+
+        <rect class="box" x="32" y="66" width="170" height="74" rx="8"/>
+        <text class="t-b" x="117" y="94" text-anchor="middle">curl / git / npm</text>
+        <text class="t-sm t-mut" x="117" y="112" text-anchor="middle">http_proxy → :3128</text>
+        <text class="t-sm t-mut" x="117" y="130" text-anchor="middle">no PAC, no NTLM</text>
+
+        <rect class="box-accent" x="272" y="66" width="170" height="74" rx="8"/>
+        <text class="t-b" x="357" y="94" text-anchor="middle">Alpaca</text>
+        <text class="t-sm t-mut" x="357" y="112" text-anchor="middle">PAC picks the upstream</text>
+        <text class="t-sm t-mut" x="357" y="130" text-anchor="middle">Negotiate / NTLM / Basic</text>
+
+        <line class="flow-accent" x1="204" y1="100" x2="270" y2="100" marker-end="url(#ah-acc)"/>
+
+        <rect class="box" x="538" y="66" width="166" height="74" rx="8"/>
+        <text class="t-sm t-b" x="621" y="96" text-anchor="middle">Corporate proxy</text>
+        <text class="t-sm t-mut" x="621" y="116" text-anchor="middle">407 challenge</text>
+
+        <line class="flow-accent" x1="458" y1="86" x2="536" y2="86" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="497" y="78" text-anchor="middle">CONNECT</text>
+
+        <line class="flow" x1="536" y1="120" x2="460" y2="120" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="497" y="136" text-anchor="middle">407</text>
+
+        <rect class="box" x="245" y="190" width="224" height="54" rx="8"/>
+        <text class="t-sm t-b" x="357" y="212" text-anchor="middle">Any other local process</text>
+        <text class="t-sm t-mut" x="357" y="230" text-anchor="middle">the listener has no auth</text>
+
+        <path class="flow-bad" d="M357 188 V142" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="371" y="170">borrows your authenticated egress</text>
       </svg>`
   };
 
