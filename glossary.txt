@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-92 terms, alphabetical. Generated from index.html by glossary.mjs.
+93 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -25,6 +25,10 @@ BlueField — NVIDIA Data Processing Unit (DPU)
 BOLA — Broken Object Level Authorization
     Swap the ID in an API request and read another user's object — because the server never checked it was yours.
     [Security Technology] · aka IDOR, insecure direct object reference, API1:2023, object-level authorization, broken access control
+
+Calico — Project Calico — Kubernetes Networking & Network Policy
+    The Kubernetes CNI that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.
+    [Network Technology, Security Technology] · aka Project Calico, CNI, Container Network Interface, calico-node, Felix, Typha, BIRD, confd, calicoctl, GlobalNetworkPolicy, HostEndpoint, policy tiers, IPIP, VXLAN, IPAM, BGP peering, eBPF data plane, default deny, Tigera
 
 CASB — Cloud Access Security Broker
     A control point between users and SaaS apps that enforces cloud security policy.

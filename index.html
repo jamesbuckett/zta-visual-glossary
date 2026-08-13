@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">92</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">93</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">92</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">93</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">92</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">93</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1236,7 +1236,7 @@
       tldr: "Programmable, in-kernel networking and security policy for Kubernetes.",
       explainer: `eBPF lets sandboxed programs run safely inside the Linux kernel, hooking into networking, security, and tracing events without kernel modules or patches — a quietly revolutionary capability. Cilium builds on it to provide networking, observability, and security for Kubernetes: it enforces identity-aware network policy, load-balances services, and can provide encrypted, mesh-like connectivity, all at kernel speed rather than through userspace proxies. Because policy is evaluated in the kernel against workload identity, Cilium implements microsegmentation efficiently — only sanctioned pod-to-pod flows are allowed, blocking lateral movement. Its Hubble component gives deep flow visibility for free. It is increasingly the default data plane for cloud-native clusters and an alternative path to service-mesh features without sidecars.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops", "Kubernetes"],
-      related: ["kubernetes", "microseg", "servicemesh"],
+      related: ["kubernetes", "microseg", "servicemesh", "calico"],
       source: { label: "cilium.io", url: "https://cilium.io/" },
       caption: "eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows."
     },
@@ -1569,6 +1569,16 @@
       related: ["alpaca", "pac", "kerberos", "ldap", "sase"],
       source: { label: "Cntlm — NTLM Authentication Proxy", url: "https://cntlm.sourceforge.net/" },
       caption: "The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf — that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN."
+    },
+    {
+      id: "calico", term: "Calico", acronym: "Project Calico — Kubernetes Networking & Network Policy",
+      aliases: ["Project Calico", "CNI", "Container Network Interface", "calico-node", "Felix", "Typha", "BIRD", "confd", "calicoctl", "GlobalNetworkPolicy", "HostEndpoint", "policy tiers", "IPIP", "VXLAN", "IPAM", "BGP peering", "eBPF data plane", "default deny", "Tigera"],
+      tldr: "The Kubernetes CNI that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.",
+      explainer: `Kubernetes does not implement pod networking itself — it delegates to a Container Network Interface plugin — and Calico is one of the two you are most likely to meet, Cilium being the other. It is Apache-2.0, created and still maintained by Tigera, and often appears alongside another CNI purely for its policy engine. Its distinguishing choice on the networking side is to route rather than tunnel: each node owns a block of the pod address space, a BGP daemon on that node (BIRD, configured by confd from Calico's datastore) advertises the block to the other nodes or to the physical fabric, and a pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. That keeps the network legible — existing routers, firewalls, and flow collectors see real endpoints rather than an opaque VXLAN blob — and costs no encapsulation overhead. Where the underlay will not carry pod routes, which is most cloud VPCs, Calico falls back to a VXLAN or IP-in-IP overlay, optionally only across subnet boundaries so the common case stays native. A Felix agent on every node does the programming, inserting routes into the kernel FIB and access control rules into whichever data plane you chose: standard iptables, nftables, eBPF (which also replaces kube-proxy, preserves the client source IP, and load-balances at connect time), or Windows HNS. Typha fans datastore updates out to those agents so a large cluster does not batter the API server. The policy engine is why Calico turns up in zero-trust designs. Kubernetes' own NetworkPolicy is deliberately minimal — namespaced, pods only, allow-only, unordered — so you cannot express "deny this, whatever anyone else says". Calico adds a projectcalico.org/v3 NetworkPolicy and a cluster-scoped GlobalNetworkPolicy with explicit deny and log actions, an order field that makes precedence deterministic, richer match criteria, and, through HostEndpoint, the same policy language applied to a node's own interfaces, to VMs, and to bare metal. Tiers are the part worth understanding: every policy lives in a tier, tiers are evaluated by order, and a tier can Pass a packet down to the next, so a platform team writes global rules in a high-precedence tier while developers' Kubernetes NetworkPolicies land in the default tier — fixed at order 1,000,000 — where they cannot override what sits above. Kubernetes RBAC applies per tier, turning that convention into an enforced boundary, which is the multi-team microsegmentation story flat NetworkPolicy cannot tell. WireGuard encryption is a flag in FelixConfiguration, Dikastes extends enforcement to layers 5–7 as an Envoy sidecar under Istio, and Tigera's Calico Cloud and Calico Enterprise editions sell the retained flow logs, DNS-based policy, staged-policy previews, WAF, and IDS the open-source edition leaves out. Two honest limits. That WireGuard encryption is node-to-node rather than pod-to-pod: the host-to-host hop is protected, the pod-to-host segment on each machine is not, so root on a node still reads plaintext. And the identity underneath is an address — Calico resolves label selectors into IP sets and enforces on those, so a policy is only as trustworthy as the labels and the IPAM behind it. That is a weaker claim than the cryptographic workload identity SPIFFE and a service mesh provide, which is why the two are usually deployed together rather than chosen between.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Kubernetes", "Platforms & Apps", "Network Edge & Ops"],
+      related: ["cilium", "kubernetes", "microseg", "bgp", "wireguard", "ovn"],
+      source: { label: "About Calico — Calico Open Source documentation", url: "https://docs.tigera.io/calico/latest/about/" },
+      caption: "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override."
     }
   ];
 
@@ -3687,6 +3697,60 @@
         <text class="t-sm t-mut" x="20" y="178">-g drops the loopback bind</text>
 
         <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">cntlm -M probes NTLMv2 → NTLM2SR → NT → NTLM → LM until one is accepted</text>
+      </svg>`,
+
+    calico: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
+        <text class="t-sm t-mut" x="20" y="22">Pod IPs are routable addresses; the ACLs come from a tier ladder</text>
+
+        <rect class="zone" x="20" y="48" width="266" height="94" rx="12"/>
+        <text class="t-sm t-b" x="32" y="66">Node A</text>
+        <rect class="box" x="32" y="76" width="100" height="52" rx="8"/>
+        <text class="t-sm t-b" x="82" y="98" text-anchor="middle">Pod A</text>
+        <text class="t-sm t-mut" x="82" y="116" text-anchor="middle">10.244.1.5</text>
+        <line class="flow" x1="134" y1="102" x2="154" y2="102" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="158" y="76" width="118" height="52" rx="8"/>
+        <text class="t-sm t-b" x="217" y="98" text-anchor="middle">Felix ACLs</text>
+        <text class="t-sm t-mut" x="217" y="116" text-anchor="middle">iptables · eBPF</text>
+
+        <rect class="zone" x="434" y="48" width="266" height="94" rx="12"/>
+        <text class="t-sm t-b" x="446" y="66">Node B</text>
+        <rect class="box-accent" x="446" y="76" width="118" height="52" rx="8"/>
+        <text class="t-sm t-b" x="505" y="98" text-anchor="middle">Felix ACLs</text>
+        <text class="t-sm t-mut" x="505" y="116" text-anchor="middle">iptables · eBPF</text>
+        <line class="flow" x1="566" y1="102" x2="586" y2="102" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="590" y="76" width="100" height="52" rx="8"/>
+        <text class="t-sm t-b" x="640" y="98" text-anchor="middle">Pod B</text>
+        <text class="t-sm t-mut" x="640" y="116" text-anchor="middle">10.244.2.9</text>
+
+        <line class="flow-accent" x1="288" y1="102" x2="430" y2="102" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="360" y="92" text-anchor="middle">no encapsulation</text>
+        <text class="t-sm t-mut" x="360" y="122" text-anchor="middle">pod IP on the wire</text>
+
+        <path class="flow" d="M160 142 V166 H560 V142" style="stroke-dasharray:4 4" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="360" y="160" text-anchor="middle">BGP — each node advertises the /26 of pods it hosts</text>
+
+        <text class="t-sm t-mut" x="20" y="196">Those ACLs are compiled from a tier ladder, evaluated in order:</text>
+
+        <rect class="box" x="20" y="210" width="182" height="58" rx="8"/>
+        <text class="t-sm t-b" x="111" y="232" text-anchor="middle">security · order 300</text>
+        <text class="t-sm t-mut" x="111" y="250" text-anchor="middle">GlobalNetworkPolicy — ops</text>
+
+        <line class="flow" x1="204" y1="239" x2="265" y2="239" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="235" y="228" text-anchor="middle">Pass</text>
+
+        <rect class="box" x="269" y="210" width="182" height="58" rx="8"/>
+        <text class="t-sm t-b" x="360" y="232" text-anchor="middle">default · 1,000,000</text>
+        <text class="t-sm t-mut" x="360" y="250" text-anchor="middle">K8s NetworkPolicy — devs</text>
+
+        <line class="flow-bad" x1="453" y1="239" x2="514" y2="239" marker-end="url(#ah-bad)"/>
+        <text class="t-sm t-mut" x="484" y="228" text-anchor="middle">no match</text>
+
+        <rect class="box" x="518" y="210" width="182" height="58" rx="8"/>
+        <text class="t-sm t-b" x="609" y="232" text-anchor="middle">nothing matched</text>
+        <text class="t-sm" x="609" y="250" text-anchor="middle" fill="var(--state-bad)">global default deny</text>
+
+        <text class="t-sm t-mut" x="360" y="288" text-anchor="middle">Tier RBAC means the developer tier cannot override the one above it.</text>
       </svg>`
   };
 
