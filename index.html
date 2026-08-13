@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">93</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">95</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">93</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">95</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">93</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">95</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1106,7 +1106,7 @@
       tldr: "A networking layer that gives every service identity, mTLS, and traffic control for free.",
       explainer: `A service mesh moves the cross-cutting concerns of service-to-service communication — mutual TLS, retries, timeouts, load balancing, and observability — out of application code and into a dedicated infrastructure layer. A proxy is deployed beside each workload as a sidecar (Envoy in Istio; Linkerd ships its own Rust micro-proxy); together these proxies form the data plane that carries traffic, while a control plane configures them and distributes identities and certificates. Because every call now flows through a mutually authenticated, policy-checked hop, the mesh delivers encrypted service-to-service (east-west) traffic and workload identity without changing a line of app code. It is where SPIFFE identities, mTLS, and microsegmentation meet inside a Kubernetes cluster. The trade-off is operational complexity and the latency of an extra network hop.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps", "Kubernetes"],
-      related: ["mtls", "spiffe", "kubernetes", "microseg"],
+      related: ["istio", "envoy", "mtls", "spiffe", "kubernetes", "microseg"],
       source: { label: "NIST SP 800-204A — Service-Mesh Security", url: "https://csrc.nist.gov/pubs/sp/800/204/a/final" },
       caption: "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default."
     },
@@ -1579,6 +1579,26 @@
       related: ["cilium", "kubernetes", "microseg", "bgp", "wireguard", "ovn"],
       source: { label: "About Calico — Calico Open Source documentation", url: "https://docs.tigera.io/calico/latest/about/" },
       caption: "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override."
+    },
+    {
+      id: "envoy", term: "Envoy", acronym: "Envoy Proxy — L7 Proxy & Universal Data Plane",
+      aliases: ["Envoy Proxy", "xDS", "LDS", "RDS", "CDS", "EDS", "SDS", "listener", "cluster", "filter chain", "HTTP connection manager", "ext_authz", "external authorization", "JWT authn filter", "RBAC filter", "WASM filter", "Envoy Gateway", "sidecar proxy", "upstream", "downstream", "circuit breaking", "outlier detection"],
+      tldr: "The C++ L7 proxy underneath most modern meshes and gateways — a filter chain whose entire configuration arrives over a live gRPC stream rather than a file, which is what makes a control plane above it possible.",
+      explainer: `Envoy is an L7 proxy written in C++, built at Lyft, open-sourced in 2016, Apache-2.0 and CNCF-graduated. You rarely choose it directly; you choose something built on it — Istio, Envoy Gateway, Contour, Gloo, Consul — which is why it is worth understanding on its own. Its design premise is that the network should be invisible to applications, so it runs out of process next to every workload rather than as a library: one deployment serves services written in any language, and the proxy fleet is upgraded independently of the code it fronts. The internal model is small enough to hold in your head. A downstream client connects to a listener, a named socket; the connection passes through a filter chain of L3/L4 network filters; for HTTP the connection manager adds a second, L7 filter chain; and at the end the router selects a cluster — a group of logically similar upstream hosts — where a load-balancing policy picks an endpoint. Nearly everything Envoy does is a filter in one of those chains, which is why the feature list reads as long as it does: HTTP/1.1, HTTP/2 and HTTP/3, gRPC with JSON transcoding, TLS termination and origination, retries, timeouts, circuit breaking, outlier detection that ejects misbehaving hosts, zone-aware balancing, and protocol-aware filters for Redis, Postgres, and MongoDB. The genuinely distinguishing part is xDS. Instead of a config file and a reload, a management server streams configuration to Envoy over gRPC — LDS for listeners, RDS for routes, CDS for clusters, EDS for endpoints, SDS for TLS certificates and keys — so routes, upstreams, and certificates change under live traffic without a restart or a dropped connection. That is the seam a control plane plugs into, and it has become a de facto standard in its own right: other data planes speak xDS so that xDS control planes can drive them. For zero trust, Envoy is the textbook Policy Enforcement Point, because the filter chain is exactly where enforcement belongs. It terminates mTLS and can require a client certificate, the JWT authentication filter validates end-user tokens before a request reaches the application, the RBAC filter matches on the authenticated principal, and ext_authz calls out to an external decision point — an OPA sidecar, say — for a per-request allow or deny, so authorisation becomes a property of the network path rather than something every service reimplements. Two things to be honest about. The configuration surface is enormous: a hand-written bootstrap runs to thousands of lines of protobuf-shaped YAML, and almost nobody maintains one, which means adopting Envoy in practice means adopting a control plane. That control plane then becomes the most security-critical component you run, because whoever can push xDS to the fleet can silently reroute traffic, swap a certificate, or disable an authorisation filter across every proxy at once. And the sidecar pattern is not free — each proxy holds the configuration and connection state for what it might talk to, so a mesh that pushes the whole cluster's config to every instance pays for it in memory long before it pays for it in latency.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Transport & Web", "Network Edge & Ops", "Platforms & Apps"],
+      related: ["istio", "servicemesh", "apigateway", "peppdp", "loadbalancer", "grpc"],
+      source: { label: "Envoy documentation — What is Envoy", url: "https://www.envoyproxy.io/docs/envoy/latest/intro/what_is_envoy" },
+      caption: "A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS."
+    },
+    {
+      id: "istio", term: "Istio", acronym: "Istio Service Mesh",
+      aliases: ["istiod", "ambient mode", "ztunnel", "waypoint proxy", "HBONE", "sidecar injection", "PeerAuthentication", "AuthorizationPolicy", "RequestAuthentication", "VirtualService", "DestinationRule", "ServiceEntry", "trust domain", "STRICT mTLS", "PERMISSIVE", "Gateway API", "east-west"],
+      tldr: "The most widely deployed service mesh — istiod issues every workload a SPIFFE identity and drives Envoy so that mTLS and per-request authorisation are the default, with an ambient mode that drops the sidecar entirely.",
+      explainer: `Istio is the reference implementation of the service mesh idea: Apache-2.0, CNCF-graduated, launched in 2017 by Google, IBM, and Lyft. Its control plane long ago collapsed into a single binary, istiod, which does service discovery, translates high-level intent into Envoy configuration, and acts as the mesh's certificate authority. That last role is the one that matters for zero trust. istiod issues every workload an X.509 certificate whose subject alternative name carries a SPIFFE ID — spiffe://<trust-domain>/ns/<namespace>/sa/<serviceaccount>, derived from the Kubernetes service account — and rotates it automatically, so policy can be written against a cryptographic service identity instead of an IP address that any pod might inherit next week. Enforcement is split across a few resources: PeerAuthentication turns mTLS on as STRICT or leaves it PERMISSIVE while you migrate, RequestAuthentication validates end-user JWTs, and AuthorizationPolicy is the rule that actually decides, matched on principals, namespaces, methods, paths, and token claims. Its evaluation order is worth memorising because it is not what people assume: CUSTOM policies are consulted first, then DENY, then ALLOW, with AUDIT logging separately and never changing the outcome — and if no ALLOW policy exists for a workload at all, the request is permitted, so default-deny is something you configure rather than something you inherit. Alongside that sit the traffic APIs — VirtualService, DestinationRule, Gateway, ServiceEntry — for routing, canaries, retries, circuit breaking, and fault injection. The significant recent change is ambient mode, which reached general availability in Istio 1.24 and splits the data plane in two. At the base, ztunnel is a per-node DaemonSet written in Rust that deliberately handles only L3 and L4 — mTLS, authentication, L4 authorisation, telemetry — and never parses application HTTP; it carries traffic in HBONE, an HTTP CONNECT tunnel multiplexed over HTTP/2 inside mTLS, by convention on port 15008. Above that, and only where L7 rules are actually wanted, a waypoint proxy runs per namespace or service; it is still Envoy, but it lives outside the application pods. The result is that a cluster can get a secure L4 overlay cheaply and pay for L7 processing only where it asks for it, with sidecar and ambient workloads interoperating in the same mesh. The standing complaint is complexity: a mesh is another distributed system with its own upgrade cadence and failure modes, and the sidecar model taxes every pod with a proxy's memory and every call with an extra hop. Ambient answers much of that but moves the blast radius rather than removing it — a shared per-node ztunnel holds the keys for every meshed pod on its node, so compromising a node now reaches further than compromising one sidecar would. And the encryption is not end-to-end in the way the diagrams imply: the hop between an application container and its own sidecar, or its node's ztunnel, is unencrypted loopback, so the guarantee is that traffic is authenticated and encrypted between workloads, not from process to process.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps", "Kubernetes"],
+      related: ["envoy", "servicemesh", "spiffe", "mtls", "kubernetes", "peppdp"],
+      source: { label: "Istio documentation — Architecture", url: "https://istio.io/latest/docs/ops/deployment/architecture/" },
+      caption: "istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed."
     }
   ];
 
@@ -3751,6 +3771,90 @@
         <text class="t-sm" x="609" y="250" text-anchor="middle" fill="var(--state-bad)">global default deny</text>
 
         <text class="t-sm t-mut" x="360" y="288" text-anchor="middle">Tier RBAC means the developer tier cannot override the one above it.</text>
+      </svg>`,
+
+    envoy: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.">
+        <text class="t-sm t-mut" x="20" y="22">Listener in, filter chain, cluster out — and the config arrives as a stream</text>
+
+        <rect class="box" x="20" y="84" width="104" height="56" rx="8"/>
+        <text class="t-sm t-b" x="72" y="108" text-anchor="middle">Downstream</text>
+        <text class="t-sm t-mut" x="72" y="126" text-anchor="middle">client</text>
+
+        <line class="flow" x1="126" y1="112" x2="156" y2="112" marker-end="url(#ah-mut)"/>
+
+        <rect class="zone-accent" x="160" y="62" width="396" height="110" rx="12"/>
+        <text class="t-sm t-b" x="172" y="80">Envoy</text>
+
+        <rect class="box" x="172" y="90" width="94" height="56" rx="8"/>
+        <text class="t-sm t-b" x="219" y="114" text-anchor="middle">Listener</text>
+        <text class="t-sm t-mut" x="219" y="132" text-anchor="middle">:8443</text>
+
+        <line class="flow" x1="268" y1="118" x2="282" y2="118" marker-end="url(#ah-mut)"/>
+
+        <rect class="box-accent" x="284" y="90" width="136" height="56" rx="8"/>
+        <text class="t-sm t-b" x="352" y="114" text-anchor="middle">HTTP filters</text>
+        <text class="t-sm t-mut" x="352" y="132" text-anchor="middle">JWT · authz · RBAC</text>
+
+        <line class="flow" x1="422" y1="118" x2="436" y2="118" marker-end="url(#ah-mut)"/>
+
+        <rect class="box" x="438" y="90" width="104" height="56" rx="8"/>
+        <text class="t-sm t-b" x="490" y="114" text-anchor="middle">Router</text>
+        <text class="t-sm t-mut" x="490" y="132" text-anchor="middle">picks cluster</text>
+
+        <line class="flow-accent" x1="558" y1="118" x2="588" y2="118" marker-end="url(#ah-acc)"/>
+
+        <rect class="box" x="592" y="84" width="108" height="56" rx="8"/>
+        <text class="t-sm t-b" x="646" y="108" text-anchor="middle">Cluster</text>
+        <text class="t-sm t-mut" x="646" y="126" text-anchor="middle">upstream pool</text>
+
+        <path class="flow-accent" d="M360 214 V176" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="348" y="198" text-anchor="end">xDS streams config in live — no reload</text>
+
+        <rect class="box-accent" x="250" y="216" width="220" height="58" rx="8"/>
+        <text class="t-sm t-b" x="360" y="240" text-anchor="middle">Control plane</text>
+        <text class="t-sm t-mut" x="360" y="258" text-anchor="middle">LDS · RDS · CDS · EDS · SDS</text>
+
+        <text class="t-sm t-mut" x="360" y="292" text-anchor="middle">Whoever can push xDS to the fleet can reroute or unwrap any traffic in it.</text>
+      </svg>`,
+
+    istio: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.">
+        <text class="t-sm t-mut" x="20" y="22">One control plane, two data planes — the identity is the same either way</text>
+
+        <rect class="box-accent" x="250" y="40" width="220" height="52" rx="10"/>
+        <text class="t-b" x="360" y="62" text-anchor="middle">istiod</text>
+        <text class="t-sm t-mut" x="360" y="80" text-anchor="middle">CA · config · discovery</text>
+
+        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">issues spiffe://&lt;trust-domain&gt;/ns/&lt;ns&gt;/sa/&lt;sa&gt;</text>
+
+        <path class="flow-accent" d="M250 66 H185 V124" marker-end="url(#ah-acc)"/>
+        <path class="flow-accent" d="M470 66 H535 V124" marker-end="url(#ah-acc)"/>
+
+        <rect class="zone" x="20" y="126" width="330" height="118" rx="12"/>
+        <text class="t-sm t-b" x="32" y="146">Sidecar mode</text>
+        <rect class="box" x="36" y="158" width="130" height="54" rx="8"/>
+        <text class="t-sm t-b" x="101" y="182" text-anchor="middle">App</text>
+        <text class="t-sm t-mut" x="101" y="200" text-anchor="middle">no code change</text>
+        <line class="flow" x1="168" y1="185" x2="192" y2="185" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="196" y="158" width="130" height="54" rx="8"/>
+        <text class="t-sm t-b" x="261" y="182" text-anchor="middle">Envoy sidecar</text>
+        <text class="t-sm t-mut" x="261" y="200" text-anchor="middle">per pod · full L7</text>
+        <text class="t-sm t-mut" x="185" y="232" text-anchor="middle">one proxy inside every pod</text>
+
+        <rect class="zone" x="370" y="126" width="330" height="118" rx="12"/>
+        <text class="t-sm t-b" x="382" y="146">Ambient mode</text>
+        <rect class="box" x="386" y="158" width="130" height="54" rx="8"/>
+        <text class="t-sm t-b" x="451" y="182" text-anchor="middle">App pods</text>
+        <text class="t-sm t-mut" x="451" y="200" text-anchor="middle">no sidecar</text>
+        <line class="flow" x1="518" y1="185" x2="542" y2="185" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="546" y="158" width="130" height="54" rx="8"/>
+        <text class="t-sm t-b" x="611" y="182" text-anchor="middle">ztunnel</text>
+        <text class="t-sm t-mut" x="611" y="200" text-anchor="middle">per node · L4 only</text>
+        <text class="t-sm t-mut" x="535" y="232" text-anchor="middle">HBONE — mTLS on :15008</text>
+
+        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">AuthorizationPolicy runs CUSTOM first, then DENY, then ALLOW — matched on identity, not IP.</text>
+        <text class="t-sm t-mut" x="360" y="288" text-anchor="middle">Ambient trades the per-pod sidecar for a per-node ztunnel: cheaper, but a wider blast radius.</text>
       </svg>`
   };
 

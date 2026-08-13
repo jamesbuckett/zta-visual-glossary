@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-93 terms, alphabetical. Generated from index.html by glossary.mjs.
+95 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -98,6 +98,10 @@ EDR / XDR — Endpoint / Extended Detection & Response
     Agents that watch endpoints for malicious behaviour — and feed device-trust signals.
     [Security Technology] · aka endpoint detection, XDR, device posture, endpoint security, EDR agent
 
+Envoy — Envoy Proxy — L7 Proxy & Universal Data Plane
+    The C++ L7 proxy underneath most modern meshes and gateways — a filter chain whose entire configuration arrives over a live gRPC stream rather than a file, which is what makes a control plane above it possible.
+    [Network Technology, Security Technology] · aka Envoy Proxy, xDS, LDS, RDS, CDS, EDS, SDS, listener, cluster, filter chain, HTTP connection manager, ext_authz, external authorization, JWT authn filter, RBAC filter, WASM filter, Envoy Gateway, sidecar proxy, upstream, downstream, circuit breaking, outlier detection
+
 FAPI 2.0 — Financial-grade API Security Profile
     The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.
     [Protocol, Security Technology] · aka FAPI, Financial-grade API, FAPI 2.0 Security Profile, PAR, pushed authorization requests, DPoP, sender-constrained tokens, RFC 9126, RFC 9449, RFC 8705, attacker model, open banking, JARM, private_key_jwt
@@ -133,6 +137,10 @@ Immuta — Policy-Based Access Control for Data Platforms
 IPsec — Internet Protocol Security
     Encrypts and authenticates IP traffic at the network layer.
     [Protocol, Security Technology] · aka IKE, ESP, tunnel mode
+
+Istio — Istio Service Mesh
+    The most widely deployed service mesh — istiod issues every workload a SPIFFE identity and drives Envoy so that mTLS and per-request authorisation are the default, with an ambient mode that drops the sidecar entirely.
+    [Network Technology, Security Technology] · aka istiod, ambient mode, ztunnel, waypoint proxy, HBONE, sidecar injection, PeerAuthentication, AuthorizationPolicy, RequestAuthentication, VirtualService, DestinationRule, ServiceEntry, trust domain, STRICT mTLS, PERMISSIVE, Gateway API, east-west
 
 JWT — JSON Web Token
     A signed, self-contained token that carries identity claims.
