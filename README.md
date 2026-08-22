@@ -36,7 +36,9 @@ index.html       # the whole glossary — markup, styles, term data, and inline 
 glossary.txt     # plain-text listing of every term, generated from index.html
 glossary.mjs     # regenerates glossary.txt (npm run glossary)
 screenshot.mjs   # Playwright capture across desktop / tablet / mobile viewports
+verify.mjs       # renders every term and checks its diagram geometry (npm run verify)
 validate.mjs     # static linter enforcing the style-guide design rules
+_terms.mjs       # shared reader for the TERMS / tag arrays in index.html
 _launch.mjs      # shared Chromium launcher used by the tooling
 screenshots/     # generated preview images
 ```

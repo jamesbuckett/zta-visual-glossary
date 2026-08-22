@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "glossary": "node glossary.mjs",
-    "test": "node validate.mjs ./index.html"
+    "test": "node validate.mjs ./index.html",
+    "verify": "node verify.mjs"
   },
   "repository": {
     "type": "git",

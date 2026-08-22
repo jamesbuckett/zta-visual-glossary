@@ -31,12 +31,18 @@ verification loop.
 
 ```bash
 npm test              # validate.mjs against index.html — must exit clean before any commit
+npm run verify        # renders every term in a browser and checks its diagram geometry
 npm run glossary      # regenerates glossary.txt, prints the term count
 ```
 
 `validate.mjs` is the style-guide linter: exactly one accent colour, no stray hex in
 component CSS, on-scale spacing values, no emoji. A project hook runs it automatically
 after every `index.html` write, but it is still the gate before committing.
+
+`verify.mjs` is the rendered check: it opens each term's detail view in a headless browser
+and asserts the diagram appears, the counters match the data, no label sits across a box
+border, and no connector runs through a label. Pass term ids to narrow it
+(`npm run verify calico`).
 
 The term count printed by `npm run glossary` is a free cross-check on the counters in
 step 4 of the skill.

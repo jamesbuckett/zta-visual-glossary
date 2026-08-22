@@ -74,38 +74,31 @@ It prints the term count, which cross-checks step 4. Commit the result alongside
 ## 6. Verify
 
 ```bash
-npm test    # validate.mjs — style-guide linter, must exit clean
+npm test               # validate.mjs — style-guide linter, must exit clean
+npm run verify <id>    # the rendered checks for your term
 ```
 
-Then a browser pass. Write a small harness in the scratchpad importing `launchBrowser()`
-from `_launch.mjs` — it returns `{ browser, label }`, so destructure it. The bundled
-chromium build does not work in this WSL environment; pass the working one on the command
-line, because the env var is read at module *import* time and setting it in-script is too
-late:
+`verify.mjs` replaces the scratchpad harness this step used to describe. For your term it
+asserts the detail view and diagram render, the TOC entry exists, the console is clean,
+and runs the two geometry checks that have caught defects invisible at thumbnail size:
 
-```bash
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=~/.cache/ms-playwright/chromium-1148/chrome-linux/chrome \
-  node scratch-verify.mjs
-```
+- **(a) Label clearance** — every `<text>` against every non-zone `<rect>`; a label
+  overlapping a box without sitting inside it, by more than 2 units, is an error. Caught
+  Calico's "no match" and "pod IP on the wire".
+- **(b) Stroke/text collision** — ~200 samples along every `<line>`/`<path>`; none may land
+  inside a label. Caught istiod's arrows striking through Istio's SPIFFE ID line, which
+  check (a) could not see.
 
-`page.evaluate("() => {...}")` with a string does not auto-invoke — wrap it as an IIFE:
-`page.evaluate("(() => {...})()")`.
+It also re-checks the step 4 counters, so a bare `npm run verify` catches drift you missed.
 
-Assert: the detail view and diagram render, the TOC entry exists, the counts match, and
-the console is clean. Selectors: `#search-input`, `#term-grid .term-card .term-name`;
-related links are `button.related-pill[data-goto]`, not `<a>`.
+Two things worth knowing if you extend it: measure in **screen space**
+(`getBoundingClientRect`, and map `getPointAtLength` results through `getScreenCTM`) —
+`getBBox()` ignores transforms and reports a phantom horizontal box for rotated text. And
+`stroke-bad` lines are the decorative X struck over a broken primitive, so they are
+excluded from check (b) by design.
 
-Two geometry checks are worth scripting every time — both caught real defects that were
-invisible at thumbnail size:
-
-- **(a) Label clearance** — compare each text `getBBox()` against every non-zone `<rect>`;
-  flag labels sitting within 2px of a box edge. Caught Calico's "no match" and "pod IP on
-  the wire".
-- **(b) Stroke/text collision** — sample ~200 points along every `<line>` and `<path>` via
-  `getPointAtLength()` and assert none land inside a text bbox. Caught istiod's arrows
-  striking straight through Istio's SPIFFE ID line, which check (a) could not see.
-
-Finally, read the light and dark element screenshots of `#detail-content`.
+Finally, read the light and dark element screenshots of `#detail-content` — the geometry
+checks do not judge whether the diagram is *right*, only that nothing collides.
 
 ## 7. Refresh the committed screenshots
 
