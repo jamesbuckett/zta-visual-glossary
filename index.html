@@ -1645,7 +1645,7 @@
         <line class="flow" x1="330" y1="136" x2="496" y2="196" marker-end="url(#ah-mut)"/>
         <line class="flow-accent" x1="265" y1="156" x2="80" y2="210" />
         <line class="flow-accent" x1="80" y1="210" x2="80" y2="160" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="150" y="205" text-anchor="middle">resolved IP returned</text>
+        <text class="t-sm t-mut" x="150" y="222" text-anchor="middle">resolved IP returned</text>
         <text class="t-sm t-mut" x="595" y="240" text-anchor="middle">hierarchy walked top-down</text>
       </svg>`,
 
@@ -1711,7 +1711,7 @@
           <rect x="${x}" y="60" width="200" height="80" rx="10" fill="color-mix(in srgb, var(${c}) 12%, var(--surface))" stroke="var(${c})" stroke-width="1.5"/>
           <text class="t-b" x="${x+100}" y="92" text-anchor="middle" fill="var(${c})">${t}</text>
           <text class="t-sm t-mut" x="${x+100}" y="114" text-anchor="middle">${s}</text>
-          ${i<2?`<text class="t-b" x="${x+222}" y="108" text-anchor="middle" fill="var(--text-muted)">.</text>`:""}
+          ${i<2?`<text class="t-b" x="${x+210}" y="108" text-anchor="middle" fill="var(--text-muted)">.</text>`:""}
         `).join("")}
         <text class="t-sm t-mut" x="360" y="40" text-anchor="middle">base64url( header ) . base64url( payload ) . signature</text>
         <line class="flow-accent" x1="590" y1="145" x2="590" y2="185" marker-end="url(#ah-acc)"/>
@@ -1858,7 +1858,7 @@
         <line class="flow-bad" x1="170" y1="150" x2="270" y2="150" marker-end="url(#ah-bad)"/>
         <line class="stroke-bad" x1="266" y1="142" x2="282" y2="158" style="stroke-width:2.5"/>
         <line class="stroke-bad" x1="282" y1="142" x2="266" y2="158" style="stroke-width:2.5"/>
-        <text class="t-sm" x="150" y="174" text-anchor="middle" fill="var(--state-bad)">others denied</text>
+        <text class="t-sm" x="150" y="192" text-anchor="middle" fill="var(--state-bad)">others denied</text>
       </svg>`,
 
     loadbalancer: () => `
@@ -1930,8 +1930,8 @@
         <line class="flow" x1="390" y1="80" x2="505" y2="128" marker-end="url(#ah-mut)"/>
         <line class="flow" x1="495" y1="184" x2="450" y2="222" marker-end="url(#ah-mut)"/>
         <line class="flow" x1="540" y1="184" x2="585" y2="222" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-b" x="250" y="108" text-anchor="middle" fill="var(--accent)">props ↓</text>
-        <text class="t-sm t-mut" x="180" y="262">state change re-renders the tree</text>
+        <text class="t-sm t-b" x="360" y="112" text-anchor="middle" fill="var(--accent)">props ↓</text>
+        <text class="t-sm t-mut" x="180" y="262" text-anchor="middle">state change re-renders the tree</text>
       </svg>`,
 
     django: () => `
@@ -2181,7 +2181,7 @@
           <text x="605" y="${y + 32}" text-anchor="middle">${t}</text>
           <line class="flow-accent" x1="430" y1="140" x2="518" y2="${y + 27}" marker-end="url(#ah-acc)"/>
         `).join("")}
-        <text class="t-sm t-b" x="474" y="${"110"}" text-anchor="middle" fill="var(--accent)">token</text>
+        <text class="t-sm t-b" x="474" y="${"72"}" text-anchor="middle" fill="var(--accent)">token</text>
         <text class="t-sm t-mut" x="340" y="214" text-anchor="middle">every app trusts the IdP</text>
       </svg>`,
 
@@ -2385,7 +2385,7 @@
         <line class="flow-accent" x1="174" y1="186" x2="250" y2="186" marker-end="url(#ah-acc)"/>
         <text class="t-sm" x="212" y="178" text-anchor="middle" fill="var(--accent)">mTLS</text>
         <line class="flow-accent" x1="546" y1="186" x2="470" y2="186" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="508" y="178" text-anchor="middle" fill="var(--accent)">outbound bind</text>
+        <text class="t-sm" x="508" y="232" text-anchor="middle" fill="var(--accent)">outbound bind</text>
         <text class="t-sm t-mut" x="360" y="274" text-anchor="middle">Default-deny: a service policy must explicitly allow identity A to the service.</text>
         <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">Services dial out to the fabric; nothing listens for inbound connections.</text>
       </svg>`,
@@ -2483,7 +2483,7 @@
           <text class="t-b" x="110" y="${y+32}" text-anchor="middle">${t}</text>
           <line class="flow" x1="196" y1="${y+27}" x2="296" y2="142" marker-end="url(#ah-mut)"/>
         `).join("")}
-        <text class="t-sm t-mut" x="244" y="100" text-anchor="middle">context</text>
+        <text class="t-sm t-mut" x="244" y="78" text-anchor="middle">context</text>
         <rect class="box-accent" x="298" y="98" width="150" height="92" rx="12"/>
         <text class="t-b" x="373" y="136" text-anchor="middle">OPA</text>
         <text class="t-sm t-mut" x="373" y="156" text-anchor="middle">evaluates Rego</text>
@@ -2731,7 +2731,7 @@
         <text class="t-b" x="618" y="152" text-anchor="middle">Service</text>
         <text class="t-sm t-mut" x="618" y="172" text-anchor="middle">verifies ticket</text>
         <line class="flow" x1="180" y1="138" x2="284" y2="96" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="208" y="108">① login</text>
+        <text class="t-sm t-mut" x="208" y="96">① login</text>
         <line class="flow-accent" x1="284" y1="110" x2="180" y2="158" marker-end="url(#ah-acc)"/>
         <text class="t-sm t-b" x="250" y="150" fill="var(--accent)">② TGT</text>
         <line class="flow-accent" x1="180" y1="178" x2="538" y2="178" marker-end="url(#ah-acc)"/>
@@ -2757,7 +2757,7 @@
           <text x="605" y="${y+31}" text-anchor="middle">${t}</text>
           <line class="flow-accent" x1="430" y1="140" x2="512" y2="${y+26}" marker-end="url(#ah-acc)"/>
         `).join("")}
-        <text class="t-sm t-mut" x="335" y="262" text-anchor="middle">Repetitive triage runs in seconds; humans gate the destructive actions.</text>
+        <text class="t-sm t-mut" x="335" y="272" text-anchor="middle">Repetitive triage runs in seconds; humans gate the destructive actions.</text>
       </svg>`,
 
     pqc: () => `
@@ -2820,7 +2820,8 @@
         <line class="flow-accent" x1="208" y1="186" x2="290" y2="216" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
         <line class="flow-accent" x1="428" y1="216" x2="510" y2="186" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
         <line class="flow-accent" x1="208" y1="172" x2="512" y2="172" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="360" y="166" text-anchor="middle" fill="var(--accent)">direct WireGuard tunnels</text>
+        <text class="t-sm t-b" x="288" y="150" text-anchor="middle" fill="var(--accent)">direct WireGuard</text>
+        <text class="t-sm t-b" x="288" y="166" text-anchor="middle" fill="var(--accent)">tunnels</text>
         <text class="t-sm t-mut" x="360" y="280" text-anchor="middle">The control server sets up keys, then steps out of the data path.</text>
       </svg>`,
 

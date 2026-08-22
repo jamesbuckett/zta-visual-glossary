@@ -103,9 +103,12 @@ checks do not judge whether the diagram is *right*, only that nothing collides.
 ## 7. Refresh the committed screenshots
 
 ```bash
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=~/.cache/ms-playwright/chromium-1148/chrome-linux/chrome \
-  node screenshot.mjs ./index.html
+node screenshot.mjs ./index.html
 ```
+
+No env prefix needed: `_launch.mjs` falls through to `/snap/bin/chromium`, and `verify.mjs`
+sets the override itself. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` only if that fallback
+chain ever comes up empty.
 
 ## 8. Commit
 
