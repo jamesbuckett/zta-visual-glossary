@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "glossary": "node glossary.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node validate.mjs ./index.html"
   },
   "repository": {
     "type": "git",
