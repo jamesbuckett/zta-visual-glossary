@@ -35,9 +35,11 @@ npm run verify        # renders every term in a browser and checks its diagram g
 npm run glossary      # regenerates glossary.txt, prints the term count
 ```
 
-`validate.mjs` is the style-guide linter: exactly one accent colour, no stray hex in
-component CSS, on-scale spacing values, no emoji. A project hook runs it automatically
-after every `index.html` write, but it is still the gate before committing.
+`validate.mjs` is the style-guide linter — exactly one accent colour, no stray hex in
+component CSS, on-scale spacing values, no emoji — and it also checks that the `TERMS`,
+tag-array and `DIAGRAMS` declarations still parse, so an edit that breaks the array is
+caught on the write rather than at `npm run glossary`. A project hook runs it after every
+`index.html` write, but it is still the gate before committing.
 
 `verify.mjs` is the rendered check: it opens each term's detail view in a headless browser
 and asserts the diagram appears, the counters match the data, no label sits across a box

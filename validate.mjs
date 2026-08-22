@@ -13,6 +13,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { extractArray, diagramIds } from './_terms.mjs';
 
 // -----------------------------------------------------------------------------
 // CLI
@@ -67,6 +68,31 @@ const warn = (rule, msg) => warnings.push({ rule, msg });
   });
   if (stray.length) {
     err('single-file', `unexpected sibling files alongside ${path.basename(target)}: ${stray.join(', ')}`);
+  }
+}
+
+// ----- data: the inline declarations must still parse -----------------------
+//
+// Everything else here reads the page as text, so a TERMS array left
+// syntactically broken by an edit lints clean and only surfaces later, at
+// `npm run glossary` or the browser sweep. Parsing it here means the
+// PostToolUse hook catches it on the write that broke it. Semantic checks —
+// counters, diagram coverage, cross-links — stay in verify.mjs; this is only
+// asking whether the declarations still evaluate.
+
+if (html.includes('const TERMS = [')) {
+  for (const name of ['TERMS', 'TYPE_TAGS', 'PROV_TAGS', 'DOMAIN_TAGS']) {
+    try {
+      const arr = extractArray(html, name);
+      if (!Array.isArray(arr) || arr.length === 0) err('data-parse', `${name} evaluated to something other than a non-empty array`);
+    } catch (e) {
+      err('data-parse', `${name}: ${e.message}`);
+    }
+  }
+  try {
+    diagramIds(html);
+  } catch (e) {
+    err('data-parse', `DIAGRAMS: ${e.message}`);
   }
 }
 
