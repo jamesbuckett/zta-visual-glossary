@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-95 terms, alphabetical. Generated from index.html by glossary.mjs.
+96 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -34,9 +34,9 @@ CASB — Cloud Access Security Broker
     A control point between users and SaaS apps that enforces cloud security policy.
     [Security Technology] · aka shadow IT, SaaS security, cloud security, SSE
 
-Cilium / eBPF — eBPF-Based Networking & Security
-    Programmable, in-kernel networking and security policy for Kubernetes.
-    [Network Technology, Security Technology] · aka eBPF, Cilium, network policy, Hubble, kernel
+Cilium — eBPF-Based Kubernetes Networking, Observability & Security
+    The Kubernetes CNI that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.
+    [Network Technology, Security Technology] · aka CNI, Container Network Interface, cilium-agent, CiliumNetworkPolicy, CiliumClusterwideNetworkPolicy, security identity, kube-proxy replacement, Hubble, Cluster Mesh, Tetragon, Gateway API, Maglev, direct server return, Isovalent
 
 Cntlm — NTLM Authentication Proxy
     The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
@@ -93,6 +93,10 @@ DPO — Direct Preference Optimization
 DPU — Data Processing Unit
     A programmable processor on the network card that offloads networking, storage, and security from the host — and runs them in its own isolated trust domain.
     [Network Technology, Security Technology] · aka data processing unit, SmartNIC, infrastructure processor, IPU, infrastructure processing unit
+
+eBPF — extended Berkeley Packet Filter
+    Sandboxed programs that run inside the Linux kernel at defined hook points, extending what it does without patching it or loading a module.
+    [Network Technology, Development Framework] · aka BPF, bpf(), verifier, JIT, eBPF maps, XDP, kprobe, uprobe, tracepoint, BPF LSM, libbpf, CO-RE, BTF, bpftrace, kernel
 
 EDR / XDR — Endpoint / Extended Detection & Response
     Agents that watch endpoints for malicious behaviour — and feed device-trust signals.

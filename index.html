@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">95</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">96</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">95</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">96</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">95</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">96</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1231,14 +1231,14 @@
       caption: "A quantum computer breaks RSA / ECC key exchange; lattice-based ML-KEM is layered into the TLS handshake to keep it secure."
     },
     {
-      id: "cilium", term: "Cilium / eBPF", acronym: "eBPF-Based Networking & Security",
-      aliases: ["eBPF", "Cilium", "network policy", "Hubble", "kernel"],
-      tldr: "Programmable, in-kernel networking and security policy for Kubernetes.",
-      explainer: `eBPF lets sandboxed programs run safely inside the Linux kernel, hooking into networking, security, and tracing events without kernel modules or patches — a quietly revolutionary capability. Cilium builds on it to provide networking, observability, and security for Kubernetes: it enforces identity-aware network policy, load-balances services, and can provide encrypted, mesh-like connectivity, all at kernel speed rather than through userspace proxies. Because policy is evaluated in the kernel against workload identity, Cilium implements microsegmentation efficiently — only sanctioned pod-to-pod flows are allowed, blocking lateral movement. Its Hubble component gives deep flow visibility for free. It is increasingly the default data plane for cloud-native clusters and an alternative path to service-mesh features without sidecars.`,
-      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops", "Kubernetes"],
-      related: ["kubernetes", "microseg", "servicemesh", "calico"],
-      source: { label: "cilium.io", url: "https://cilium.io/" },
-      caption: "eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows."
+      id: "cilium", term: "Cilium", acronym: "eBPF-Based Kubernetes Networking, Observability & Security",
+      aliases: ["CNI", "Container Network Interface", "cilium-agent", "CiliumNetworkPolicy", "CiliumClusterwideNetworkPolicy", "security identity", "kube-proxy replacement", "Hubble", "Cluster Mesh", "Tetragon", "Gateway API", "Maglev", "direct server return", "Isovalent"],
+      tldr: "The Kubernetes CNI that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.",
+      explainer: `Cilium is the other CNI you are likely to meet alongside Calico, a CNCF graduated project built on eBPF. Its defining move is to stop writing policy about addresses. In a cluster where pods are created and destroyed constantly an IP address identifies nothing durable, so Cilium's control plane collapses each pod's label set into a numeric security identity, distributes that mapping cluster-wide, and carries the identity with the packet so the receiving node can decide without a second lookup. Policy is then written between identities — a CiliumNetworkPolicy, or its cluster-scoped sibling, names label selectors, and enforcement holds as the pods underneath churn. Where Kubernetes' own NetworkPolicy stops at layer 4, Cilium keeps going: it can admit only particular HTTP methods and paths, particular gRPC calls, or only DNS names matching a wildcard, handing the layer-7 work to an Envoy instance per node rather than a sidecar per pod. The same eBPF data plane does the rest of the cluster's networking. It replaces kube-proxy, rewriting service connections at the socket layer on connect() so there is no per-packet NAT on the hot path, and load-balances north-south traffic at the driver with XDP, Maglev hashing, and direct server return. Hubble reads those same programs to produce a service map and per-flow records annotated with identity rather than IP, which is the observability story that usually sells it. Cluster Mesh extends one identity space across clusters, and transparent encryption between nodes is a configuration flag over IPsec or WireGuard. Two honest limits. The identity is only as good as the labels behind it: it is allocated by the control plane from Kubernetes metadata, not proved by a key, so whoever can set labels can select a policy — Cilium's mutual authentication closes this by binding workloads to SPIFFE identities, but that is a layer you turn on rather than the default. And the data plane's reach is also its blast radius: the agent and its eBPF programs sit in every node's kernel with the privilege to see and rewrite all pod traffic on that machine, and because the transparent encryption is node-to-node, the pod-to-node hop stays plaintext on the host — the same gap Calico's WireGuard mode leaves.`,
+      types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Kubernetes", "Platforms & Apps", "Network Edge & Ops"],
+      related: ["ebpf", "calico", "kubernetes", "microseg", "servicemesh"],
+      source: { label: "Introduction to Cilium & Hubble — Cilium documentation", url: "https://docs.cilium.io/en/stable/overview/intro/" },
+      caption: "Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy."
     },
     {
       id: "tailscale", term: "Tailscale", acronym: "WireGuard-Based Mesh VPN",
@@ -1576,7 +1576,7 @@
       tldr: "The Kubernetes CNI that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.",
       explainer: `Kubernetes does not implement pod networking itself — it delegates to a Container Network Interface plugin — and Calico is one of the two you are most likely to meet, Cilium being the other. It is Apache-2.0, created and still maintained by Tigera, and often appears alongside another CNI purely for its policy engine. Its distinguishing choice on the networking side is to route rather than tunnel: each node owns a block of the pod address space, a BGP daemon on that node (BIRD, configured by confd from Calico's datastore) advertises the block to the other nodes or to the physical fabric, and a pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. That keeps the network legible — existing routers, firewalls, and flow collectors see real endpoints rather than an opaque VXLAN blob — and costs no encapsulation overhead. Where the underlay will not carry pod routes, which is most cloud VPCs, Calico falls back to a VXLAN or IP-in-IP overlay, optionally only across subnet boundaries so the common case stays native. A Felix agent on every node does the programming, inserting routes into the kernel FIB and access control rules into whichever data plane you chose: standard iptables, nftables, eBPF (which also replaces kube-proxy, preserves the client source IP, and load-balances at connect time), or Windows HNS. Typha fans datastore updates out to those agents so a large cluster does not batter the API server. The policy engine is why Calico turns up in zero-trust designs. Kubernetes' own NetworkPolicy is deliberately minimal — namespaced, pods only, allow-only, unordered — so you cannot express "deny this, whatever anyone else says". Calico adds a projectcalico.org/v3 NetworkPolicy and a cluster-scoped GlobalNetworkPolicy with explicit deny and log actions, an order field that makes precedence deterministic, richer match criteria, and, through HostEndpoint, the same policy language applied to a node's own interfaces, to VMs, and to bare metal. Tiers are the part worth understanding: every policy lives in a tier, tiers are evaluated by order, and a tier can Pass a packet down to the next, so a platform team writes global rules in a high-precedence tier while developers' Kubernetes NetworkPolicies land in the default tier — fixed at order 1,000,000 — where they cannot override what sits above. Kubernetes RBAC applies per tier, turning that convention into an enforced boundary, which is the multi-team microsegmentation story flat NetworkPolicy cannot tell. WireGuard encryption is a flag in FelixConfiguration, Dikastes extends enforcement to layers 5–7 as an Envoy sidecar under Istio, and Tigera's Calico Cloud and Calico Enterprise editions sell the retained flow logs, DNS-based policy, staged-policy previews, WAF, and IDS the open-source edition leaves out. Two honest limits. That WireGuard encryption is node-to-node rather than pod-to-pod: the host-to-host hop is protected, the pod-to-host segment on each machine is not, so root on a node still reads plaintext. And the identity underneath is an address — Calico resolves label selectors into IP sets and enforces on those, so a policy is only as trustworthy as the labels and the IPAM behind it. That is a weaker claim than the cryptographic workload identity SPIFFE and a service mesh provide, which is why the two are usually deployed together rather than chosen between.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Kubernetes", "Platforms & Apps", "Network Edge & Ops"],
-      related: ["cilium", "kubernetes", "microseg", "bgp", "wireguard", "ovn"],
+      related: ["cilium", "ebpf", "kubernetes", "microseg", "bgp", "wireguard", "ovn"],
       source: { label: "About Calico — Calico Open Source documentation", url: "https://docs.tigera.io/calico/latest/about/" },
       caption: "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override."
     },
@@ -1599,6 +1599,16 @@
       related: ["envoy", "servicemesh", "spiffe", "mtls", "kubernetes", "peppdp"],
       source: { label: "Istio documentation — Architecture", url: "https://istio.io/latest/docs/ops/deployment/architecture/" },
       caption: "istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed."
+    },
+    {
+      id: "ebpf", term: "eBPF", acronym: "extended Berkeley Packet Filter",
+      aliases: ["BPF", "bpf()", "verifier", "JIT", "eBPF maps", "XDP", "kprobe", "uprobe", "tracepoint", "BPF LSM", "libbpf", "CO-RE", "BTF", "bpftrace", "kernel"],
+      tldr: "Sandboxed programs that run inside the Linux kernel at defined hook points, extending what it does without patching it or loading a module.",
+      explainer: `Changing what the Linux kernel does used to mean patching it or shipping a module, and both are slow to land and easy to get catastrophically wrong. eBPF is the third option: you compile a small program to a bytecode, hand it to the kernel through the bpf() system call, and the kernel runs it at a defined hook — a packet arriving at the driver (XDP), traffic control on an interface, a kernel function entry or return (kprobe), a static tracepoint, a socket operation, or a security hook (BPF LSM). What makes that safe enough to be interesting is the verifier. Before a program is accepted it is statically analysed across every execution path to prove that it terminates — loops are permitted only where the exit condition provably becomes true — that it never reads uninitialised memory or steps outside its bounds, and that its complexity stays inside what the analysis can carry. Only then is it JIT-compiled to native instructions, so it runs at roughly the speed of compiled kernel code rather than in an interpreter. Programs hold no state of their own; maps are what fix that — hash tables, arrays, LRU caches, ring buffers, longest-prefix-match tries — readable and writable both from the program and from a user-space agent, which is how counters, policy tables, and event streams cross the boundary. That combination is why so much of modern infrastructure quietly runs on it: Cilium's data plane, Calico's eBPF mode, runtime security tooling, and most of the newer profilers and tracers. Two honest limits. The verifier proves memory safety and termination, not benignity — loading a program is a privileged operation for good reason, and an attacker who reaches CAP_BPF or CAP_SYS_ADMIN gains a kernel-resident foothold that conventional tooling is poorly placed to see, which is a documented rootkit technique rather than a theoretical one. And portability is real work: which hooks and helpers exist, and what the verifier will accept, vary by kernel version, so programs lean on BTF type information to compile once and run everywhere — and you still end up writing for the verifier rather than for clarity.`,
+      types: ["Network Technology", "Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops", "Detection & Response"],
+      related: ["cilium", "calico", "kubernetes", "edr"],
+      source: { label: "What is eBPF? — ebpf.io", url: "https://ebpf.io/what-is-ebpf/" },
+      caption: "A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps."
     }
   ];
 
@@ -2785,24 +2795,63 @@
       </svg>`,
 
     cilium: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="eBPF programs run policy and load-balancing inside the kernel; Cilium uses them to allow only sanctioned, identity-aware pod flows.">
-        ${[["Pod A",70],["Pod B",290],["Pod C",510]].map(([t,x])=>`
-          <rect class="box" x="${x}" y="44" width="140" height="64" rx="10"/>
-          <text class="t-b" x="${x+70}" y="82" text-anchor="middle">${t}</text>
-        `).join("")}
-        <line class="flow-ok" x1="210" y1="76" x2="290" y2="76" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" x="250" y="66" text-anchor="middle" fill="var(--state-ok)">allowed</text>
-        <line class="flow-bad" x1="430" y1="76" x2="510" y2="76" marker-end="url(#ah-bad)"/>
-        <line class="stroke-bad" x1="462" y1="68" x2="478" y2="84" style="stroke-width:2.5"/>
-        <line class="stroke-bad" x1="478" y1="68" x2="462" y2="84" style="stroke-width:2.5"/>
-        <text class="t-sm" x="470" y="66" text-anchor="middle" fill="var(--state-bad)">blocked</text>
-        <rect class="zone-accent" x="40" y="150" width="640" height="96" rx="14"/>
-        <text class="t-b" x="360" y="186" text-anchor="middle">Linux kernel — eBPF</text>
-        <text class="t-sm t-mut" x="360" y="210" text-anchor="middle">identity-aware policy · load-balancing · flow visibility (Hubble)</text>
-        <line class="flow" x1="140" y1="108" x2="140" y2="148" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="360" y1="108" x2="360" y2="148" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="580" y1="108" x2="580" y2="148" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">Policy runs in the kernel against workload identity — no sidecar required.</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy.">
+        <text class="t-sm t-mut" x="360" y="24" text-anchor="middle">Policy is written between identities, not addresses.</text>
+        <rect class="box" x="24" y="52" width="170" height="60" rx="10"/>
+        <text class="t-sm t-b" x="109" y="76" text-anchor="middle">Pod</text>
+        <text class="t-sm t-mut" x="109" y="94" text-anchor="middle">app=frontend</text>
+        <rect class="box" x="24" y="150" width="170" height="60" rx="10"/>
+        <text class="t-sm t-b" x="109" y="174" text-anchor="middle">Pod</text>
+        <text class="t-sm t-mut" x="109" y="192" text-anchor="middle">app=payments</text>
+        <rect class="box-accent" x="254" y="90" width="190" height="82" rx="12"/>
+        <text class="t-b" x="349" y="118" text-anchor="middle">Security identity</text>
+        <text class="t-sm t-mut" x="349" y="138" text-anchor="middle">numeric ID from</text>
+        <text class="t-sm t-mut" x="349" y="155" text-anchor="middle">the label set</text>
+        <line class="flow" x1="194" y1="82" x2="252" y2="112" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="194" y1="180" x2="252" y2="150" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="504" y="68" width="186" height="52" rx="10"/>
+        <text class="t-sm t-b" x="597" y="99" text-anchor="middle" fill="var(--state-ok)">allowed</text>
+        <rect class="box" x="504" y="150" width="186" height="52" rx="10"/>
+        <text class="t-sm t-b" x="597" y="181" text-anchor="middle" fill="var(--state-bad)">dropped in kernel</text>
+        <line class="flow-ok" x1="444" y1="118" x2="502" y2="94" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" x1="444" y1="146" x2="502" y2="176" marker-end="url(#ah-bad)"/>
+        <rect class="zone-accent" x="20" y="224" width="680" height="56" rx="14"/>
+        <text class="t-sm t-b" x="360" y="248" text-anchor="middle">eBPF programs in the kernel — no sidecar in the data path</text>
+        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">L3/L4 · HTTP and DNS rules · kube-proxy replacement · Hubble flow logs</text>
+      </svg>`,
+
+    ebpf: () => `
+      <svg class="dg" viewBox="0 0 720 310" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.">
+        <text class="t-sm t-mut" x="30" y="26">user space</text>
+        <rect class="box" x="24" y="40" width="200" height="56" rx="10"/>
+        <text class="t-sm t-b" x="124" y="64" text-anchor="middle">eBPF program</text>
+        <text class="t-sm t-mut" x="124" y="82" text-anchor="middle">C · Rust · Go</text>
+        <rect class="box" x="496" y="40" width="200" height="56" rx="10"/>
+        <text class="t-sm t-b" x="596" y="64" text-anchor="middle">Agent</text>
+        <text class="t-sm t-mut" x="596" y="82" text-anchor="middle">reads counters, events</text>
+        <line class="divider" x1="20" y1="112" x2="700" y2="112"/>
+        <text class="t-sm t-mut" x="30" y="132">kernel</text>
+        <rect class="zone-accent" x="20" y="140" width="680" height="140" rx="14"/>
+        <rect class="box-accent" x="44" y="170" width="150" height="54" rx="10"/>
+        <text class="t-sm t-b" x="119" y="194" text-anchor="middle">Verifier</text>
+        <text class="t-sm t-mut" x="119" y="211" text-anchor="middle">safety checked</text>
+        <rect class="box" x="234" y="170" width="110" height="54" rx="10"/>
+        <text class="t-sm t-b" x="289" y="194" text-anchor="middle">JIT</text>
+        <text class="t-sm t-mut" x="289" y="211" text-anchor="middle">native code</text>
+        <rect class="box" x="384" y="170" width="170" height="54" rx="10"/>
+        <text class="t-sm t-b" x="469" y="194" text-anchor="middle">Attached at a hook</text>
+        <text class="t-sm t-mut" x="469" y="211" text-anchor="middle">XDP · tc · kprobe · LSM</text>
+        <rect class="box" x="594" y="170" width="100" height="54" rx="10"/>
+        <text class="t-sm t-b" x="644" y="194" text-anchor="middle">Maps</text>
+        <text class="t-sm t-mut" x="644" y="211" text-anchor="middle">shared state</text>
+        <line class="flow" x1="124" y1="96" x2="124" y2="168" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="150" y="136">bpf()</text>
+        <line class="flow" x1="194" y1="197" x2="232" y2="197" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="344" y1="197" x2="382" y2="197" marker-end="url(#ah-mut)"/>
+        <line class="flow" x1="554" y1="197" x2="592" y2="197" marker-end="url(#ah-mut)"/>
+        <line class="flow-accent" x1="644" y1="168" x2="644" y2="98" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="630" y="136" text-anchor="end">counters · events</text>
+        <text class="t-sm t-mut" x="360" y="300" text-anchor="middle">The verifier proves the program terminates and stays in bounds.</text>
       </svg>`,
 
     tailscale: () => `
