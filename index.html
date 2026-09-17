@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">98</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">99</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">98</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">99</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">98</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">99</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1186,7 +1186,7 @@
       tldr: "Sensors that spot attacks in network traffic — and optionally block them inline.",
       explainer: `An Intrusion Detection System inspects network traffic or host activity for signs of an attack — known exploit signatures, protocol anomalies, or traffic that deviates from a learned baseline — and raises an alert when it sees one. An Intrusion Prevention System is the same engine placed inline so it can act, dropping or resetting the malicious connection rather than merely reporting it. Open-source engines like Snort and Suricata pioneered the signature model, matching packets against community rule sets updated as new threats emerge. The detection feeds a SIEM for correlation and a SOC for response, and complements endpoint EDR by watching the wire instead of the host. The classic weakness is false positives in detection mode and the risk of blocking legitimate traffic in prevention mode.`,
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response", "Network Edge & Ops"],
-      related: ["firewall", "siem", "edr", "soar"],
+      related: ["firewall", "siem", "edr", "soar", "sentrywire"],
       source: { label: "NIST SP 800-94 — Guide to IDPS", url: "https://csrc.nist.gov/pubs/sp/800/94/final" },
       caption: "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow."
     },
@@ -1629,6 +1629,16 @@
       related: ["lora", "dpo", "rlhf", "sbom"],
       source: { label: "Dettmers et al. — QLoRA: Efficient Finetuning of Quantized LLMs", url: "https://arxiv.org/abs/2305.14314" },
       caption: "The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM."
+    },
+    {
+      id: "sentrywire", term: "SentryWire", acronym: "Full Packet Capture & Network Security Monitoring Platform",
+      aliases: ["full packet capture", "FPC", "PCAP", "packet capture", "network forensics", "network security monitoring", "NSM", "IDS Search Back", "retrospective detection", "Suricata", "JA3", "network tap", "packet broker", "Alliance Technology Group"],
+      tldr: "Commercial full packet capture — every packet kept for months, so a signature written today can be searched back across traffic recorded long before anyone knew to look.",
+      explainer: `SentryWire is a commercial full packet capture platform, built by a division of the Maryland-based Alliance Technology Group and aimed at US federal agencies, critical infrastructure operators, and large enterprises — and it is worth knowing as an instance of a category rather than as a brand. Most network monitoring keeps a summary of traffic and throws the traffic away: flow records say who spoke to whom and how much, an IDS alert says that something matched. Full packet capture keeps the packets — every header and every payload byte, written to disk as PCAP — so an investigation can replay the conversation rather than infer it from whatever a log happened to record. The engineering problem is volume, and SentryWire's answer is to scale capture, storage, and search independently. Appliances sit passively out of band, fed a copy of traffic from a tap or packet broker, and record without truncating or slicing packets while filtering and compressing in real time; the vendor quotes capture rates from 1 Mbps on a virtual machine up to 1 Tbps on its largest systems. Retention grows by adding cluster nodes rather than replacing the appliance, and searches run in parallel across the store, streaming back only the matching sessions as PCAP or as reconstructed files. The part that changes how a SOC works is retrospective detection. An integrated Suricata engine alerts on live traffic, but the same signatures can be run backwards over months of stored packets — the vendor calls it IDS Search Back — so an indicator published today can be tested against what actually crossed the wire months earlier, answering the questions logs cannot: when the intruder arrived, how, and exactly what left. JA3 fingerprints, GeoIP and file-hash enrichment, Kibana dashboards, and Splunk and Elastic integrations sit on top, so an analyst can pivot from a SIEM alert to the packets behind it. In zero-trust terms it is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network and its communications. Three honest limits. Encryption hollows out the word "full": with TLS nearly everywhere the stored payloads are ciphertext, TLS 1.3 removed the RSA key exchange that once let a holder of the server's private key decrypt a recording after the fact, and what remains readable is metadata, timing, and handshake fingerprints — JA3 among them, which has grown unreliable since Chrome began randomising its TLS extension order. Capture sees only what crosses the tap: traffic between virtual machines on one host, between pods on one node, or inside a cloud VPC never reaches the appliance unless it is deliberately mirrored there, and nothing from before deployment can be searched at all. And the archive is itself a liability — months of every credential and personal record that crossed the wire unencrypted — so it needs privileged-access control, a retention period defensible under data-protection law, and protection equal to the systems it watches.`,
+      types: ["Security Technology"], provenance: ["Vendor"], domains: ["Detection & Response", "Network Edge & Ops"],
+      related: ["idsips", "siem", "tls", "nist207"],
+      source: { label: "SentryWire — Full packet capture appliance", url: "https://www.sentrywire.com/full-packet-capture" },
+      caption: "Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext."
     }
   ];
 
@@ -3985,6 +3995,48 @@
         <text class="t-sm t-mut" x="372" y="248" text-anchor="end">QLoRA: &lt;48 GB</text>
         <rect class="box-accent" x="380" y="237" width="20" height="14" rx="3"/>
         <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">One 48 GB GPU for a 65B model — paid for in slower steps and quantisation error.</text>
+      </svg>`,
+
+    sentrywire: () => `
+      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP, though encrypted payloads stay ciphertext.">
+        <text class="t-sm t-mut" x="20" y="20">Record every packet, then search the past with today's signatures</text>
+
+        <rect class="box" x="20" y="36" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="80" y="63" text-anchor="middle">Clients</text>
+        <rect class="box" x="580" y="36" width="120" height="46" rx="8"/>
+        <text class="t-sm t-b" x="640" y="63" text-anchor="middle">Servers</text>
+        <line class="flow" x1="140" y1="59" x2="578" y2="59" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="440" y="50" text-anchor="middle">production traffic</text>
+        <line class="flow" x1="200" y1="59" x2="200" y2="98" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="210" y="84">passive copy at a tap</text>
+
+        <rect class="box-accent" x="20" y="100" width="250" height="70" rx="8"/>
+        <text class="t-b" x="145" y="124" text-anchor="middle">Capture nodes</text>
+        <text class="t-sm t-mut" x="145" y="142" text-anchor="middle">whole packets, never sliced</text>
+        <text class="t-sm t-mut" x="145" y="158" text-anchor="middle">Suricata alerts on live traffic</text>
+
+        <line class="flow-accent" x1="270" y1="135" x2="328" y2="135" marker-end="url(#ah-acc)"/>
+
+        <rect class="data" x="330" y="100" width="370" height="70" rx="8"/>
+        <text class="t-b" x="515" y="124" text-anchor="middle">Cluster store</text>
+        <text class="t-sm t-mut" x="515" y="142" text-anchor="middle">PCAP sessions, weeks to years</text>
+        <text class="t-sm t-mut" x="515" y="158" text-anchor="middle">add nodes to extend retention</text>
+
+        <rect class="box" x="20" y="200" width="200" height="56" rx="8"/>
+        <text class="t-b" x="120" y="224" text-anchor="middle">New indicator</text>
+        <text class="t-sm t-mut" x="120" y="242" text-anchor="middle">published today</text>
+
+        <path class="flow-accent" d="M220 228 H400 V174" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="310" y="220" text-anchor="middle">IDS search back</text>
+
+        <line class="flow-ok" x1="620" y1="170" x2="620" y2="198" marker-end="url(#ah-ok)"/>
+        <text class="t-sm t-mut" x="610" y="189" text-anchor="end">matching sessions as PCAP</text>
+
+        <rect class="box" x="520" y="200" width="180" height="56" rx="8"/>
+        <text class="t-b" x="610" y="224" text-anchor="middle">Analyst or SIEM</text>
+        <text class="t-sm t-mut" x="610" y="242" text-anchor="middle">months-old evidence</text>
+
+        <text class="t-sm t-mut" x="360" y="280" text-anchor="middle">Without keys, TLS payloads are kept as ciphertext — metadata and fingerprints remain</text>
       </svg>`
   };
 

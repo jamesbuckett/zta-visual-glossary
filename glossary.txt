@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-98 terms, alphabetical. Generated from index.html by glossary.mjs.
+99 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -317,6 +317,10 @@ SD-WAN — Software-Defined Wide Area Network
 Secrets Management — Secrets Management (HashiCorp Vault)
     A central, audited vault for the passwords, keys, and tokens that machines need.
     [Security Technology] · aka HashiCorp Vault, secret store, dynamic secrets, credential rotation, KMS
+
+SentryWire — Full Packet Capture & Network Security Monitoring Platform
+    Commercial full packet capture — every packet kept for months, so a signature written today can be searched back across traffic recorded long before anyone knew to look.
+    [Security Technology] · aka full packet capture, FPC, PCAP, packet capture, network forensics, network security monitoring, NSM, IDS Search Back, retrospective detection, Suricata, JA3, network tap, packet broker, Alliance Technology Group
 
 Service Mesh — Service Mesh (Istio · Linkerd · Envoy)
     A networking layer that gives every service identity, mTLS, and traffic control for free.
