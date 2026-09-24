@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-96 terms, alphabetical. Generated from index.html by glossary.mjs.
+98 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -170,6 +170,10 @@ Load Balancer — Load Balancer
     Spreads incoming traffic across many backend servers.
     [Network Technology] · aka LB, reverse proxy, HAProxy
 
+LoRA — Low-Rank Adaptation
+    Fine-tune a large model by freezing it and training two small matrices beside each layer, so the task-specific change fits in megabytes rather than a full copy of the weights.
+    [Method] · aka low-rank adaptation, adapter, PEFT, parameter-efficient fine-tuning, fine-tuning, rank, BA matrices, merged weights
+
 MFA / Passkeys — Multi-Factor Authentication (FIDO2 · WebAuthn)
     Proving identity with more than a password — and passkeys that cannot be phished.
     [Security Technology, Protocol] · aka MFA, 2FA, FIDO2, WebAuthn, passkey, passwordless, TOTP, phishing-resistant
@@ -257,6 +261,10 @@ PKI — Public Key Infrastructure
 Post-Quantum Cryptography — Post-Quantum Cryptography (PQC)
     New algorithms designed to survive attack by a large quantum computer.
     [Security Technology] · aka PQC, ML-KEM, Kyber, ML-DSA, Dilithium, quantum-safe, harvest now decrypt later
+
+QLoRA — Quantized LoRA
+    LoRA on a base model squeezed to 4 bits — the frozen weights shrink fourfold, so a 65-billion-parameter model can be fine-tuned on a single GPU.
+    [Method] · aka quantized LoRA, 4-bit fine-tuning, NF4, NormalFloat, double quantization, paged optimizers, bitsandbytes, Guanaco, quantisation
 
 QUIC — QUIC (a name, not an acronym — RFC 9000)
     A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.

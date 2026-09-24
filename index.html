@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">96</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">98</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">96</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">98</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">5</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">96</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">98</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1446,7 +1446,7 @@
       tldr: "Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.",
       explainer: `RLHF is how a raw language model becomes one that follows instructions usefully and declines what it should. It runs in three stages. Supervised fine-tuning first teaches the base model to imitate human-written demonstrations. Then labellers are shown several candidate answers to the same prompt and rank them, and those comparisons train a separate reward model to predict which output a human would prefer. Finally reinforcement learning — classically PPO — optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference so it cannot drift into degenerate text that happens to score well. The technique came from Christiano et al. in 2017 and was scaled to language models by InstructGPT, whose 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3. It matters beyond answer quality: refusal behaviour and safety policy are installed here, at training time, which is why they are a property of the weights rather than a runtime control anything downstream can inspect, audit, or enforce. Its weakness is reward hacking — the policy optimises the reward model, which is only a proxy for human judgement — and the three-model pipeline is expensive and notoriously fiddly to keep stable.`,
       types: ["Method"], provenance: [], domains: ["AI & Models"],
-      related: ["dpo", "peppdp", "opa", "sbom", "rag"],
+      related: ["dpo", "peppdp", "opa", "sbom", "rag", "lora"],
       source: { label: "Ouyang et al. — Training language models to follow instructions with human feedback", url: "https://arxiv.org/abs/2203.02155" },
       caption: "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash."
     },
@@ -1456,7 +1456,7 @@
       tldr: "RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.",
       explainer: `DPO reaches the same objective as RLHF by a much shorter route. Rafailov et al. showed that the KL-constrained reward maximisation RLHF solves has a closed-form optimum, which lets the reward be rewritten in terms of the policy itself — "your language model is secretly a reward model". The consequence is practical: drop the separate reward model and the PPO loop, and train directly on the same preference data — triples of prompt, chosen answer, rejected answer — using an ordinary classification loss that raises the model's log-probability of the chosen answer and lowers it for the rejected one, each measured against a frozen reference copy of the model. That reference does the job RLHF gave to the KL penalty. One training loop, nothing sampled from the model mid-run, no reward model to babysit — which is why DPO and its descendants became the default for open-weight instruction tuning. The trade-off is that it is offline: it learns only from pairs somebody already collected, so it cannot explore responses that dataset never contained, and it can over-optimise on prompts far from the reference model's distribution.`,
       types: ["Method"], provenance: [], domains: ["AI & Models"],
-      related: ["rlhf", "peppdp", "sbom", "sigstore", "rag"],
+      related: ["rlhf", "peppdp", "sbom", "sigstore", "rag", "lora", "qlora"],
       source: { label: "Rafailov et al. — Direct Preference Optimization: Your Language Model is Secretly a Reward Model", url: "https://arxiv.org/abs/2305.18290" },
       caption: "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference."
     },
@@ -1609,6 +1609,26 @@
       related: ["cilium", "calico", "kubernetes", "edr"],
       source: { label: "What is eBPF? — ebpf.io", url: "https://ebpf.io/what-is-ebpf/" },
       caption: "A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps."
+    },
+    {
+      id: "lora", term: "LoRA", acronym: "Low-Rank Adaptation",
+      aliases: ["low-rank adaptation", "adapter", "PEFT", "parameter-efficient fine-tuning", "fine-tuning", "rank", "BA matrices", "merged weights"],
+      tldr: "Fine-tune a large model by freezing it and training two small matrices beside each layer, so the task-specific change fits in megabytes rather than a full copy of the weights.",
+      explainer: `Full fine-tuning updates every weight in a model, which for a 175-billion-parameter network means a full copy of those weights per task, plus optimiser state several times larger while it trains. LoRA, from Hu et al. at Microsoft in 2021, rests on the observation that the change fine-tuning makes has a low intrinsic rank. So it freezes the pretrained weight matrix W and learns the update as the product of two thin matrices, B times A, with a rank r of perhaps 8 or 16 against a hidden dimension in the thousands. Each adapted layer computes Wx + BAx; B is initialised to zero, so training starts from exactly the original model, and only A and B ever receive gradients. On GPT-3 175B that cut the trainable parameters by a factor of 10,000 and the GPU memory by three, at quality on par with full fine-tuning. Two deployment options follow. Merge BA into W and the served model is the same size and speed as the original — no added inference latency, unlike earlier adapter layers. Or keep the adapter separate: a file of megabytes rather than hundreds of gigabytes, so one base model can hot-swap adapters per task or per tenant. That portability is the security point. An adapter is model behaviour packaged in a small, easily shared file, and published research has shown a cheap LoRA run stripping the safety training from an aligned chat model — so an adapter deserves the same provenance and signing controls as the weights it modifies, and a safety-tuned base promises nothing once third-party adapters load on top. The limitation is capacity: a low-rank update steers what the model already knows but struggles to teach it substantially new knowledge, and on demanding domains such as code and mathematics it measurably trails full fine-tuning.`,
+      types: ["Method"], provenance: [], domains: ["AI & Models"],
+      related: ["qlora", "dpo", "rlhf", "sbom"],
+      source: { label: "Hu et al. — LoRA: Low-Rank Adaptation of Large Language Models", url: "https://arxiv.org/abs/2106.09685" },
+      caption: "The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own."
+    },
+    {
+      id: "qlora", term: "QLoRA", acronym: "Quantized LoRA",
+      aliases: ["quantized LoRA", "4-bit fine-tuning", "NF4", "NormalFloat", "double quantization", "paged optimizers", "bitsandbytes", "Guanaco", "quantisation"],
+      tldr: "LoRA on a base model squeezed to 4 bits — the frozen weights shrink fourfold, so a 65-billion-parameter model can be fine-tuned on a single GPU.",
+      explainer: `QLoRA, from Dettmers et al. in 2023, attacks the cost LoRA leaves in place: the frozen base model still has to sit in GPU memory at 16 bits, and at 65 billion parameters that alone is some 130 GB. QLoRA stores the frozen base in 4 bits instead and trains ordinary LoRA adapters on top of it in 16-bit precision. Three pieces make that work without losing quality. 4-bit NormalFloat (NF4) is a data type whose sixteen levels sit at the quantiles of a normal distribution, which is how pretrained weights are actually distributed, so the precision lands where the values are. Double quantisation then quantises the per-block scaling constants themselves, saving about another 0.37 bits per parameter — roughly 3 GB on a 65B model. And paged optimisers use unified memory to spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash. On each forward pass a layer's weights are dequantised to BF16 on the fly, gradients flow back through them, and only the adapters are updated. The result: fine-tuning a 65B model drops from more than 780 GB of GPU memory to under 48 GB — one data-centre card — while preserving full 16-bit fine-tuning performance on the paper's benchmarks, and its Guanaco models reached 99.3% of ChatGPT on the Vicuna benchmark after 24 hours on a single GPU. That democratisation cuts both ways: the cost of customising, or de-aligning, a large open-weight model fell to something an individual can afford, which strengthens the case for treating adapters and their training data as supply-chain artefacts. The candid limitation is that the memory is bought with time and precision — dequantising every layer on every step makes training slower than plain LoRA, and an adapter learned against quantised weights drifts when merged into a 16-bit base or re-quantised for serving, a mismatch that has to be measured rather than assumed away.`,
+      types: ["Method"], provenance: [], domains: ["AI & Models"],
+      related: ["lora", "dpo", "rlhf", "sbom"],
+      source: { label: "Dettmers et al. — QLoRA: Efficient Finetuning of Quantized LLMs", url: "https://arxiv.org/abs/2305.14314" },
+      caption: "The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM."
     }
   ];
 
@@ -3905,6 +3925,66 @@
 
         <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">AuthorizationPolicy runs CUSTOM first, then DENY, then ALLOW — matched on identity, not IP.</text>
         <text class="t-sm t-mut" x="360" y="288" text-anchor="middle">Ambient trades the per-pod sidecar for a per-node ztunnel: cheaper, but a wider blast radius.</text>
+      </svg>`,
+
+    lora: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">Only the small adapter trains — the big matrix never moves</text>
+        <rect class="box" x="24" y="110" width="90" height="60" rx="10"/>
+        <text class="t-sm t-b" x="69" y="136" text-anchor="middle">Input x</text>
+        <text class="t-sm t-mut" x="69" y="156" text-anchor="middle">activations</text>
+        <path class="flow" d="M114 130 H150 V80 H176" marker-end="url(#ah-mut)"/>
+        <path class="flow-accent" d="M114 150 H150 V195 H176" marker-end="url(#ah-acc)"/>
+        <rect class="box" x="180" y="40" width="220" height="80" rx="10"/>
+        <text class="t-b" x="290" y="72" text-anchor="middle">Pretrained W</text>
+        <text class="t-sm t-mut" x="290" y="96" text-anchor="middle">d × d · frozen, no gradients</text>
+        <rect class="box-accent" x="180" y="160" width="100" height="70" rx="10"/>
+        <text class="t-b" x="230" y="190" text-anchor="middle">A</text>
+        <text class="t-sm t-mut" x="230" y="212" text-anchor="middle">r × d</text>
+        <line class="flow-accent" x1="280" y1="195" x2="296" y2="195" marker-end="url(#ah-acc)"/>
+        <rect class="box-accent" x="300" y="160" width="100" height="70" rx="10"/>
+        <text class="t-b" x="350" y="190" text-anchor="middle">B</text>
+        <text class="t-sm t-mut" x="350" y="212" text-anchor="middle">d × r · zero</text>
+        <text class="t-sm t-mut" x="290" y="252" text-anchor="middle">trainable adapter · rank r ≪ d (e.g. 8)</text>
+        <path class="flow" d="M400 80 H440 V120 H466" marker-end="url(#ah-mut)"/>
+        <path class="flow-accent" d="M400 195 H440 V160 H466" marker-end="url(#ah-acc)"/>
+        <rect class="box-accent" x="470" y="100" width="80" height="80" rx="10"/>
+        <text class="t-sm t-b" x="510" y="134" text-anchor="middle">Sum</text>
+        <text class="t-sm t-mut" x="510" y="156" text-anchor="middle">Wx + BAx</text>
+        <line class="flow" x1="550" y1="140" x2="596" y2="140" marker-end="url(#ah-mut)"/>
+        <rect class="box" x="600" y="110" width="96" height="60" rx="10"/>
+        <text class="t-sm t-b" x="648" y="136" text-anchor="middle">Output h</text>
+        <text class="t-sm t-mut" x="648" y="156" text-anchor="middle">same shape</text>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Serve merged (W + BA: no extra latency) or keep the adapter as a small file to swap.</text>
+      </svg>`,
+
+    qlora: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM.">
+        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">The base is stored in 4 bits; only the adapter trains, in 16</text>
+        <rect class="box" x="24" y="44" width="200" height="80" rx="10"/>
+        <text class="t-sm t-b" x="124" y="70" text-anchor="middle">Base weights</text>
+        <text class="t-sm t-mut" x="124" y="92" text-anchor="middle">NF4 · 4-bit · frozen</text>
+        <text class="t-sm t-mut" x="124" y="112" text-anchor="middle">double-quantised scales</text>
+        <line class="flow" x1="224" y1="84" x2="296" y2="84" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" x="260" y="74" text-anchor="middle">dequantise</text>
+        <rect class="box" x="300" y="44" width="180" height="80" rx="10"/>
+        <text class="t-sm t-b" x="390" y="76" text-anchor="middle">Forward pass</text>
+        <text class="t-sm t-mut" x="390" y="100" text-anchor="middle">BF16 compute, per layer</text>
+        <line class="flow" x1="480" y1="84" x2="556" y2="84" marker-end="url(#ah-mut)"/>
+        <rect class="box-accent" x="560" y="44" width="136" height="80" rx="10"/>
+        <text class="t-sm t-b" x="628" y="76" text-anchor="middle">LoRA adapters</text>
+        <text class="t-sm t-mut" x="628" y="100" text-anchor="middle">BF16 · trainable</text>
+        <path class="flow-accent" d="M390 124 V150 H628 V128" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-mut" x="510" y="170" text-anchor="middle">gradients pass through; only the adapter updates</text>
+        <rect class="box" x="24" y="190" width="200" height="56" rx="10"/>
+        <text class="t-sm t-b" x="124" y="214" text-anchor="middle">Paged optimiser</text>
+        <text class="t-sm t-mut" x="124" y="234" text-anchor="middle">state spills to CPU RAM</text>
+        <text class="t-sm t-b" x="380" y="200" text-anchor="start">GPU memory to fine-tune 65B</text>
+        <text class="t-sm t-mut" x="372" y="224" text-anchor="end">16-bit: &gt;780 GB</text>
+        <rect class="box" x="380" y="213" width="316" height="14" rx="3"/>
+        <text class="t-sm t-mut" x="372" y="248" text-anchor="end">QLoRA: &lt;48 GB</text>
+        <rect class="box-accent" x="380" y="237" width="20" height="14" rx="3"/>
+        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">One 48 GB GPU for a 65B model — paid for in slower steps and quantisation error.</text>
       </svg>`
   };
 
