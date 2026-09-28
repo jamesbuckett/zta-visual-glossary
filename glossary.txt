@@ -3,6 +3,8 @@ ZTA VISUAL GLOSSARY — TERM REFERENCE
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
+         1. step — text        (terms with a diagram tour)
+         Key fact: …
 
 ========================================================================
 

@@ -29,6 +29,8 @@ const lines = [
   'Format: TERM — expansion / full name',
   '         TL;DR',
   '         [type tags] · aliases',
+  '         1. step — text        (terms with a diagram tour)',
+  '         Key fact: …',
   '',
   '='.repeat(72),
   '',
@@ -39,6 +41,10 @@ for (const t of entries) {
   lines.push(`${t.term} — ${t.acronym}`);
   lines.push(`    ${t.tldr}`);
   lines.push(`    [${(t.types || []).join(', ')}]${aliases}`);
+  if (t.steps) {
+    t.steps.forEach((s, i) => lines.push(`    ${i + 1}. ${s.title} — ${s.text}`));
+    lines.push(`    Key fact: ${t.fact}`);
+  }
   lines.push('');
 }
 
