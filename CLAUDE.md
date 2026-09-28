@@ -33,6 +33,7 @@ verification loop.
 npm test              # validate.mjs against index.html — must exit clean before any commit
 npm run verify        # renders every term in a browser and checks its diagram geometry
 npm run glossary      # regenerates glossary.txt, prints the term count
+npm run test:tour     # proves validate/verify catch broken tours
 ```
 
 `validate.mjs` is the style-guide linter — exactly one accent colour, no stray hex in
@@ -43,7 +44,8 @@ caught on the write rather than at `npm run glossary`. A project hook runs it af
 
 `verify.mjs` is the rendered check: it opens each term's detail view in a headless browser
 and asserts the diagram appears, the counters match the data, no label sits across a box
-border, and no connector runs through a label. Pass term ids to narrow it
+border, and no connector runs through a label. For a term with `steps` it also drives the
+diagram tour: every chip, the panel text, keyboard stepping and reduced motion. Pass term ids to narrow it
 (`npm run verify calico`).
 
 The term count printed by `npm run glossary` is a free cross-check on the counters in

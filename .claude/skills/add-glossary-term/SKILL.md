@@ -28,26 +28,38 @@ Add an object to `const TERMS` in `index.html`:
   types: ["Protocol"], provenance: ["Open Source"], domains: ["Zero-Trust Core"],
   related: ["sibling-id"],
   source: { label: "RFC 9999 — Title", url: "https://..." },
-  caption: "What the diagram shows."
+  caption: "What the diagram shows.",
+  steps: [
+    { title: "Two to four words", text: "One or two sentences, only what the explainer says." },
+    …  // 3–5 steps
+  ],
+  fact: "One sentence from the explainer worth remembering."
 }
 ```
 
 `types`, `provenance` and `domains` draw only on the existing `TYPE_TAGS`, `PROV_TAGS` and
 `DOMAIN_TAGS` arrays. UK spelling. See CLAUDE.md for the source-verification rule.
 
-## 2. Append the diagram
+## 2. Append the diagram and its tour
 
-Add a matching `DIAGRAMS.<id>` function returning inline SVG, `viewBox` 720×~300. Use the
-shared grammar rather than new classes:
+Add a matching `DIAGRAMS.<id>` function returning inline SVG, `viewBox` 720 wide and
+~240–320 tall. Every diagram is a step-through tour: the term's `steps` drive numbered
+chips, and each diagram element that belongs to a step carries `data-s="1 3"`.
 
 - shapes — `box`, `box-accent`, `zone-accent`
 - flows — `flow`, `flow-accent`, `flow-ok`, `flow-bad`
 - arrowheads — `ah-acc`, `ah-ok`, `ah-bad`, `ah-mut`
 - text — `t-b`, `t-sm`, `t-mut`, `t-acc` (accent — never a `fill="var(--accent)"`
   attribute, which the `.dg text` rule silently overrides)
+- icons — `${icon('server', x, y)}`: a 24px Lucide icon at the top-left of a main box,
+  with its label shifted right. Add a missing icon to `ICONS` from lucide-static.
+- badges — `${badge(n, x, y, 'n')}`: one numbered circle per step, on the element or
+  arrow that step centres on.
 
-Set `aria-label` to the caption text. Budget label widths at roughly 6.6px per character
-for the ~11px mono face.
+Rules: 3–5 steps; every step lights something; tag a component's `<g>`, never both a
+group and its children (no nested `data-s`); a flow may run under its badge, but a
+badge must not cover a label; the drawing must read correctly fully lit (print).
+Tour copy states only what the explainer says.
 
 ## 3. Cross-link
 
@@ -89,6 +101,8 @@ and runs the two geometry checks that have caught defects invisible at thumbnail
 - **(b) Stroke/text collision** — ~200 samples along every `<line>`/`<path>`; none may land
   inside a label. Caught istiod's arrows striking through Istio's SPIFFE ID line, which
   check (a) could not see.
+- **(c) Diagram tour** — chips match `steps`, each step lights something, clicks and
+  ArrowRight work, nothing animates under reduced motion, no badge covers a label.
 
 It also re-checks the step 4 counters, so a bare `npm run verify` catches drift you missed.
 
