@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-99 terms, alphabetical. Generated from index.html by glossary.mjs.
+100 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -41,6 +41,10 @@ Cilium — eBPF-Based Kubernetes Networking, Observability & Security
 Cntlm — NTLM Authentication Proxy
     The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
     [Network Technology, Security Technology] · aka CNTLM, cntlm.conf, NTLM proxy, NTLMv2, NTLM2SR, LM hash, PassNTLMv2, PassNT, PassLM, magic dialect detection, parent proxy, gateway mode, NoProxy, SOCKS5 proxy, port tunnelling, ISA Server
+
+CoreWeave — GPU Cloud Platform for AI
+    A GPU-first cloud that runs Kubernetes straight on bare-metal NVIDIA servers, trading the hypervisor for a DPU in every node and an InfiniBand fabric built for AI training.
+    [Cloud Platform] · aka neocloud, GPU cloud, AI cloud, CKS, CoreWeave Kubernetes Service, bare-metal Kubernetes, Atlantic Crypto, CRWV, InfiniBand, SHARP
 
 CORS — Cross-Origin Resource Sharing
     A browser rule that lets a server declare which other origins may read its responses.

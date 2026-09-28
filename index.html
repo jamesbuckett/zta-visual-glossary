@@ -591,7 +591,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">99</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">100</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -602,11 +602,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">99</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">100</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">99</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">100</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1366,7 +1366,7 @@
       tldr: "NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data center's networking, storage, and zero-trust security on the card.",
       explainer: `BlueField is NVIDIA's DPU product line — the concrete silicon behind the concept. Each chip pairs an NVIDIA ConnectX network ASIC with a cluster of Arm cores running their own Linux, onboard memory, and accelerators for crypto, compression, and storage. BlueField-3, the current production generation, delivers 400 Gb/s and 16 Arm cores; BlueField-4, announced in late 2025, scales to 800 Gb/s for the AI-factory era and is in early availability rather than general release. Because the Arm subsystem is isolated from the host across PCIe, operators run infrastructure and security services directly on the card. The zero-trust mechanisms are concrete: a hardware root of trust with DICE-based measured boot and remote attestation proves the card and its software are unmodified; line-rate IPsec/TLS encrypts traffic at wire speed with no host CPU cost; and DOCA Argus performs agentless host introspection — reading the host's processes and memory from the DPU to catch reverse shells, injected code, or hidden processes that host-resident malware would conceal and could never disable. It is programmed with the DOCA framework.`,
       types: ["Network Technology", "Security Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Platforms & Apps"],
-      related: ["dpu", "doca", "supernic", "tpm", "microseg", "ipsec"],
+      related: ["dpu", "doca", "supernic", "tpm", "microseg", "ipsec", "coreweave"],
       source: { label: "NVIDIA — BlueField Networking Platform", url: "https://www.nvidia.com/en-us/networking/products/data-processing-unit/" },
       caption: "A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust."
     },
@@ -1639,6 +1639,16 @@
       related: ["idsips", "siem", "tls", "nist207"],
       source: { label: "SentryWire — Full packet capture appliance", url: "https://www.sentrywire.com/full-packet-capture" },
       caption: "Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext."
+    },
+    {
+      id: "coreweave", term: "CoreWeave", acronym: "GPU Cloud Platform for AI",
+      aliases: ["neocloud", "GPU cloud", "AI cloud", "CKS", "CoreWeave Kubernetes Service", "bare-metal Kubernetes", "Atlantic Crypto", "CRWV", "InfiniBand", "SHARP"],
+      tldr: "A GPU-first cloud that runs Kubernetes straight on bare-metal NVIDIA servers, trading the hypervisor for a DPU in every node and an InfiniBand fabric built for AI training.",
+      explainer: `CoreWeave is a GPU-first cloud — one of the so-called neoclouds — built for training and serving AI models rather than for general enterprise workloads. It began in 2017 as Atlantic Crypto, an Ethereum mining operation in New Jersey; after the 2018 crypto crash it renamed itself in 2019 and started renting its NVIDIA GPUs out as cloud capacity, and it listed on Nasdaq in March 2025. The architecture departs from the hyperscalers in one deliberate way: CoreWeave Kubernetes Service runs Kubernetes directly on bare-metal nodes with no hypervisor, so a job gets the whole machine rather than a virtual slice of it. CoreWeave runs the control plane, manages the GPU drivers, and validates each node before it joins a cluster; nodes are stateless and boot a clean OS image every time, which keeps a fleet of thousands of servers consistent. The isolation a hypervisor would normally provide moves elsewhere — into dedicated single-tenant hardware, a VPC per cluster, and an NVIDIA BlueField DPU in every server that runs the networking and host security on its own Arm cores, out of reach of the workload. GPU-to-GPU traffic travels a separate non-blocking InfiniBand fat-tree fabric with in-network reduction (SHARP), because a large training run is limited as much by how fast gradients cross the network as by the GPUs themselves. In zero-trust terms the idea worth keeping is that enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls. Two honest limits. It is a specialist: the managed databases, identity services and compliance catalogue that surround a hyperscaler workload are far thinner, so most organisations run CoreWeave alongside another cloud and inherit the job of joining identity, networking and logging across both. And it is a concentrated bet — Microsoft supplied more than 60 per cent of its 2024 revenue, its expansion has been financed with debt secured against the GPUs themselves, and a customer's training capacity rides on that one provider's balance sheet.`,
+      types: ["Cloud Platform"], provenance: ["Vendor"], domains: ["AI & Models", "Platforms & Apps", "Kubernetes"],
+      related: ["kubernetes", "bluefield", "dpu", "lora"],
+      source: { label: "CoreWeave Docs — CoreWeave Kubernetes Service (CKS)", url: "https://docs.coreweave.com/docs/products/cks" },
+      caption: "CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric."
     }
   ];
 
@@ -4037,6 +4047,51 @@
         <text class="t-sm t-mut" x="610" y="242" text-anchor="middle">months-old evidence</text>
 
         <text class="t-sm t-mut" x="360" y="280" text-anchor="middle">Without keys, TLS payloads are kept as ciphertext — metadata and fingerprints remain</text>
+      </svg>`,
+
+    coreweave: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.">
+        <text class="t-sm t-mut" x="20" y="20">No hypervisor: the tenant gets the whole machine, the DPU keeps the boundary</text>
+
+        <rect class="box" x="20" y="40" width="200" height="56" rx="8"/>
+        <text class="t-b" x="120" y="63" text-anchor="middle">Control plane</text>
+        <text class="t-sm t-mut" x="120" y="81" text-anchor="middle">managed by CoreWeave</text>
+        <line class="flow" x1="220" y1="68" x2="248" y2="68" marker-end="url(#ah-mut)"/>
+
+        <rect class="box" x="20" y="128" width="200" height="56" rx="8"/>
+        <text class="t-b" x="120" y="151" text-anchor="middle">Your team</text>
+        <text class="t-sm t-mut" x="120" y="169" text-anchor="middle">kubectl + node access</text>
+        <path class="flow-accent" d="M220 156 H236 V96 H260" marker-end="url(#ah-acc)"/>
+
+        <text class="t-sm t-mut" x="20" y="226">Stateless nodes boot a clean</text>
+        <text class="t-sm t-mut" x="20" y="244">OS image; GPU drivers and</text>
+        <text class="t-sm t-mut" x="20" y="262">node checks are CoreWeave's</text>
+
+        <rect class="zone-accent" x="250" y="36" width="210" height="164" rx="10"/>
+        <text class="t-sm t-mut" x="262" y="54">Node · single tenant</text>
+        <rect class="box-accent" x="262" y="64" width="186" height="52" rx="8"/>
+        <text class="t-b" x="355" y="86" text-anchor="middle">GPUs · your pods</text>
+        <text class="t-sm t-mut" x="355" y="104" text-anchor="middle">bare metal, no hypervisor</text>
+        <rect class="box" x="320" y="132" width="128" height="52" rx="8"/>
+        <text class="t-b" x="384" y="154" text-anchor="middle">BlueField DPU</text>
+        <text class="t-sm t-mut" x="384" y="172" text-anchor="middle">VPC, host access</text>
+        <line class="flow-accent" x1="285" y1="116" x2="285" y2="224" marker-end="url(#ah-acc)"/>
+
+        <rect class="zone-accent" x="490" y="36" width="210" height="164" rx="10"/>
+        <text class="t-sm t-mut" x="502" y="54">Node · single tenant</text>
+        <rect class="box-accent" x="502" y="64" width="186" height="52" rx="8"/>
+        <text class="t-b" x="595" y="86" text-anchor="middle">GPUs · your pods</text>
+        <text class="t-sm t-mut" x="595" y="104" text-anchor="middle">bare metal, no hypervisor</text>
+        <rect class="box" x="560" y="132" width="128" height="52" rx="8"/>
+        <text class="t-b" x="624" y="154" text-anchor="middle">BlueField DPU</text>
+        <text class="t-sm t-mut" x="624" y="172" text-anchor="middle">VPC, host access</text>
+        <line class="flow-accent" x1="525" y1="116" x2="525" y2="224" marker-end="url(#ah-acc)"/>
+
+        <rect class="box" x="250" y="226" width="450" height="46" rx="8"/>
+        <text class="t-b" x="475" y="246" text-anchor="middle">InfiniBand fabric</text>
+        <text class="t-sm t-mut" x="475" y="263" text-anchor="middle">non-blocking fat tree, GPU-to-GPU RDMA</text>
+
+        <text class="t-sm t-mut" x="360" y="292" text-anchor="middle">Isolation is dedicated hardware plus the DPU — the shared dependency is the provider itself</text>
       </svg>`
   };
 
