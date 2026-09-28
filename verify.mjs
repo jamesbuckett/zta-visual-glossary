@@ -10,6 +10,10 @@
 //       sitting inside it (Calico's "no match" and "pod IP on the wire")
 //   (b) stroke/text collision — a <line>/<path> passing through a label
 //       (istiod's arrows through Istio's SPIFFE ID)
+//   (c) diagram tours — for a term with steps: chip count, every step lights
+//       something, no out-of-range or nested data-s, each click shows its own
+//       text and lit set, ArrowRight moves focus, no animation under reduced
+//       motion; badges must not cover a label
 //
 // Usage:
 //   node verify.mjs                  # every term
@@ -163,9 +167,13 @@ const PROBE = `(() => {
   const scale = vb.width ? frame.width / vb.width : 1;   // user units -> screen px
   const box = (el) => { const r = el.getBoundingClientRect(); return { x: r.left, r: r.right, y: r.top, bot: r.bottom }; };
 
+  // Badge numerals are part of the badge, not labels: a flow is meant to run
+  // under its badge. Icons count as labels, so a stroke must not cross one.
   const texts = [...svg.querySelectorAll('text')]
-    .filter((t) => t.textContent.trim())
+    .filter((t) => t.textContent.trim() && !t.closest('.badge'))
     .map((t) => Object.assign(box(t), { s: t.textContent.trim().slice(0, 44) }));
+  const icons = [...svg.querySelectorAll('.ico')].map((g) => Object.assign(box(g), { s: 'icon' }));
+  const badges = [...svg.querySelectorAll('.badge')].map((g) => Object.assign(box(g), { s: 'badge ' + g.textContent.trim() }));
 
   // Zone rects are background regions that labels legitimately straddle.
   const rects = [...svg.querySelectorAll('rect')]
@@ -180,7 +188,7 @@ const PROBE = `(() => {
   // The incursion is reported in user units: a label clipping a corner by a
   // pixel is font-metric noise, one buried 15px into a box is a real defect.
   const clearance = [];
-  for (const t of texts) for (const q of rects) {
+  for (const t of [...texts, ...icons, ...badges]) for (const q of rects) {
     const ox = Math.min(t.r, q.r) - Math.max(t.x, q.x);
     const oy = Math.min(t.bot, q.bot) - Math.max(t.y, q.y);
     if (ox <= 0 || oy <= 0) continue;
@@ -199,6 +207,7 @@ const PROBE = `(() => {
   const cushion = 2 * scale;
   const collisions = [];
   for (const el of svg.querySelectorAll('line, path')) {
+    if (el.closest('.ico, .badge')) continue;
     // stroke-bad is the decorative X struck over a broken primitive (pqc's
     // RSA/ECC, and 4 others). It is *meant* to sit on the label it cancels.
     if ((el.getAttribute('class') || '').includes('stroke-bad')) continue;
@@ -209,7 +218,7 @@ const PROBE = `(() => {
     for (let i = 0; i <= 200; i++) {
       const raw = el.getPointAtLength(len * i / 200);
       const p = new DOMPoint(raw.x, raw.y).matrixTransform(m);
-      for (const t of texts) {
+      for (const t of [...texts, ...icons]) {
         if (p.x > t.x + cushion && p.x < t.r - cushion && p.y > t.y + cushion && p.y < t.bot - cushion) {
           const cls = el.getAttribute('class') || '(no class)';
           const d = cls + ' ' + el.tagName + ' ' + (el.getAttribute('d') || (el.getAttribute('x1') + ',' + el.getAttribute('y1')));
@@ -226,7 +235,33 @@ const PROBE = `(() => {
     .filter((t) => t.x < frame.left - pad || t.r > frame.right + pad || t.y < frame.top - pad || t.bot > frame.bottom + pad)
     .map((t) => ({ text: t.s, x: Math.round((t.x - frame.left) / scale), right: Math.round((t.r - frame.left) / scale) }));
 
-  return { rendered: true, labels: texts.length, clearance, collisions, overflow };
+  // A badge sitting on a label hides it: overlap beyond the 2-unit cushion.
+  const badgeHits = [];
+  for (const b of badges) for (const t of [...texts, ...icons]) {
+    const ox = Math.min(b.r, t.r) - Math.max(b.x, t.x);
+    const oy = Math.min(b.bot, t.bot) - Math.max(b.y, t.y);
+    if (ox > 2 * scale && oy > 2 * scale) badgeHits.push({ badge: b.s, text: t.s });
+  }
+
+  return { rendered: true, labels: texts.length, clearance, collisions, overflow, badgeHits };
+})()`;
+
+// Reads the tour card's structure. Stepping is driven from Node (real clicks),
+// so this only reports what is in the DOM right now.
+const TOUR_PROBE = `(() => {
+  const fig = document.querySelector('#detail-content .tour');
+  if (!fig) return { card: false };
+  const tags = [...fig.querySelectorAll('svg.dg [data-s]')];
+  return {
+    card: true,
+    chips: fig.querySelectorAll('.tour-chip').length,
+    nums: tags.flatMap((el) => el.dataset.s.trim().split(/\\s+/).map(Number)),
+    nested: tags.filter((el) => el.parentElement.closest('[data-s]')).length,
+    lit: tags.map((el, i) => el.classList.contains('on') ? i : -1).filter((i) => i >= 0).join(','),
+    pressed: [...fig.querySelectorAll('.tour-chip[aria-pressed="true"]')].map((c) => c.dataset.step).join(','),
+    text: fig.querySelector('.tour-text').textContent,
+    focused: document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.step || '' : '',
+  };
 })()`;
 
 const tocIds = `(() => [...document.querySelectorAll('#toc [data-toc]')].map((e) => e.dataset.toc))()`;
@@ -277,6 +312,44 @@ for (const t of targets) {
   for (const c of found.clearance)  err("clearance", `${t.id}: "${c.text}" crosses ${c.rect} by ${c.by}px`);
   for (const c of found.collisions) err('collision', `${t.id}: ${c.stroke} passes through "${c.text}"`);
   for (const o of found.overflow)   err('overflow',  `${t.id}: "${o.text}" extends outside the viewBox (x ${o.x}..${o.right})`);
+  for (const b of found.badgeHits)  err('badge', `${t.id}: ${b.badge} covers "${b.text}"`);
+
+  if (t.steps) {
+    const n = t.steps.length;
+    const tour = await page.evaluate(TOUR_PROBE);
+    if (!tour.card) { err('tour', `${t.id}: has steps but no tour card rendered`); }
+    else {
+      if (tour.chips !== n) err('tour', `${t.id}: ${tour.chips} chips for ${n} steps`);
+      for (let k = 1; k <= n; k++) if (!tour.nums.includes(k)) err('tour', `${t.id}: step ${k} lights nothing`);
+      for (const x of new Set(tour.nums)) if (!(Number.isInteger(x) && x >= 1 && x <= n)) err('tour', `${t.id}: data-s names step ${x}, but there are ${n}`);
+      if (tour.nested) err('tour', `${t.id}: ${tour.nested} data-s element(s) nested inside another`);
+
+      // Drive every step with a real click; each must press its chip, show its
+      // own text, and light a different set from the step before.
+      let prevLit = null;
+      for (let k = 1; k <= n; k++) {
+        await page.click(`#detail-content .tour-chip[data-step="${k}"]`);
+        const s = await page.evaluate(TOUR_PROBE);
+        if (s.pressed !== String(k)) err('tour', `${t.id}: after clicking step ${k}, pressed chip is "${s.pressed}"`);
+        if (s.text !== t.steps[k - 1].text) err('tour', `${t.id}: step ${k} panel text does not match steps[${k - 1}].text`);
+        if (prevLit !== null && s.lit === prevLit) err('tour', `${t.id}: step ${k} lights the same elements as step ${k - 1}`);
+        prevLit = s.lit;
+      }
+
+      // Keyboard: from step 1, ArrowRight focuses and selects step 2.
+      await page.click('#detail-content .tour-chip[data-step="1"]');
+      await page.keyboard.press('ArrowRight');
+      const kb = await page.evaluate(TOUR_PROBE);
+      if (kb.focused !== '2' || kb.pressed !== '2') err('tour', `${t.id}: ArrowRight from step 1 gave focus "${kb.focused}", pressed "${kb.pressed}"`);
+
+      // Reduced motion: nothing may still be animating.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      const running = await page.evaluate(`document.getAnimations().length`);
+      if (running) err('tour', `${t.id}: ${running} animation(s) running under reduced motion`);
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+    }
+  }
+
   for (const c of consoleErrors)    err('console',   `${t.id}: ${c}`);
 }
 

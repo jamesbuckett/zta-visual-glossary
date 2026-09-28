@@ -52,13 +52,12 @@ const CASES = [
   ['two steps rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: "b" }], fact: "f"`), 'validate', 1, 'tour-data'],
   ['empty step text rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: " " }, { title: "C", text: "c" }], fact: "f"`), 'validate', 1, 'tour-data'],
   ['missing fact rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: "b" }, { title: "C", text: "c" }]`), 'validate', 1, 'tour-data'],
-  // Task 3 uncomments this one once icon()/badge() and the card exist.
-  // ['good tour verifies', withDiagram(withTour(base, GOOD_STEPS), svg()), 'verify', 0, null],
-  // Task 4 uncomments these four together with the checks that catch them.
-  // ['step that lights nothing', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '1' })), 'verify', 1, 'tour'],
-  // ['step number out of range', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '2 4' })), 'verify', 1, 'tour'],
-  // ['nested data-s', withDiagram(withTour(base, GOOD_STEPS), svg({ nestBadge: true })), 'verify', 1, 'tour'],
-  // ['badge over a label', withDiagram(withTour(base, GOOD_STEPS), svg({ badgeAt: '120, 90' })), 'verify', 1, 'badge'],
+  // Enabled by the Task 4 checks (tour stepping and badge/icon geometry).
+  ['good tour verifies', withDiagram(withTour(base, GOOD_STEPS), svg()), 'verify', 0, null],
+  ['step that lights nothing', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '1' })), 'verify', 1, 'tour'],
+  ['step number out of range', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '2 4' })), 'verify', 1, 'tour'],
+  ['nested data-s', withDiagram(withTour(base, GOOD_STEPS), svg({ nestBadge: true })), 'verify', 1, 'tour'],
+  ['badge over a label', withDiagram(withTour(base, GOOD_STEPS), svg({ badgeAt: '120, 90' })), 'verify', 1, 'badge'],
 ];
 
 // --emit <path>: write the good fixture page to disk for eyeballing, then stop.
