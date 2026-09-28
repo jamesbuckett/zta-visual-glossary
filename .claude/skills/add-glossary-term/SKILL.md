@@ -53,8 +53,11 @@ chips, and each diagram element that belongs to a step carries `data-s="1 3"`.
   attribute, which the `.dg text` rule silently overrides)
 - icons — `${icon('server', x, y)}`: a 24px Lucide icon at the top-left of a main box,
   with its label shifted right. Add a missing icon to `ICONS` from lucide-static.
-- badges — `${badge(n, x, y, 'n')}`: one numbered circle per step, on the element or
-  arrow that step centres on.
+- badges — `${badge(n, x, y, '1 3')}`: one numbered circle per step, on the element or
+  arrow that step centres on; the last argument lists the steps it lights, like `data-s`.
+
+Set `aria-label` to the caption text. Budget label widths at roughly 6.6px per character
+for the ~11px mono face.
 
 Rules: 3–5 steps; every step lights something; tag a component's `<g>`, never both a
 group and its children (no nested `data-s`); a flow may run under its badge, but a

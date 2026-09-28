@@ -42,11 +42,11 @@ tag-array and `DIAGRAMS` declarations still parse, so an edit that breaks the ar
 caught on the write rather than at `npm run glossary`. A project hook runs it after every
 `index.html` write, but it is still the gate before committing.
 
-`verify.mjs` is the rendered check: it opens each term's detail view in a headless browser
-and asserts the diagram appears, the counters match the data, no label sits across a box
-border, and no connector runs through a label. For a term with `steps` it also drives the
-diagram tour: every chip, the panel text, keyboard stepping and reduced motion. Pass term ids to narrow it
-(`npm run verify calico`).
+`verify.mjs` is the rendered check: it opens each term's detail view in a headless
+browser and asserts the diagram appears, the counters match the data, no label sits
+across a box border, and no connector runs through a label. For a term with `steps` it
+also drives the diagram tour: every chip, the panel text, keyboard stepping and reduced
+motion. Pass term ids to narrow it (`npm run verify calico`).
 
 The term count printed by `npm run glossary` is a free cross-check on the counters in
 step 4 of the skill.
