@@ -1285,7 +1285,7 @@
       steps: [
         { title: "Log in once", text: "The client authenticates once to a trusted Key Distribution Center (KDC), rather than sending its password to every service it uses." },
         { title: "Receive a TGT", text: "In return the client receives a Ticket-Granting Ticket (TGT), a time-limited, encrypted ticket. Tickets expire quickly and rely on synchronised clocks." },
-        { title: "Swap for a service ticket", text: "To reach a service, the client presents the TGT and exchanges it for a service ticket for that one service." },
+        { title: "Swap for a ticket", text: "To reach a service, the client presents the TGT and exchanges it for a service ticket for that one service." },
         { title: "Present the ticket", text: "The client presents the service ticket and the service verifies it. This ticket exchange is what makes single sign-on across a Windows domain possible." }
       ],
       fact: "The password never crosses the network."
@@ -1440,8 +1440,8 @@
       source: { label: "NVIDIA — What Is a DPU?", url: "https://blogs.nvidia.com/blog/whats-a-dpu-data-processing-unit/" },
       caption: "Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.",
       steps: [
-        { title: "Traffic hits the DPU first", text: "The DPU fuses a high-speed network interface with its own processor, so traffic passes through it before it ever reaches the host." },
-        { title: "Its own cores and OS", text: "Its general-purpose CPU cores, typically Arm, run their own operating system in a domain the host cannot see or control." },
+        { title: "Traffic hits DPU first", text: "The DPU fuses a high-speed network interface with its own processor, so traffic passes through it before it ever reaches the host." },
+        { title: "Own cores, own OS", text: "Its general-purpose CPU cores, typically Arm, run their own operating system in a domain the host cannot see or control." },
         { title: "Security on the card", text: "Security policy executes out-of-band on the card: microsegmentation, line-rate encryption, intrusion detection and the keys all live on the DPU." },
         { title: "Host compromised, policy holds", text: "An attacker who takes over the host cannot reach the enforcement they would want to disable, because it sits on a separate processor." }
       ],
@@ -1609,9 +1609,9 @@
       steps: [
         { title: "Financial entity", text: "DORA binds around twenty categories of regulated firm — banks, insurers, investment firms, trading venues — and, unusually, reaches their suppliers as well." },
         { title: "Register of information", text: "Each firm maintains a register of information describing every ICT service dependency and where it runs." },
-        { title: "ESAs supervise", text: "Under DORA, a firm's ability to keep operating through an ICT failure is a supervisory question. The register makes each ICT dependency visible to the supervisor." },
+        { title: "Supervisor sees the register", text: "The register makes each ICT dependency, and where it runs, visible to the supervisor." },
         { title: "Critical provider designated", text: "The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud and core-banking platforms." },
-        { title: "Lead Overseer reaches the provider", text: "Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. European financial regulators supervising hyperscalers had no precedent." }
+        { title: "Overseer reaches provider", text: "Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. European financial regulators supervising hyperscalers had no precedent." }
       ],
       fact: "Oversight buys visibility, not diversification."
     },
@@ -2959,8 +2959,8 @@
           <rect class="box" x="24" y="24" width="176" height="246" rx="12"/>
           ${icon('user', 40, 38)}
           <text class="t-b" x="72" y="56">Client</text>
-          <text class="t-sm t-mut" x="72" y="74">password stays</text>
-          <text class="t-sm t-mut" x="72" y="90">on the client</text>
+          <text class="t-sm t-mut" x="72" y="74">password is</text>
+          <text class="t-sm t-mut" x="72" y="90">never sent</text>
         </g>
         <g data-s="1 2 3">
           <rect class="box" x="508" y="24" width="188" height="166" rx="8"/>
@@ -3840,53 +3840,61 @@
       </svg>`,
 
     dora: () => `
-      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before — a Lead Overseer reaching past the regulated firm to the provider itself.">
-        <g data-s="3 4 5">
-          <rect class="box" x="24" y="16" width="276" height="64" rx="8"/>
+      <svg class="dg" viewBox="0 0 720 324" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before — a Lead Overseer reaching past the regulated firm to the provider itself.">
+        <g data-s="3">
+          <rect class="box" x="24" y="16" width="220" height="64" rx="8"/>
           ${icon('landmark', 40, 30)}
-          <text class="t-b" x="72" y="48">ESAs</text>
-          <text class="t-sm t-mut" x="72" y="66">European Supervisory Authorities</text>
+          <text class="t-b" x="72" y="48">Supervisor</text>
+          <text class="t-sm t-mut" x="72" y="66">competent authority</text>
+        </g>
+        <g data-s="4 5">
+          <rect class="box" x="420" y="16" width="276" height="64" rx="8"/>
+          ${icon('landmark', 436, 30)}
+          <text class="t-b" x="468" y="48">ESAs</text>
+          <text class="t-sm t-mut" x="468" y="66">European Supervisory Authorities</text>
         </g>
         <g data-s="2 3">
-          <rect class="box" x="100" y="124" width="300" height="64" rx="8"/>
-          ${icon('file-text', 116, 138)}
-          <text class="t-b" x="148" y="156">Register of information</text>
-          <text class="t-sm t-mut" x="148" y="174">every ICT dependency</text>
+          <rect class="box" x="90" y="132" width="250" height="64" rx="8"/>
+          ${icon('file-text', 106, 146)}
+          <text class="t-b" x="138" y="164">Register of information</text>
+          <text class="t-sm t-mut" x="138" y="182">every ICT dependency</text>
         </g>
         <g data-s="1 2">
-          <rect class="box" x="24" y="236" width="220" height="64" rx="12"/>
-          ${icon('building-2', 40, 250)}
-          <text class="t-b" x="72" y="268">Financial entity</text>
-          <text class="t-sm t-mut" x="72" y="286">e.g. a bank or insurer</text>
+          <rect class="box" x="24" y="244" width="220" height="64" rx="12"/>
+          ${icon('building-2', 40, 258)}
+          <text class="t-b" x="72" y="276">Financial entity</text>
+          <text class="t-sm t-mut" x="72" y="294">e.g. a bank or insurer</text>
         </g>
         <g data-s="1 4 5">
-          <rect class="box" x="456" y="236" width="240" height="64" rx="8"/>
-          ${icon('cloud', 472, 250)}
-          <text class="t-b" x="504" y="268">ICT third party</text>
-          <text class="t-sm t-mut" x="504" y="286">cloud or core banking</text>
+          <rect class="box" x="456" y="244" width="240" height="64" rx="8"/>
+          ${icon('cloud', 472, 258)}
+          <text class="t-b" x="504" y="276">ICT third party</text>
+          <text class="t-sm t-mut" x="504" y="294">cloud or core banking</text>
         </g>
 
-        <line class="flow" data-s="1" x1="244" y1="268" x2="454" y2="268" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="261" text-anchor="middle">ICT services</text>
+        <line class="flow" data-s="1" x1="244" y1="276" x2="454" y2="276" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="352" y="269" text-anchor="middle">uses ICT services</text>
 
-        <line class="flow" data-s="2" x1="200" y1="236" x2="200" y2="190" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="216" y="217">maintains</text>
+        <line class="flow" data-s="2" x1="200" y1="244" x2="200" y2="198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="218" y="225">maintains</text>
 
-        <line class="flow" data-s="3" x1="200" y1="124" x2="200" y2="82" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="212" y="107">visible to the supervisor</text>
-        <line class="flow" data-s="3" x1="60" y1="80" x2="60" y2="234" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="70" y="107">supervises</text>
+        <line class="flow" data-s="3" x1="200" y1="132" x2="200" y2="82" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="218" y="111">visible to the supervisor</text>
+        <line class="flow" data-s="3" x1="60" y1="80" x2="60" y2="242" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="70" y="111">supervises</text>
 
-        <path class="flow" data-s="4" d="M300 32 H650 V234" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="475" y="25" text-anchor="middle">designates as critical</text>
-        <path class="flow-accent" data-s="5" d="M300 62 H570 V234" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b t-acc" data-s="5" x="450" y="55" text-anchor="middle">Lead Overseer inspects directly</text>
+        <line class="flow" data-s="4" x1="640" y1="80" x2="640" y2="242" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="628" y="152" text-anchor="end">designates</text>
+        <text class="t-sm" data-s="4" x="628" y="168" text-anchor="end">as critical</text>
+        <line class="flow-accent" data-s="5" x1="480" y1="80" x2="480" y2="242" marker-end="url(#ah-acc)"/>
+        <text class="t-sm t-b t-acc" data-s="5" x="468" y="152" text-anchor="end">Lead Overseer</text>
+        <text class="t-sm t-b t-acc" data-s="5" x="468" y="168" text-anchor="end">inspects directly</text>
 
-        ${badge(1, 272, 268, '1')}
-        ${badge(2, 200, 213, '2')}
-        ${badge(3, 60, 170, '3')}
-        ${badge(4, 326, 32, '4')}
-        ${badge(5, 326, 62, '5')}
+        ${badge(1, 270, 276, '1')}
+        ${badge(2, 200, 221, '2')}
+        ${badge(3, 200, 107, '3')}
+        ${badge(4, 640, 112, '4')}
+        ${badge(5, 480, 112, '5')}
       </svg>`,
 
     fapi: () => `

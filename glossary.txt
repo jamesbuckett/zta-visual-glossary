@@ -93,9 +93,9 @@ DORA — Digital Operational Resilience Act
     [Security Technology] · aka Digital Operational Resilience Act, Regulation (EU) 2022/2554, 2022/2554, operational resilience, ICT risk management, TLPT, threat-led penetration testing, TIBER-EU, register of information, CTPP, critical ICT third-party provider, Lead Overseer, ESAs
     1. Financial entity — DORA binds around twenty categories of regulated firm — banks, insurers, investment firms, trading venues — and, unusually, reaches their suppliers as well.
     2. Register of information — Each firm maintains a register of information describing every ICT service dependency and where it runs.
-    3. ESAs supervise — Under DORA, a firm's ability to keep operating through an ICT failure is a supervisory question. The register makes each ICT dependency visible to the supervisor.
+    3. Supervisor sees the register — The register makes each ICT dependency, and where it runs, visible to the supervisor.
     4. Critical provider designated — The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud and core-banking platforms.
-    5. Lead Overseer reaches the provider — Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. European financial regulators supervising hyperscalers had no precedent.
+    5. Overseer reaches provider — Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. European financial regulators supervising hyperscalers had no precedent.
     Key fact: Oversight buys visibility, not diversification.
 
 DPO — Direct Preference Optimization
@@ -105,8 +105,8 @@ DPO — Direct Preference Optimization
 DPU — Data Processing Unit
     A programmable processor on the network card that offloads networking, storage, and security from the host — and runs them in its own isolated trust domain.
     [Network Technology, Security Technology] · aka data processing unit, SmartNIC, infrastructure processor, IPU, infrastructure processing unit
-    1. Traffic hits the DPU first — The DPU fuses a high-speed network interface with its own processor, so traffic passes through it before it ever reaches the host.
-    2. Its own cores and OS — Its general-purpose CPU cores, typically Arm, run their own operating system in a domain the host cannot see or control.
+    1. Traffic hits DPU first — The DPU fuses a high-speed network interface with its own processor, so traffic passes through it before it ever reaches the host.
+    2. Own cores, own OS — Its general-purpose CPU cores, typically Arm, run their own operating system in a domain the host cannot see or control.
     3. Security on the card — Security policy executes out-of-band on the card: microsegmentation, line-rate encryption, intrusion detection and the keys all live on the DPU.
     4. Host compromised, policy holds — An attacker who takes over the host cannot reach the enforcement they would want to disable, because it sits on a separate processor.
     Key fact: Even if the host OS is completely compromised, the enforcement on the DPU stays intact.
@@ -176,7 +176,7 @@ Kerberos — Kerberos Authentication Protocol
     [Protocol, Security Technology] · aka KDC, ticket-granting ticket, TGT, service principal, SPN, single sign-on
     1. Log in once — The client authenticates once to a trusted Key Distribution Center (KDC), rather than sending its password to every service it uses.
     2. Receive a TGT — In return the client receives a Ticket-Granting Ticket (TGT), a time-limited, encrypted ticket. Tickets expire quickly and rely on synchronised clocks.
-    3. Swap for a service ticket — To reach a service, the client presents the TGT and exchanges it for a service ticket for that one service.
+    3. Swap for a ticket — To reach a service, the client presents the TGT and exchanges it for a service ticket for that one service.
     4. Present the ticket — The client presents the service ticket and the service verifies it. This ticket exchange is what makes single sign-on across a Windows domain possible.
     Key fact: The password never crosses the network.
 

@@ -735,11 +735,11 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 | id | steps (titles) | fact (from explainer) | icons |
 |---|---|---|---|
-| kerberos | Log in once · Receive a TGT · Swap for a service ticket · Present the ticket | The password never crosses the network. | user, key-round, server |
+| kerberos | Log in once · Receive a TGT · Swap for a ticket · Present the ticket | The password never crosses the network. | user, key-round, server |
 | pki | Trusted root · Intermediate CA · Server certificate · Walk the chain | Get the root of trust wrong and everything built on it is compromised. | shield-check, file-badge, globe |
 | rbac | RBAC: user to role · RBAC: role to permissions · ABAC: four attributes · Policy engine decides | Zero Trust leans toward ABAC because trust should depend on live context, not a static role. | user, users, list-checks, scale |
-| dpu | Traffic hits the DPU first · Its own cores and OS · Security on the card · Host compromised, policy holds | Even if the host OS is completely compromised, the enforcement on the DPU stays intact. | network, cpu, shield, server |
-| dora | Financial entity · Register of information · ESAs supervise · Critical provider designated · Lead Overseer reaches the provider | Oversight buys visibility, not diversification. | building-2, file-text, landmark, cloud |
+| dpu | Traffic hits DPU first · Own cores, own OS · Security on the card · Host compromised, policy holds | Even if the host OS is completely compromised, the enforcement on the DPU stays intact. | network, cpu, shield, server |
+| dora | Financial entity · Register of information · Supervisor sees the register · Critical provider designated · Overseer reaches provider | Oversight buys visibility, not diversification. | building-2, file-text, landmark, cloud |
 
 For each of the five terms, in this order (kerberos, pki, rbac, dpu, dora):
 
