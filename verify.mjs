@@ -176,7 +176,10 @@ const PROBE = `(() => {
   const badges = [...svg.querySelectorAll('.badge')].map((g) => Object.assign(box(g), { s: 'badge ' + g.textContent.trim() }));
 
   // Zone rects are background regions that labels legitimately straddle.
+  // An icon's own <rect> strokes (server, cpu, network) are part of the icon,
+  // not boxes, and would otherwise report the icon as crossing itself.
   const rects = [...svg.querySelectorAll('rect')]
+    .filter((r) => !r.closest('.ico'))
     .filter((r) => !/zone/.test(r.getAttribute('class') || ''))
     .filter((r) => r.getAttribute('width') && r.getAttribute('height'))
     .map((r) => Object.assign(box(r), {
