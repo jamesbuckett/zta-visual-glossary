@@ -91,6 +91,12 @@ Docker — Docker containers
 DORA — Digital Operational Resilience Act
     The EU regulation that makes surviving an IT failure a supervisory matter for financial firms — and, for the first time, lets European regulators oversee the cloud providers those firms depend on.
     [Security Technology] · aka Digital Operational Resilience Act, Regulation (EU) 2022/2554, 2022/2554, operational resilience, ICT risk management, TLPT, threat-led penetration testing, TIBER-EU, register of information, CTPP, critical ICT third-party provider, Lead Overseer, ESAs
+    1. Financial entity — DORA binds around twenty categories of regulated firm — banks, insurers, investment firms, trading venues — and, unusually, reaches their suppliers as well.
+    2. Register of information — Each firm maintains a register of information describing every ICT service dependency and where it runs.
+    3. ESAs supervise — Under DORA, a firm's ability to keep operating through an ICT failure is a supervisory question. The register makes each ICT dependency visible to the supervisor.
+    4. Critical provider designated — The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud and core-banking platforms.
+    5. Lead Overseer reaches the provider — Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. European financial regulators supervising hyperscalers had no precedent.
+    Key fact: Oversight buys visibility, not diversification.
 
 DPO — Direct Preference Optimization
     RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.
@@ -99,6 +105,11 @@ DPO — Direct Preference Optimization
 DPU — Data Processing Unit
     A programmable processor on the network card that offloads networking, storage, and security from the host — and runs them in its own isolated trust domain.
     [Network Technology, Security Technology] · aka data processing unit, SmartNIC, infrastructure processor, IPU, infrastructure processing unit
+    1. Traffic hits the DPU first — The DPU fuses a high-speed network interface with its own processor, so traffic passes through it before it ever reaches the host.
+    2. Its own cores and OS — Its general-purpose CPU cores, typically Arm, run their own operating system in a domain the host cannot see or control.
+    3. Security on the card — Security policy executes out-of-band on the card: microsegmentation, line-rate encryption, intrusion detection and the keys all live on the DPU.
+    4. Host compromised, policy holds — An attacker who takes over the host cannot reach the enforcement they would want to disable, because it sits on a separate processor.
+    Key fact: Even if the host OS is completely compromised, the enforcement on the DPU stays intact.
 
 eBPF — extended Berkeley Packet Filter
     Sandboxed programs that run inside the Linux kernel at defined hook points, extending what it does without patching it or loading a module.
@@ -163,6 +174,11 @@ KEDA — Kubernetes Event-driven Autoscaling
 Kerberos — Kerberos Authentication Protocol
     Ticket-based authentication that proves identity without sending passwords over the wire.
     [Protocol, Security Technology] · aka KDC, ticket-granting ticket, TGT, service principal, SPN, single sign-on
+    1. Log in once — The client authenticates once to a trusted Key Distribution Center (KDC), rather than sending its password to every service it uses.
+    2. Receive a TGT — In return the client receives a Ticket-Granting Ticket (TGT), a time-limited, encrypted ticket. Tickets expire quickly and rely on synchronised clocks.
+    3. Swap for a service ticket — To reach a service, the client presents the TGT and exchanges it for a service ticket for that one service.
+    4. Present the ticket — The client presents the service ticket and the service verifies it. This ticket exchange is what makes single sign-on across a Windows domain possible.
+    Key fact: The password never crosses the network.
 
 Kubernetes — Kubernetes (K8s)
     Automates deploying, scaling, and healing containerized apps across machines.
@@ -263,6 +279,11 @@ PKCE — Proof Key for Code Exchange
 PKI — Public Key Infrastructure
     The certificate-and-trust system that lets you prove who owns a public key.
     [Security Technology] · aka certificate authority, CA, X.509, root of trust, certificate chain, ACME
+    1. Trusted root — PKI binds a public key to an identity. Trust starts at a root Certificate Authority (CA) that the client already trusts.
+    2. Intermediate CA — The root CA signs the intermediate CA's X.509 certificate, vouching that its key belongs to its name.
+    3. Server certificate — The intermediate CA in turn signs the server's certificate, binding the server's public key to its name.
+    4. Walk the chain — The client verifies each signature and walks the chain up to the root it already trusts. Every padlock in a browser is a PKI trust decision.
+    Key fact: Get the root of trust wrong and everything built on it is compromised.
 
 Post-Quantum Cryptography — Post-Quantum Cryptography (PQC)
     New algorithms designed to survive attack by a large quantum computer.
@@ -287,6 +308,11 @@ RAG — Retrieval-Augmented Generation
 RBAC & ABAC — Role- / Attribute-Based Access Control
     Two models for deciding who may do what — by role, or by attributes and context.
     [Security Technology] · aka role-based access control, attribute-based access control, authorization, least privilege, entitlements
+    1. RBAC: user to role — Role-Based Access Control assigns people to roles, such as billing-admin or read-only-auditor.
+    2. RBAC: role to permissions — Each role groups a set of permissions. That is simple to reason about, but coarse and prone to role explosion.
+    3. ABAC: four attributes — Attribute-Based Access Control evaluates rules over attributes of the subject, the resource, the action and the environment.
+    4. Policy engine decides — A policy engine evaluates these rules at the decision point for every request, giving a fine-grained, context-aware decision.
+    Key fact: Zero Trust leans toward ABAC because trust should depend on live context, not a static role.
 
 React — React (UI library)
     A JavaScript library for building user interfaces from composable components.
