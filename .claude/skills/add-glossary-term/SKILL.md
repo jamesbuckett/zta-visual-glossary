@@ -43,7 +43,8 @@ shared grammar rather than new classes:
 - shapes — `box`, `box-accent`, `zone-accent`
 - flows — `flow`, `flow-accent`, `flow-ok`, `flow-bad`
 - arrowheads — `ah-acc`, `ah-ok`, `ah-bad`, `ah-mut`
-- text — `t-b`, `t-sm`, `t-mut`
+- text — `t-b`, `t-sm`, `t-mut`, `t-acc` (accent — never a `fill="var(--accent)"`
+  attribute, which the `.dg text` rule silently overrides)
 
 Set `aria-label` to the caption text. Budget label widths at roughly 6.6px per character
 for the ~11px mono face.

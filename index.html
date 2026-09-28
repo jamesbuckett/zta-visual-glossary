@@ -28,6 +28,7 @@
       --accent: #2563EB;
       --accent-hover: color-mix(in srgb, var(--accent) 88%, black);
       --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--bg));
+      --accent-text: var(--accent);
 
       /* Genuine state colours (allow/deny, secure/insecure) — NOT brand. */
       --state-ok: #16A34A;
@@ -96,6 +97,7 @@
       --border: #27272A;
       --border-strong: #3F3F46;
       --accent-soft: color-mix(in srgb, var(--accent) 18%, var(--bg));
+      --accent-text: color-mix(in srgb, var(--accent) 70%, white);
       --state-ok: #4ADE80;
       --state-bad: #F87171;
       --state-warn: #FACC15;
@@ -447,6 +449,7 @@
     .dg .t-mut { fill: var(--text-muted); }
     .dg .t-on { fill: #fff; }
     .dg .t-b { font-weight: 700; }
+    .dg .t-acc { fill: var(--accent-text); }
     .dg .box { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; }
     .dg .box-soft { fill: color-mix(in srgb, currentColor 5%, var(--surface)); stroke: var(--border-strong); stroke-width: 1.5; }
     .dg .box-accent { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
@@ -1708,7 +1711,7 @@
         <text class="t-b" x="605" y="110" text-anchor="middle">Server</text>
         <text class="t-sm t-mut" x="605" y="130" text-anchor="middle">origin</text>
         <rect class="zone-accent" x="215" y="55" width="290" height="120" rx="10"/>
-        <text class="t-sm" x="360" y="48" text-anchor="middle" fill="var(--accent)">HTTPS = TLS-encrypted channel</text>
+        <text class="t-sm t-acc" x="360" y="48" text-anchor="middle">HTTPS = TLS-encrypted channel</text>
         <line class="flow" x1="195" y1="100" x2="525" y2="100" marker-end="url(#ah-mut)"/>
         <text class="t-sm" x="360" y="93" text-anchor="middle">GET /index.html</text>
         <line class="flow-accent" x1="525" y1="135" x2="195" y2="135" marker-end="url(#ah-acc)"/>
@@ -1731,7 +1734,7 @@
           <text class="t-sm" x="360" y="${y-8}" text-anchor="middle">${t}</text>
         `).join("")}
         <rect class="zone-accent" x="150" y="215" width="420" height="70" rx="8"/>
-        <text class="t-b t-sm" x="360" y="243" text-anchor="middle" fill="var(--accent)">Encrypted application data</text>
+        <text class="t-b t-sm t-acc" x="360" y="243" text-anchor="middle">Encrypted application data</text>
         <text class="t-sm t-mut" x="360" y="265" text-anchor="middle">fast symmetric session keys, both directions</text>
       </svg>`,
 
@@ -1788,7 +1791,7 @@
         <line class="flow-accent" x1="437" y1="72" x2="528" y2="126" marker-end="url(#ah-acc)"/>
         <line class="flow" x1="190" y1="152" x2="283" y2="204" marker-end="url(#ah-mut)"/>
         <line class="flow" x1="437" y1="210" x2="528" y2="154" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-b" x="360" y="26" text-anchor="middle" fill="var(--accent)">selected path (by policy)</text>
+        <text class="t-sm t-b t-acc" x="360" y="26" text-anchor="middle">selected path (by policy)</text>
         <text class="t-sm t-mut" x="360" y="272" text-anchor="middle">an alternate path also exists</text>
       </svg>`,
 
@@ -1806,7 +1809,7 @@
         <text class="t-b" x="620" y="114" text-anchor="middle">Internet</text>
         <text class="t-sm t-mut" x="620" y="134" text-anchor="middle">sees one address</text>
         <line class="flow-accent" x1="440" y1="118" x2="538" y2="118" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="489" y="108" text-anchor="middle" fill="var(--accent)">203.0.113.9</text>
+        <text class="t-sm t-b t-acc" x="489" y="108" text-anchor="middle">203.0.113.9</text>
         <rect class="box-soft" x="150" y="210" width="420" height="50" rx="8"/>
         <text class="t-sm" x="360" y="232" text-anchor="middle">10.0.0.5:5000  →  203.0.113.9:40001</text>
         <text class="t-sm t-mut" x="360" y="250" text-anchor="middle">the table maps each reply back to its host</text>
@@ -1827,10 +1830,10 @@
         <line class="flow" x1="170" y1="140" x2="248" y2="74" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="168" y="98" text-anchor="middle">log in</text>
         <line class="flow-accent" x1="365" y1="90" x2="365" y2="148" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="430" y="124" text-anchor="middle" fill="var(--accent)">access token</text>
+        <text class="t-sm t-b t-acc" x="430" y="124" text-anchor="middle">access token</text>
         <line class="flow-accent" x1="470" y1="178" x2="600" y2="184" marker-end="url(#ah-acc)"/>
         <line class="flow-accent" x1="600" y1="184" x2="600" y2="184" />
-        <text class="t-sm t-b" x="540" y="205" text-anchor="middle" fill="var(--accent)">call + token</text>
+        <text class="t-sm t-b t-acc" x="540" y="205" text-anchor="middle">call + token</text>
         <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">the app acts on your behalf — it never sees your password</text>
       </svg>`,
 
@@ -1842,7 +1845,7 @@
         <rect class="zone" x="205" y="66" width="300" height="120" rx="10"/>
         <text class="t-sm t-mut" x="355" y="180" text-anchor="middle">untrusted public internet</text>
         <line class="flow-accent" x1="180" y1="128" x2="540" y2="128" marker-end="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b" x="355" y="118" text-anchor="middle" fill="var(--accent)">encrypted tunnel</text>
+        <text class="t-sm t-b t-acc" x="355" y="118" text-anchor="middle">encrypted tunnel</text>
         <rect class="box-accent" x="540" y="100" width="150" height="64" rx="10"/>
         <text class="t-b" x="615" y="128" text-anchor="middle">VPN gateway</text>
         <text class="t-sm t-mut" x="615" y="146" text-anchor="middle">decrypts here</text>
@@ -1862,7 +1865,7 @@
         <line class="flow-accent" x1="240" y1="103" x2="480" y2="103" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
         <rect class="fill-accent" x="350" y="92" width="20" height="22" rx="3"/>
         <path d="M354 92 v-5 a6 6 0 0 1 12 0 v5" fill="none" stroke="var(--accent)" stroke-width="2"/>
-        <text class="t-sm t-b" x="360" y="66" text-anchor="middle" fill="var(--accent)">encrypted tunnel</text>
+        <text class="t-sm t-b t-acc" x="360" y="66" text-anchor="middle">encrypted tunnel</text>
         <text class="t-sm t-mut" x="360" y="180" text-anchor="middle">tiny codebase, fast handshake — no certificates needed</text>
       </svg>`,
 
@@ -1980,7 +1983,7 @@
         <line class="flow" x1="390" y1="80" x2="505" y2="128" marker-end="url(#ah-mut)"/>
         <line class="flow" x1="495" y1="184" x2="450" y2="222" marker-end="url(#ah-mut)"/>
         <line class="flow" x1="540" y1="184" x2="585" y2="222" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-b" x="360" y="112" text-anchor="middle" fill="var(--accent)">props ↓</text>
+        <text class="t-sm t-b t-acc" x="360" y="112" text-anchor="middle">props ↓</text>
         <text class="t-sm t-mut" x="180" y="262" text-anchor="middle">state change re-renders the tree</text>
       </svg>`,
 
@@ -2022,7 +2025,7 @@
         <text class="t-b" x="135" y="195" text-anchor="middle">Client stub</text>
         <rect class="box" x="490" y="150" width="190" height="80" rx="12"/>
         <text class="t-b" x="585" y="195" text-anchor="middle">Server stub</text>
-        <text class="t-sm t-b" x="360" y="176" text-anchor="middle" fill="var(--accent)">over HTTP/2</text>
+        <text class="t-sm t-b t-acc" x="360" y="176" text-anchor="middle">over HTTP/2</text>
         <line class="flow-accent" x1="230" y1="186" x2="490" y2="186" marker-end="url(#ah-acc)"/>
         <line class="flow" x1="490" y1="210" x2="230" y2="210" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="360" y="206" text-anchor="middle">request</text>
@@ -2045,7 +2048,7 @@
           <line class="flow-accent" x1="450" y1="${y < 90 ? 110 : 150}" x2="538" y2="${y + 28}" marker-end="url(#ah-acc)"/>
         `).join("")}
         <text class="t-sm t-mut" x="180" y="222" text-anchor="middle">publish</text>
-        <text class="t-sm t-b" x="540" y="222" text-anchor="middle" fill="var(--accent)">subscribe</text>
+        <text class="t-sm t-b t-acc" x="540" y="222" text-anchor="middle">subscribe</text>
       </svg>`,
 
     ssh: () => `
@@ -2063,7 +2066,7 @@
         <line class="flow-accent" x1="150" y1="212" x2="570" y2="212" marker-end="url(#ah-acc)"/>
         <text class="t-sm" x="360" y="204" text-anchor="middle">signed proof over session ID — no password sent</text>
         <rect class="zone-accent" x="150" y="228" width="420" height="44" rx="8"/>
-        <text class="t-b t-sm" x="360" y="248" text-anchor="middle" fill="var(--accent)">Authenticated session</text>
+        <text class="t-b t-sm t-acc" x="360" y="248" text-anchor="middle">Authenticated session</text>
         <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">shell · file transfer · port forwarding</text>
       </svg>`,
 
@@ -2095,7 +2098,7 @@
         <line class="flow" x1="400" y1="128" x2="518" y2="128" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="459" y="118" text-anchor="middle">redirect to log in</text>
         <line class="flow-accent" x1="518" y1="154" x2="400" y2="154" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="459" y="186" text-anchor="middle" fill="var(--accent)">signed assertion</text>
+        <text class="t-sm t-b t-acc" x="459" y="186" text-anchor="middle">signed assertion</text>
         <text class="t-sm t-mut" x="360" y="244" text-anchor="middle">log in once; the SP trusts the IdP's signature</text>
       </svg>`,
 
@@ -2115,7 +2118,7 @@
         <line class="flow" x1="415" y1="122" x2="538" y2="122" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="476" y="112" text-anchor="middle">Access-Request</text>
         <line class="flow-accent" x1="538" y1="148" x2="415" y2="148" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="476" y="178" text-anchor="middle" fill="var(--accent)">Accept / Reject</text>
+        <text class="t-sm t-b t-acc" x="476" y="178" text-anchor="middle">Accept / Reject</text>
         <text class="t-sm t-mut" x="360" y="234" text-anchor="middle">authentication · authorization · accounting (AAA)</text>
       </svg>`,
 
@@ -2131,7 +2134,7 @@
         <text class="t-sm" x="640" y="92" text-anchor="middle">Site B LAN</text>
         <line class="flow" x1="140" y1="86" x2="163" y2="86" marker-end="url(#ah-mut)"/>
         <line class="flow-accent" x1="275" y1="86" x2="445" y2="86" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b" x="360" y="76" text-anchor="middle" fill="var(--accent)">encrypted ESP tunnel</text>
+        <text class="t-sm t-b t-acc" x="360" y="76" text-anchor="middle">encrypted ESP tunnel</text>
         <line class="flow" x1="555" y1="86" x2="578" y2="86" marker-end="url(#ah-mut)"/>
         <rect class="box" x="150" y="186" width="120" height="46" rx="6"/>
         <text class="t-sm" x="210" y="214" text-anchor="middle">new IP hdr</text>
@@ -2155,7 +2158,7 @@
         <line class="flow-accent" x1="150" y1="176" x2="570" y2="176" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
         <text class="t-sm" x="360" y="168" text-anchor="middle">each verifies the other's certificate</text>
         <rect class="zone-accent" x="150" y="206" width="420" height="60" rx="8"/>
-        <text class="t-b t-sm" x="360" y="232" text-anchor="middle" fill="var(--accent)">Mutually authenticated channel</text>
+        <text class="t-b t-sm t-acc" x="360" y="232" text-anchor="middle">Mutually authenticated channel</text>
         <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">two-way identity, no passwords</text>
       </svg>`,
 
@@ -2172,9 +2175,9 @@
         <text class="t-sm t-mut" x="430" y="224" text-anchor="middle">holds an SVID</text>
         <line class="flow-accent" x1="210" y1="118" x2="338" y2="76" marker-end="url(#ah-acc)"/>
         <line class="flow-accent" x1="210" y1="162" x2="338" y2="206" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="252" y="96" text-anchor="middle" fill="var(--accent)">SVID</text>
+        <text class="t-sm t-b t-acc" x="252" y="96" text-anchor="middle">SVID</text>
         <line class="flow-accent" x1="430" y1="106" x2="430" y2="174" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b" x="470" y="144" fill="var(--accent)">mTLS</text>
+        <text class="t-sm t-b t-acc" x="470" y="144">mTLS</text>
         <text class="t-sm t-mut" x="120" y="214" text-anchor="middle">short-lived</text>
       </svg>`,
 
@@ -2211,7 +2214,7 @@
         <line class="flow" x1="270" y1="112" x2="270" y2="90" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="235" y="104" text-anchor="end">evaluate</text>
         <line class="flow-accent" x1="312" y1="90" x2="312" y2="112" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="345" y="104" fill="var(--accent)">allow / deny</text>
+        <text class="t-sm t-b t-acc" x="345" y="104">allow / deny</text>
         <line class="flow-ok" x1="370" y1="152" x2="558" y2="152" marker-end="url(#ah-ok)"/>
         <text class="t-sm" x="464" y="142" text-anchor="middle" fill="var(--state-ok)">if allowed</text>
         <text class="t-sm t-mut" x="360" y="248" text-anchor="middle">one central policy brain, many enforcement points</text>
@@ -2231,7 +2234,7 @@
           <text x="605" y="${y + 32}" text-anchor="middle">${t}</text>
           <line class="flow-accent" x1="430" y1="140" x2="518" y2="${y + 27}" marker-end="url(#ah-acc)"/>
         `).join("")}
-        <text class="t-sm t-b" x="474" y="${"72"}" text-anchor="middle" fill="var(--accent)">token</text>
+        <text class="t-sm t-b t-acc" x="474" y="${"72"}" text-anchor="middle">token</text>
         <text class="t-sm t-mut" x="340" y="214" text-anchor="middle">every app trusts the IdP</text>
       </svg>`,
 
@@ -2269,7 +2272,7 @@
         <text class="t-sm t-b" x="625" y="138" text-anchor="middle">HQ / cloud</text>
         <line class="flow-accent" x1="360" y1="74" x2="360" y2="106" marker-end="url(#ah-acc)" style="stroke-dasharray:4 4"/>
         <line class="flow-accent" x1="170" y1="122" x2="550" y2="122" style="stroke-width:2.5"/>
-        <text class="t-sm t-b" x="360" y="116" text-anchor="middle" fill="var(--accent)">MPLS — selected path</text>
+        <text class="t-sm t-b t-acc" x="360" y="116" text-anchor="middle">MPLS — selected path</text>
         <line class="flow" x1="170" y1="148" x2="550" y2="148"/>
         <text class="t-sm t-mut" x="360" y="142" text-anchor="middle">broadband</text>
         <line class="flow" x1="170" y1="174" x2="550" y2="174"/>
@@ -2293,7 +2296,7 @@
         <text class="t-sm t-b" x="620" y="142" text-anchor="middle">SOC analyst</text>
         <text class="t-sm t-mut" x="620" y="162" text-anchor="middle">investigate</text>
         <line class="flow-accent" x1="460" y1="145" x2="538" y2="145" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="499" y="135" text-anchor="middle" fill="var(--accent)">alerts</text>
+        <text class="t-sm t-b t-acc" x="499" y="135" text-anchor="middle">alerts</text>
         <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">prioritised alerts from correlated events</text>
       </svg>`,
 
@@ -2312,7 +2315,7 @@
         `).join("")}
         <text class="t-sm t-mut" x="360" y="158" text-anchor="middle">One round trip to first byte (0-RTT on resume)</text>
         <rect class="zone-accent" x="150" y="172" width="420" height="78" rx="8"/>
-        <text class="t-b t-sm" x="360" y="194" text-anchor="middle" fill="var(--accent)">Encrypted, multiplexed streams</text>
+        <text class="t-b t-sm t-acc" x="360" y="194" text-anchor="middle">Encrypted, multiplexed streams</text>
         ${[209, 223, 237].map((y) => `<line class="flow-accent" x1="180" y1="${y}" x2="540" y2="${y}" marker-end="url(#ah-acc)"/>`).join("")}
         <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">Runs over UDP — a lost packet stalls only its own stream.</text>
       </svg>`,
@@ -2369,7 +2372,7 @@
         <text class="t-b t-sm" x="318" y="73">Access token</text>
         <text class="t-sm t-mut" x="318" y="91">opaque — authorises calls to the resource API</text>
         <rect class="box-accent" x="300" y="126" width="384" height="80" rx="10"/>
-        <text class="t-b t-sm" x="318" y="151" fill="var(--accent)">ID Token — a signed JWT</text>
+        <text class="t-b t-sm t-acc" x="318" y="151">ID Token — a signed JWT</text>
         <text class="t-sm t-mut" x="318" y="171">claims: sub (who) · iss (issuer) · aud (audience)</text>
         <text class="t-sm t-mut" x="318" y="190">+ UserInfo endpoint for profile details</text>
         <line class="flow" x1="186" y1="120" x2="298" y2="78" marker-end="url(#ah-mut)"/>
@@ -2392,7 +2395,7 @@
         `).join("")}
         <text class="t-sm t-mut" x="360" y="150" text-anchor="middle">Same TCP socket, now upgraded</text>
         <rect class="zone-accent" x="150" y="162" width="420" height="74" rx="8"/>
-        <text class="t-b t-sm" x="360" y="184" text-anchor="middle" fill="var(--accent)">Full-duplex frame stream</text>
+        <text class="t-b t-sm t-acc" x="360" y="184" text-anchor="middle">Full-duplex frame stream</text>
         <line class="flow-accent" x1="174" y1="206" x2="546" y2="206" marker-end="url(#ah-acc)"/>
         <line class="flow-accent" x1="546" y1="224" x2="174" y2="224" marker-end="url(#ah-acc)"/>
         <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Either side sends at any time — no request/response turn-taking.</text>
@@ -2403,7 +2406,7 @@
         <text class="t-b" x="80" y="28" text-anchor="middle">Browser</text>
         <text class="t-b" x="640" y="28" text-anchor="middle">Server</text>
         <rect class="zone-accent" x="40" y="44" width="640" height="142" rx="10"/>
-        <text class="t-b t-sm" x="360" y="68" text-anchor="middle" fill="var(--accent)">One HTTP/3 connection — QUIC over UDP</text>
+        <text class="t-b t-sm t-acc" x="360" y="68" text-anchor="middle">One HTTP/3 connection — QUIC over UDP</text>
         ${[104, 124, 144].map((y) => `<line class="flow-accent" x1="120" y1="${y}" x2="600" y2="${y}" marker-end="url(#ah-acc)"/>`).join("")}
         <text class="t-sm t-mut" x="360" y="172" text-anchor="middle">Independent reliable streams — one lost packet stalls only its own</text>
         <line class="flow" x1="120" y1="222" x2="600" y2="222" stroke-dasharray="5 4" marker-end="url(#ah-mut)"/>
@@ -2433,9 +2436,9 @@
         <text class="t-sm t-b" x="621" y="182" text-anchor="middle">Service — dark</text>
         <text class="t-sm t-mut" x="621" y="199" text-anchor="middle">no inbound ports</text>
         <line class="flow-accent" x1="174" y1="186" x2="250" y2="186" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="212" y="178" text-anchor="middle" fill="var(--accent)">mTLS</text>
+        <text class="t-sm t-acc" x="212" y="178" text-anchor="middle">mTLS</text>
         <line class="flow-accent" x1="546" y1="186" x2="470" y2="186" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="508" y="232" text-anchor="middle" fill="var(--accent)">outbound bind</text>
+        <text class="t-sm t-acc" x="508" y="232" text-anchor="middle">outbound bind</text>
         <text class="t-sm t-mut" x="360" y="274" text-anchor="middle">Default-deny: a service policy must explicitly allow identity A to the service.</text>
         <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">Services dial out to the fabric; nothing listens for inbound connections.</text>
       </svg>`,
@@ -2502,13 +2505,13 @@
         <line class="flow" x1="601" y1="182" x2="601" y2="122" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="616" y="158">presents</text>
         <line class="flow-accent" x1="506" y1="150" x2="218" y2="150" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="362" y="142" text-anchor="middle" fill="var(--accent)">verify chain up to a trusted root</text>
+        <text class="t-sm t-acc" x="362" y="142" text-anchor="middle">verify chain up to a trusted root</text>
       </svg>`,
 
     rbac: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision.">
-        <text class="t-sm t-b" x="172" y="28" text-anchor="middle" fill="var(--accent)">RBAC — by role</text>
-        <text class="t-sm t-b" x="548" y="28" text-anchor="middle" fill="var(--accent)">ABAC — by attributes</text>
+        <text class="t-sm t-b t-acc" x="172" y="28" text-anchor="middle">RBAC — by role</text>
+        <text class="t-sm t-b t-acc" x="548" y="28" text-anchor="middle">ABAC — by attributes</text>
         <line class="divider" x1="360" y1="42" x2="360" y2="256"/>
         ${[["User · Alice",58],["Role · billing-admin",128],["Permissions",198]].map(([t,y],i)=>`
           <rect class="${i===1?'box-accent':'box'}" x="64" y="${y}" width="216" height="48" rx="8"/>
@@ -2562,7 +2565,7 @@
         <rect class="box" x="566" y="150" width="124" height="74" rx="10"/>
         <text class="t-sm t-b" x="628" y="192" text-anchor="middle">Service B</text>
         <line class="flow-accent" x1="244" y1="187" x2="476" y2="187" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b" x="360" y="178" text-anchor="middle" fill="var(--accent)">mTLS</text>
+        <text class="t-sm t-b t-acc" x="360" y="178" text-anchor="middle">mTLS</text>
         <text class="t-sm t-mut" x="360" y="206" text-anchor="middle">data plane</text>
         <line class="flow" x1="320" y1="86" x2="206" y2="148" marker-end="url(#ah-mut)"/>
         <line class="flow" x1="400" y1="86" x2="514" y2="148" marker-end="url(#ah-mut)"/>
@@ -2669,7 +2672,7 @@
         <line class="flow" x1="186" y1="220" x2="286" y2="220" marker-end="url(#ah-mut)"/>
         <line class="flow-ok" x1="432" y1="220" x2="532" y2="220" marker-end="url(#ah-ok)"/>
         <line class="flow-accent" x1="360" y1="118" x2="360" y2="178" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="404" y="150" fill="var(--accent)">allow / deny</text>
+        <text class="t-sm t-b t-acc" x="404" y="150">allow / deny</text>
         <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">Per-session, least-privilege decisions; no trust granted by network location.</text>
       </svg>`,
 
@@ -2719,7 +2722,7 @@
 
     idsips: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.">
-        <text class="t-sm t-b" x="44" y="32" fill="var(--accent)">IDS — out of band</text>
+        <text class="t-sm t-b t-acc" x="44" y="32">IDS — out of band</text>
         <rect class="box" x="24" y="46" width="120" height="46" rx="8"/>
         <text class="t-sm t-b" x="84" y="74" text-anchor="middle">Source</text>
         <rect class="box" x="576" y="46" width="120" height="46" rx="8"/>
@@ -2730,7 +2733,7 @@
         <text class="t-sm t-b" x="360" y="123" text-anchor="middle">IDS → alert</text>
         <text class="t-sm t-mut" x="430" y="58" text-anchor="middle">mirrored copy</text>
         <line class="divider" x1="20" y1="158" x2="700" y2="158"/>
-        <text class="t-sm t-b" x="44" y="186" fill="var(--accent)">IPS — inline</text>
+        <text class="t-sm t-b t-acc" x="44" y="186">IPS — inline</text>
         <rect class="box" x="24" y="202" width="120" height="46" rx="8"/>
         <text class="t-sm t-b" x="84" y="230" text-anchor="middle">Source</text>
         <rect class="box" x="576" y="202" width="120" height="46" rx="8"/>
@@ -2783,9 +2786,9 @@
         <line class="flow" x1="180" y1="138" x2="284" y2="96" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" x="208" y="96">① login</text>
         <line class="flow-accent" x1="284" y1="110" x2="180" y2="158" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="250" y="150" fill="var(--accent)">② TGT</text>
+        <text class="t-sm t-b t-acc" x="250" y="150">② TGT</text>
         <line class="flow-accent" x1="180" y1="178" x2="538" y2="178" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="360" y="200" text-anchor="middle" fill="var(--accent)">③ present service ticket</text>
+        <text class="t-sm t-b t-acc" x="360" y="200" text-anchor="middle">③ present service ticket</text>
         <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">The TGT is traded back at the KDC for each service ticket — the password never crosses the network.</text>
       </svg>`,
 
@@ -2909,8 +2912,8 @@
         <line class="flow-accent" x1="208" y1="186" x2="290" y2="216" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
         <line class="flow-accent" x1="428" y1="216" x2="510" y2="186" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
         <line class="flow-accent" x1="208" y1="172" x2="512" y2="172" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="288" y="150" text-anchor="middle" fill="var(--accent)">direct WireGuard</text>
-        <text class="t-sm t-b" x="288" y="166" text-anchor="middle" fill="var(--accent)">tunnels</text>
+        <text class="t-sm t-b t-acc" x="288" y="150" text-anchor="middle">direct WireGuard</text>
+        <text class="t-sm t-b t-acc" x="288" y="166" text-anchor="middle">tunnels</text>
         <text class="t-sm t-mut" x="360" y="280" text-anchor="middle">The control server sets up keys, then steps out of the data path.</text>
       </svg>`,
 
@@ -2947,7 +2950,7 @@
         <rect class="box-accent" x="248" y="96" width="216" height="116" rx="12"/>
         <text class="t-b" x="356" y="124" text-anchor="middle">FindProxyForURL</text>
         <text class="t-sm t-b" x="356" y="158" text-anchor="middle" fill="var(--state-ok)">internal host &#8594; DIRECT</text>
-        <text class="t-sm t-b" x="356" y="184" text-anchor="middle" fill="var(--accent)">else &#8594; PROXY swg:8080</text>
+        <text class="t-sm t-b t-acc" x="356" y="184" text-anchor="middle">else &#8594; PROXY swg:8080</text>
         <line class="flow-ok" x1="464" y1="132" x2="560" y2="118" marker-end="url(#ah-ok)"/>
         <rect class="box" x="562" y="92" width="134" height="56" rx="10"/>
         <text class="t-sm t-b" x="629" y="116" text-anchor="middle">Internet</text>
@@ -3074,7 +3077,7 @@
 
     tpm: () => `
       <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Secure Boot verifies each startup stage and the TPM records what loaded, so a server can attest the device booted into a known-good state.">
-        <text class="t-sm t-b" x="360" y="24" text-anchor="middle" fill="var(--accent)">Secure Boot — each stage verifies the next</text>
+        <text class="t-sm t-b t-acc" x="360" y="24" text-anchor="middle">Secure Boot — each stage verifies the next</text>
         ${[["Firmware",30],["Bootloader",270],["OS",510]].map(([t,x],i)=>`
           <rect class="box" x="${x}" y="40" width="180" height="58" rx="10"/>
           <text class="t-b" x="${x+90}" y="68" text-anchor="middle">${t}</text>
@@ -3424,7 +3427,7 @@
         `).join("")}
         <path class="flow" d="M100 142 V156 H266 V142"/>
         <line class="flow" x1="183" y1="156" x2="183" y2="170"/>
-        <text class="t-sm" x="195" y="175" text-anchor="start" fill="var(--accent)">the version fixes the cipher suite before any parsing begins</text>
+        <text class="t-sm t-acc" x="195" y="175" text-anchor="start">the version fixes the cipher suite before any parsing begins</text>
         <line class="divider" x1="24" y1="192" x2="696" y2="192"/>
         <text class="t-sm t-b" x="24" y="241" text-anchor="start">JWT</text>
         <rect class="box" x="86" y="212" width="170" height="48" rx="8"/>
@@ -3516,7 +3519,7 @@
         <text class="t-sm t-mut" x="645" y="137" text-anchor="middle">0 &#8594; N pods</text>
 
         <path class="flow-accent" d="M380 71 H645 V93" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="505" y="62" text-anchor="middle" fill="var(--accent)">0 &#8596; 1 — the operator itself</text>
+        <text class="t-sm t-b t-acc" x="505" y="62" text-anchor="middle">0 &#8596; 1 — the operator itself</text>
         <path class="flow-accent" d="M548 177 H645 V155" marker-end="url(#ah-acc)"/>
 
         <text class="t-sm t-mut" x="400" y="230" text-anchor="middle">1 &#8596; N — an ordinary HPA, reading the scaler's metric</text>
@@ -3636,7 +3639,7 @@
         <text class="t-sm t-mut" x="364" y="186" text-anchor="middle">outsourced ICT service</text>
 
         <path class="flow-accent" d="M230 68 H600 V164" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b" x="415" y="58" text-anchor="middle" fill="var(--accent)">direct oversight — new under DORA</text>
+        <text class="t-sm t-b t-acc" x="415" y="58" text-anchor="middle">direct oversight — new under DORA</text>
       </svg>`,
 
     fapi: () => `
