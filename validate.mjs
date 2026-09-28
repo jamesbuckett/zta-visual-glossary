@@ -94,6 +94,26 @@ if (html.includes('const TERMS = [')) {
   } catch (e) {
     err('data-parse', `DIAGRAMS: ${e.message}`);
   }
+
+  // Diagram tours: a term that has steps or a fact must have both, with 3–5
+  // steps that each carry a title and text. Phase 3 of the infographic
+  // rollout makes this mandatory for every term.
+  let terms = [];
+  try { terms = extractArray(html, 'TERMS'); } catch { /* reported above */ }
+  for (const t of terms) {
+    if (t.steps === undefined && t.fact === undefined) continue;
+    const where = t.id || '(no id)';
+    if (!Array.isArray(t.steps) || t.steps.length < 3 || t.steps.length > 5) {
+      err('tour-data', `${where}: steps must be an array of 3–5 entries`);
+    } else {
+      t.steps.forEach((s, i) => {
+        if (!s || !String(s.title || '').trim() || !String(s.text || '').trim()) {
+          err('tour-data', `${where}: step ${i + 1} needs a non-empty title and text`);
+        }
+      });
+    }
+    if (!String(t.fact || '').trim()) err('tour-data', `${where}: a term with steps needs a non-empty fact`);
+  }
 }
 
 // ----- structural meta ------------------------------------------------------

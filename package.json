@@ -6,6 +6,7 @@
   "scripts": {
     "glossary": "node glossary.mjs",
     "test": "node validate.mjs ./index.html",
+    "test:tour": "node test/tour-fixtures.mjs",
     "verify": "node verify.mjs"
   },
   "repository": {
