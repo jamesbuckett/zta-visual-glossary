@@ -511,6 +511,8 @@
     .dg .dim { opacity: .35; }
     .dg .on > :is(.box, .box-soft), .dg :is(.box, .box-soft).on { fill: var(--accent-soft); stroke: var(--accent); }
     .dg .flow.on { stroke: var(--accent); }
+    .dg .on > .divider, .dg .divider.on { stroke: var(--accent); stroke-width: 2; }
+    .dg .on > :is(.zone, .zone-accent), .dg :is(.zone, .zone-accent).on { stroke: var(--accent); stroke-width: 2; }
     .dg .flow.on[marker-end] { marker-end: url(#ah-acc); }
     .dg .flow.on[marker-start] { marker-start: url(#ah-acc); }
     .dg .on:is(.flow, .flow-accent, .flow-ok, .flow-bad) { stroke-width: 2.5; stroke-dasharray: 7 5; animation: tour-dash 900ms linear infinite; }
@@ -1770,7 +1772,9 @@
     "building-2": '<path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>',
     "file-text": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
     landmark: '<path d="M10 18v-7"/><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/>',
-    cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>'
+    cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+    "badge-check": '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m16 9-5.5 5.5L8 12"/>',
+    flag: '<path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -2616,7 +2620,7 @@
         </g>
         <g data-s="2 3 4">
           <rect class="box" x="64" y="118" width="280" height="64" rx="8"/>
-          ${icon('shield-check', 80, 132)}
+          ${icon('badge-check', 80, 132)}
           <text class="t-b" x="112" y="150">Intermediate CA</text>
           <text class="t-sm t-mut" x="112" y="168">signed by the root</text>
         </g>
@@ -3345,12 +3349,12 @@
     dpu: () => `
       <svg class="dg" viewBox="0 0 720 376" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.">
         <g data-s="1">
-          <rect class="box" x="250" y="12" width="220" height="40" rx="8"/>
-          ${icon('network', 266, 20)}
-          <text class="t-b" x="298" y="37">Network</text>
+          <rect class="box" x="410" y="12" width="220" height="40" rx="8"/>
+          ${icon('network', 426, 20)}
+          <text class="t-b" x="458" y="37">Network</text>
         </g>
-        <line class="flow" data-s="1" x1="360" y1="52" x2="360" y2="98" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="378" y="74">all traffic</text>
+        <line class="flow" data-s="1" x1="520" y1="52" x2="520" y2="132" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="538" y="80">all traffic</text>
 
         <g data-s="1 2 3">
           <rect class="box" x="40" y="100" width="640" height="124" rx="10"/>
@@ -3364,7 +3368,7 @@
           <text class="t-sm t-mut" x="108" y="182">typically Arm, own OS</text>
           <text class="t-sm t-mut" x="108" y="199">host cannot see or control</text>
         </g>
-        <g data-s="3 4">
+        <g data-s="1 3 4">
           <rect class="box" x="380" y="134" width="280" height="78" rx="8"/>
           ${icon('shield', 396, 146)}
           <text class="t-b" x="428" y="164">Security policy</text>
@@ -3375,9 +3379,9 @@
         <line class="divider" data-s="2 4" x1="40" y1="248" x2="680" y2="248"/>
         <text class="t-sm t-mut" data-s="2 4" x="680" y="242" text-anchor="end">trust boundary</text>
 
-        <line class="flow" data-s="1" x1="360" y1="224" x2="360" y2="314" marker-end="url(#ah-mut)"/>
-        <line class="flow-bad" data-s="4" x1="460" y1="314" x2="460" y2="254" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="4" x="476" y="280">attacker cannot reach the DPU</text>
+        <line class="flow" data-s="1" x1="520" y1="212" x2="520" y2="314" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="4" x1="420" y1="314" x2="420" y2="254" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="4" x="408" y="280" text-anchor="end">attacker cannot reach the DPU</text>
 
         <g data-s="1 4">
           <rect class="box" x="40" y="316" width="640" height="48" rx="8"/>
@@ -3386,10 +3390,10 @@
           <text class="t-sm t-mut" x="132" y="345">host CPU and OS</text>
         </g>
 
-        ${badge(1, 360, 70, '1')}
+        ${badge(1, 520, 76, '1')}
         ${badge(2, 322, 152, '2')}
         ${badge(3, 642, 152, '3')}
-        ${badge(4, 460, 300, '4')}
+        ${badge(4, 420, 300, '4')}
       </svg>`,
 
     bluefield: () => `
@@ -3849,7 +3853,7 @@
         </g>
         <g data-s="4 5">
           <rect class="box" x="420" y="16" width="276" height="64" rx="8"/>
-          ${icon('landmark', 436, 30)}
+          ${icon('flag', 436, 30)}
           <text class="t-b" x="468" y="48">ESAs</text>
           <text class="t-sm t-mut" x="468" y="66">European Supervisory Authorities</text>
         </g>

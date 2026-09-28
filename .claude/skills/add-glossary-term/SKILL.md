@@ -48,6 +48,8 @@ chips, and each diagram element that belongs to a step carries `data-s="1 3"`.
 
 - shapes — `box`, `box-accent`, `zone-accent`
 - flows — `flow`, `flow-accent`, `flow-ok`, `flow-bad`
+- boundaries — `divider`, `zone`, `zone-accent` light up too (accent stroke, no moving
+  dash), so a boundary or region can be a step's focus: tag it, or its group
 - arrowheads — `ah-acc`, `ah-ok`, `ah-bad`, `ah-mut`
 - text — `t-b`, `t-sm`, `t-mut`, `t-acc` (accent — never a `fill="var(--accent)"`
   attribute, which the `.dg text` rule silently overrides)
@@ -61,7 +63,8 @@ for the ~11px mono face.
 
 Rules: 3–5 steps; every step lights something; tag a component's `<g>`, never both a
 group and its children (no nested `data-s`); a flow may run under its badge, but a
-badge must not cover a label; the drawing must read correctly fully lit (print).
+badge must not cover a label; no icon repeated within one diagram unless the things are
+the same kind; the drawing must read correctly fully lit (print).
 Tour copy states only what the explainer says.
 
 ## 3. Cross-link
