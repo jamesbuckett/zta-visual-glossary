@@ -473,6 +473,62 @@
     .m-bad { fill: var(--state-bad); }
 
     /* ==================================================================
+       Step-through tour card: wraps a diagram when its term has steps
+       ================================================================== */
+    .tour-chips {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--space-2); margin-bottom: var(--space-5);
+    }
+    .tour-chip {
+      display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1);
+      padding: var(--space-2) var(--space-3);
+      background: var(--surface); color: var(--text-muted);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      font: inherit; font-size: var(--fs-small); text-align: left; cursor: pointer;
+      transition: color var(--transition), border-color var(--transition), background-color var(--transition);
+    }
+    .tour-chip b { font-size: 20px; line-height: 1; }
+    .tour-chip:hover { border-color: var(--accent); color: var(--text); }
+    .tour-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+    .tour-chip[aria-pressed="true"] b { color: var(--accent-text); }
+    .tour-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .tour-panel {
+      display: flex; gap: var(--space-4); align-items: flex-start;
+      margin-top: var(--space-5); padding-left: var(--space-4); border-left: 3px solid var(--accent);
+    }
+    .tour-num { font-size: 40px; font-weight: 800; line-height: 1; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+    .tour-title { font-weight: 700; margin: 0 0 var(--space-1); }
+    .tour-text { margin: 0; line-height: 1.5; }
+    .tour-fact {
+      margin: var(--space-4) 0 0; padding: var(--space-3) var(--space-4);
+      background: var(--accent-soft); border-radius: var(--radius);
+      font-size: var(--fs-small); line-height: 1.5;
+    }
+    .tour-fact b { color: var(--accent-text); margin-right: var(--space-1); }
+    .tour-print { display: none; }
+    /* step states on the diagram itself */
+    .dg [data-s] { transition: opacity var(--transition); }
+    .dg .dim { opacity: .22; }
+    .dg .on > :is(.box, .box-soft), .dg :is(.box, .box-soft).on { fill: var(--accent-soft); stroke: var(--accent); }
+    .dg .flow.on { stroke: var(--accent); }
+    .dg .flow.on[marker-end] { marker-end: url(#ah-acc); }
+    .dg .flow.on[marker-start] { marker-start: url(#ah-acc); }
+    .dg .on:is(.flow, .flow-accent, .flow-ok, .flow-bad) { stroke-width: 2.5; stroke-dasharray: 7 5; animation: tour-dash 900ms linear infinite; }
+    @keyframes tour-dash { to { stroke-dashoffset: -24; } }
+    .dg .ico { fill: none; stroke: var(--text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .dg .on .ico { stroke: var(--accent-text); }
+    .dg .badge circle { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; }
+    .dg .badge text { fill: var(--text-muted); font-size: 11px; font-weight: 700; }
+    .dg .badge.on circle { fill: var(--accent); stroke: var(--accent); }
+    .dg .badge.on text { fill: #fff; }
+    @media print {
+      .tour-chips, .tour-panel { display: none; }
+      .tour-print { display: block; margin: var(--space-4) 0 0; }
+      .dg .dim { opacity: 1; }
+      .dg .on { animation: none; }
+    }
+
+    /* ==================================================================
        Footer
        ================================================================== */
     .site-footer {
@@ -1654,6 +1710,22 @@
       caption: "CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric."
     }
   ];
+
+  /* ====================================================================
+     Diagram helpers. ICONS holds only the Lucide paths the diagrams use
+     (Lucide, ISC licence: https://lucide.dev). Paste an icon's inner markup
+     from https://unpkg.com/lucide-static@latest/icons/<name>.svg when a new
+     one is needed. icon() places it on a 24×24 grid; badge() draws the
+     numbered step marker that matches a tour chip.
+     ==================================================================== */
+  const ICONS = {
+    user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    server: '<rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/>',
+    "key-round": '<path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>'
+  };
+  const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
+  const badge = (n, x, y, steps) =>
+    `<g class="badge" data-s="${steps}"><circle cx="${x}" cy="${y}" r="10"/><text x="${x}" y="${y + 4}" text-anchor="middle">${n}</text></g>`;
 
   /* ====================================================================
      DIAGRAMS — one function per term id, returning inline SVG built from
@@ -4242,7 +4314,37 @@
   function diagramHtml(e) {
     const fn = DIAGRAMS[e.id];
     const svg = fn ? fn() : fallbackDiagram(e);
+    if (e.steps) return tourHtml(e, svg);
     return `<figure class="diagram-frame" aria-labelledby="dgcap-${e.id}">${svg}<figcaption id="dgcap-${e.id}">${esc(e.caption || (e.term + " — schematic"))}</figcaption></figure>`;
+  }
+  // Step-through card. setStep() fills the panel, so it starts empty here.
+  function tourHtml(e, svg) {
+    const chips = e.steps.map((s, i) =>
+      `<button class="tour-chip" type="button" data-step="${i + 1}" aria-pressed="false" tabindex="-1"><b>${i + 1}</b><span>${esc(s.title)}</span></button>`).join("");
+    const all = e.steps.map(s => `<li><b>${esc(s.title)}</b> — ${esc(s.text)}</li>`).join("");
+    return `<figure class="diagram-frame tour" aria-labelledby="dgcap-${e.id}" data-tour="${e.id}">
+      <div class="tour-chips" role="group" aria-label="Diagram steps">${chips}</div>
+      ${svg}
+      <div class="tour-panel" aria-live="polite"><span class="tour-num"></span><div><p class="tour-title"></p><p class="tour-text"></p></div></div>
+      <ol class="tour-print">${all}</ol>
+      <p class="tour-fact"><b>Key fact</b>${esc(e.fact)}</p>
+      <figcaption id="dgcap-${e.id}">${esc(e.caption || (e.term + " — schematic"))}</figcaption></figure>`;
+  }
+  function setStep(fig, k) {
+    const e = byId[fig.dataset.tour];
+    fig.querySelectorAll("[data-s]").forEach(el => {
+      const on = el.dataset.s.trim().split(/\s+/).includes(String(k));
+      el.classList.toggle("on", on);
+      el.classList.toggle("dim", !on);
+    });
+    fig.querySelectorAll(".tour-chip").forEach(c => {
+      const cur = Number(c.dataset.step) === k;
+      c.setAttribute("aria-pressed", String(cur));
+      c.tabIndex = cur ? 0 : -1;
+    });
+    fig.querySelector(".tour-num").textContent = k;
+    fig.querySelector(".tour-title").textContent = e.steps[k - 1].title;
+    fig.querySelector(".tour-text").textContent = e.steps[k - 1].text;
   }
   function fallbackDiagram(e) {
     return `<svg class="dg" viewBox="0 0 720 160" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="${esc(e.term)} schematic placeholder">
@@ -4339,6 +4441,8 @@
   }
   function showDetail(e) {
     els.detailContent.innerHTML = detailHtml(e);
+    const tour = els.detailContent.querySelector(".tour");
+    if (tour) setStep(tour, 1);
     els.browseView.hidden = true;
     els.detailView.hidden = false;
     document.title = `${e.term} — ZTA Visual Glossary`;
@@ -4386,6 +4490,8 @@
 
   // Detail view: back button, related pills, tag filters
   els.detailContent.addEventListener("click", (ev) => {
+    const step = ev.target.closest(".tour-chip");
+    if (step) { setStep(step.closest(".tour"), Number(step.dataset.step)); return; }
     if (ev.target.closest("[data-back]")) { location.hash = ""; return; }
     const pill = ev.target.closest("[data-goto]");
     if (pill) { goTo(pill.dataset.goto); return; }
@@ -4397,6 +4503,18 @@
       renderGrid();
       location.hash = "";
     }
+  });
+
+  // Tour chips: Left/Right move between steps (Enter/Space are native to buttons)
+  els.detailContent.addEventListener("keydown", (ev) => {
+    const chip = ev.target.closest(".tour-chip");
+    if (!chip || (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft")) return;
+    const fig = chip.closest(".tour");
+    const n = fig.querySelectorAll(".tour-chip").length;
+    const k = ((Number(chip.dataset.step) - 1 + (ev.key === "ArrowRight" ? 1 : -1) + n) % n) + 1;
+    setStep(fig, k);
+    fig.querySelector(`.tour-chip[data-step="${k}"]`).focus();
+    ev.preventDefault();
   });
 
   window.addEventListener("hashchange", route);
