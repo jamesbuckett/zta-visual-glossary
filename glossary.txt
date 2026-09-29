@@ -261,6 +261,11 @@ Istio — Istio Service Mesh
 JWT — JSON Web Token
     A signed, self-contained token that carries identity claims.
     [Security Technology, Protocol] · aka bearer token, claims
+    1. The header — A JSON Web Token has three base64url-encoded parts. The header comes first.
+    2. A payload of claims — The payload packs claims: who you are, what you may do, when it expires.
+    3. The signature — The signature lets any holder verify the token has not been tampered with, without a database lookup, which makes JWTs popular for stateless sessions and API access.
+    4. Readable, not encrypted — Anyone holding the token can read the payload, because a JWT is encoded, not encrypted.
+    Key fact: JWTs are readable, not encrypted, so secrets never belong in the payload.
 
 KEDA — Kubernetes Event-driven Autoscaling
     Scales Kubernetes workloads on the event source itself — queue depth, consumer lag, a Prometheus query — and all the way down to zero, which CPU-based autoscaling cannot do.
@@ -349,6 +354,11 @@ NIST SP 800-207 — Zero Trust Architecture (NIST)
 OAuth 2.0 — Open Authorization 2.0
     Lets an app access your data on another service without your password.
     [Protocol, Security Technology] · aka OAuth, OIDC, access token
+    1. Redirect to log in — The app redirects you to the resource's authorisation server, where you log in.
+    2. You consent — You consent to what the app may do.
+    3. A scoped token — Instead of handing the app your credentials, the authorisation server issues it a scoped, revocable access token.
+    4. Call the API — The app uses the token to call the API on your behalf.
+    Key fact: OAuth is about authorisation, not authentication.
 
 OBO / Token Exchange — On-Behalf-Of (OAuth 2.0 Token Exchange)
     Lets a middle-tier service swap the user's token for a downstream-scoped one, so identity and least privilege survive the whole call chain.
@@ -439,6 +449,11 @@ QUIC — QUIC (a name, not an acronym — RFC 9000)
 RADIUS — Remote Authentication Dial-In User Service
     A protocol for centralized authentication, authorization, and accounting.
     [Protocol, Security Technology] · aka AAA, NAS, 802.1X
+    1. You connect — You connect to an access device: Wi-Fi, a VPN or a switch port.
+    2. Verify credentials — The access device asks a RADIUS server to verify your credentials.
+    3. Decide what's allowed — The RADIUS server decides what you are allowed to do.
+    4. Log the session — It also logs the session: authentication, authorisation and accounting, the classic AAA model.
+    Key fact: RADIUS cleanly separates the device granting access from the system that holds identities.
 
 RAG — Retrieval-Augmented Generation
     Look the answer up before answering — retrieve the relevant passages at query time and put them in the prompt, so the model works from sources rather than memory.
@@ -470,6 +485,11 @@ RLHF — Reinforcement Learning from Human Feedback
 SAML — Security Assertion Markup Language
     An XML standard for single sign-on between identity and service providers.
     [Protocol, Security Technology] · aka SSO, assertion, federation
+    1. Log in at the IdP — An identity provider authenticates the user.
+    2. A signed assertion — The identity provider issues a digitally signed XML assertion.
+    3. The SP trusts it — The signature is what lets a service provider trust the assertion without ever seeing the password.
+    4. One login, many apps — Because service providers trust the assertion, users log in once for many applications: enterprise single sign-on.
+    Key fact: SAML predates OAuth and OIDC and remains widespread in corporate and SaaS access.
 
 SASE — Secure Access Service Edge
     Delivers networking and security together from the cloud edge, near the user.
@@ -524,6 +544,11 @@ SOAR — Security Orchestration, Automation & Response
 SPIFFE / SPIRE — Secure Production Identity Framework For Everyone
     A standard and engine for giving workloads cryptographic identities.
     [Security Technology, Development Framework] · aka SVID, SPIRE, workload identity
+    1. Attest the workload — SPIRE, the reference implementation, attests each workload.
+    2. A SPIFFE ID — SPIFFE defines a universal identity for workloads: the SPIFFE ID.
+    3. A short-lived SVID — SPIRE issues the document that proves it, the SVID, typically an X.509 certificate or a JWT. It is short-lived and issued automatically.
+    4. mTLS, not secrets — Services authenticate one another with mTLS instead of shared secrets.
+    Key fact: Together SPIFFE and SPIRE are foundational plumbing for zero trust.
 
 Spinnaker — Multi-Cloud Continuous Delivery
     The deployment half of the pipeline — takes a built artifact and rolls it out across clouds, with blue/green and canary as configurable strategies rather than hand-written scripts.
