@@ -323,6 +323,11 @@ MQTT — MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)
 mTLS — Mutual TLS
     TLS where both client and server prove identity with certificates.
     [Protocol, Security Technology] · aka mutual TLS, client certificate
+    1. Server certificate — In ordinary TLS only the server presents a certificate.
+    2. Client certificate too — Mutual TLS extends it so the client must present a certificate too.
+    3. Each side verifies — Each side verifies the other before any application data flows, giving strong two-way authentication without passwords.
+    4. Then data flows — Only then does application data flow, between two workloads that each carry their own cryptographic identity.
+    Key fact: mTLS is a cornerstone of zero-trust service-to-service communication and of service meshes.
 
 NAT — Network Address Translation
     Lets many private devices share one public IP address.
@@ -411,6 +416,12 @@ PKI — Public Key Infrastructure
 Post-Quantum Cryptography — Post-Quantum Cryptography (PQC)
     New algorithms designed to survive attack by a large quantum computer.
     [Security Technology] · aka PQC, ML-KEM, Kyber, ML-DSA, Dilithium, quantum-safe, harvest now decrypt later
+    1. Today's public-key crypto — RSA and elliptic-curve cryptography secure today's internet, in key exchange and in signatures.
+    2. Quantum breaks it — Their maths could be broken by a sufficiently large quantum computer running Shor's algorithm, undoing key exchange and signatures at a stroke.
+    3. Harvest now, decrypt later — Adversaries can record encrypted traffic today and decrypt it once quantum hardware arrives, so long-lived secrets need protecting now.
+    4. New standards — Post-Quantum Cryptography uses hard problems, chiefly structured lattices. In August 2024 NIST finalised FIPS 203 (ML-KEM), FIPS 204 (ML-DSA) and FIPS 205 (SLH-DSA).
+    5. A hybrid rollout — PQC key exchange is being layered alongside classical algorithms in TLS, rather than replacing them overnight.
+    Key fact: The urgency is harvest now, decrypt later: long-lived secrets need protecting now.
 
 QLoRA — Quantized LoRA
     LoRA on a base model squeezed to 4 bits — the frozen weights shrink fourfold, so a 65-billion-parameter model can be fine-tuned on a single GPU.
@@ -483,6 +494,12 @@ SD-WAN — Software-Defined Wide Area Network
 Secrets Management — Secrets Management (HashiCorp Vault)
     A central, audited vault for the passwords, keys, and tokens that machines need.
     [Security Technology] · aka HashiCorp Vault, secret store, dynamic secrets, credential rotation, KMS
+    1. No hard-coded secrets — Applications need credentials such as database passwords, API keys and certificates. Hard-coding them in config files or source control is a recipe for leaks.
+    2. The workload authenticates — Instead, a workload identity, often SPIFFE, authenticates to a secrets manager such as HashiCorp Vault, which stores secrets centrally and encrypted.
+    3. Policy decides — Fine-grained policy means the vault hands a secret only to identities that prove they should have it, exactly the ones they need, just in time.
+    4. A dynamic secret — Rather than a long-lived shared password, the vault generates a short-lived credential on demand and revokes it automatically.
+    5. Every access logged — Every access is authenticated, authorised and logged, giving an audit trail and one-click rotation when something is exposed.
+    Key fact: Dynamic secrets shrink the window in which a leaked secret is useful.
 
 SentryWire — Full Packet Capture & Network Security Monitoring Platform
     Commercial full packet capture — every packet kept for months, so a signature written today can be searched back across traffic recorded long before anyone knew to look.
@@ -528,6 +545,12 @@ SuperNIC — NVIDIA AI-Network Accelerator
 Tailscale — WireGuard-Based Mesh VPN
     A zero-config mesh VPN that connects your devices directly over WireGuard.
     [Network Technology, Security Technology] · aka Headscale, mesh VPN, tailnet, DERP, overlay network
+    1. Sign in via your IdP — A central coordination server handles authentication through your existing identity provider.
+    2. Keys, then step aside — It also distributes keys, then steps out of the data path.
+    3. A direct mesh — Devices connect directly to each other over encrypted WireGuard tunnels in a flat mesh, instead of backhauling through a central gateway.
+    4. Relay if blocked — NAT traversal, with relay fallback (DERP), makes peer-to-peer connectivity work even behind firewalls.
+    5. ACLs, not location — In the resulting tailnet, access is governed by identity and access-control lists rather than network location.
+    Key fact: A tailnet is a practical on-ramp to Zero Trust networking for small teams.
 
 TCP/IP — Transmission Control Protocol / Internet Protocol
     The layered addressing-and-delivery system that moves data across the internet.
@@ -550,6 +573,12 @@ TLS — Transport Layer Security
 TPM & Secure Boot — Hardware Root of Trust
     A hardware chip that protects keys and proves a machine booted clean.
     [Security Technology] · aka trusted platform module, secure boot, measured boot, attestation, UEFI
+    1. Secure Boot checks — Secure Boot has the firmware verify each stage of startup against trusted signatures, refusing to run a bootloader that has been tampered with.
+    2. Measured into PCRs — Measured boot records hashes of what actually loaded into the TPM's Platform Configuration Registers (PCRs).
+    3. Keys stay in hardware — The TPM is a tamper-resistant chip that generates and stores cryptographic keys so they never leave the hardware.
+    4. Remote attestation — A remote server can ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted.
+    5. A root of trust — This hardware root of trust underpins disk-encryption key release, device identity and the device-posture checks Zero Trust relies on.
+    Key fact: A TPM moves the foundation of trust from software, which malware can subvert, down into silicon.
 
 VLAN — Virtual Local Area Network
     Splits one physical switch into several isolated logical networks.
