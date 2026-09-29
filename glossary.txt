@@ -11,6 +11,12 @@ Format: TERM — expansion / full name
 Alpaca — Local HTTP Proxy for Command-Line Tools
     A proxy you run on your own machine so curl, git, and npm can get out through the corporate one — it reads the PAC file and answers the NTLM or Kerberos challenge that command-line tools cannot.
     [Network Technology, Security Technology] · aka samuong/alpaca, local HTTP proxy, NTLM proxy, proxy authentication, 407 Proxy Authentication Required, Proxy-Authenticate, Negotiate, SPNEGO, http_proxy, https_proxy, corporate proxy, NTLM_CREDENTIALS, ALPACA_PROXY_AUTH_ALLOWLIST, localhost:3128
+    1. Tools know one proxy — curl, git, npm, pip and docker mostly understand one thing: an http_proxy variable naming a single host and port. Alpaca is that host and port, on loopback.
+    2. The PAC picks a route — For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use.
+    3. A CONNECT tunnel — For HTTPS it opens a CONNECT tunnel, so it sees only the host and port.
+    4. It answers the 407 — When the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself: Negotiate, then NTLM, then Basic.
+    5. Any process can use it — The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress.
+    Key fact: Alpaca is an honest compatibility shim for the perimeter model rather than a zero-trust component.
 
 API Gateway — API Gateway
     A single front door for APIs that handles auth, rate limits, and routing.
@@ -60,6 +66,11 @@ Cilium — eBPF-Based Kubernetes Networking, Observability & Security
 Cntlm — NTLM Authentication Proxy
     The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
     [Network Technology, Security Technology] · aka CNTLM, cntlm.conf, NTLM proxy, NTLMv2, NTLM2SR, LM hash, PassNTLMv2, PassNT, PassLM, magic dialect detection, parent proxy, gateway mode, NoProxy, SOCKS5 proxy, port tunnelling, ISA Server
+    1. Tools point at loopback — Cntlm listens on 127.0.0.1:3128, forwards to a parent proxy, and adds the NTLM handshake the application behind it cannot perform.
+    2. Find the dialect — The Auth setting selects the dialect, strongest to weakest: NTLMv2, NTLM2SR, NT, NTLM or LM. cntlm -M probes with the strongest hashes first and prints a working configuration.
+    3. Hashes, not a password — cntlm.conf holds hashes printed by cntlm -H rather than a password. But they are exactly what the NTLM exchange consumes, so whoever can read that file can authenticate as you.
+    4. Gateway mode — With -g, Cntlm listens on every interface and other machines can share it, gated only by -A and -D rules on IP and mask: authenticated egress granted by network position.
+    Key fact: Cntlm is best understood as a prosthesis for a proxy you do not control rather than a design to carry forward.
 
 CoreWeave — GPU Cloud Platform for AI
     A GPU-first cloud that runs Kubernetes straight on bare-metal NVIDIA servers, trading the hypervisor for a DPU in every node and an InfiniBand fabric built for AI training.
@@ -185,6 +196,12 @@ EDR / XDR — Endpoint / Extended Detection & Response
 Envoy — Envoy Proxy — L7 Proxy & Universal Data Plane
     The C++ L7 proxy underneath most modern meshes and gateways — a filter chain whose entire configuration arrives over a live gRPC stream rather than a file, which is what makes a control plane above it possible.
     [Network Technology, Security Technology] · aka Envoy Proxy, xDS, LDS, RDS, CDS, EDS, SDS, listener, cluster, filter chain, HTTP connection manager, ext_authz, external authorization, JWT authn filter, RBAC filter, WASM filter, Envoy Gateway, sidecar proxy, upstream, downstream, circuit breaking, outlier detection
+    1. A listener — A downstream client connects to a listener, a named socket. Envoy runs out of process next to every workload rather than as a library.
+    2. Filter chains — The connection passes through L3/L4 network filters, and for HTTP a second, L7 chain. There Envoy terminates mTLS, validates JWTs, matches RBAC and calls ext_authz for a per-request allow or deny.
+    3. Router to cluster — The router selects a cluster, a group of logically similar upstream hosts, where a load-balancing policy picks an endpoint.
+    4. Config over xDS — A management server streams configuration over gRPC (LDS, RDS, CDS, EDS, SDS), so routes, upstreams and certificates change under live traffic without a restart.
+    5. Guard the control plane — Whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once.
+    Key fact: For zero trust, Envoy is the textbook Policy Enforcement Point, because the filter chain is exactly where enforcement belongs.
 
 FAPI 2.0 — Financial-grade API Security Profile
     The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.
@@ -354,6 +371,12 @@ OWASP Top 10 — Open Worldwide Application Security Project
 PAC File — Proxy Auto-Configuration
     A snippet of JavaScript the browser runs for every URL to decide: go direct, or through which proxy?
     [Network Technology, Security Technology] · aka proxy auto-config, FindProxyForURL, WPAD, wpad.dat, proxy.pac, automatic proxy configuration, explicit proxy
+    1. Locate the file — The browser locates the PAC file from a manually configured URL, or via WPAD, which finds it through DHCP or DNS.
+    2. Called per request — The browser or OS calls the file's one function, FindProxyForURL(url, host), for every request to decide how to reach it.
+    3. Internal goes direct — Built-in helpers like shExpMatch(), dnsDomainIs() and isInNet() let rules match on hostname, domain or IP range, so internal traffic goes DIRECT.
+    4. The rest via a gateway — Everything else is steered through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup.
+    5. WPAD can be poisoned — WPAD discovery has been repeatedly abused: a poisoned response can route all of a victim's traffic through an attacker's proxy.
+    Key fact: A PAC file is the classic, agentless way to funnel web traffic through a Secure Web Gateway.
 
 PAM — Privileged Access Management
     Tight control over the powerful admin accounts attackers most want.

@@ -1490,7 +1490,15 @@
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Transport & Web", "Network Edge & Ops"],
       related: ["sase", "casb", "dns", "http", "alpaca"],
       source: { label: "MDN — Proxy Auto-Configuration (PAC) file", url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file" },
-      caption: "The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway."
+      caption: "The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.",
+      steps: [
+        { title: "Locate the file", text: "The browser locates the PAC file from a manually configured URL, or via WPAD, which finds it through DHCP or DNS." },
+        { title: "Called per request", text: "The browser or OS calls the file's one function, FindProxyForURL(url, host), for every request to decide how to reach it." },
+        { title: "Internal goes direct", text: "Built-in helpers like shExpMatch(), dnsDomainIs() and isInNet() let rules match on hostname, domain or IP range, so internal traffic goes DIRECT." },
+        { title: "The rest via a gateway", text: "Everything else is steered through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup." },
+        { title: "WPAD can be poisoned", text: "WPAD discovery has been repeatedly abused: a poisoned response can route all of a victim's traffic through an attacker's proxy." }
+      ],
+      fact: "A PAC file is the classic, agentless way to funnel web traffic through a Secure Web Gateway."
     },
     {
       id: "dlp", term: "DLP", acronym: "Data Loss Prevention",
@@ -1811,7 +1819,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Transport & Web", "Network Edge & Ops", "Identity & Access"],
       related: ["cntlm", "pac", "kerberos", "ldap", "sase", "http"],
       source: { label: "Alpaca — local HTTP proxy for command-line tools (GitHub)", url: "https://github.com/samuong/alpaca" },
-      caption: "The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too."
+      caption: "The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.",
+      steps: [
+        { title: "Tools know one proxy", text: "curl, git, npm, pip and docker mostly understand one thing: an http_proxy variable naming a single host and port. Alpaca is that host and port, on loopback." },
+        { title: "The PAC picks a route", text: "For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use." },
+        { title: "A CONNECT tunnel", text: "For HTTPS it opens a CONNECT tunnel, so it sees only the host and port." },
+        { title: "It answers the 407", text: "When the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself: Negotiate, then NTLM, then Basic." },
+        { title: "Any process can use it", text: "The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress." }
+      ],
+      fact: "Alpaca is an honest compatibility shim for the perimeter model rather than a zero-trust component."
     },
     {
       id: "cntlm", term: "Cntlm", acronym: "NTLM Authentication Proxy",
@@ -1821,7 +1837,14 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Transport & Web", "Network Edge & Ops", "Identity & Access"],
       related: ["alpaca", "pac", "kerberos", "ldap", "sase"],
       source: { label: "Cntlm — NTLM Authentication Proxy", url: "https://cntlm.sourceforge.net/" },
-      caption: "The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf — that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN."
+      caption: "The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf — that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN.",
+      steps: [
+        { title: "Tools point at loopback", text: "Cntlm listens on 127.0.0.1:3128, forwards to a parent proxy, and adds the NTLM handshake the application behind it cannot perform." },
+        { title: "Find the dialect", text: "The Auth setting selects the dialect, strongest to weakest: NTLMv2, NTLM2SR, NT, NTLM or LM. cntlm -M probes with the strongest hashes first and prints a working configuration." },
+        { title: "Hashes, not a password", text: "cntlm.conf holds hashes printed by cntlm -H rather than a password. But they are exactly what the NTLM exchange consumes, so whoever can read that file can authenticate as you." },
+        { title: "Gateway mode", text: "With -g, Cntlm listens on every interface and other machines can share it, gated only by -A and -D rules on IP and mask: authenticated egress granted by network position." }
+      ],
+      fact: "Cntlm is best understood as a prosthesis for a proxy you do not control rather than a design to carry forward."
     },
     {
       id: "calico", term: "Calico", acronym: "Project Calico — Kubernetes Networking & Network Policy",
@@ -1849,7 +1872,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Transport & Web", "Network Edge & Ops", "Platforms & Apps"],
       related: ["istio", "servicemesh", "apigateway", "peppdp", "loadbalancer", "grpc"],
       source: { label: "Envoy documentation — What is Envoy", url: "https://www.envoyproxy.io/docs/envoy/latest/intro/what_is_envoy" },
-      caption: "A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS."
+      caption: "A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.",
+      steps: [
+        { title: "A listener", text: "A downstream client connects to a listener, a named socket. Envoy runs out of process next to every workload rather than as a library." },
+        { title: "Filter chains", text: "The connection passes through L3/L4 network filters, and for HTTP a second, L7 chain. There Envoy terminates mTLS, validates JWTs, matches RBAC and calls ext_authz for a per-request allow or deny." },
+        { title: "Router to cluster", text: "The router selects a cluster, a group of logically similar upstream hosts, where a load-balancing policy picks an endpoint." },
+        { title: "Config over xDS", text: "A management server streams configuration over gRPC (LDS, RDS, CDS, EDS, SDS), so routes, upstreams and certificates change under live traffic without a restart." },
+        { title: "Guard the control plane", text: "Whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once." }
+      ],
+      fact: "For zero trust, Envoy is the textbook Policy Enforcement Point, because the filter chain is exactly where enforcement belongs."
     },
     {
       id: "istio", term: "Istio", acronym: "Istio Service Mesh",
@@ -1976,7 +2007,9 @@
     boxes: '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>',
     radio: '<path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/>',
     wifi: '<path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/>',
-    send: '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>'
+    send: '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>',
+    terminal: '<path d="M12 19h8"/><path d="m4 17 6-6-6-6"/>',
+    skull: '<path d="m12.5 17-.5-1-.5 1h1z"/><path d="M15 22a1 1 0 0 0 1-1v-1a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20v1a1 1 0 0 0 1 1z"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="12" r="1"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -3756,26 +3789,59 @@
       </svg>`,
 
     pac: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The browser calls FindProxyForURL for every URL; matching rules return DIRECT or a proxy, steering web traffic through a Secure Web Gateway.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">One JavaScript function, evaluated per request: FindProxyForURL(url, host)</text>
-        <rect class="box" x="24" y="116" width="138" height="72" rx="12"/>
-        <text class="t-b" x="93" y="148" text-anchor="middle">Browser / OS</text>
-        <text class="t-sm t-mut" x="93" y="168" text-anchor="middle">wants a URL</text>
-        <line class="flow" x1="162" y1="152" x2="246" y2="152" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="204" y="142" text-anchor="middle">each request</text>
-        <rect class="box-accent" x="248" y="96" width="216" height="116" rx="12"/>
-        <text class="t-b" x="356" y="124" text-anchor="middle">FindProxyForURL</text>
-        <text class="t-sm t-b" x="356" y="158" text-anchor="middle" fill="var(--state-ok)">internal host &#8594; DIRECT</text>
-        <text class="t-sm t-b t-acc" x="356" y="184" text-anchor="middle">else &#8594; PROXY swg:8080</text>
-        <line class="flow-ok" x1="464" y1="132" x2="560" y2="118" marker-end="url(#ah-ok)"/>
-        <rect class="box" x="562" y="92" width="134" height="56" rx="10"/>
-        <text class="t-sm t-b" x="629" y="116" text-anchor="middle">Internet</text>
-        <text class="t-sm t-mut" x="629" y="136" text-anchor="middle">direct</text>
-        <line class="flow-accent" x1="464" y1="180" x2="560" y2="194" marker-end="url(#ah-acc)"/>
-        <rect class="box-accent" x="562" y="170" width="134" height="64" rx="10"/>
-        <text class="t-sm t-b" x="629" y="196" text-anchor="middle">Secure Web</text>
-        <text class="t-sm t-b" x="629" y="214" text-anchor="middle">Gateway</text>
-        <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Found via a configured URL or WPAD (DHCP / DNS) — which also makes WPAD an attack surface.</text>
+      <svg class="dg" viewBox="0 0 720 236" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.">
+        <g data-s="1 5">
+          <rect class="box" x="24" y="16" width="176" height="56" rx="8"/>
+          ${icon('file-code', 40, 32)}
+          <text class="t-b" x="72" y="41">PAC file</text>
+          <text class="t-sm t-mut" x="72" y="59">URL or WPAD</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="256" y="16" width="208" height="56" rx="12"/>
+          ${icon('skull', 272, 32)}
+          <text class="t-b" x="304" y="41">Attacker</text>
+          <text class="t-sm t-mut" x="304" y="59">poisons WPAD</text>
+        </g>
+        <line class="flow-bad" data-s="5" x1="254" y1="44" x2="202" y2="44" marker-end="url(#ah-bad)"/>
+        <line class="flow" data-s="1" x1="112" y1="74" x2="112" y2="106" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2">
+          <rect class="box" x="24" y="108" width="176" height="72" rx="12"/>
+          ${icon('app-window', 40, 122)}
+          <text class="t-b" x="72" y="140">Browser / OS</text>
+          <text class="t-sm t-mut" x="72" y="158">every request</text>
+        </g>
+        <line class="flow" data-s="2" x1="202" y1="144" x2="254" y2="144" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4">
+          <rect class="box" x="256" y="96" width="208" height="124" rx="8"/>
+          ${icon('code', 272, 110)}
+          <text class="t-b" x="304" y="128">FindProxyForURL</text>
+          <text class="t-sm t-mut" x="304" y="146">(url, host)</text>
+          <text class="t-sm" x="272" y="172">shExpMatch()</text>
+          <text class="t-sm" x="272" y="188">dnsDomainIs()</text>
+          <text class="t-sm" x="272" y="204">isInNet()</text>
+        </g>
+        <line class="flow" data-s="3" x1="466" y1="124" x2="518" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="492" y="116" text-anchor="middle">DIRECT</text>
+        <g data-s="3">
+          <rect class="box" x="520" y="96" width="176" height="56" rx="8"/>
+          ${icon('server', 536, 112)}
+          <text class="t-b" x="568" y="121">Internal</text>
+          <text class="t-sm t-mut" x="568" y="139">host</text>
+        </g>
+        <line class="flow" data-s="4" x1="466" y1="192" x2="518" y2="192" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="492" y="184" text-anchor="middle">PROXY</text>
+        <g data-s="4">
+          <rect class="box" x="520" y="164" width="176" height="56" rx="8"/>
+          ${icon('shield', 536, 180)}
+          <text class="t-b" x="568" y="189">Web gateway</text>
+          <text class="t-sm t-mut" x="568" y="207">inspect + policy</text>
+        </g>
+
+        ${badge(1, 184, 30, '1')}
+        ${badge(2, 228, 144, '2')}
+        ${badge(3, 680, 110, '3')}
+        ${badge(4, 680, 178, '4')}
+        ${badge(5, 448, 30, '5')}
       </svg>`,
 
     dlp: () => `
@@ -4675,81 +4741,119 @@
       </svg>`,
 
     alpaca: () => `
-      <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
-        <text class="t-sm t-mut" x="20" y="20">One local proxy stands in for the PAC file and the 407 handshake</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
+        <rect class="zone" x="16" y="12" width="424" height="232" rx="10"/>
+        <text class="t-sm t-mut" x="28" y="30">your machine</text>
+        <g data-s="1">
+          <rect class="box" x="32" y="40" width="184" height="96" rx="8"/>
+          ${icon('terminal', 48, 54)}
+          <text class="t-b" x="80" y="72">CLI tool</text>
+          <text class="t-sm t-mut" x="80" y="90">curl, git, npm</text>
+          <text class="t-sm t-mut" x="80" y="106">knows only</text>
+          <text class="t-sm t-mut" x="80" y="122">http_proxy</text>
+        </g>
+        <line class="flow" data-s="1" x1="218" y1="88" x2="246" y2="88" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4 5">
+          <rect class="box" x="248" y="40" width="176" height="96" rx="8"/>
+          ${icon('route', 264, 54)}
+          <text class="t-b" x="296" y="72">Alpaca</text>
+          <text class="t-sm t-mut" x="296" y="90">localhost:3128</text>
+          <text class="t-sm t-mut" x="296" y="106">no auth of</text>
+          <text class="t-sm t-mut" x="296" y="122">its own</text>
+        </g>
+        <line class="flow" data-s="2" x1="336" y1="166" x2="336" y2="138" marker-end="url(#ah-mut)"/>
+        <g data-s="2">
+          <rect class="box" x="248" y="168" width="176" height="60" rx="8"/>
+          ${icon('file-code', 264, 186)}
+          <text class="t-b" x="296" y="194">PAC file</text>
+          <text class="t-sm t-mut" x="296" y="212">picks the upstream</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="32" y="168" width="184" height="60" rx="8"/>
+          ${icon('terminal', 48, 186)}
+          <text class="t-b" x="80" y="194">Any process</text>
+          <text class="t-sm t-mut" x="80" y="212">on this machine</text>
+        </g>
+        <line class="flow-bad" data-s="5" x1="218" y1="184" x2="246" y2="132" marker-end="url(#ah-bad)"/>
 
-        <rect class="zone" x="16" y="36" width="440" height="124" rx="10"/>
-        <text class="t-sm t-mut" x="30" y="54">your machine</text>
+        <g data-s="3 4">
+          <rect class="box" x="536" y="40" width="160" height="96" rx="8"/>
+          ${icon('building-2', 552, 54)}
+          <text class="t-b" x="584" y="72">Upstream</text>
+          <text class="t-sm t-mut" x="584" y="90">proxy the</text>
+          <text class="t-sm t-mut" x="584" y="106">PAC names</text>
+        </g>
+        <line class="flow" data-s="3" x1="426" y1="64" x2="534" y2="64" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="480" y="57" text-anchor="middle">CONNECT</text>
+        <line class="flow" data-s="4" x1="534" y1="92" x2="426" y2="92" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="480" y="85" text-anchor="middle">407</text>
+        <line class="flow" data-s="4" x1="426" y1="120" x2="534" y2="120" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="480" y="113" text-anchor="middle">credential</text>
 
-        <rect class="box" x="32" y="66" width="170" height="74" rx="8"/>
-        <text class="t-b" x="117" y="94" text-anchor="middle">curl / git / npm</text>
-        <text class="t-sm t-mut" x="117" y="112" text-anchor="middle">http_proxy → :3128</text>
-        <text class="t-sm t-mut" x="117" y="130" text-anchor="middle">no PAC, no NTLM</text>
-
-        <rect class="box-accent" x="272" y="66" width="170" height="74" rx="8"/>
-        <text class="t-b" x="357" y="94" text-anchor="middle">Alpaca</text>
-        <text class="t-sm t-mut" x="357" y="112" text-anchor="middle">PAC picks the upstream</text>
-        <text class="t-sm t-mut" x="357" y="130" text-anchor="middle">Negotiate / NTLM / Basic</text>
-
-        <line class="flow-accent" x1="204" y1="100" x2="270" y2="100" marker-end="url(#ah-acc)"/>
-
-        <rect class="box" x="538" y="66" width="166" height="74" rx="8"/>
-        <text class="t-sm t-b" x="621" y="96" text-anchor="middle">Corporate proxy</text>
-        <text class="t-sm t-mut" x="621" y="116" text-anchor="middle">407 challenge</text>
-
-        <line class="flow-accent" x1="458" y1="86" x2="536" y2="86" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="497" y="78" text-anchor="middle">CONNECT</text>
-
-        <line class="flow" x1="536" y1="120" x2="460" y2="120" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="497" y="136" text-anchor="middle">407</text>
-
-        <rect class="box" x="245" y="190" width="224" height="54" rx="8"/>
-        <text class="t-sm t-b" x="357" y="212" text-anchor="middle">Any other local process</text>
-        <text class="t-sm t-mut" x="357" y="230" text-anchor="middle">the listener has no auth</text>
-
-        <path class="flow-bad" d="M357 188 V142" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="371" y="170">borrows your authenticated egress</text>
+        ${badge(1, 200, 54, '1')}
+        ${badge(2, 408, 182, '2')}
+        ${badge(3, 520, 64, '3')}
+        ${badge(4, 520, 92, '4')}
+        ${badge(5, 200, 182, '5')}
       </svg>`,
 
     cntlm: () => `
-      <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf — that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN.">
-        <text class="t-sm t-mut" x="20" y="20">The dialect is found by probing; the stored hash is what authenticates</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf — that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN.">
+        <g data-s="1">
+          <rect class="box" x="24" y="40" width="172" height="72" rx="8"/>
+          ${icon('terminal', 40, 54)}
+          <text class="t-b" x="72" y="72">CLI tools</text>
+          <text class="t-sm t-mut" x="72" y="90">http_proxy to</text>
+          <text class="t-sm t-mut" x="72" y="105">loopback</text>
+        </g>
+        <line class="flow" data-s="1" x1="198" y1="76" x2="250" y2="76" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="252" y="40" width="188" height="72" rx="8"/>
+          ${icon('arrow-left-right', 268, 54)}
+          <text class="t-b" x="300" y="72">Cntlm</text>
+          <text class="t-sm t-mut" x="300" y="90">127.0.0.1:3128</text>
+          <text class="t-sm t-mut" x="300" y="105">adds NTLM</text>
+        </g>
+        <g data-s="1 2">
+          <rect class="box" x="520" y="40" width="176" height="72" rx="8"/>
+          ${icon('building-2', 536, 54)}
+          <text class="t-b" x="568" y="72">Parent proxy</text>
+          <text class="t-sm t-mut" x="568" y="90">wants NTLM</text>
+        </g>
+        <line class="flow" data-s="1" x1="442" y1="62" x2="518" y2="62" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="480" y="55" text-anchor="middle">forwards</text>
+        <line class="flow" data-s="2" x1="518" y1="92" x2="442" y2="92" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="480" y="85" text-anchor="middle">407</text>
 
-        <rect class="box" x="20" y="48" width="180" height="64" rx="8"/>
-        <text class="t-sm t-b" x="110" y="74" text-anchor="middle">curl / apt / git</text>
-        <text class="t-sm t-mut" x="110" y="94" text-anchor="middle">http_proxy → :3128</text>
+        <g data-s="2">
+          <rect class="box" x="484" y="140" width="212" height="88" rx="8"/>
+          ${icon('list-checks', 500, 154)}
+          <text class="t-b" x="532" y="172">Dialect</text>
+          <text class="t-sm t-mut" x="532" y="190">NTLMv2, NTLM2SR,</text>
+          <text class="t-sm t-mut" x="532" y="205">NT, NTLM, LM</text>
+          <text class="t-sm t-mut" x="532" y="220">cntlm -M probes</text>
+        </g>
+        <line class="flow" data-s="3" x1="346" y1="138" x2="346" y2="114" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="252" y="140" width="188" height="88" rx="8"/>
+          ${icon('file-text', 268, 154)}
+          <text class="t-b" x="300" y="172">cntlm.conf</text>
+          <text class="t-sm t-mut" x="300" y="190">hashes, not a</text>
+          <text class="t-sm t-mut" x="300" y="205">password: reading</text>
+          <text class="t-sm t-mut" x="300" y="220">it is enough</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="24" y="160" width="172" height="64" rx="8"/>
+          ${icon('users', 40, 174)}
+          <text class="t-b" x="72" y="192">Other hosts</text>
+          <text class="t-sm t-mut" x="72" y="210">on the LAN, -g</text>
+        </g>
+        <path class="flow-bad" data-s="4" d="M198 192 H224 V100 H250" marker-end="url(#ah-bad)"/>
 
-        <rect class="box-accent" x="272" y="48" width="180" height="64" rx="8"/>
-        <text class="t-b" x="362" y="76" text-anchor="middle">Cntlm</text>
-        <text class="t-sm t-mut" x="362" y="96" text-anchor="middle">127.0.0.1:3128</text>
-
-        <line class="flow" x1="202" y1="80" x2="270" y2="80" marker-end="url(#ah-mut)"/>
-
-        <rect class="box" x="530" y="48" width="170" height="64" rx="8"/>
-        <text class="t-sm t-b" x="615" y="74" text-anchor="middle">Parent proxy</text>
-        <text class="t-sm t-mut" x="615" y="94" text-anchor="middle">NTLM only</text>
-
-        <line class="flow" x1="528" y1="68" x2="456" y2="68" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="492" y="60" text-anchor="middle">407</text>
-
-        <line class="flow-accent" x1="454" y1="96" x2="528" y2="96" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="492" y="112" text-anchor="middle">NTLMv2</text>
-
-        <rect class="data" x="272" y="150" width="180" height="62" rx="8"/>
-        <text class="t-sm t-b" x="362" y="174" text-anchor="middle">cntlm.conf</text>
-        <text class="t-sm t-mut" x="362" y="192" text-anchor="middle">PassNTLMv2 hash</text>
-
-        <path class="flow-accent" d="M362 148 V114" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="376" y="136">the hash is the credential</text>
-
-        <rect class="box" x="20" y="196" width="210" height="56" rx="8"/>
-        <text class="t-sm t-b" x="125" y="218" text-anchor="middle">Other hosts on the LAN</text>
-        <text class="t-sm t-mut" x="125" y="236" text-anchor="middle">with -g, they can too</text>
-
-        <path class="flow-bad" d="M230 224 H252 V100 H266" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="20" y="178">-g drops the loopback bind</text>
-
-        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">cntlm -M probes NTLMv2 → NTLM2SR → NT → NTLM → LM until one is accepted</text>
+        ${badge(1, 224, 76, '1')}
+        ${badge(2, 680, 154, '2')}
+        ${badge(3, 424, 154, '3')}
+        ${badge(4, 224, 146, '4')}
       </svg>`,
 
     calico: () => `
@@ -4808,48 +4912,61 @@
       </svg>`,
 
     envoy: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.">
-        <text class="t-sm t-mut" x="20" y="22">Listener in, filter chain, cluster out — and the config arrives as a stream</text>
+      <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.">
+        <g data-s="1">
+          <rect class="box" x="24" y="72" width="120" height="64" rx="12"/>
+          <text class="t-b" x="84" y="100" text-anchor="middle">Client</text>
+          <text class="t-sm t-mut" x="84" y="118" text-anchor="middle">downstream</text>
+        </g>
+        <line class="flow" data-s="1" x1="146" y1="104" x2="174" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="zone" x="160" y="36" width="400" height="136" rx="10"/>
+          <text class="t-sm t-b" x="172" y="54">Envoy</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="176" y="72" width="92" height="64" rx="8"/>
+          <text class="t-b" x="222" y="100" text-anchor="middle">Listener</text>
+          <text class="t-sm t-mut" x="222" y="118" text-anchor="middle">socket</text>
+        </g>
+        <line class="flow" data-s="2" x1="270" y1="104" x2="282" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="2">
+          <rect class="box" x="284" y="64" width="152" height="84" rx="8"/>
+          <text class="t-b" x="360" y="86" text-anchor="middle">Filter chains</text>
+          <text class="t-sm t-mut" x="360" y="104" text-anchor="middle">L3/L4 network</text>
+          <text class="t-sm t-mut" x="360" y="120" text-anchor="middle">L7: mTLS, JWT,</text>
+          <text class="t-sm t-mut" x="360" y="136" text-anchor="middle">RBAC, ext_authz</text>
+        </g>
+        <line class="flow" data-s="3" x1="438" y1="104" x2="450" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="452" y="72" width="92" height="64" rx="8"/>
+          <text class="t-b" x="498" y="100" text-anchor="middle">Router</text>
+          <text class="t-sm t-mut" x="498" y="118" text-anchor="middle">selects</text>
+        </g>
+        <line class="flow" data-s="3" x1="546" y1="104" x2="574" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="576" y="64" width="120" height="84" rx="8"/>
+          <text class="t-b" x="636" y="90" text-anchor="middle">Cluster</text>
+          <text class="t-sm t-mut" x="636" y="108" text-anchor="middle">upstream hosts</text>
+          <text class="t-sm t-mut" x="636" y="124" text-anchor="middle">load balanced</text>
+        </g>
 
-        <rect class="box" x="20" y="84" width="104" height="56" rx="8"/>
-        <text class="t-sm t-b" x="72" y="108" text-anchor="middle">Downstream</text>
-        <text class="t-sm t-mut" x="72" y="126" text-anchor="middle">client</text>
+        <line class="flow" data-s="4" x1="360" y1="222" x2="360" y2="174" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="376" y="202">xDS over gRPC, live</text>
+        <g data-s="4 5">
+          <rect class="box" x="216" y="224" width="264" height="60" rx="8"/>
+          ${icon('cog', 232, 242)}
+          <text class="t-b" x="264" y="250">Control plane</text>
+          <text class="t-sm t-mut" x="264" y="268">LDS · RDS · CDS · EDS · SDS</text>
+        </g>
+        <text class="t-sm bad" data-s="5" x="496" y="248">can reroute traffic,</text>
+        <text class="t-sm bad" data-s="5" x="496" y="264">swap certificates,</text>
+        <text class="t-sm bad" data-s="5" x="496" y="280">disable authorisation</text>
 
-        <line class="flow" x1="126" y1="112" x2="156" y2="112" marker-end="url(#ah-mut)"/>
-
-        <rect class="zone-accent" x="160" y="62" width="396" height="110" rx="12"/>
-        <text class="t-sm t-b" x="172" y="80">Envoy</text>
-
-        <rect class="box" x="172" y="90" width="94" height="56" rx="8"/>
-        <text class="t-sm t-b" x="219" y="114" text-anchor="middle">Listener</text>
-        <text class="t-sm t-mut" x="219" y="132" text-anchor="middle">:8443</text>
-
-        <line class="flow" x1="268" y1="118" x2="282" y2="118" marker-end="url(#ah-mut)"/>
-
-        <rect class="box-accent" x="284" y="90" width="136" height="56" rx="8"/>
-        <text class="t-sm t-b" x="352" y="114" text-anchor="middle">HTTP filters</text>
-        <text class="t-sm t-mut" x="352" y="132" text-anchor="middle">JWT · authz · RBAC</text>
-
-        <line class="flow" x1="422" y1="118" x2="436" y2="118" marker-end="url(#ah-mut)"/>
-
-        <rect class="box" x="438" y="90" width="104" height="56" rx="8"/>
-        <text class="t-sm t-b" x="490" y="114" text-anchor="middle">Router</text>
-        <text class="t-sm t-mut" x="490" y="132" text-anchor="middle">picks cluster</text>
-
-        <line class="flow-accent" x1="558" y1="118" x2="588" y2="118" marker-end="url(#ah-acc)"/>
-
-        <rect class="box" x="592" y="84" width="108" height="56" rx="8"/>
-        <text class="t-sm t-b" x="646" y="108" text-anchor="middle">Cluster</text>
-        <text class="t-sm t-mut" x="646" y="126" text-anchor="middle">upstream pool</text>
-
-        <path class="flow-accent" d="M360 214 V176" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="348" y="198" text-anchor="end">xDS streams config in live — no reload</text>
-
-        <rect class="box-accent" x="250" y="216" width="220" height="58" rx="8"/>
-        <text class="t-sm t-b" x="360" y="240" text-anchor="middle">Control plane</text>
-        <text class="t-sm t-mut" x="360" y="258" text-anchor="middle">LDS · RDS · CDS · EDS · SDS</text>
-
-        <text class="t-sm t-mut" x="360" y="292" text-anchor="middle">Whoever can push xDS to the fleet can reroute or unwrap any traffic in it.</text>
+        ${badge(1, 128, 84, '1')}
+        ${badge(2, 424, 76, '2')}
+        ${badge(3, 530, 82, '3')}
+        ${badge(4, 360, 198, '4')}
+        ${badge(5, 464, 238, '5')}
       </svg>`,
 
     istio: () => `
