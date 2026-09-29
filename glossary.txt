@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-102 terms, alphabetical. Generated from index.html by glossary.mjs.
+103 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -17,6 +17,16 @@ Alpaca — Local HTTP Proxy for Command-Line Tools
     4. It answers the 407 — When the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself: Negotiate, then NTLM, then Basic.
     5. Any process uses it — The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress.
     Key fact: Alpaca is an honest compatibility shim for the perimeter model rather than a zero-trust component.
+
+AMPS — Advanced Message Processing System (60East Technologies)
+    A low-latency publish/subscribe engine for trading systems that also keeps the latest state of every record.
+    [Network Technology] · aka Advanced Message Processing System, 60East Technologies, State of the World, SOW, sow_and_subscribe, content filtering, pub/sub, message bus
+    1. Filter on content — AMPS is a publish/subscribe engine: subscribers filter on a message's content as well as its topic, such as every message where Ticker is IBM.
+    2. State of the World — The SOW keeps the latest version of each record in a topic.
+    3. Query and subscribe — One query-and-subscribe command returns the current state and then streams updates from that exact moment, with nothing missed or doubled.
+    4. A transaction log — A transaction log records messages for replay and underpins queues and replication.
+    5. Open by default — Out of the box AMPS accepts any username and password and grants every permission to any user, and TLS passes no identity to either check. Real access control means plugging in a module.
+    Key fact: Out of the box, AMPS accepts any username and password and grants every permission to any user.
 
 API Gateway — API Gateway
     A single front door for APIs that handles auth, rate limits, and routing.

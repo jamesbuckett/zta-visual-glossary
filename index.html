@@ -652,7 +652,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">102</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">103</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -663,11 +663,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">102</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">103</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">102</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">103</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -1055,7 +1055,7 @@
       tldr: "A lightweight publish/subscribe protocol for IoT and constrained devices.",
       explainer: `MQTT is a messaging protocol built for low-bandwidth, high-latency, or unreliable networks. Clients publish messages to named topics on a central broker, and other clients subscribe to the topics they care about, which decouples senders from receivers. Its tiny footprint and tiered quality-of-service levels make it the default for sensors, telemetry, and large IoT fleets.`,
       types: ["Protocol"], provenance: ["Open Source"], domains: ["Transport & Web"],
-      related: ["tcpip", "grpc"],
+      related: ["tcpip", "grpc", "amps"],
       source: { label: "OASIS MQTT 5.0 specification", url: "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html" },
       caption: "Publishers send to topics on a broker, which fans messages out to subscribers.",
       steps: [
@@ -2490,7 +2490,7 @@
       tldr: "The messaging standard trading firms use to send orders and trade confirmations to each other in real time.",
       explainer: `Created in 1992 between Fidelity Investments and Salomon Brothers, and now maintained as an open standard by the non-profit FIX Trading Community, FIX is the messaging protocol trading firms use to send orders, cancellations and trade confirmations to one another in real time. Each message is a run of numbered tag=value fields separated by a control character: 35=D marks a new order, 35=8 an execution report, and tags 49 and 56 name the sending and receiving firms, their SenderCompID and TargetCompID. A session opens with a Logon, stays alive on heartbeats and numbers every message, so a gap in the sequence triggers a resend request rather than a silently lost order. The limitation is trust. FIX leaves security to the network beneath it: its own guidance treats the SenderCompID, matched to a known IP address, as the basic check on who is at the other end, encryption is often skipped on private leased lines, and a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS.`,
       types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
-      related: ["tcpip", "tls", "mtls", "fapi"],
+      related: ["tcpip", "tls", "mtls", "fapi", "amps"],
       source: { label: "FIX Trading Community — Standards", url: "https://www.fixtrading.org/standards/" },
       caption: "A fund and a broker exchange numbered tag=value messages over a FIX session; a sequence gap triggers a resend, but trust rests on CompIDs and the network.",
       steps: [
@@ -2501,6 +2501,24 @@
         { title: "Trust in the network", text: "FIX leaves security to the network beneath it. The SenderCompID, matched to a known IP address, is the basic check, and encryption is often skipped on leased lines; FIXS runs FIX over TLS." }
       ],
       fact: "FIX leaves security to the network beneath it, so a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS."
+    },
+    {
+      id: "amps", term: "AMPS", acronym: "Advanced Message Processing System (60East Technologies)",
+      aliases: ["Advanced Message Processing System", "60East Technologies", "State of the World", "SOW", "sow_and_subscribe", "content filtering", "pub/sub", "message bus"],
+      tldr: "A low-latency publish/subscribe engine for trading systems that also keeps the latest state of every record.",
+      explainer: `AMPS is a commercial publish/subscribe engine from 60East Technologies, built for the low-latency, high-volume messaging of financial services; its maker describes it as combining a message bus, a queue and a database. Subscribers can filter on a message's content as well as its topic — every message where Ticker is IBM, say — and payloads can be JSON, FIX, XML, Protocol Buffers or raw binary. Its State of the World (SOW) keeps the latest version of each record in a topic, so one query-and-subscribe command returns the current state and then streams updates from that exact moment, with nothing missed or doubled, while a transaction log records messages for replay and underpins queues and replication. The limitation is the defaults: out of the box AMPS requires a logon but accepts any username and password, its default entitlement module grants every permission to any user, and TLS, even mutual TLS, passes no identity to either check. Real access control means plugging in Kerberos, LDAP, OAuth or a custom entitlement module, which can then narrow each user down to individual messages and fields.`,
+      types: ["Network Technology"], provenance: ["Vendor"], domains: ["Platforms & Apps", "Transport & Web"],
+      related: ["fix", "mqtt", "rbac", "mtls"],
+      source: { label: "60East Technologies — AMPS User Guide", url: "https://crankuptheamps.com/docs/amps-user-guide" },
+      caption: "A publisher's message is routed by content to matching subscribers and kept in the State of the World; a query-and-subscribe reads the current state, then streams updates.",
+      steps: [
+        { title: "Filter on content", text: "AMPS is a publish/subscribe engine: subscribers filter on a message's content as well as its topic, such as every message where Ticker is IBM." },
+        { title: "State of the World", text: "The SOW keeps the latest version of each record in a topic." },
+        { title: "Query and subscribe", text: "One query-and-subscribe command returns the current state and then streams updates from that exact moment, with nothing missed or doubled." },
+        { title: "A transaction log", text: "A transaction log records messages for replay and underpins queues and replication." },
+        { title: "Open by default", text: "Out of the box AMPS accepts any username and password and grants every permission to any user, and TLS passes no identity to either check. Real access control means plugging in a module." }
+      ],
+      fact: "Out of the box, AMPS accepts any username and password and grants every permission to any user."
     }
   ];
 
@@ -7449,6 +7467,78 @@
         ${badge(3, 680, 40, '3')}
         ${badge(4, 124, 156, '4')}
         ${badge(5, 680, 288, '5')}
+      </svg>`,
+
+    amps: () => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A publisher's message is routed by content to matching subscribers and kept in the State of the World; a query-and-subscribe reads the current state, then streams updates.">
+        <g data-s="1">
+          <rect class="box" x="24" y="64" width="132" height="96" rx="12"/>
+          ${icon('send', 40, 76)}
+          <text class="t-b" x="72" y="94">Publisher</text>
+          <text class="t-sm t-mut" x="40" y="124">Ticker: IBM</text>
+          <text class="t-sm t-mut" x="40" y="144">Price: 125</text>
+        </g>
+        <line class="flow" data-s="1" x1="158" y1="114" x2="240" y2="114" marker-end="url(#ah-mut)"/>
+
+        <rect class="zone" x="184" y="16" width="264" height="220" rx="10"/>
+        <text class="t-b" x="200" y="38">AMPS</text>
+        <text class="t-sm t-mut" x="244" y="38">60East server</text>
+        <g data-s="4">
+          <rect class="box" x="200" y="52" width="232" height="52" rx="6"/>
+          <text class="t-sm" x="216" y="72">transaction log</text>
+          <text class="t-sm t-mut" x="216" y="92">replay · queues · replication</text>
+        </g>
+        <g data-s="2 3">
+          <rect class="box" x="200" y="124" width="232" height="96" rx="6"/>
+          <text class="t-sm" x="216" y="144">State of the World (SOW)</text>
+          <text class="t-sm t-mut" x="216" y="166">key</text>
+          <text class="t-sm t-mut" x="288" y="166">latest</text>
+          <text class="t-sm" x="216" y="186">IBM</text>
+          <text class="t-sm" x="288" y="186">125</text>
+          <text class="t-sm" x="216" y="206">MSFT</text>
+          <text class="t-sm" x="288" y="206">410</text>
+        </g>
+
+        <g data-s="1">
+          <rect class="box" x="528" y="24" width="168" height="52" rx="12"/>
+          ${icon('monitor', 544, 38)}
+          <text class="t-b" x="576" y="46">Subscriber 1</text>
+          <text class="t-sm t-mut" x="576" y="64">Ticker = 'IBM'</text>
+        </g>
+        <line class="flow" data-s="1" x1="450" y1="50" x2="526" y2="50" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="488" y="43" text-anchor="middle">IBM 125</text>
+
+        <g data-s="1">
+          <rect class="box" x="528" y="92" width="168" height="52" rx="12"/>
+          ${icon('monitor', 544, 106)}
+          <text class="t-b" x="576" y="114">Subscriber 2</text>
+          <text class="t-sm t-mut" x="576" y="132">Ticker = 'MSFT'</text>
+        </g>
+        <line class="flow-bad" data-s="1" x1="450" y1="118" x2="484" y2="118"/>
+        <line class="stroke-bad" data-s="1" x1="490" y1="110" x2="506" y2="126" stroke-width="2"/>
+        <line class="stroke-bad" data-s="1" x1="506" y1="110" x2="490" y2="126" stroke-width="2"/>
+        <text class="t-sm t-mut" data-s="1" x="488" y="146" text-anchor="middle">no match</text>
+
+        <g data-s="3">
+          <rect class="box" x="528" y="160" width="168" height="68" rx="12"/>
+          ${icon('gauge', 544, 172)}
+          <text class="t-b" x="576" y="190">Dashboard</text>
+          <text class="t-sm t-mut" x="544" y="206">current state,</text>
+          <text class="t-sm t-mut" x="544" y="222">then live updates</text>
+        </g>
+        <line class="flow" data-s="3" x1="434" y1="194" x2="526" y2="194" marker-end="url(#ah-mut)"/>
+
+        <g data-s="5">
+          <rect class="box" x="24" y="252" width="672" height="36" rx="6"/>
+          <text class="t-sm bad" x="40" y="274">default: any username and password · every permission to any user</text>
+          <text class="t-sm t-mut" x="488" y="274">TLS identity not used</text>
+        </g>
+
+        ${badge(1, 172, 114, '1')}
+        ${badge(2, 416, 144, '2')}
+        ${badge(3, 480, 194, '3')}
+        ${badge(4, 416, 72, '4')}
+        ${badge(5, 680, 270, '5')}
       </svg>`,
   };
 
