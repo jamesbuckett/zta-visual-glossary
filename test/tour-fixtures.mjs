@@ -23,9 +23,11 @@ const GOOD_STEPS = `steps: [
       ],
       fact: "Each peer is known only by its public key."`;
 
-// Appends tour fields at the end of the wireguard entry. Later keys win in an
-// object literal, so this overrides any real tour the entry has by then.
+// Replaces the wireguard entry's tour fields with `tour`. The real tour is
+// stripped first, so a case that omits a field (the missing-fact case) really
+// omits it rather than inheriting the entry's own.
 function withTour(html, tour) {
+  html = html.replace(/(id: "wireguard"[\s\S]*?),\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1');
   const at = html.indexOf('id: "wireguard"');
   const close = html.indexOf('\n    }', at);
   return html.slice(0, close) + `,\n      ${tour}` + html.slice(close);

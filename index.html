@@ -798,7 +798,14 @@
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Secure Channels & Crypto"],
       related: ["mtls", "ssh", "ipsec", "http"],
       source: { label: "RFC 8446 — TLS 1.3", url: "https://www.rfc-editor.org/info/rfc8446" },
-      caption: "Handshake sequence — negotiate, authenticate with a certificate, then exchange encrypted data."
+      caption: "Handshake sequence — negotiate, authenticate with a certificate, then exchange encrypted data.",
+      steps: [
+        { title: "Negotiate ciphers", text: "A handshake opens the connection by negotiating which ciphers to use." },
+        { title: "Server's certificate", text: "The server presents its certificate, which is how TLS authenticates the server." },
+        { title: "Agree session keys", text: "The certificate plus public-key cryptography are used to agree on session keys." },
+        { title: "Encrypted traffic", text: "From then on, traffic is encrypted with fast symmetric crypto, giving the connection confidentiality and integrity." }
+      ],
+      fact: "TLS underpins HTTPS, secure email and many VPNs."
     },
     {
       id: "bgp", term: "BGP", acronym: "Border Gateway Protocol", aliases: ["autonomous system", "peering"],
@@ -873,7 +880,14 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Secure Channels & Crypto"],
       related: ["wireguard", "ipsec", "tls", "sase"],
       source: { label: "NIST glossary — VPN", url: "https://csrc.nist.gov/glossary/term/virtual_private_network" },
-      caption: "An encrypted tunnel carries private traffic across the untrusted public internet."
+      caption: "An encrypted tunnel carries private traffic across the untrusted public internet.",
+      steps: [
+        { title: "A device or a site", text: "A VPN starts from a device, or a whole site, that needs to reach a network." },
+        { title: "An encrypted tunnel", text: "It builds an encrypted tunnel so traffic crosses the untrusted internet as if it were on a private link." },
+        { title: "Into the network", text: "At the far end the traffic reaches the private network: remote access to corporate resources, and a shield on hostile networks." },
+        { title: "The protocol decides", text: "Underneath sits a specific protocol: IPsec, WireGuard or a TLS-based design." }
+      ],
+      fact: "A VPN's security and topology depend entirely on the underlying protocol."
     },
     {
       id: "wireguard", term: "WireGuard", acronym: "WireGuard VPN protocol", aliases: ["wg"],
@@ -882,7 +896,14 @@
       types: ["Protocol", "Security Technology"], provenance: ["Open Source"], domains: ["Secure Channels & Crypto"],
       related: ["vpn", "ipsec", "tls"],
       source: { label: "WireGuard whitepaper", url: "https://www.wireguard.com/papers/wireguard.pdf" },
-      caption: "Two peers identified by public keys establish a lightweight encrypted tunnel."
+      caption: "Two peers identified by public keys establish a lightweight encrypted tunnel.",
+      steps: [
+        { title: "Keys are identities", text: "Each WireGuard peer is identified by its public key." },
+        { title: "A quick handshake", text: "Once configured, the peers establish an encrypted tunnel with quick handshakes." },
+        { title: "Low-overhead tunnel", text: "The tunnel itself runs with very low overhead." },
+        { title: "Small, in the kernel", text: "WireGuard is designed for simplicity and speed, with a codebase small enough to audit by hand, and it ships inside the Linux kernel." }
+      ],
+      fact: "WireGuard has rapidly become the modern default over heavier IPsec and OpenVPN stacks."
     },
     {
       id: "zerotrust", term: "Zero Trust", acronym: "Zero Trust Architecture", aliases: ["ZTA", "ZTNA", "BeyondCorp"],
@@ -1017,7 +1038,14 @@
       types: ["Protocol", "Security Technology"], provenance: ["Open Source"], domains: ["Secure Channels & Crypto"],
       related: ["tls", "vpn"],
       source: { label: "RFC 4251 — SSH Protocol Architecture", url: "https://www.rfc-editor.org/info/rfc4251" },
-      caption: "An encrypted channel is established first; key-based login then proves identity inside it."
+      caption: "An encrypted channel is established first; key-based login then proves identity inside it.",
+      steps: [
+        { title: "Key exchange first", text: "SSH first establishes an encrypted channel to the remote machine through key exchange." },
+        { title: "Log in inside it", text: "Only then does it authenticate, inside that channel, with a password or, preferably, a public-key pair." },
+        { title: "Shells, files, ports", text: "The channel carries interactive shells, file transfer and port forwarding." },
+        { title: "Replaces cleartext", text: "It is a safe replacement for the cleartext remote-access tools of the past." }
+      ],
+      fact: "SSH is the everyday tool for administering servers securely."
     },
     {
       id: "dhcp", term: "DHCP", acronym: "Dynamic Host Configuration Protocol", aliases: ["DORA", "lease"],
@@ -1061,7 +1089,14 @@
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Secure Channels & Crypto"],
       related: ["vpn", "wireguard", "tls"],
       source: { label: "RFC 4301 — IPsec Architecture", url: "https://www.rfc-editor.org/info/rfc4301" },
-      caption: "Tunnel mode — a gateway encrypts and wraps whole packets for transit between sites."
+      caption: "Tunnel mode — a gateway encrypts and wraps whole packets for transit between sites.",
+      steps: [
+        { title: "Transport mode", text: "IPsec secures traffic at the IP layer, so any application's packets are protected with no changes to the application. Transport mode protects the payload, host to host." },
+        { title: "Tunnel mode", text: "Tunnel mode wraps the whole packet, encrypting and integrity-protecting it inside a new one." },
+        { title: "Gateway to gateway", text: "Tunnel mode between gateways is the basis of many site-to-site VPNs." },
+        { title: "IKE negotiates", text: "Key exchange and negotiation are handled by the IKE protocol." }
+      ],
+      fact: "IPsec protects any application's packets with no changes to the application."
     },
     {
       id: "mtls", term: "mTLS", acronym: "Mutual TLS", aliases: ["mutual TLS", "client certificate"],
@@ -2124,22 +2159,37 @@
       </svg>`,
 
     tls: () => `
-      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="TLS handshake: ClientHello, ServerHello with certificate, key exchange, then encrypted application data.">
-        <text class="t-b" x="150" y="32" text-anchor="middle">Client</text>
-        <text class="t-b" x="570" y="32" text-anchor="middle">Server</text>
-        <line class="divider" x1="150" y1="44" x2="150" y2="290"/>
-        <line class="divider" x1="570" y1="44" x2="570" y2="290"/>
-        ${[
-          ["ClientHello — ciphers offered", 80, "mut", 1],
-          ["ServerHello + certificate", 130, "mut", 0],
-          ["verify cert, key exchange", 180, "acc", 1],
-        ].map(([t, y, m, dir]) => `
-          <line class="flow${m==='acc'?'-accent':''}" x1="${dir? 150:570}" y1="${y}" x2="${dir?570:150}" y2="${y}" marker-end="url(#ah-${m})"/>
-          <text class="t-sm" x="360" y="${y-8}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <rect class="zone-accent" x="150" y="215" width="420" height="70" rx="8"/>
-        <text class="t-b t-sm t-acc" x="360" y="243" text-anchor="middle">Encrypted application data</text>
-        <text class="t-sm t-mut" x="360" y="265" text-anchor="middle">fast symmetric session keys, both directions</text>
+      <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Handshake sequence — negotiate, authenticate with a certificate, then exchange encrypted data.">
+        <g data-s="1 3 4">
+          <rect class="box" x="24" y="12" width="180" height="48" rx="12"/>
+          ${icon('laptop', 40, 24)}
+          <text class="t-b" x="72" y="41">Client</text>
+        </g>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="516" y="12" width="180" height="48" rx="8"/>
+          ${icon('server', 532, 24)}
+          <text class="t-b" x="564" y="34">Server</text>
+          <text class="t-sm t-mut" x="564" y="51">has a certificate</text>
+        </g>
+        <line class="divider" x1="114" y1="62" x2="114" y2="248"/>
+        <line class="divider" x1="606" y1="62" x2="606" y2="248"/>
+        <line class="flow" data-s="1" x1="116" y1="92" x2="604" y2="92" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="85" text-anchor="middle">negotiate ciphers</text>
+        <line class="flow" data-s="2" x1="604" y1="124" x2="116" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="117" text-anchor="middle">server's certificate</text>
+        <line class="flow" data-s="3" x1="116" y1="156" x2="604" y2="156" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="149" text-anchor="middle">public-key crypto agrees session keys</text>
+        <g data-s="4">
+          <rect class="zone" x="104" y="176" width="512" height="72" rx="8"/>
+          <text class="t-sm" x="360" y="194" text-anchor="middle">encrypted with fast symmetric crypto</text>
+        </g>
+        <line class="flow" data-s="4" x1="116" y1="212" x2="604" y2="212" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="604" y1="234" x2="116" y2="234" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 150, 92, '1')}
+        ${badge(2, 570, 124, '2')}
+        ${badge(3, 150, 156, '3')}
+        ${badge(4, 150, 212, '4')}
       </svg>`,
 
     vlan: () => `
@@ -2319,35 +2369,74 @@
       </svg>`,
 
     vpn: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A remote device reaches a private network through an encrypted tunnel across the public internet.">
-        <rect class="box" x="30" y="100" width="150" height="64" rx="10"/>
-        <text class="t-b" x="105" y="128" text-anchor="middle">Remote</text>
-        <text class="t-sm t-mut" x="105" y="146" text-anchor="middle">device</text>
-        <rect class="zone" x="205" y="66" width="300" height="120" rx="10"/>
-        <text class="t-sm t-mut" x="355" y="180" text-anchor="middle">untrusted public internet</text>
-        <line class="flow-accent" x1="180" y1="128" x2="540" y2="128" marker-end="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b t-acc" x="355" y="118" text-anchor="middle">encrypted tunnel</text>
-        <rect class="box-accent" x="540" y="100" width="150" height="64" rx="10"/>
-        <text class="t-b" x="615" y="128" text-anchor="middle">VPN gateway</text>
-        <text class="t-sm t-mut" x="615" y="146" text-anchor="middle">decrypts here</text>
-        <rect class="box" x="540" y="206" width="150" height="50" rx="10"/>
-        <text x="615" y="236" text-anchor="middle">Private network</text>
-        <line class="flow" x1="615" y1="164" x2="615" y2="204" marker-end="url(#ah-mut)"/>
+      <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An encrypted tunnel carries private traffic across the untrusted public internet.">
+        <g data-s="1 2">
+          <rect class="box" x="24" y="64" width="160" height="112" rx="12"/>
+          ${icon('laptop', 40, 78)}
+          <text class="t-b" x="72" y="96">Device</text>
+          <text class="t-sm t-mut" x="72" y="114">or a whole</text>
+          <text class="t-sm t-mut" x="72" y="130">site</text>
+        </g>
+        <rect class="zone" x="200" y="24" width="320" height="192" rx="10"/>
+        <text class="t-sm t-mut" x="360" y="44" text-anchor="middle">untrusted internet</text>
+        <text class="t-sm" data-s="2" x="360" y="92" text-anchor="middle">encrypted tunnel</text>
+        <g data-s="2">
+          <rect class="box" x="186" y="104" width="348" height="32" rx="16"/>
+        </g>
+        <line class="flow" data-s="2 3" x1="232" y1="120" x2="532" y2="120" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="536" y="64" width="160" height="112" rx="8"/>
+          ${icon('building-2', 552, 78)}
+          <text class="t-b" x="584" y="96">Private</text>
+          <text class="t-sm t-mut" x="584" y="114">network</text>
+          <text class="t-sm t-mut" x="552" y="148">corporate</text>
+          <text class="t-sm t-mut" x="552" y="164">resources</text>
+        </g>
+        <g data-s="4">
+          <text class="t-sm t-mut" x="24" y="245">the protocol underneath:</text>
+          ${[['IPsec', 216], ['WireGuard', 340], ['TLS-based', 464]].map(([t, x]) => `
+            <rect class="box" x="${x}" y="226" width="112" height="28" rx="6"/>
+            <text class="t-sm" x="${x + 56}" y="244" text-anchor="middle">${t}</text>`).join('')}
+        </g>
+
+        ${badge(1, 168, 78, '1')}
+        ${badge(2, 212, 120, '2')}
+        ${badge(3, 680, 78, '3')}
+        ${badge(4, 600, 240, '4')}
       </svg>`,
 
     wireguard: () => `
-      <svg class="dg" viewBox="0 0 720 220" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two peers identified by public keys form a lightweight encrypted tunnel.">
-        <rect class="box" x="40" y="65" width="200" height="90" rx="12"/>
-        <text class="t-b" x="140" y="100" text-anchor="middle">Peer A</text>
-        <text class="t-sm t-mut" x="140" y="123" text-anchor="middle">pubkey 0xA1B2…</text>
-        <rect class="box" x="480" y="65" width="200" height="90" rx="12"/>
-        <text class="t-b" x="580" y="100" text-anchor="middle">Peer B</text>
-        <text class="t-sm t-mut" x="580" y="123" text-anchor="middle">pubkey 0xC3D4…</text>
-        <line class="flow-accent" x1="240" y1="103" x2="480" y2="103" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
-        <rect class="fill-accent" x="350" y="92" width="20" height="22" rx="3"/>
-        <path d="M354 92 v-5 a6 6 0 0 1 12 0 v5" fill="none" stroke="var(--accent)" stroke-width="2"/>
-        <text class="t-sm t-b t-acc" x="360" y="66" text-anchor="middle">encrypted tunnel</text>
-        <text class="t-sm t-mut" x="360" y="180" text-anchor="middle">tiny codebase, fast handshake — no certificates needed</text>
+      <svg class="dg" viewBox="0 0 720 248" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two peers identified by public keys establish a lightweight encrypted tunnel.">
+        ${[['Peer A', 24, 'A'], ['Peer B', 496, 'B']].map(([name, x, k]) => `
+          <g data-s="2 3">
+            <rect class="box" x="${x}" y="24" width="200" height="124" rx="12"/>
+            ${icon('laptop', x + 16, 38)}
+            <text class="t-b" x="${x + 48}" y="56">${name}</text>
+          </g>
+          <g data-s="1">
+            <rect class="box" x="${x + 16}" y="76" width="168" height="56" rx="6"/>
+            ${icon('key-round', x + 28, 92)}
+            <text class="t-sm t-b" x="${x + 60}" y="102">public key ${k}</text>
+            <text class="t-sm t-mut" x="${x + 60}" y="118">is its identity</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="226" y1="56" x2="494" y2="56" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="48" text-anchor="middle">quick handshake</text>
+        <g data-s="3">
+          <rect class="box" x="226" y="88" width="268" height="32" rx="16"/>
+        </g>
+        <line class="flow" data-s="3" x1="268" y1="104" x2="492" y2="104" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="140" text-anchor="middle">encrypted, very low overhead</text>
+        <g data-s="4">
+          <rect class="box" x="24" y="172" width="672" height="56" rx="8"/>
+          ${icon('cpu', 40, 188)}
+          <text class="t-b" x="72" y="196">Inside the Linux kernel</text>
+          <text class="t-sm t-mut" x="72" y="214">a codebase small enough to audit by hand</text>
+        </g>
+
+        ${badge(1, 190, 90, '1')}
+        ${badge(2, 250, 56, '2')}
+        ${badge(3, 248, 104, '3')}
+        ${badge(4, 680, 186, '4')}
       </svg>`,
 
     zerotrust: () => `
@@ -2653,22 +2742,36 @@
       </svg>`,
 
     ssh: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SSH first opens an encrypted channel via key exchange, then authenticates with a key pair inside it for shell, transfer, and tunnels.">
-        <text class="t-b" x="150" y="32" text-anchor="middle">Client</text>
-        <text class="t-b" x="570" y="32" text-anchor="middle">Server</text>
-        <line class="divider" x1="150" y1="44" x2="150" y2="272"/>
-        <line class="divider" x1="570" y1="44" x2="570" y2="272"/>
-        <line class="flow" x1="150" y1="80" x2="570" y2="80" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" x="360" y="72" text-anchor="middle">key exchange — channel encrypted</text>
-        <line class="flow" x1="150" y1="124" x2="570" y2="124" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" x="360" y="116" text-anchor="middle">offer public key</text>
-        <line class="flow" x1="570" y1="168" x2="150" y2="168" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" x="360" y="160" text-anchor="middle">key accepted — send proof</text>
-        <line class="flow-accent" x1="150" y1="212" x2="570" y2="212" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="360" y="204" text-anchor="middle">signed proof over session ID — no password sent</text>
-        <rect class="zone-accent" x="150" y="228" width="420" height="44" rx="8"/>
-        <text class="t-b t-sm t-acc" x="360" y="248" text-anchor="middle">Authenticated session</text>
-        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">shell · file transfer · port forwarding</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An encrypted channel is established first; key-based login then proves identity inside it.">
+        <g data-s="1 2 3">
+          <rect class="box" x="24" y="36" width="160" height="188" rx="12"/>
+          ${icon('laptop', 40, 50)}
+          <text class="t-b" x="72" y="68">Client</text>
+        </g>
+        <g data-s="1 2 3">
+          <rect class="box" x="536" y="36" width="160" height="188" rx="8"/>
+          ${icon('server', 552, 50)}
+          <text class="t-b" x="584" y="68">Remote</text>
+          <text class="t-sm t-mut" x="584" y="86">machine</text>
+        </g>
+        <g data-s="1">
+          <rect class="zone" x="200" y="16" width="320" height="216" rx="10"/>
+          <text class="t-sm" x="360" y="36" text-anchor="middle">encrypted channel</text>
+        </g>
+        <line class="flow" data-s="1" x1="186" y1="68" x2="534" y2="68" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="61" text-anchor="middle">key exchange</text>
+        <line class="flow" data-s="2" x1="186" y1="112" x2="534" y2="112" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="105" text-anchor="middle">log in: key pair or password</text>
+        ${[['interactive shell', 156], ['file transfer', 184], ['port forwarding', 212]].map(([t, y]) => `
+          <line class="flow" data-s="3" x1="186" y1="${y}" x2="534" y2="${y}" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+          <text class="t-sm" data-s="3" x="360" y="${y - 6}" text-anchor="middle">${t}</text>`).join('')}
+        <line class="flow-bad" data-s="4" x1="186" y1="256" x2="534" y2="256" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="360" y="250" text-anchor="middle">the cleartext tools SSH replaces</text>
+
+        ${badge(1, 222, 68, '1')}
+        ${badge(2, 222, 112, '2')}
+        ${badge(3, 222, 184, '3')}
+        ${badge(4, 222, 256, '4')}
       </svg>`,
 
     dhcp: () => `
@@ -2742,26 +2845,45 @@
       </svg>`,
 
     ipsec: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two gateways build an encrypted tunnel; tunnel mode wraps each original packet inside a new one.">
-        <rect class="box" x="20" y="58" width="120" height="56" rx="10"/>
-        <text class="t-sm" x="80" y="92" text-anchor="middle">Site A LAN</text>
-        <rect class="box" x="165" y="52" width="110" height="68" rx="10"/>
-        <text class="t-sm t-b" x="220" y="90" text-anchor="middle">Gateway</text>
-        <rect class="box" x="445" y="52" width="110" height="68" rx="10"/>
-        <text class="t-sm t-b" x="500" y="90" text-anchor="middle">Gateway</text>
-        <rect class="box" x="580" y="58" width="120" height="56" rx="10"/>
-        <text class="t-sm" x="640" y="92" text-anchor="middle">Site B LAN</text>
-        <line class="flow" x1="140" y1="86" x2="163" y2="86" marker-end="url(#ah-mut)"/>
-        <line class="flow-accent" x1="275" y1="86" x2="445" y2="86" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b t-acc" x="360" y="76" text-anchor="middle">encrypted ESP tunnel</text>
-        <line class="flow" x1="555" y1="86" x2="578" y2="86" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="150" y="186" width="120" height="46" rx="6"/>
-        <text class="t-sm" x="210" y="214" text-anchor="middle">new IP hdr</text>
-        <rect class="box" x="270" y="186" width="90" height="46" rx="6"/>
-        <text class="t-sm" x="315" y="214" text-anchor="middle">ESP</text>
-        <rect class="box-accent" x="360" y="186" width="210" height="46" rx="6"/>
-        <text class="t-sm" x="465" y="214" text-anchor="middle">original packet (encrypted)</text>
-        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">tunnel mode wraps the whole original packet</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Tunnel mode — a gateway encrypts and wraps whole packets for transit between sites.">
+        <g data-s="1">
+          <text class="t-sm t-b" x="24" y="40">Transport mode</text>
+          <text class="t-sm t-mut" x="24" y="56">host to host</text>
+          <rect class="box" x="232" y="24" width="120" height="40" rx="4"/>
+          <text class="t-sm" x="292" y="48" text-anchor="middle">IP header</text>
+          <rect class="box" x="356" y="24" width="340" height="40" rx="4"/>
+          <text class="t-sm" x="526" y="48" text-anchor="middle">payload, protected</text>
+        </g>
+        <g data-s="2 3">
+          <text class="t-sm t-b" x="24" y="104">Tunnel mode</text>
+          <text class="t-sm t-mut" x="24" y="120">whole packet wrapped</text>
+          <rect class="box" x="232" y="88" width="120" height="40" rx="4"/>
+          <text class="t-sm" x="292" y="112" text-anchor="middle">new header</text>
+          <rect class="box" x="356" y="88" width="340" height="40" rx="4"/>
+          <rect class="box" x="368" y="96" width="120" height="24" rx="3"/>
+          <text class="t-sm" x="428" y="112" text-anchor="middle">IP header</text>
+          <rect class="box" x="492" y="96" width="192" height="24" rx="3"/>
+          <text class="t-sm" x="588" y="112" text-anchor="middle">payload</text>
+          <text class="t-sm t-mut" x="526" y="146" text-anchor="middle">the original packet, protected</text>
+        </g>
+        ${[['Gateway A', 'site A', 24], ['Gateway B', 'site B', 516]].map(([name, sub, x]) => `
+          <g data-s="3 4">
+            <rect class="box" x="${x}" y="168" width="180" height="72" rx="8"/>
+            ${icon('router', x + 16, 182)}
+            <text class="t-b" x="${x + 48}" y="200">${name}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="218">${sub}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="4" x1="206" y1="184" x2="514" y2="184" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="177" text-anchor="middle">IKE: key exchange, negotiation</text>
+        <g data-s="3">
+          <rect class="box" x="206" y="204" width="308" height="28" rx="14"/>
+        </g>
+        <line class="flow" data-s="3" x1="250" y1="218" x2="512" y2="218" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 212, 44, '1')}
+        ${badge(2, 212, 108, '2')}
+        ${badge(3, 228, 218, '3')}
+        ${badge(4, 236, 184, '4')}
       </svg>`,
 
     mtls: () => `

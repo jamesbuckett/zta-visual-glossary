@@ -248,6 +248,11 @@ Immuta — Policy-Based Access Control for Data Platforms
 IPsec — Internet Protocol Security
     Encrypts and authenticates IP traffic at the network layer.
     [Protocol, Security Technology] · aka IKE, ESP, tunnel mode
+    1. Transport mode — IPsec secures traffic at the IP layer, so any application's packets are protected with no changes to the application. Transport mode protects the payload, host to host.
+    2. Tunnel mode — Tunnel mode wraps the whole packet, encrypting and integrity-protecting it inside a new one.
+    3. Gateway to gateway — Tunnel mode between gateways is the basis of many site-to-site VPNs.
+    4. IKE negotiates — Key exchange and negotiation are handled by the IKE protocol.
+    Key fact: IPsec protects any application's packets with no changes to the application.
 
 Istio — Istio Service Mesh
     The most widely deployed service mesh — istiod issues every workload a SPIFFE identity and drives Envoy so that mTLS and per-request authorisation are the default, with an ambient mode that drops the sidecar entirely.
@@ -510,6 +515,11 @@ Spinnaker — Multi-Cloud Continuous Delivery
 SSH — Secure Shell
     An encrypted channel for remote login and command execution.
     [Protocol, Security Technology] · aka OpenSSH, SCP, key pair
+    1. Key exchange first — SSH first establishes an encrypted channel to the remote machine through key exchange.
+    2. Log in inside it — Only then does it authenticate, inside that channel, with a password or, preferably, a public-key pair.
+    3. Shells, files, ports — The channel carries interactive shells, file transfer and port forwarding.
+    4. Replaces cleartext — It is a safe replacement for the cleartext remote-access tools of the past.
+    Key fact: SSH is the everyday tool for administering servers securely.
 
 SuperNIC — NVIDIA AI-Network Accelerator
     A network accelerator tuned for AI: line-rate GPU-to-GPU Ethernet (RoCE) with the congestion control huge training clusters need — the DPU's performance-focused sibling.
@@ -531,6 +541,11 @@ TCP/IP — Transmission Control Protocol / Internet Protocol
 TLS — Transport Layer Security
     Encrypts data in transit and authenticates the server you are talking to.
     [Protocol, Security Technology] · aka SSL
+    1. Negotiate ciphers — A handshake opens the connection by negotiating which ciphers to use.
+    2. Server's certificate — The server presents its certificate, which is how TLS authenticates the server.
+    3. Agree session keys — The certificate plus public-key cryptography are used to agree on session keys.
+    4. Encrypted traffic — From then on, traffic is encrypted with fast symmetric crypto, giving the connection confidentiality and integrity.
+    Key fact: TLS underpins HTTPS, secure email and many VPNs.
 
 TPM & Secure Boot — Hardware Root of Trust
     A hardware chip that protects keys and proves a machine booted clean.
@@ -548,6 +563,11 @@ VLAN — Virtual Local Area Network
 VPN — Virtual Private Network
     An encrypted tunnel that extends a private network over the public internet.
     [Network Technology, Security Technology] · aka tunnel, remote access
+    1. A device or a site — A VPN starts from a device, or a whole site, that needs to reach a network.
+    2. An encrypted tunnel — It builds an encrypted tunnel so traffic crosses the untrusted internet as if it were on a private link.
+    3. Into the network — At the far end the traffic reaches the private network: remote access to corporate resources, and a shield on hostile networks.
+    4. The protocol decides — Underneath sits a specific protocol: IPsec, WireGuard or a TLS-based design.
+    Key fact: A VPN's security and topology depend entirely on the underlying protocol.
 
 WAF — Web Application Firewall
     A firewall that inspects HTTP to block web attacks a network firewall cannot see.
@@ -574,6 +594,11 @@ WebTransport — Multiplexed streams and datagrams over HTTP/3
 WireGuard — WireGuard VPN protocol
     A fast, modern, minimal VPN protocol built on current cryptography.
     [Protocol, Security Technology] · aka wg
+    1. Keys are identities — Each WireGuard peer is identified by its public key.
+    2. A quick handshake — Once configured, the peers establish an encrypted tunnel with quick handshakes.
+    3. Low-overhead tunnel — The tunnel itself runs with very low overhead.
+    4. Small, in the kernel — WireGuard is designed for simplicity and speed, with a codebase small enough to audit by hand, and it ships inside the Linux kernel.
+    Key fact: WireGuard has rapidly become the modern default over heavier IPsec and OpenVPN stacks.
 
 Zero Trust — Zero Trust Architecture
     Trust nothing by default; verify every request regardless of network location.
