@@ -19,6 +19,11 @@ API Gateway — API Gateway
 BGP — Border Gateway Protocol
     The routing protocol that stitches the internet's networks together.
     [Protocol, Network Technology] · aka autonomous system, peering
+    1. Advertise a range — An autonomous system, a large and independently run network, advertises which IP ranges it can reach.
+    2. Pass it on — Neighbouring autonomous systems advertise the range onward, so AS D hears of it along more than one path.
+    3. Choose by policy — AS D chooses a path by policy rather than purely shortest-path, reflecting commercial peering and transit relationships.
+    4. One misconfiguration — A single misconfiguration can reroute or black-hole traffic globally.
+    Key fact: BGP is what makes the internet a network of networks.
 
 BlueField — NVIDIA Data Processing Unit (DPU)
     NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data center's networking, storage, and zero-trust security on the card.
@@ -79,6 +84,12 @@ DLP — Data Loss Prevention
 DNS — Domain Name System
     The internet's phonebook: turns human names into IP addresses.
     [Protocol, Network Technology] · aka DNSSEC, resolver
+    1. Client asks — A client needs the IP address behind a human-readable name like example.com, and asks a resolver.
+    2. Root servers — The resolver walks a hierarchy from the top, starting with the root servers.
+    3. Top-level domain — Next it asks the server for the top-level domain.
+    4. Authoritative server — Last it reaches the authoritative server for the domain itself.
+    5. Answer and cache — The resolver returns the IP address the machine will route to, and caches the answer along the way to stay fast.
+    Key fact: DNS is also a powerful control point for security and filtering.
 
 DOCA — NVIDIA DPU Software Framework
     The SDK for BlueField — 'what CUDA is to the GPU, DOCA is to the DPU' — with libraries and services to offload networking, storage, and zero-trust security.
@@ -215,6 +226,11 @@ mTLS — Mutual TLS
 NAT — Network Address Translation
     Lets many private devices share one public IP address.
     [Network Technology, Protocol] · aka PAT, masquerade
+    1. Private addresses — Many internal hosts each have their own private address.
+    2. Rewrite IP and port — As packets cross the boundary, the NAT router rewrites their source and destination IP address and port.
+    3. One public address — Many internal private addresses are mapped onto a single public one, which conserves scarce IPv4 address space and hides internal network structure.
+    4. Replies find their host — The router keeps a translation table, so replies are sent back to the correct internal host.
+    Key fact: NAT conserves scarce IPv4 address space and, as a side effect, hides internal network structure.
 
 nDLP — Network Data Loss Prevention
     DLP for data in motion — traffic is inspected inline at the network edge and sensitive content is stopped before it leaves.
@@ -393,6 +409,11 @@ Tailscale — WireGuard-Based Mesh VPN
 TCP/IP — Transmission Control Protocol / Internet Protocol
     The layered addressing-and-delivery system that moves data across the internet.
     [Protocol, Network Technology] · aka internet protocol suite, UDP
+    1. Application data — Data starts at the top, in the application layer. Almost every other protocol in this glossary runs on top of TCP/IP.
+    2. Transport: TCP or UDP — The transport layer adds its own header. TCP gives reliable, ordered, connection-oriented delivery; UDP is the lightweight, fire-and-forget alternative.
+    3. Internet: IP — The internet layer adds the IP header. IP handles the addressing and routing of packets between hosts.
+    4. Link: last header — The link layer adds the last header, wrapping everything above it. Because each layer adds only its own header, each concern is solved independently.
+    Key fact: TCP/IP is the foundational suite that lets dissimilar networks interconnect.
 
 TLS — Transport Layer Security
     Encrypts data in transit and authenticates the server you are talking to.
@@ -405,6 +426,11 @@ TPM & Secure Boot — Hardware Root of Trust
 VLAN — Virtual Local Area Network
     Splits one physical switch into several isolated logical networks.
     [Network Technology] · aka 802.1Q, trunk
+    1. One physical switch — Every device plugs into a single physical network, here one switch.
+    2. Tag into VLANs — Tagging Ethernet frames (the 802.1Q standard) partitions it into separate broadcast domains, say guest, voice and server traffic.
+    3. No direct path — Devices on different VLANs cannot talk directly, even when plugged into the same switch.
+    4. Through the router — Traffic between VLANs must pass through a router.
+    Key fact: A VLAN improves security, performance and manageability without extra cabling.
 
 VPN — Virtual Private Network
     An encrypted tunnel that extends a private network over the public internet.
