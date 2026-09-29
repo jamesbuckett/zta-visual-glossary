@@ -782,7 +782,14 @@
       types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
       related: ["tls", "tcpip", "grpc"],
       source: { label: "RFC 9110 — HTTP Semantics", url: "https://www.rfc-editor.org/info/rfc9110" },
-      caption: "Request/response — the client asks, the server answers; HTTPS wraps the exchange in TLS."
+      caption: "Request/response — the client asks, the server answers; HTTPS wraps the exchange in TLS.",
+      steps: [
+        { title: "Client requests", text: "A browser or API client asks for a resource, using a method such as GET or POST." },
+        { title: "Server responds", text: "The server answers the request with the resource." },
+        { title: "Stateless", text: "Each request stands alone. Cookies or tokens carry context from one request to the next." },
+        { title: "HTTPS wraps it in TLS", text: "HTTPS is the very same protocol running inside a TLS-encrypted channel, so the traffic is private and tamper-evident." }
+      ],
+      fact: "HTTPS is now the default transport for nearly all web traffic."
     },
     {
       id: "tls", term: "TLS", acronym: "Transport Layer Security", aliases: ["SSL"],
@@ -978,7 +985,14 @@
       types: ["Protocol", "Development Framework"], provenance: ["Open Source"], domains: ["Transport & Web", "Platforms & Apps"],
       related: ["http", "kubernetes", "mtls"],
       source: { label: "gRPC documentation", url: "https://grpc.io/docs/" },
-      caption: "A .proto contract generates client and server stubs; calls ride HTTP/2 with streaming."
+      caption: "A .proto contract generates client and server stubs; calls ride HTTP/2 with streaming.",
+      steps: [
+        { title: "One .proto contract", text: "The contract between services is defined in a .proto file." },
+        { title: "Generate the code", text: "Client and server code is generated from that one contract." },
+        { title: "Call like a function", text: "Services call one another as if invoking local functions." },
+        { title: "Binary over HTTP/2", text: "Data is serialised with compact binary Protocol Buffers and rides HTTP/2, enabling multiplexing and streaming with low latency." }
+      ],
+      fact: "gRPC is a common choice for internal microservice communication where REST and JSON prove too chatty."
     },
     {
       id: "mqtt", term: "MQTT", acronym: "MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)", aliases: ["pub/sub", "broker", "IoT"],
@@ -987,7 +1001,14 @@
       types: ["Protocol"], provenance: ["Open Source"], domains: ["Transport & Web"],
       related: ["tcpip", "grpc"],
       source: { label: "OASIS MQTT 5.0 specification", url: "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html" },
-      caption: "Publishers send to topics on a broker, which fans messages out to subscribers."
+      caption: "Publishers send to topics on a broker, which fans messages out to subscribers.",
+      steps: [
+        { title: "Publish to a topic", text: "Clients publish messages to named topics on a central broker." },
+        { title: "Subscribe to topics", text: "Other clients subscribe to the topics they care about." },
+        { title: "Broker fans out", text: "The broker passes each message to the topic's subscribers, which decouples senders from receivers." },
+        { title: "Built for weak networks", text: "MQTT is built for low-bandwidth, high-latency or unreliable networks, with a tiny footprint and tiered quality-of-service levels." }
+      ],
+      fact: "MQTT's tiny footprint and tiered quality-of-service levels make it the default for sensors, telemetry and large IoT fleets."
     },
     {
       id: "ssh", term: "SSH", acronym: "Secure Shell", aliases: ["OpenSSH", "SCP", "key pair"],
@@ -1124,7 +1145,14 @@
       types: ["Protocol", "Network Technology", "Security Technology"], provenance: [], domains: ["Transport & Web", "Secure Channels & Crypto"],
       related: ["tls", "tcpip", "http"],
       source: { label: "RFC 9000 — QUIC", url: "https://www.rfc-editor.org/info/rfc9000" },
-      caption: "Combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP."
+      caption: "Combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP.",
+      steps: [
+        { title: "Runs over UDP", text: "QUIC is a transport protocol that runs over UDP and combines connection setup, TLS 1.3 encryption and multiplexed streams into one design." },
+        { title: "One round trip", text: "The transport and cryptographic handshakes happen together, so a new connection is usually ready after a single round trip, or zero when resuming. TCP-then-TLS needs several." },
+        { title: "Independent streams", text: "Encrypted streams are multiplexed over the one connection, independently of each other." },
+        { title: "No head-of-line blocking", text: "One lost packet stalls only its own stream, rather than holding up everything queued behind it as it does for HTTP/2 over TCP." }
+      ],
+      fact: "QUIC is the foundation of HTTP/3, with encryption built in rather than bolted on."
     },
     {
       id: "cors", term: "CORS", acronym: "Cross-Origin Resource Sharing",
@@ -1916,7 +1944,9 @@
     lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
     binary: '<rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 10h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/>',
     anchor: '<path d="M12 6v16"/><path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/><path d="M9 11h6"/><circle cx="12" cy="4" r="2"/>',
-    boxes: '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>'
+    boxes: '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>',
+    radio: '<path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/>',
+    wifi: '<path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -2000,20 +2030,34 @@
       </svg>`,
 
     http: () => `
-      <svg class="dg" viewBox="0 0 720 240" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A client sends a GET request and the server returns a 200 response, optionally inside a TLS channel for HTTPS.">
-        <rect class="box" x="40" y="80" width="150" height="70" rx="10"/>
-        <text class="t-b" x="115" y="110" text-anchor="middle">Client</text>
-        <text class="t-sm t-mut" x="115" y="130" text-anchor="middle">browser / app</text>
-        <rect class="box" x="530" y="80" width="150" height="70" rx="10"/>
-        <text class="t-b" x="605" y="110" text-anchor="middle">Server</text>
-        <text class="t-sm t-mut" x="605" y="130" text-anchor="middle">origin</text>
-        <rect class="zone-accent" x="215" y="55" width="290" height="120" rx="10"/>
-        <text class="t-sm t-acc" x="360" y="48" text-anchor="middle">HTTPS = TLS-encrypted channel</text>
-        <line class="flow" x1="195" y1="100" x2="525" y2="100" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" x="360" y="93" text-anchor="middle">GET /index.html</text>
-        <line class="flow-accent" x1="525" y1="135" x2="195" y2="135" marker-end="url(#ah-acc)"/>
-        <text class="t-sm" x="360" y="155" text-anchor="middle">200 OK + body</text>
-        <text class="t-sm t-mut" x="360" y="205" text-anchor="middle">Stateless: each request stands alone.</text>
+      <svg class="dg" viewBox="0 0 720 220" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Request/response — the client asks, the server answers; HTTPS wraps the exchange in TLS.">
+        <g data-s="1 3">
+          <rect class="box" x="24" y="56" width="160" height="136" rx="12"/>
+          ${icon('laptop', 40, 70)}
+          <text class="t-b" x="72" y="88">Client</text>
+          <text class="t-sm t-mut" x="72" y="106">browser or API</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="536" y="56" width="160" height="136" rx="8"/>
+          ${icon('server', 552, 70)}
+          <text class="t-b" x="584" y="88">Server</text>
+          <text class="t-sm t-mut" x="584" y="106">resources</text>
+        </g>
+        <g data-s="4">
+          <rect class="zone" x="204" y="20" width="312" height="188" rx="10"/>
+          <text class="t-sm" x="360" y="40" text-anchor="middle">HTTPS: the same, inside TLS</text>
+        </g>
+        <line class="flow" data-s="1" x1="186" y1="86" x2="534" y2="86" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="78" text-anchor="middle">GET or POST</text>
+        <line class="flow" data-s="2" x1="534" y1="124" x2="186" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="116" text-anchor="middle">the resource</text>
+        <line class="flow" data-s="3" x1="186" y1="170" x2="534" y2="170" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="162" text-anchor="middle">next request + cookie or token</text>
+
+        ${badge(1, 230, 86, '1')}
+        ${badge(2, 490, 124, '2')}
+        ${badge(3, 230, 170, '3')}
+        ${badge(4, 496, 36, '4')}
       </svg>`,
 
     tls: () => `
@@ -2463,41 +2507,86 @@
       </svg>`,
 
     grpc: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A shared .proto contract generates client and server stubs that talk over HTTP/2 with streaming.">
-        <rect class="box-accent" x="250" y="24" width="220" height="48" rx="10"/>
-        <text class="t-b" x="360" y="46" text-anchor="middle">service.proto</text>
-        <text class="t-sm t-mut" x="360" y="64" text-anchor="middle">shared contract</text>
-        <line class="flow" x1="276" y1="72" x2="176" y2="146" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="444" y1="72" x2="544" y2="146" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="108" text-anchor="middle">generates client &amp; server stubs</text>
-        <rect class="box" x="40" y="150" width="190" height="80" rx="12"/>
-        <text class="t-b" x="135" y="195" text-anchor="middle">Client stub</text>
-        <rect class="box" x="490" y="150" width="190" height="80" rx="12"/>
-        <text class="t-b" x="585" y="195" text-anchor="middle">Server stub</text>
-        <text class="t-sm t-b t-acc" x="360" y="176" text-anchor="middle">over HTTP/2</text>
-        <line class="flow-accent" x1="230" y1="186" x2="490" y2="186" marker-end="url(#ah-acc)"/>
-        <line class="flow" x1="490" y1="210" x2="230" y2="210" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="206" text-anchor="middle">request</text>
-        <text class="t-sm t-mut" x="360" y="226" text-anchor="middle">streamed response</text>
+      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A .proto contract generates client and server stubs; calls ride HTTP/2 with streaming.">
+        <g data-s="1">
+          <rect class="box" x="250" y="16" width="220" height="60" rx="8"/>
+          ${icon('file-code', 266, 34)}
+          <text class="t-b" x="298" y="42">.proto file</text>
+          <text class="t-sm t-mut" x="298" y="60">the contract</text>
+        </g>
+        <line class="flow" data-s="2" x1="276" y1="78" x2="170" y2="142" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="444" y1="78" x2="550" y2="142" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="112" text-anchor="middle">generates code</text>
+
+        ${[['Client', 'laptop', 'calls a function', 'generated client code', 24], ['Server', 'server', 'answers the call', 'generated server code', 456]].map(([name, ico, sub, gen, x]) => `
+          <g data-s="3">
+            <rect class="box" x="${x}" y="144" width="240" height="96" rx="8"/>
+            ${icon(ico, x + 16, 156)}
+            <text class="t-b" x="${x + 48}" y="174">${name}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="192">${sub}</text>
+          </g>
+          <g data-s="2">
+            <rect class="box" x="${x + 16}" y="204" width="208" height="26" rx="4"/>
+            <text class="t-sm" x="${x + 120}" y="221" text-anchor="middle">${gen}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="3 4" x1="266" y1="170" x2="454" y2="170" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="162" text-anchor="middle">call</text>
+        <line class="flow" data-s="4" x1="454" y1="200" x2="266" y2="200" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="218" text-anchor="middle">streamed replies</text>
+        <text class="t-sm" data-s="4" x="360" y="252" text-anchor="middle">HTTP/2 · binary Protocol Buffers</text>
+
+        ${badge(1, 454, 30, '1')}
+        ${badge(2, 223, 110, '2')}
+        ${badge(3, 290, 170, '3')}
+        ${badge(4, 430, 200, '4')}
       </svg>`,
 
     mqtt: () => `
-      <svg class="dg" viewBox="0 0 720 250" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Publishers send to topics on a broker, which fans the messages out to subscribers.">
-        ${[["Sensor A", 34], ["Sensor B", 150]].map(([t, y]) => `
-          <rect class="box" x="30" y="${y}" width="150" height="56" rx="10"/>
-          <text x="105" y="${y + 33}" text-anchor="middle">${t}</text>
-          <line class="flow" x1="180" y1="${y + 28}" x2="268" y2="${y < 90 ? 110 : 150}" marker-end="url(#ah-mut)"/>
-        `).join("")}
-        <rect class="box-accent" x="270" y="70" width="180" height="116" rx="12"/>
-        <text class="t-b" x="360" y="120" text-anchor="middle">Broker</text>
-        <text class="t-sm t-mut" x="360" y="142" text-anchor="middle">topic: sensors/temp</text>
-        ${[["Dashboard", 34], ["Logger", 150]].map(([t, y]) => `
-          <rect class="box" x="540" y="${y}" width="150" height="56" rx="10"/>
-          <text x="615" y="${y + 33}" text-anchor="middle">${t}</text>
-          <line class="flow-accent" x1="450" y1="${y < 90 ? 110 : 150}" x2="538" y2="${y + 28}" marker-end="url(#ah-acc)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="180" y="222" text-anchor="middle">publish</text>
-        <text class="t-sm t-b t-acc" x="540" y="222" text-anchor="middle">subscribe</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Publishers send to topics on a broker, which fans messages out to subscribers.">
+        ${[40, 136].map((y) => `
+          <g data-s="1">
+            <rect class="box" x="24" y="${y}" width="160" height="56" rx="12"/>
+            ${icon('radio', 40, y + 16)}
+            <text class="t-b" x="72" y="${y + 25}">Sensor</text>
+            <text class="t-sm t-mut" x="72" y="${y + 43}">publisher</text>
+          </g>`).join('')}
+        <line class="flow" data-s="1" x1="186" y1="68" x2="274" y2="100" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" x1="186" y1="164" x2="274" y2="140" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="229" y="124" text-anchor="middle">publish</text>
+
+        <g data-s="1 2 3">
+          <rect class="box" x="276" y="56" width="168" height="120" rx="8"/>
+          ${icon('server', 292, 70)}
+          <text class="t-b" x="324" y="88">Broker</text>
+          <text class="t-sm t-mut" x="324" y="106">central</text>
+          <rect class="box" x="292" y="124" width="136" height="36" rx="4"/>
+          <text class="t-sm" x="360" y="146" text-anchor="middle">named topic</text>
+        </g>
+
+        ${[40, 136].map((y) => `
+          <g data-s="2 3">
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="12"/>
+            ${icon('monitor', 552, y + 16)}
+            <text class="t-b" x="584" y="${y + 25}">Client</text>
+            <text class="t-sm t-mut" x="584" y="${y + 43}">subscriber</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="534" y1="60" x2="446" y2="92" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="446" y1="108" x2="534" y2="76" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="446" y1="128" x2="534" y2="156" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="534" y1="172" x2="446" y2="144" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="490" y="121" text-anchor="middle">subscribe</text>
+
+        <g data-s="4">
+          <rect class="box" x="24" y="212" width="672" height="56" rx="8"/>
+          ${icon('wifi', 40, 228)}
+          <text class="t-b" x="72" y="236">Built for weak networks</text>
+          <text class="t-sm t-mut" x="72" y="254">low bandwidth, high latency, unreliable · tiny footprint · tiered QoS</text>
+        </g>
+
+        ${badge(1, 229, 84, '1')}
+        ${badge(2, 680, 54, '2')}
+        ${badge(3, 490, 142, '3')}
+        ${badge(4, 680, 226, '4')}
       </svg>`,
 
     ssh: () => `
@@ -2768,23 +2857,49 @@
       </svg>`,
 
     quic: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="QUIC over UDP: one combined transport and TLS 1.3 handshake in a single round trip, then encrypted multiplexed streams with no head-of-line blocking.">
-        <text class="t-b" x="150" y="32" text-anchor="middle">Client</text>
-        <text class="t-b" x="570" y="32" text-anchor="middle">Server</text>
-        <line class="divider" x1="150" y1="44" x2="150" y2="250"/>
-        <line class="divider" x1="570" y1="44" x2="570" y2="250"/>
-        ${[
-          ["Initial — connection + TLS 1.3 keys", 80, "acc", 1],
-          ["handshake complete, keys agreed", 124, "mut", 0],
-        ].map(([t, y, m, dir]) => `
-          <line class="flow${m==='acc'?'-accent':''}" x1="${dir?150:570}" y1="${y}" x2="${dir?570:150}" y2="${y}" marker-end="url(#ah-${m})"/>
-          <text class="t-sm" x="360" y="${y-8}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="158" text-anchor="middle">One round trip to first byte (0-RTT on resume)</text>
-        <rect class="zone-accent" x="150" y="172" width="420" height="78" rx="8"/>
-        <text class="t-b t-sm t-acc" x="360" y="194" text-anchor="middle">Encrypted, multiplexed streams</text>
-        ${[209, 223, 237].map((y) => `<line class="flow-accent" x1="180" y1="${y}" x2="540" y2="${y}" marker-end="url(#ah-acc)"/>`).join("")}
-        <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">Runs over UDP — a lost packet stalls only its own stream.</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP.">
+        <g data-s="1 2">
+          <rect class="box" x="24" y="16" width="160" height="48" rx="12"/>
+          ${icon('laptop', 40, 28)}
+          <text class="t-b" x="72" y="45">Client</text>
+        </g>
+        <g data-s="1 2">
+          <rect class="box" x="536" y="16" width="160" height="48" rx="8"/>
+          ${icon('server', 552, 28)}
+          <text class="t-b" x="584" y="45">Server</text>
+        </g>
+        <line class="divider" x1="104" y1="66" x2="104" y2="244"/>
+        <line class="divider" x1="616" y1="66" x2="616" y2="244"/>
+
+        <line class="flow" data-s="2" x1="106" y1="96" x2="614" y2="96" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="88" text-anchor="middle">connection + TLS 1.3 setup, together</text>
+        <line class="flow" data-s="2" x1="614" y1="128" x2="106" y2="128" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="120" text-anchor="middle">ready after one round trip</text>
+
+        <g data-s="3">
+          <rect class="zone" x="96" y="148" width="528" height="92" rx="8"/>
+          <text class="t-sm" x="360" y="166" text-anchor="middle">encrypted, multiplexed streams</text>
+        </g>
+        <line class="flow" data-s="3 4" x1="106" y1="184" x2="614" y2="184" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="3 4" x="124" y="178">stream 1</text>
+        <line class="flow-bad" data-s="3 4" x1="106" y1="208" x2="346" y2="208"/>
+        <line class="stroke-bad" data-s="4" x1="352" y1="200" x2="368" y2="216" stroke-width="2"/>
+        <line class="stroke-bad" data-s="4" x1="368" y1="200" x2="352" y2="216" stroke-width="2"/>
+        <text class="t-sm t-mut" data-s="3 4" x="124" y="202">stream 2</text>
+        <text class="t-sm bad" data-s="4" x="380" y="212">lost packet: only stream 2 waits</text>
+        <line class="flow" data-s="3 4" x1="106" y1="232" x2="614" y2="232" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="3 4" x="124" y="226">stream 3</text>
+
+        <g data-s="1">
+          <rect class="box" x="24" y="252" width="672" height="36" rx="6"/>
+          <text class="t-b" x="40" y="275">UDP</text>
+          <text class="t-sm t-mut" x="80" y="275">QUIC runs over UDP, not TCP</text>
+        </g>
+
+        ${badge(1, 680, 270, '1')}
+        ${badge(2, 140, 96, '2')}
+        ${badge(3, 560, 184, '3')}
+        ${badge(4, 330, 208, '4')}
       </svg>`,
 
     cors: () => `

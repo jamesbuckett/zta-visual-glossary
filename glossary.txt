@@ -190,10 +190,20 @@ Firewall — Network Firewall
 gRPC — gRPC Remote Procedure Call
     A fast, contract-first RPC framework using Protocol Buffers over HTTP/2.
     [Protocol, Development Framework] · aka protobuf, Protocol Buffers, RPC
+    1. One .proto contract — The contract between services is defined in a .proto file.
+    2. Generate the code — Client and server code is generated from that one contract.
+    3. Call like a function — Services call one another as if invoking local functions.
+    4. Binary over HTTP/2 — Data is serialised with compact binary Protocol Buffers and rides HTTP/2, enabling multiplexing and streaming with low latency.
+    Key fact: gRPC is a common choice for internal microservice communication where REST and JSON prove too chatty.
 
 HTTP / HTTPS — HyperText Transfer Protocol (Secure)
     The request/response protocol of the web; HTTPS is HTTP wrapped in TLS.
     [Protocol] · aka HTTP, HTTPS, HTTP/2, web
+    1. Client requests — A browser or API client asks for a resource, using a method such as GET or POST.
+    2. Server responds — The server answers the request with the resource.
+    3. Stateless — Each request stands alone. Cookies or tokens carry context from one request to the next.
+    4. HTTPS wraps it in TLS — HTTPS is the very same protocol running inside a TLS-encrypted channel, so the traffic is private and tamper-evident.
+    Key fact: HTTPS is now the default transport for nearly all web traffic.
 
 Identity Provider — Identity Provider (IdP)
     The trusted service that authenticates users and vouches for who they are.
@@ -271,6 +281,11 @@ Microsegmentation — Network Microsegmentation
 MQTT — MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)
     A lightweight publish/subscribe protocol for IoT and constrained devices.
     [Protocol] · aka pub/sub, broker, IoT
+    1. Publish to a topic — Clients publish messages to named topics on a central broker.
+    2. Subscribe to topics — Other clients subscribe to the topics they care about.
+    3. Broker fans out — The broker passes each message to the topic's subscribers, which decouples senders from receivers.
+    4. Built for weak networks — MQTT is built for low-bandwidth, high-latency or unreliable networks, with a tiny footprint and tiered quality-of-service levels.
+    Key fact: MQTT's tiny footprint and tiered quality-of-service levels make it the default for sensors, telemetry and large IoT fleets.
 
 mTLS — Mutual TLS
     TLS where both client and server prove identity with certificates.
@@ -365,6 +380,11 @@ QLoRA — Quantized LoRA
 QUIC — QUIC (a name, not an acronym — RFC 9000)
     A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.
     [Protocol, Network Technology, Security Technology] · aka HTTP/3, gQUIC, RFC 9000
+    1. Runs over UDP — QUIC is a transport protocol that runs over UDP and combines connection setup, TLS 1.3 encryption and multiplexed streams into one design.
+    2. One round trip — The transport and cryptographic handshakes happen together, so a new connection is usually ready after a single round trip, or zero when resuming. TCP-then-TLS needs several.
+    3. Independent streams — Encrypted streams are multiplexed over the one connection, independently of each other.
+    4. No head-of-line blocking — One lost packet stalls only its own stream, rather than holding up everything queued behind it as it does for HTTP/2 over TCP.
+    Key fact: QUIC is the foundation of HTTP/3, with encryption built in rather than bolted on.
 
 RADIUS — Remote Authentication Dial-In User Service
     A protocol for centralized authentication, authorization, and accounting.
