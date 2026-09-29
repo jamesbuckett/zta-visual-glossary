@@ -446,6 +446,12 @@ NAT — Network Address Translation
 nDLP — Network Data Loss Prevention
     DLP for data in motion — traffic is inspected inline at the network edge and sensitive content is stopped before it leaves.
     [Security Technology] · aka network DLP, data in motion, egress inspection, TLS inspection, inline DLP
+    1. Inline at the edge — Network DLP sits inline where traffic leaves the organisation: a secure web gateway, email gateway, next-generation firewall or SASE edge. Any device on that path is covered, managed or not.
+    2. Decrypt to inspect — Because most traffic is TLS-encrypted, inspection depends on TLS interception: decrypt, inspect, re-encrypt at a proxy the fleet trusts, with privacy and performance trade-offs.
+    3. Inspect the content — Email, web uploads and file transfers are checked against data classifications with pattern matching, exact data matching and machine-learning classifiers.
+    4. Pass or block — Clean transfers continue re-encrypted; a transfer that breaks policy is blocked, quarantined or encrypted, and the security team is alerted.
+    5. The blind spots — USB drives, clipboard and printing never touch the network path, which is why network DLP pairs with endpoint DLP rather than replacing it.
+    Key fact: Traffic network DLP cannot decrypt, it cannot content-inspect.
 
 NIST SP 800-207 — Zero Trust Architecture (NIST)
     The reference document that defines Zero Trust and its policy components.
@@ -497,10 +503,21 @@ OPA — Open Policy Agent
 Open Virtual Network — OVN — SDN control plane for OVS
     An SDN control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.
     [Network Technology, Security Technology] · aka OVN, ovn-kubernetes, logical switch, logical router, Neutron OVN, northbound database, distributed firewall
+    1. Declare the intent — Instead of writing raw flows, you declare logical switches, logical routers and Access Control Lists in OVN's northbound database.
+    2. Compiled to flows — OVN's daemons translate that intent into OpenFlow.
+    3. One overlay, many hosts — They program every OVS instance across the cluster, so one logical network spans many hosts as an overlay.
+    4. Services on every node — Routing, DHCP, DNS and a stateful distributed firewall run in the data plane on each node, rather than at a central choke point.
+    5. Microsegmentation — Per-port ACLs isolate workloads from one another east-west, not just at the perimeter.
+    Key fact: If OVS is the distributed switch, OVN is the brain that turns thousands of them into one programmable, segmented virtual network.
 
 Open vSwitch — OVS — multilayer virtual switch
     The open-source programmable switch inside the hypervisor — it wires VMs and containers to the network and forwards their packets by flow rules.
     [Network Technology] · aka OVS, openvswitch, vSwitch, OpenFlow, OVSDB, virtual switch, ovs-vswitchd
+    1. Plug into the switch — Open vSwitch runs in the hypervisor or host and connects virtual machines, containers and the physical NIC.
+    2. Rules from a controller — An external controller installs OpenFlow rules into its flow tables, and the OVSDB protocol configures its bridges and ports.
+    3. Forwarding by policy — Forwarding, tunnelling (VXLAN or Geneve) and filtering are driven by policy rather than hard-wired, unlike a plain Linux bridge that forwards by MAC address.
+    4. Offload to a DPU — Because its data plane is just flow tables, a SmartNIC or DPU can execute the same OVS flows at line rate, freeing host CPU.
+    Key fact: OVS forwards packets on its own, but it needs a control plane to decide what those flows should be: that is where OVN comes in.
 
 OpenZiti — Open-source zero-trust networking overlay
     An open-source overlay that gives every app an identity and a default-deny, encrypted path — a zero-trust VPN replacement.
@@ -655,6 +672,12 @@ SASE — Secure Access Service Edge
 SBC — Session Border Controller
     The border guard for VoIP — calls terminate on it, are policed and normalised, then re-originated toward the far side.
     [Network Technology, Security Technology] · aka SIP, VoIP, B2BUA, SIP trunking, RTP, toll fraud
+    1. At the voice border — A Session Border Controller sits where VoIP traffic crosses a network boundary, such as between an organisation's phone system and its SIP trunk provider.
+    2. Back-to-back — Each call's SIP signalling, and usually its RTP media, terminates on the SBC and is re-originated toward the far side, so the two networks never touch directly.
+    3. Hide and encrypt — That position lets it hide internal topology and encrypt signalling and media with SIP over TLS and SRTP.
+    4. Police the edge — It polices access against denial-of-service and toll fraud, maintains NAT bindings and enforces call-admission limits so voice quality holds.
+    5. Why not a firewall — Ordinary firewalls handle VoIP poorly: SIP embeds addresses inside its messages and negotiates dynamic media ports per call.
+    Key fact: Microsoft Teams Direct Routing requires a certified SBC.
 
 SBOM & SLSA — Software Supply-Chain Integrity
     Knowing exactly what is in your software, and proving how it was built.
