@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-101 terms, alphabetical. Generated from index.html by glossary.mjs.
+102 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -288,6 +288,16 @@ Firewall — Network Firewall
     3. Allow or block — Traffic that the rules permit passes; the rest is blocked.
     4. Stateful, next-gen — Stateful firewalls track the state of connections; next-generation firewalls inspect deeper into the traffic itself.
     Key fact: The firewall is the classic first line of network defence.
+
+FIX — Financial Information eXchange
+    The messaging standard trading firms use to send orders and trade confirmations to each other in real time.
+    [Protocol] · aka FIX Protocol, Financial Information Exchange, FIX 4.4, FIXS, FIX-over-TLS, tag=value, SenderCompID, trading protocol
+    1. Firm to firm — FIX is the messaging protocol trading firms use to send orders, cancellations and trade confirmations to one another in real time.
+    2. Tag=value fields — Each message is a run of numbered tag=value fields separated by a control character. 35=D marks a new order and 35=8 an execution report.
+    3. CompIDs name firms — Tags 49 and 56 name the sending and receiving firms: the SenderCompID and TargetCompID.
+    4. A numbered session — A session opens with a Logon, stays alive on heartbeats and numbers every message, so a gap in the sequence triggers a resend request rather than a silently lost order.
+    5. Trust in the network — FIX leaves security to the network beneath it. The SenderCompID, matched to a known IP address, is the basic check, and encryption is often skipped on leased lines; FIXS runs FIX over TLS.
+    Key fact: FIX leaves security to the network beneath it, so a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS.
 
 gRPC — gRPC Remote Procedure Call
     A fast, contract-first RPC framework using Protocol Buffers over HTTP/2.

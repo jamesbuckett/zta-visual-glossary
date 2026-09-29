@@ -652,7 +652,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">101</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">102</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -663,11 +663,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">101</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">102</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">101</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">102</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -2240,7 +2240,7 @@
       tldr: "The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.",
       explainer: `FAPI 2.0 is the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, final since February 2025. The name began as Financial-grade API and the first version came out of open banking, but 2.0 is written for any API exposing high-value data — the specification names e-health and e-government alongside finance. It is a profile rather than a new protocol: it takes the options OAuth deliberately leaves open and closes them. Four mandates carry it. Pushed Authorization Requests are required, so the client sends the full authorization request to the authorization server over a client-authenticated back channel and gets back an opaque request_uri; the browser then carries only that handle, leaving nothing in the URL to tamper with or to leak through referrers, history, and logs. PKCE with S256 is required. The authorization response must carry the iss parameter from RFC 9207, which closes the mix-up attack that appears once a client talks to more than one authorization server. Most consequentially, access tokens must be sender-constrained — bound either to an mTLS client certificate or to a DPoP key — which retires the bearer token: an attacker who lifts a token from a log, a proxy, or a compromised resource server cannot spend it without the matching private key. Client authentication is mTLS or private_key_jwt, so no shared secrets. Set against FAPI 1.0 this is as much a simplification as a hardening: 1.0 offered Baseline and Advanced tiers and required either JARM or the hybrid flow, where 2.0 has one profile, a plain authorization code response, and the ID token off the front channel entirely. What makes it unusual is the companion Attacker Model, which states six attacker types — from a web attacker up to one who controls the network — and four security goals, backed by a formal model and a machine-checked proof that the profile meets them. Very few deployed security profiles can point at anything like that. The cost is operational: mTLS or DPoP means real key management in the client, and PAR adds a round trip before the user sees a consent screen, which is why adoption clusters in regulated ecosystems that were told to implement it rather than spreading on merit.`,
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access", "Transport & Web"],
-      related: ["oauth", "oidc", "pkce", "mtls"],
+      related: ["oauth", "oidc", "pkce", "mtls", "fix"],
       source: { label: "FAPI 2.0 Security Profile — OpenID Foundation", url: "https://openid.net/specs/fapi-security-profile-2_0-final.html" },
       caption: "PAR keeps the authorization request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API.",
       steps: [
@@ -2483,6 +2483,24 @@
         { title: "TCP head-of-line blocking", text: "Every stream shares one ordered TCP byte stream, so a single lost packet stalls all of them. HTTP/3 over QUIC was built to remove this." }
       ],
       fact: "A single lost packet stalls every HTTP/2 stream on the connection, which is the head-of-line blocking HTTP/3 over QUIC was built to remove."
+    },
+    {
+      id: "fix", term: "FIX", acronym: "Financial Information eXchange",
+      aliases: ["FIX Protocol", "Financial Information Exchange", "FIX 4.4", "FIXS", "FIX-over-TLS", "tag=value", "SenderCompID", "trading protocol"],
+      tldr: "The messaging standard trading firms use to send orders and trade confirmations to each other in real time.",
+      explainer: `Created in 1992 between Fidelity Investments and Salomon Brothers, and now maintained as an open standard by the non-profit FIX Trading Community, FIX is the messaging protocol trading firms use to send orders, cancellations and trade confirmations to one another in real time. Each message is a run of numbered tag=value fields separated by a control character: 35=D marks a new order, 35=8 an execution report, and tags 49 and 56 name the sending and receiving firms, their SenderCompID and TargetCompID. A session opens with a Logon, stays alive on heartbeats and numbers every message, so a gap in the sequence triggers a resend request rather than a silently lost order. The limitation is trust. FIX leaves security to the network beneath it: its own guidance treats the SenderCompID, matched to a known IP address, as the basic check on who is at the other end, encryption is often skipped on private leased lines, and a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS.`,
+      types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
+      related: ["tcpip", "tls", "mtls", "fapi"],
+      source: { label: "FIX Trading Community — Standards", url: "https://www.fixtrading.org/standards/" },
+      caption: "A fund and a broker exchange numbered tag=value messages over a FIX session; a sequence gap triggers a resend, but trust rests on CompIDs and the network.",
+      steps: [
+        { title: "Firm to firm", text: "FIX is the messaging protocol trading firms use to send orders, cancellations and trade confirmations to one another in real time." },
+        { title: "Tag=value fields", text: "Each message is a run of numbered tag=value fields separated by a control character. 35=D marks a new order and 35=8 an execution report." },
+        { title: "CompIDs name firms", text: "Tags 49 and 56 name the sending and receiving firms: the SenderCompID and TargetCompID." },
+        { title: "A numbered session", text: "A session opens with a Logon, stays alive on heartbeats and numbers every message, so a gap in the sequence triggers a resend request rather than a silently lost order." },
+        { title: "Trust in the network", text: "FIX leaves security to the network beneath it. The SenderCompID, matched to a known IP address, is the basic check, and encryption is often skipped on leased lines; FIXS runs FIX over TLS." }
+      ],
+      fact: "FIX leaves security to the network beneath it, so a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS."
     }
   ];
 
@@ -2561,7 +2579,8 @@
     "scroll-text": '<path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/>',
     workflow: '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>',
     "memory-stick": '<path d="M12 12v-2"/><path d="M12 18v-2"/><path d="M16 12v-2"/><path d="M16 18v-2"/><path d="M2 11h1.5"/><path d="M20 18v-2"/><path d="M20.5 11H22"/><path d="M4 18v-2"/><path d="M8 12v-2"/><path d="M8 18v-2"/><rect x="2" y="6" width="20" height="10" rx="2"/>',
-    sigma: '<path d="M18 7V5a1 1 0 0 0-1-1H6.5a.5.5 0 0 0-.4.8l4.5 6a2 2 0 0 1 0 2.4l-4.5 6a.5.5 0 0 0 .4.8H17a1 1 0 0 0 1-1v-2"/>'
+    sigma: '<path d="M18 7V5a1 1 0 0 0-1-1H6.5a.5.5 0 0 0-.4.8l4.5 6a2 2 0 0 1 0 2.4l-4.5 6a.5.5 0 0 0 .4.8H17a1 1 0 0 0 1-1v-2"/>',
+    briefcase: '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -7378,6 +7397,58 @@
         ${badge(3, 512, 36, '3')}
         ${badge(4, 510, 120, '4')}
         ${badge(5, 680, 262, '5')}
+      </svg>`,
+
+    fix: () => `
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A fund and a broker exchange numbered tag=value messages over a FIX session; a sequence gap triggers a resend, but trust rests on CompIDs and the network.">
+        <g data-s="1 3">
+          <rect class="box" x="24" y="16" width="160" height="48" rx="12"/>
+          ${icon('briefcase', 40, 28)}
+          <text class="t-b" x="72" y="38">Fund</text>
+          <text class="t-sm t-mut" x="72" y="55">buy side</text>
+        </g>
+        <g data-s="1 3">
+          <rect class="box" x="536" y="16" width="160" height="48" rx="8"/>
+          ${icon('landmark', 552, 28)}
+          <text class="t-b" x="584" y="38">Broker</text>
+          <text class="t-sm t-mut" x="584" y="55">sell side</text>
+        </g>
+        <line class="divider" x1="104" y1="66" x2="104" y2="214"/>
+        <line class="divider" x1="616" y1="66" x2="616" y2="214"/>
+
+        <line class="flow" data-s="4" x1="106" y1="84" x2="614" y2="84" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="77" text-anchor="middle">35=A Logon · seq 1</text>
+        <line class="flow" data-s="1" x1="106" y1="108" x2="614" y2="108" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="101" text-anchor="middle">35=D new order · seq 2</text>
+        <line class="flow" data-s="1" x1="614" y1="132" x2="106" y2="132" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="125" text-anchor="middle">35=8 execution report</text>
+        <line class="flow-bad" data-s="4" x1="106" y1="156" x2="346" y2="156"/>
+        <text class="t-sm" data-s="4" x="226" y="149" text-anchor="middle">35=D new order · seq 3</text>
+        <line class="stroke-bad" data-s="4" x1="352" y1="148" x2="368" y2="164" stroke-width="2"/>
+        <line class="stroke-bad" data-s="4" x1="368" y1="148" x2="352" y2="164" stroke-width="2"/>
+        <text class="t-sm bad" data-s="4" x="380" y="160">lost</text>
+        <line class="flow" data-s="4" x1="106" y1="180" x2="614" y2="180" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="173" text-anchor="middle">35=0 heartbeat · seq 4</text>
+        <line class="flow" data-s="4" x1="614" y1="204" x2="106" y2="204" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="197" text-anchor="middle">35=2 resend request: seq 3</text>
+
+        <rect class="box" data-s="2" x="24" y="228" width="672" height="32" rx="6"/>
+        ${[['8=FIX.4.4|', 40, '2'], ['35=D|', 112, '2'], ['49=FUND|', 151, '3'], ['56=BROKER|', 210, '3'], ['34=2|', 282, '2 4'],
+           ['55=VOD|', 321, '2'], ['54=1|', 373, '2'], ['38=500|', 412, '2'], ['…', 464, '2']].map(([f, x, s]) => `
+          <text class="t-sm" data-s="${s}" x="${x}" y="249">${f}</text>`).join('')}
+        <text class="t-sm t-mut" data-s="2" x="490" y="249">| = SOH · abridged</text>
+
+        <g data-s="5">
+          <rect class="box" x="24" y="272" width="672" height="32" rx="6"/>
+          <text class="t-sm bad" x="40" y="292">trust: CompID + known IP on a leased line, often unencrypted</text>
+          <text class="t-sm ok" x="460" y="292">FIXS = FIX over TLS</text>
+        </g>
+
+        ${badge(1, 124, 108, '1')}
+        ${badge(2, 680, 244, '2')}
+        ${badge(3, 680, 40, '3')}
+        ${badge(4, 124, 156, '4')}
+        ${badge(5, 680, 288, '5')}
       </svg>`,
   };
 
