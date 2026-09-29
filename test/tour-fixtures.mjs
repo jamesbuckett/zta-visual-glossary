@@ -51,9 +51,11 @@ const svg = ({ b = '2', badgeAt = '360, 100', nestBadge = false } = {}) => {
 const CASES = [
   // [name, html, checker, expected exit, rule expected in the report]
   ['good tour validates', withDiagram(withTour(base, GOOD_STEPS), svg()), 'validate', 0, null],
-  ['two steps rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: "b" }], fact: "f"`), 'validate', 1, 'tour-data'],
-  ['empty step text rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: " " }, { title: "C", text: "c" }], fact: "f"`), 'validate', 1, 'tour-data'],
-  ['missing fact rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: "b" }, { title: "C", text: "c" }]`), 'validate', 1, 'tour-data'],
+  ['two steps rejected', withTour(base, `steps: [{ title: "Step A", text: "a" }, { title: "Step B", text: "b" }], fact: "f"`), 'validate', 1, 'tour-data'],
+  ['empty step text rejected', withTour(base, `steps: [{ title: "Step A", text: "a" }, { title: "Step B", text: " " }, { title: "Step C", text: "c" }], fact: "f"`), 'validate', 1, 'tour-data'],
+  ['missing fact rejected', withTour(base, `steps: [{ title: "Step A", text: "a" }, { title: "Step B", text: "b" }, { title: "Step C", text: "c" }]`), 'validate', 1, 'tour-data'],
+  ['one-word title rejected', withTour(base, GOOD_STEPS.replace('title: "Peer A"', 'title: "Peer"')), 'validate', 1, 'tour-data'],
+  ['five-word title rejected', withTour(base, GOOD_STEPS.replace('title: "The tunnel"', 'title: "The tunnel between the peers"')), 'validate', 1, 'tour-data'],
   ['term without a tour rejected',
     base.replace(/(id: "wireguard"[\s\S]*?)\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1'),
     'validate', 1, 'tour-data'],

@@ -96,7 +96,8 @@ if (html.includes('const TERMS = [')) {
   }
 
   // Diagram tours: every term must have steps and a fact, with 3–5 steps
-  // that each carry a title and text.
+  // that each carry a title of two to four words and text. Longer titles
+  // wrap badly in a five-chip row; a hyphenated word counts as one.
   let terms = [];
   try { terms = extractArray(html, 'TERMS'); } catch { /* reported above */ }
   for (const t of terms) {
@@ -107,6 +108,11 @@ if (html.includes('const TERMS = [')) {
       t.steps.forEach((s, i) => {
         if (!s || !String(s.title || '').trim() || !String(s.text || '').trim()) {
           err('tour-data', `${where}: step ${i + 1} needs a non-empty title and text`);
+          return;
+        }
+        const words = s.title.trim().split(/\s+/).length;
+        if (words < 2 || words > 4) {
+          err('tour-data', `${where}: step ${i + 1} title "${s.title}" has ${words} words, want 2–4`);
         }
       });
     }
