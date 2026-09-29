@@ -137,6 +137,12 @@ Django — Django (Python web framework)
 DLP — Data Loss Prevention
     Controls that detect and stop sensitive data from leaving where it should not.
     [Security Technology] · aka data leak prevention, exfiltration, data classification, egress control
+    1. Sensitive data — DLP keeps sensitive information, such as card numbers, health records, source code and secrets, from leaving the organisation.
+    2. Inspect what leaves — Content leaving through email, uploads, USB drives or chat is inspected against patterns and classifications.
+    3. Warn, block, encrypt — When a transfer breaks policy, for example a spreadsheet of customer card numbers attached to an outbound message, DLP warns, blocks or encrypts.
+    4. Wherever data moves — It operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration: the Data pillar of Zero Trust.
+    5. Labels come first — Good DLP depends on good data classification; overly blunt rules generate noise and tempt users to route around the control.
+    Key fact: You can only protect what you have labelled.
 
 DNS — Domain Name System
     The internet's phonebook: turns human names into IP addresses.
@@ -203,6 +209,12 @@ eBPF — extended Berkeley Packet Filter
 EDR / XDR — Endpoint / Extended Detection & Response
     Agents that watch endpoints for malicious behaviour — and feed device-trust signals.
     [Security Technology] · aka endpoint detection, XDR, device posture, endpoint security, EDR agent
+    1. An agent records — A lightweight agent on laptops, servers and workstations continuously records process, file, network and registry activity.
+    2. Flag attack patterns — Behaviour that matches known attack patterns is flagged.
+    3. Isolate or roll back — Responders can isolate or roll back a compromised host.
+    4. XDR widens the lens — Extended Detection and Response correlates endpoint telemetry with email, identity and cloud signals, so a multi-stage attack is seen as one incident.
+    5. Posture gates access — The agent's live health verdict becomes a device-posture signal the policy engine weighs: a device that fails can be denied even with valid user credentials.
+    Key fact: EDR is reactive detection; posture turns it into an access input.
 
 Envoy — Envoy Proxy — L7 Proxy & Universal Data Plane
     The C++ L7 proxy underneath most modern meshes and gateways — a filter chain whose entire configuration arrives over a live gRPC stream rather than a file, which is what makes a control plane above it possible.
@@ -267,6 +279,12 @@ Identity Provider — Identity Provider (IdP)
 IDS / IPS — Intrusion Detection / Prevention System
     Sensors that spot attacks in network traffic — and optionally block them inline.
     [Security Technology] · aka Snort, Suricata, signature detection, NIDS, intrusion detection
+    1. Inspect the traffic — The engine inspects network traffic for known exploit signatures, protocol anomalies, or deviations from a learned baseline.
+    2. IDS: alert on a copy — An Intrusion Detection System works on a mirrored copy of the traffic and raises an alert when it sees an attack.
+    3. IPS: drop it inline — An Intrusion Prevention System is the same engine placed inline, so it drops or resets the malicious connection rather than merely reporting it.
+    4. Feed the SIEM — Detections feed a SIEM for correlation and a SOC for response.
+    5. The classic weakness — Detection mode produces false positives, and prevention mode risks blocking legitimate traffic.
+    Key fact: IDS / IPS complements endpoint EDR by watching the wire instead of the host.
 
 Immuta — Policy-Based Access Control for Data Platforms
     Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point in front of many query engines.
@@ -635,6 +653,12 @@ Secrets Management — Secrets Management (HashiCorp Vault)
 SentryWire — Full Packet Capture & Network Security Monitoring Platform
     Commercial full packet capture — every packet kept for months, so a signature written today can be searched back across traffic recorded long before anyone knew to look.
     [Security Technology] · aka full packet capture, FPC, PCAP, packet capture, network forensics, network security monitoring, NSM, IDS Search Back, retrospective detection, Suricata, JA3, network tap, packet broker, Alliance Technology Group
+    1. Copy every packet — Appliances sit passively out of band, fed a copy of traffic from a tap or packet broker, and record every header and payload byte without truncating packets.
+    2. Keep them for months — The packets are written to disk as PCAP, filtered and compressed in real time, and retention grows by adding cluster nodes.
+    3. Search back — An integrated Suricata engine alerts on live traffic, and the same signatures can be run backwards over months of stored packets.
+    4. Return the sessions — Searches stream back only the matching sessions, as PCAP or reconstructed files, answering when an intruder arrived, how, and what left.
+    5. Three honest limits — Encrypted payloads stay ciphertext, capture sees only what crosses the tap, and the archive is itself a liability that needs protecting.
+    Key fact: Full packet capture is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network.
 
 Service Mesh — Service Mesh (Istio · Linkerd · Envoy)
     A networking layer that gives every service identity, mTLS, and traffic control for free.
@@ -662,6 +686,12 @@ Sigstore — Keyless Artifact Signing (Cosign)
 SOAR — Security Orchestration, Automation & Response
     Automation that turns security alerts into executed response playbooks.
     [Security Technology] · aka playbook, automation, incident response, orchestration
+    1. An alert arrives — Security teams drown in alerts, most needing the same repetitive triage steps. SOAR picks each one up from SIEM detection.
+    2. Enrich — A codified playbook enriches the alert, drawing on the tools an analyst would otherwise click through, such as threat intelligence.
+    3. Decide — The playbook decides whether the alert is real.
+    4. Act across tools — Then it acts: isolate a host, disable an account, block an IP, open a case, cutting response time from hours to seconds.
+    5. Humans gate the risky — Its risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval.
+    Key fact: SOAR frees analysts for the judgement calls machines cannot make.
 
 SPIFFE / SPIRE — Secure Production Identity Framework For Everyone
     A standard and engine for giving workloads cryptographic identities.

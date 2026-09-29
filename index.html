@@ -1483,7 +1483,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
       related: ["siem", "soar", "zerotrust", "idsips"],
       source: { label: "NIST glossary — Endpoint Detection & Response", url: "https://csrc.nist.gov/glossary/term/endpoint_detection_and_response" },
-      caption: "An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access."
+      caption: "An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access.",
+      steps: [
+        { title: "An agent records", text: "A lightweight agent on laptops, servers and workstations continuously records process, file, network and registry activity." },
+        { title: "Flag attack patterns", text: "Behaviour that matches known attack patterns is flagged." },
+        { title: "Isolate or roll back", text: "Responders can isolate or roll back a compromised host." },
+        { title: "XDR widens the lens", text: "Extended Detection and Response correlates endpoint telemetry with email, identity and cloud signals, so a multi-stage attack is seen as one incident." },
+        { title: "Posture gates access", text: "The agent's live health verdict becomes a device-posture signal the policy engine weighs: a device that fails can be denied even with valid user credentials." }
+      ],
+      fact: "EDR is reactive detection; posture turns it into an access input."
     },
     {
       id: "waf", term: "WAF", acronym: "Web Application Firewall",
@@ -1577,7 +1585,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response", "Network Edge & Ops"],
       related: ["firewall", "siem", "edr", "soar", "sentrywire"],
       source: { label: "NIST SP 800-94 — Guide to IDPS", url: "https://csrc.nist.gov/pubs/sp/800/94/final" },
-      caption: "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow."
+      caption: "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.",
+      steps: [
+        { title: "Inspect the traffic", text: "The engine inspects network traffic for known exploit signatures, protocol anomalies, or deviations from a learned baseline." },
+        { title: "IDS: alert on a copy", text: "An Intrusion Detection System works on a mirrored copy of the traffic and raises an alert when it sees an attack." },
+        { title: "IPS: drop it inline", text: "An Intrusion Prevention System is the same engine placed inline, so it drops or resets the malicious connection rather than merely reporting it." },
+        { title: "Feed the SIEM", text: "Detections feed a SIEM for correlation and a SOC for response." },
+        { title: "The classic weakness", text: "Detection mode produces false positives, and prevention mode risks blocking legitimate traffic." }
+      ],
+      fact: "IDS / IPS complements endpoint EDR by watching the wire instead of the host."
     },
     {
       id: "ldap", term: "LDAP / Active Directory", acronym: "Lightweight Directory Access Protocol",
@@ -1622,7 +1638,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
       related: ["siem", "edr", "idsips"],
       source: { label: "NIST glossary — SOAR", url: "https://csrc.nist.gov/glossary/term/security_orchestration_automation_and_response" },
-      caption: "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically."
+      caption: "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.",
+      steps: [
+        { title: "An alert arrives", text: "Security teams drown in alerts, most needing the same repetitive triage steps. SOAR picks each one up from SIEM detection." },
+        { title: "Enrich", text: "A codified playbook enriches the alert, drawing on the tools an analyst would otherwise click through, such as threat intelligence." },
+        { title: "Decide", text: "The playbook decides whether the alert is real." },
+        { title: "Act across tools", text: "Then it acts: isolate a host, disable an account, block an IP, open a case, cutting response time from hours to seconds." },
+        { title: "Humans gate the risky", text: "Its risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval." }
+      ],
+      fact: "SOAR frees analysts for the judgement calls machines cannot make."
     },
     {
       id: "pqc", term: "Post-Quantum Cryptography", acronym: "Post-Quantum Cryptography (PQC)",
@@ -1714,7 +1738,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Detection & Response"],
       related: ["ndlp", "casb", "sase", "siem"],
       source: { label: "NIST glossary — Data Loss Prevention", url: "https://csrc.nist.gov/glossary/term/data_loss_prevention" },
-      caption: "Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted."
+      caption: "Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted.",
+      steps: [
+        { title: "Sensitive data", text: "DLP keeps sensitive information, such as card numbers, health records, source code and secrets, from leaving the organisation." },
+        { title: "Inspect what leaves", text: "Content leaving through email, uploads, USB drives or chat is inspected against patterns and classifications." },
+        { title: "Warn, block, encrypt", text: "When a transfer breaks policy, for example a spreadsheet of customer card numbers attached to an outbound message, DLP warns, blocks or encrypts." },
+        { title: "Wherever data moves", text: "It operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration: the Data pillar of Zero Trust." },
+        { title: "Labels come first", text: "Good DLP depends on good data classification; overly blunt rules generate noise and tempt users to route around the control." }
+      ],
+      fact: "You can only protect what you have labelled."
     },
     {
       id: "pam", term: "PAM", acronym: "Privileged Access Management",
@@ -2227,7 +2259,15 @@
       types: ["Security Technology"], provenance: ["Vendor"], domains: ["Detection & Response", "Network Edge & Ops"],
       related: ["idsips", "siem", "tls", "nist207"],
       source: { label: "SentryWire — Full packet capture appliance", url: "https://www.sentrywire.com/full-packet-capture" },
-      caption: "Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext."
+      caption: "Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext.",
+      steps: [
+        { title: "Copy every packet", text: "Appliances sit passively out of band, fed a copy of traffic from a tap or packet broker, and record every header and payload byte without truncating packets." },
+        { title: "Keep them for months", text: "The packets are written to disk as PCAP, filtered and compressed in real time, and retention grows by adding cluster nodes." },
+        { title: "Search back", text: "An integrated Suricata engine alerts on live traffic, and the same signatures can be run backwards over months of stored packets." },
+        { title: "Return the sessions", text: "Searches stream back only the matching sessions, as PCAP or reconstructed files, answering when an intruder arrived, how, and what left." },
+        { title: "Three honest limits", text: "Encrypted payloads stay ciphertext, capture sees only what crosses the tap, and the archive is itself a liability that needs protecting." }
+      ],
+      fact: "Full packet capture is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network."
     },
     {
       id: "coreweave", term: "CoreWeave", acronym: "GPU Cloud Platform for AI",
@@ -2307,7 +2347,10 @@
     "message-square": '<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>',
     "git-branch": '<path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>',
     activity: '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
-    "brick-wall": '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 9v6"/><path d="M16 15v6"/><path d="M16 3v6"/><path d="M3 15h18"/><path d="M3 9h18"/><path d="M8 15v6"/><path d="M8 3v6"/>'
+    "brick-wall": '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 9v6"/><path d="M16 15v6"/><path d="M16 3v6"/><path d="M3 15h18"/><path d="M3 9h18"/><path d="M8 15v6"/><path d="M8 3v6"/>',
+    "hard-drive": '<path d="M10 16h.01"/><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M21.946 12.013H2.054"/><path d="M6 16h.01"/>',
+    mail: '<path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/>',
+    "file-search": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3 15 18"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -4099,23 +4142,60 @@
 
     edr: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access.">
-        <rect class="box" x="28" y="104" width="172" height="92" rx="10"/>
-        <text class="t-b" x="114" y="138" text-anchor="middle">Endpoint</text>
-        <text class="t-sm t-mut" x="114" y="158" text-anchor="middle">agent watches</text>
-        <text class="t-sm t-mut" x="114" y="176" text-anchor="middle">process · file · net</text>
-        <rect class="box-accent" x="268" y="98" width="184" height="104" rx="12"/>
-        <text class="t-b" x="360" y="138" text-anchor="middle">Detection</text>
-        <text class="t-sm t-mut" x="360" y="158" text-anchor="middle">scores behaviour</text>
-        <text class="t-sm t-mut" x="360" y="176" text-anchor="middle">&amp; device posture</text>
-        <line class="flow" x1="200" y1="150" x2="266" y2="150" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="233" y="140" text-anchor="middle">telemetry</text>
-        <rect class="box" x="528" y="84" width="168" height="50" rx="8"/>
-        <text class="t-sm t-b" x="612" y="113" text-anchor="middle" fill="var(--state-ok)">access granted</text>
-        <rect class="box" x="528" y="166" width="168" height="50" rx="8"/>
-        <text class="t-sm t-b" x="612" y="195" text-anchor="middle" fill="var(--state-bad)">quarantine host</text>
-        <line class="flow-ok" x1="452" y1="134" x2="526" y2="112" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" x1="452" y1="166" x2="526" y2="190" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="360" y="262" text-anchor="middle">The live posture verdict becomes an input to every access decision.</text>
+        <g data-s="1 3">
+          <rect class="box" x="24" y="24" width="172" height="136" rx="12"/>
+          ${icon('laptop', 40, 38)}
+          <text class="t-b" x="72" y="56">Endpoint</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="40" y="72" width="140" height="72" rx="6"/>
+          <text class="t-sm t-b" x="52" y="92">agent records</text>
+          <text class="t-sm t-mut" x="52" y="110">process, file,</text>
+          <text class="t-sm t-mut" x="52" y="126">network, registry</text>
+        </g>
+        <line class="flow" data-s="1" x1="198" y1="64" x2="274" y2="64" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="274" y1="136" x2="198" y2="136" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="236" y="156" text-anchor="middle">isolate</text>
+        <g data-s="1 2 3 4 5">
+          <rect class="box" x="276" y="24" width="200" height="136" rx="8"/>
+          ${icon('activity', 292, 38)}
+          <text class="t-b" x="324" y="56">Detection</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="292" y="72" width="168" height="72" rx="6"/>
+          <text class="t-sm t-b" x="304" y="92">known attack</text>
+          <text class="t-sm t-b" x="304" y="108">patterns</text>
+          <text class="t-sm t-mut" x="304" y="126">flag behaviour</text>
+        </g>
+        ${[['mail', 'email', 24], ['user', 'identity', 72], ['cloud', 'cloud', 120]].map(([ico, t, y]) => `
+          <g data-s="4">
+            <rect class="box" x="552" y="${y}" width="144" height="40" rx="6"/>
+            ${icon(ico, 562, y + 8)}
+            <text class="t-sm" x="594" y="${y + 25}">${t}</text>
+          </g>
+          <line class="flow" data-s="4" x1="550" y1="${y + 20}" x2="478" y2="${y + 20 > 92 ? 120 : (y + 20 < 92 ? 64 : 92)}" marker-end="url(#ah-mut)"/>`).join('')}
+
+        <line class="flow" data-s="5" x1="376" y1="162" x2="376" y2="198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="388" y="184">posture</text>
+        <g data-s="5">
+          <rect class="box" x="276" y="200" width="200" height="64" rx="8"/>
+          ${icon('scale', 292, 214)}
+          <text class="t-b" x="324" y="232">Policy engine</text>
+          <text class="t-sm t-mut" x="324" y="250">weighs posture</text>
+        </g>
+        <line class="flow-bad" data-s="5" x1="478" y1="232" x2="550" y2="232" marker-end="url(#ah-bad)"/>
+        <g data-s="5">
+          <rect class="box" x="552" y="200" width="144" height="64" rx="8"/>
+          <text class="t-sm t-b" x="564" y="222">access denied</text>
+          <text class="t-sm t-mut" x="564" y="240">even with valid</text>
+          <text class="t-sm t-mut" x="564" y="254">credentials</text>
+        </g>
+
+        ${badge(1, 236, 64, '1')}
+        ${badge(2, 444, 86, '2')}
+        ${badge(3, 236, 136, '3')}
+        ${badge(4, 514, 44, '4')}
+        ${badge(5, 514, 232, '5')}
       </svg>`,
 
     waf: () => `
@@ -4339,29 +4419,54 @@
 
     idsips: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.">
-        <text class="t-sm t-b t-acc" x="44" y="32">IDS — out of band</text>
-        <rect class="box" x="24" y="46" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="84" y="74" text-anchor="middle">Source</text>
-        <rect class="box" x="576" y="46" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="636" y="74" text-anchor="middle">Dest</text>
-        <line class="flow" x1="144" y1="69" x2="574" y2="69" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="360" y1="69" x2="360" y2="100" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="290" y="100" width="140" height="36" rx="8"/>
-        <text class="t-sm t-b" x="360" y="123" text-anchor="middle">IDS → alert</text>
-        <text class="t-sm t-mut" x="430" y="58" text-anchor="middle">mirrored copy</text>
-        <line class="divider" x1="20" y1="158" x2="700" y2="158"/>
-        <text class="t-sm t-b t-acc" x="44" y="186">IPS — inline</text>
-        <rect class="box" x="24" y="202" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="84" y="230" text-anchor="middle">Source</text>
-        <rect class="box" x="576" y="202" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="636" y="230" text-anchor="middle">Dest</text>
-        <rect class="box-accent" x="312" y="200" width="96" height="50" rx="8"/>
-        <text class="t-sm t-b" x="360" y="230" text-anchor="middle">IPS</text>
-        <line class="flow" x1="144" y1="225" x2="310" y2="225" marker-end="url(#ah-mut)"/>
-        <line class="flow-ok" x1="408" y1="225" x2="574" y2="225" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" x="492" y="216" text-anchor="middle" fill="var(--state-ok)">clean passes</text>
-        <line class="flow-bad" x1="360" y1="250" x2="360" y2="282" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" x="378" y="278" fill="var(--state-bad)">matched flow dropped</text>
+        <text class="t-sm" data-s="1" x="24" y="18">looks for: signatures · protocol anomalies · deviations from a baseline</text>
+        ${[32, 172].map((y) => `
+          <g data-s="1">
+            <rect class="box" x="24" y="${y}" width="120" height="48" rx="12"/>
+            ${icon('globe', 36, y + 12)}
+            <text class="t-b" x="68" y="${y + 29}">Traffic</text>
+          </g>
+          <g data-s="1">
+            <rect class="box" x="576" y="${y}" width="120" height="48" rx="8"/>
+            ${icon('server', 588, y + 12)}
+            <text class="t-b" x="620" y="${y + 29}">Hosts</text>
+          </g>`).join('')}
+        <line class="flow" data-s="1" x1="146" y1="56" x2="574" y2="56" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="328" y1="58" x2="328" y2="90" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2">
+          <rect class="box" x="248" y="92" width="160" height="44" rx="8"/>
+          ${icon('scan-eye', 260, 102)}
+          <text class="t-b" x="292" y="112">IDS</text>
+          <text class="t-sm t-mut" x="292" y="128">mirrored copy</text>
+        </g>
+        <text class="t-sm bad" data-s="5" x="248" y="154">false positives</text>
+
+        <line class="flow-bad" data-s="3" x1="146" y1="196" x2="246" y2="196" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="3" x="196" y="188" text-anchor="middle">malicious</text>
+        <g data-s="1 3">
+          <rect class="box" x="248" y="172" width="160" height="48" rx="8"/>
+          ${icon('shield', 260, 184)}
+          <text class="t-b" x="292" y="194">IPS</text>
+          <text class="t-sm t-mut" x="292" y="210">inline: drops it</text>
+        </g>
+        <line class="flow" data-s="1" x1="410" y1="186" x2="574" y2="186" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="1" x="500" y="178" text-anchor="middle">legitimate</text>
+        <text class="t-sm bad" data-s="5" x="248" y="240">may block legitimate traffic</text>
+
+        <path class="flow" data-s="4" d="M410 114 H436 V264 H446" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="4" d="M410 210 H436" />
+        <g data-s="4">
+          <rect class="box" x="448" y="240" width="248" height="48" rx="8"/>
+          ${icon('activity', 460, 252)}
+          <text class="t-b" x="492" y="262">SIEM and SOC</text>
+          <text class="t-sm t-mut" x="492" y="278">correlate, respond</text>
+        </g>
+
+        ${badge(1, 200, 56, '1')}
+        ${badge(2, 328, 74, '2')}
+        ${badge(3, 170, 206, '3')}
+        ${badge(4, 680, 254, '4')}
+        ${badge(5, 376, 150, '5')}
       </svg>`,
 
     ldap: () => `
@@ -4463,24 +4568,44 @@
       </svg>`,
 
     soar: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.">
-        <rect class="box" x="24" y="106" width="150" height="68" rx="10"/>
-        <text class="t-b" x="99" y="138" text-anchor="middle">Alert</text>
-        <text class="t-sm t-mut" x="99" y="158" text-anchor="middle">from SIEM</text>
-        <rect class="box-accent" x="240" y="46" width="190" height="188" rx="12"/>
-        <text class="t-b" x="335" y="78" text-anchor="middle">Playbook</text>
-        ${["enrich","decide","act"].map((t,i)=>`
-          <rect class="box" x="266" y="${100+i*40}" width="138" height="32" rx="6"/>
-          <text class="t-sm" x="335" y="${121+i*40}" text-anchor="middle">${t}</text>
-          ${i<2?`<line class="flow-accent" x1="335" y1="${132+i*40}" x2="335" y2="${140+i*40}" marker-end="url(#ah-acc)"/>`:""}
-        `).join("")}
-        <line class="flow" x1="174" y1="140" x2="238" y2="140" marker-end="url(#ah-mut)"/>
-        ${[["isolate host",60],["disable account",132],["block IP",204]].map(([t,y])=>`
-          <rect class="box" x="514" y="${y}" width="182" height="52" rx="10"/>
-          <text x="605" y="${y+31}" text-anchor="middle">${t}</text>
-          <line class="flow-accent" x1="430" y1="140" x2="512" y2="${y+26}" marker-end="url(#ah-acc)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="335" y="272" text-anchor="middle">Repetitive triage runs in seconds; humans gate the destructive actions.</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.">
+        <g data-s="1">
+          <rect class="box" x="24" y="112" width="148" height="64" rx="12"/>
+          ${icon('activity', 40, 126)}
+          <text class="t-b" x="72" y="144">Alert</text>
+          <text class="t-sm t-mut" x="72" y="162">from SIEM</text>
+        </g>
+        <line class="flow" data-s="1" x1="174" y1="144" x2="234" y2="144" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="236" y="16" width="200" height="248" rx="8"/>
+          ${icon('list-checks', 252, 30)}
+          <text class="t-b" x="284" y="48">Playbook</text>
+        </g>
+        ${[['enrich', 72, '2'], ['decide', 136, '3'], ['act', 200, '4 5']].map(([t, y, s], i) => `
+          <g data-s="${s}">
+            <rect class="box" x="252" y="${y}" width="168" height="44" rx="6"/>
+            <text class="t-sm t-b" x="336" y="${y + 27}" text-anchor="middle">${t}</text>
+          </g>
+          ${i < 2 ? `<line class="flow" data-s="${i === 0 ? 3 : 4}" x1="336" y1="${y + 46}" x2="336" y2="${y + 62}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+        ${[['isolate a host', 24], ['disable an account', 80], ['block an IP', 136], ['open a case', 192]].map(([t, y]) => `
+          <g data-s="4">
+            <rect class="box" x="512" y="${y}" width="184" height="44" rx="8"/>
+            <text class="t-sm" x="528" y="${y + 27}">${t}</text>
+          </g>
+          <line class="flow" data-s="4" x1="422" y1="222" x2="510" y2="${y + 22}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5">
+          <rect class="box" x="512" y="248" width="184" height="44" rx="8"/>
+          ${icon('user', 524, 258)}
+          <text class="t-sm t-b" x="556" y="268">human approval</text>
+          <text class="t-sm t-mut" x="556" y="284">destructive only</text>
+        </g>
+        <line class="flow" data-s="5" x1="422" y1="232" x2="510" y2="268" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 204, 144, '1')}
+        ${badge(2, 404, 86, '2')}
+        ${badge(3, 404, 150, '3')}
+        ${badge(4, 404, 214, '4')}
+        ${badge(5, 466, 250, '5')}
       </svg>`,
 
     pqc: () => `
@@ -4773,23 +4898,50 @@
       </svg>`,
 
     dlp: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted.">
-        <rect class="box" x="24" y="100" width="166" height="80" rx="10"/>
-        <text class="t-sm t-b" x="107" y="132" text-anchor="middle">Outbound content</text>
-        <text class="t-sm t-mut" x="107" y="152" text-anchor="middle">email · upload · USB</text>
-        <rect class="box-accent" x="258" y="92" width="178" height="96" rx="12"/>
-        <text class="t-b" x="347" y="130" text-anchor="middle">DLP</text>
-        <text class="t-sm t-mut" x="347" y="150" text-anchor="middle">match classifications</text>
-        <line class="flow" x1="190" y1="140" x2="256" y2="140" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="528" y="76" width="168" height="52" rx="10"/>
-        <text class="t-sm t-b" x="612" y="100" text-anchor="middle" fill="var(--state-ok)">allowed</text>
-        <text class="t-sm t-mut" x="612" y="118" text-anchor="middle">no sensitive data</text>
-        <rect class="box" x="528" y="158" width="168" height="52" rx="10"/>
-        <text class="t-sm t-b" x="612" y="182" text-anchor="middle" fill="var(--state-bad)">blocked</text>
-        <text class="t-sm t-mut" x="612" y="200" text-anchor="middle">card data by email</text>
-        <line class="flow-ok" x1="436" y1="126" x2="526" y2="104" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" x1="436" y1="156" x2="526" y2="182" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">A policy breach is warned, blocked, or encrypted before it leaves.</text>
+      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted.">
+        <g data-s="1 2">
+          <rect class="box" x="24" y="24" width="176" height="92" rx="8"/>
+          ${icon('file-text', 40, 38)}
+          <text class="t-b" x="72" y="56">Sensitive data</text>
+          <text class="t-sm t-mut" x="40" y="84">cards, health,</text>
+          <text class="t-sm t-mut" x="40" y="100">code, secrets</text>
+        </g>
+        <line class="flow" data-s="2" x1="202" y1="72" x2="262" y2="72" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="40" y="138">leaving by email, upload,</text>
+        <text class="t-sm" data-s="2" x="40" y="154">USB or chat</text>
+        <g data-s="5">
+          <rect class="box" x="24" y="176" width="176" height="56" rx="8"/>
+          ${icon('list-checks', 40, 192)}
+          <text class="t-b" x="72" y="201">Labels</text>
+          <text class="t-sm t-mut" x="72" y="219">classification</text>
+        </g>
+        <line class="flow" data-s="5" x1="202" y1="204" x2="262" y2="170" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4 5">
+          <rect class="box" x="264" y="24" width="192" height="176" rx="8"/>
+          ${icon('shield', 280, 38)}
+          <text class="t-b" x="312" y="56">DLP</text>
+          <text class="t-sm t-mut" x="280" y="96">inspects content</text>
+          <text class="t-sm t-mut" x="280" y="112">against patterns</text>
+          <text class="t-sm t-mut" x="280" y="128">and classifications</text>
+        </g>
+        ${[['warn', 24, ''], ['block', 84, 'card data by email'], ['encrypt', 144, '']].map(([t, y, sub]) => `
+          <g data-s="3">
+            <rect class="box" x="536" y="${y}" width="160" height="48" rx="8"/>
+            <text class="t-sm t-b" x="552" y="${sub ? y + 21 : y + 29}">${t}</text>
+            ${sub ? `<text class="t-sm bad" x="552" y="${y + 37}">${sub}</text>` : ''}
+          </g>
+          <line class="flow" data-s="3" x1="458" y1="112" x2="534" y2="${y + 24}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="4">
+          <rect class="box" x="264" y="228" width="432" height="44" rx="8"/>
+          ${icon('network', 280, 238)}
+          <text class="t-sm" x="312" y="255">endpoints · network · cloud and SaaS via CASB</text>
+        </g>
+
+        ${badge(1, 184, 92, '1')}
+        ${badge(2, 232, 72, '2')}
+        ${badge(3, 680, 98, '3')}
+        ${badge(4, 680, 250, '4')}
+        ${badge(5, 184, 190, '5')}
       </svg>`,
 
     pam: () => `
@@ -6279,45 +6431,52 @@
       </svg>`,
 
     sentrywire: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP, though encrypted payloads stay ciphertext.">
-        <text class="t-sm t-mut" x="20" y="20">Record every packet, then search the past with today's signatures</text>
+      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext.">
+        <line class="flow" data-s="1" x1="24" y1="36" x2="694" y2="36" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="1" x="360" y="28" text-anchor="middle">live traffic</text>
+        <line class="flow" data-s="1" x1="144" y1="38" x2="144" y2="118" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="156" y="84">tap copy</text>
+        <g data-s="1 2">
+          <rect class="box" x="24" y="120" width="240" height="76" rx="8"/>
+          ${icon('hard-drive', 40, 134)}
+          <text class="t-b" x="72" y="152">Capture</text>
+          <text class="t-sm t-mut" x="72" y="170">passive, out of band</text>
+          <text class="t-sm t-mut" x="72" y="186">every payload byte</text>
+        </g>
+        <line class="flow" data-s="2" x1="266" y1="158" x2="310" y2="158" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4">
+          <rect class="box" x="312" y="120" width="192" height="76" rx="8"/>
+          ${icon('database', 328, 134)}
+          <text class="t-b" x="360" y="152">PCAP store</text>
+          <text class="t-sm t-mut" x="360" y="170">kept for months</text>
+          <text class="t-sm t-mut" x="360" y="186">add nodes</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="552" y="56" width="144" height="64" rx="8"/>
+          ${icon('file-search', 564, 70)}
+          <text class="t-b" x="596" y="88">Signature</text>
+          <text class="t-sm t-mut" x="564" y="110">published today</text>
+        </g>
+        <line class="flow" data-s="3" x1="550" y1="100" x2="506" y2="128" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="506" y1="176" x2="550" y2="176" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="552" y="140" width="144" height="64" rx="8"/>
+          ${icon('users', 564, 154)}
+          <text class="t-b" x="596" y="172">Analyst</text>
+          <text class="t-sm t-mut" x="564" y="194">matches as PCAP</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="224" width="672" height="56" rx="8"/>
+          ${icon('lock', 40, 240)}
+          <text class="t-sm bad" x="72" y="248">limits: TLS payloads stay ciphertext · only what crosses the tap</text>
+          <text class="t-sm bad" x="72" y="266">the archive itself needs protecting</text>
+        </g>
 
-        <rect class="box" x="20" y="36" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="80" y="63" text-anchor="middle">Clients</text>
-        <rect class="box" x="580" y="36" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="640" y="63" text-anchor="middle">Servers</text>
-        <line class="flow" x1="140" y1="59" x2="578" y2="59" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="440" y="50" text-anchor="middle">production traffic</text>
-        <line class="flow" x1="200" y1="59" x2="200" y2="98" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="210" y="84">passive copy at a tap</text>
-
-        <rect class="box-accent" x="20" y="100" width="250" height="70" rx="8"/>
-        <text class="t-b" x="145" y="124" text-anchor="middle">Capture nodes</text>
-        <text class="t-sm t-mut" x="145" y="142" text-anchor="middle">whole packets, never sliced</text>
-        <text class="t-sm t-mut" x="145" y="158" text-anchor="middle">Suricata alerts on live traffic</text>
-
-        <line class="flow-accent" x1="270" y1="135" x2="328" y2="135" marker-end="url(#ah-acc)"/>
-
-        <rect class="data" x="330" y="100" width="370" height="70" rx="8"/>
-        <text class="t-b" x="515" y="124" text-anchor="middle">Cluster store</text>
-        <text class="t-sm t-mut" x="515" y="142" text-anchor="middle">PCAP sessions, weeks to years</text>
-        <text class="t-sm t-mut" x="515" y="158" text-anchor="middle">add nodes to extend retention</text>
-
-        <rect class="box" x="20" y="200" width="200" height="56" rx="8"/>
-        <text class="t-b" x="120" y="224" text-anchor="middle">New indicator</text>
-        <text class="t-sm t-mut" x="120" y="242" text-anchor="middle">published today</text>
-
-        <path class="flow-accent" d="M220 228 H400 V174" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="310" y="220" text-anchor="middle">IDS search back</text>
-
-        <line class="flow-ok" x1="620" y1="170" x2="620" y2="198" marker-end="url(#ah-ok)"/>
-        <text class="t-sm t-mut" x="610" y="189" text-anchor="end">matching sessions as PCAP</text>
-
-        <rect class="box" x="520" y="200" width="180" height="56" rx="8"/>
-        <text class="t-b" x="610" y="224" text-anchor="middle">Analyst or SIEM</text>
-        <text class="t-sm t-mut" x="610" y="242" text-anchor="middle">months-old evidence</text>
-
-        <text class="t-sm t-mut" x="360" y="280" text-anchor="middle">Without keys, TLS payloads are kept as ciphertext — metadata and fingerprints remain</text>
+        ${badge(1, 144, 64, '1')}
+        ${badge(2, 288, 158, '2')}
+        ${badge(3, 680, 70, '3')}
+        ${badge(4, 680, 154, '4')}
+        ${badge(5, 680, 238, '5')}
       </svg>`,
 
     coreweave: () => `
