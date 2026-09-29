@@ -236,6 +236,11 @@ HTTP / HTTPS — HyperText Transfer Protocol (Secure)
 Identity Provider — Identity Provider (IdP)
     The trusted service that authenticates users and vouches for who they are.
     [Security Technology] · aka IdP, SSO, OIDC, Keycloak
+    1. Verify the user — An Identity Provider is the central authority that verifies identities.
+    2. Issue a token — It issues the assertions or tokens, via SAML, OAuth or OIDC, that applications trust.
+    3. Apps trust it — Each application trusts what the IdP issues, so it does not manage passwords itself.
+    4. The single sign-on hub — The IdP is the hub of single sign-on and the anchor of identity in zero-trust designs.
+    Key fact: An Identity Provider means each app does not manage passwords itself.
 
 IDS / IPS — Intrusion Detection / Prevention System
     Sensors that spot attacks in network traffic — and optionally block them inline.
@@ -311,6 +316,11 @@ LoRA — Low-Rank Adaptation
 MFA / Passkeys — Multi-Factor Authentication (FIDO2 · WebAuthn)
     Proving identity with more than a password — and passkeys that cannot be phished.
     [Security Technology, Protocol] · aka MFA, 2FA, FIDO2, WebAuthn, passkey, passwordless, TOTP, phishing-resistant
+    1. Independent factors — MFA requires two or more independent proofs: something you know, something you have, or something you are, so a stolen password alone is not enough.
+    2. Codes can be phished — Classic second factors like SMS codes and TOTP apps can still be phished: a user can be tricked into typing them into a fake site.
+    3. Bound to the origin — With FIDO2 and WebAuthn, the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere.
+    4. Passkeys — A passkey is a discoverable FIDO credential synced across your devices that replaces the password entirely.
+    Key fact: For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be.
 
 Microsegmentation — Network Microsegmentation
     Divides a network into tiny zones, each with its own access policy.
@@ -367,6 +377,11 @@ OBO / Token Exchange — On-Behalf-Of (OAuth 2.0 Token Exchange)
 OIDC — OpenID Connect
     An identity layer on top of OAuth 2.0 that tells an app who the user is.
     [Protocol, Security Technology] · aka OpenID Connect, ID Token, OpenID Provider, SSO
+    1. OAuth alone — On its own, OAuth 2.0 only handles authorisation: the app gets an access token for APIs.
+    2. Add the openid scope — Requesting the openid scope is what turns a plain OAuth exchange into an OIDC one.
+    3. An ID Token — Alongside the access token, the OpenID Provider issues an ID Token: a signed JWT with claims such as who the user is (sub), who issued it (iss) and who it is for (aud).
+    4. The UserInfo endpoint — Apps can also call the UserInfo endpoint for profile details like name and email.
+    Key fact: OIDC is the modern, JSON-based successor to SAML for single sign-on.
 
 OPA — Open Policy Agent
     A general-purpose policy engine that answers allow / deny from code, not config.
@@ -413,6 +428,12 @@ PEP / PDP — Policy Enforcement Point / Policy Decision Point
 PKCE — Proof Key for Code Exchange
     Stops a stolen OAuth authorization code from being redeemed by anyone but the app that began the flow.
     [Security Technology, Protocol] · aka pixy, code_verifier, code_challenge, RFC 7636
+    1. Invent a verifier — The client first invents a random secret, the code_verifier.
+    2. Send only the hash — When it starts login it sends only the verifier's SHA-256 hash, the code_challenge.
+    3. A code comes back — The authorisation server returns an authorisation code.
+    4. Prove the verifier — To swap the code for tokens, the client must present the original verifier, which the server re-hashes and compares.
+    5. A stolen code fails — A code intercepted in transit is useless without the matching verifier.
+    Key fact: PKCE is now recommended for every client and is mandatory in the OAuth 2.1 draft.
 
 PKI — Public Key Infrastructure
     The certificate-and-trust system that lets you prove who owns a public key.
@@ -506,6 +527,11 @@ SBOM & SLSA — Software Supply-Chain Integrity
 SCIM — System for Cross-domain Identity Management
     Automates creating and removing user accounts across apps when people join or leave.
     [Protocol, Security Technology] · aka user provisioning, deprovisioning, SCIM 2.0, RFC 7644
+    1. Joiner: create — When someone joins, the identity provider pushes a create call, granting access on day one.
+    2. Mover: update — When someone moves, it pushes the change so every connected app stays in step automatically.
+    3. Leaver: deactivate — When someone leaves, access is revoked the moment they go, closing the security gap left by orphaned accounts.
+    4. REST and JSON — It all runs over a simple REST and JSON API, chiefly create-read-update-delete operations on /Users and /Groups resources.
+    Key fact: Where SAML and OIDC handle the login itself, SCIM handles the account lifecycle around it.
 
 SD-WAN — Software-Defined Wide Area Network
     Software steers branch traffic across multiple links by policy, not fixed routing.

@@ -1185,7 +1185,14 @@
       types: ["Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Identity & Access"],
       related: ["oauth", "saml", "zerotrust", "radius"],
       source: { label: "NIST glossary — Identity Provider", url: "https://csrc.nist.gov/glossary/term/identity_provider" },
-      caption: "A central identity provider authenticates users and issues tokens that many apps trust."
+      caption: "A central identity provider authenticates users and issues tokens that many apps trust.",
+      steps: [
+        { title: "Verify the user", text: "An Identity Provider is the central authority that verifies identities." },
+        { title: "Issue a token", text: "It issues the assertions or tokens, via SAML, OAuth or OIDC, that applications trust." },
+        { title: "Apps trust it", text: "Each application trusts what the IdP issues, so it does not manage passwords itself." },
+        { title: "The single sign-on hub", text: "The IdP is the hub of single sign-on and the anchor of identity in zero-trust designs." }
+      ],
+      fact: "An Identity Provider means each app does not manage passwords itself."
     },
     {
       id: "sase", term: "SASE", acronym: "Secure Access Service Edge", aliases: ["SSE", "ZTNA", "cloud security"],
@@ -1256,7 +1263,15 @@
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "oidc", "idp"],
       source: { label: "RFC 7636 — PKCE", url: "https://www.rfc-editor.org/info/rfc7636" },
-      caption: "The client commits to a hashed secret up front and proves it on redemption, so an intercepted code cannot be exchanged."
+      caption: "The client commits to a hashed secret up front and proves it on redemption, so an intercepted code cannot be exchanged.",
+      steps: [
+        { title: "Invent a verifier", text: "The client first invents a random secret, the code_verifier." },
+        { title: "Send only the hash", text: "When it starts login it sends only the verifier's SHA-256 hash, the code_challenge." },
+        { title: "A code comes back", text: "The authorisation server returns an authorisation code." },
+        { title: "Prove the verifier", text: "To swap the code for tokens, the client must present the original verifier, which the server re-hashes and compares." },
+        { title: "A stolen code fails", text: "A code intercepted in transit is useless without the matching verifier." }
+      ],
+      fact: "PKCE is now recommended for every client and is mandatory in the OAuth 2.1 draft."
     },
     {
       id: "oidc", term: "OIDC", acronym: "OpenID Connect",
@@ -1266,7 +1281,14 @@
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["oauth", "jwt", "idp", "saml"],
       source: { label: "OpenID Connect Core 1.0", url: "https://openid.net/specs/openid-connect-core-1_0.html" },
-      caption: "OAuth grants an access token for APIs; OIDC adds a signed ID Token (a JWT) that attests who the user is."
+      caption: "OAuth grants an access token for APIs; OIDC adds a signed ID Token (a JWT) that attests who the user is.",
+      steps: [
+        { title: "OAuth alone", text: "On its own, OAuth 2.0 only handles authorisation: the app gets an access token for APIs." },
+        { title: "Add the openid scope", text: "Requesting the openid scope is what turns a plain OAuth exchange into an OIDC one." },
+        { title: "An ID Token", text: "Alongside the access token, the OpenID Provider issues an ID Token: a signed JWT with claims such as who the user is (sub), who issued it (iss) and who it is for (aud)." },
+        { title: "The UserInfo endpoint", text: "Apps can also call the UserInfo endpoint for profile details like name and email." }
+      ],
+      fact: "OIDC is the modern, JSON-based successor to SAML for single sign-on."
     },
     {
       id: "websockets", term: "WebSockets", acronym: "WebSocket Protocol (RFC 6455)",
@@ -1320,7 +1342,14 @@
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Identity & Access"],
       related: ["idp", "saml", "oidc"],
       source: { label: "RFC 7644 — SCIM Protocol", url: "https://www.rfc-editor.org/info/rfc7644" },
-      caption: "The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync."
+      caption: "The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync.",
+      steps: [
+        { title: "Joiner: create", text: "When someone joins, the identity provider pushes a create call, granting access on day one." },
+        { title: "Mover: update", text: "When someone moves, it pushes the change so every connected app stays in step automatically." },
+        { title: "Leaver: deactivate", text: "When someone leaves, access is revoked the moment they go, closing the security gap left by orphaned accounts." },
+        { title: "REST and JSON", text: "It all runs over a simple REST and JSON API, chiefly create-read-update-delete operations on /Users and /Groups resources." }
+      ],
+      fact: "Where SAML and OIDC handle the login itself, SCIM handles the account lifecycle around it."
     },
     {
       id: "mfa", term: "MFA / Passkeys", acronym: "Multi-Factor Authentication (FIDO2 · WebAuthn)",
@@ -1330,7 +1359,14 @@
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Identity & Access"],
       related: ["fido2", "oauth", "oidc", "idp", "pkce"],
       source: { label: "W3C WebAuthn Level 2", url: "https://www.w3.org/TR/webauthn-2/" },
-      caption: "Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it."
+      caption: "Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it.",
+      steps: [
+        { title: "Independent factors", text: "MFA requires two or more independent proofs: something you know, something you have, or something you are, so a stolen password alone is not enough." },
+        { title: "Codes can be phished", text: "Classic second factors like SMS codes and TOTP apps can still be phished: a user can be tricked into typing them into a fake site." },
+        { title: "Bound to the origin", text: "With FIDO2 and WebAuthn, the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere." },
+        { title: "Passkeys", text: "A passkey is a discoverable FIDO credential synced across your devices that replaces the password entirely." }
+      ],
+      fact: "For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be."
     },
     {
       id: "pki", term: "PKI", acronym: "Public Key Infrastructure",
@@ -2122,7 +2158,9 @@
     power: '<path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/>',
     atom: '<circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/>',
     "radio-tower": '<path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.11.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="M9.5 18h5"/><path d="m8 22 4-11 4 11"/>',
-    eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>'
+    eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
+    fingerprint: '<path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>',
+    "message-square": '<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -3164,21 +3202,38 @@
       </svg>`,
 
     idp: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A user authenticates once at the identity provider, which issues tokens that several applications trust.">
-        <rect class="box" x="30" y="112" width="120" height="56" rx="10"/>
-        <text class="t-b" x="90" y="146" text-anchor="middle">User</text>
-        <rect class="box-accent" x="250" y="92" width="180" height="96" rx="12"/>
-        <text class="t-b" x="340" y="132" text-anchor="middle">Identity Provider</text>
-        <text class="t-sm t-mut" x="340" y="152" text-anchor="middle">issues tokens</text>
-        <line class="flow" x1="150" y1="140" x2="248" y2="140" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="199" y="130" text-anchor="middle">log in once</text>
-        ${[["Email app", 24], ["CRM", 112], ["Wiki", 200]].map(([t, y]) => `
-          <rect class="box" x="520" y="${y}" width="170" height="54" rx="10"/>
-          <text x="605" y="${y + 32}" text-anchor="middle">${t}</text>
-          <line class="flow-accent" x1="430" y1="140" x2="518" y2="${y + 27}" marker-end="url(#ah-acc)"/>
-        `).join("")}
-        <text class="t-sm t-b t-acc" x="474" y="${"72"}" text-anchor="middle">token</text>
-        <text class="t-sm t-mut" x="340" y="214" text-anchor="middle">every app trusts the IdP</text>
+      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A central identity provider authenticates users and issues tokens that many apps trust.">
+        <g data-s="1 4">
+          <rect class="box" x="24" y="96" width="160" height="72" rx="12"/>
+          ${icon('user', 40, 110)}
+          <text class="t-b" x="72" y="128">User</text>
+          <text class="t-sm t-mut" x="72" y="146">logs in once</text>
+        </g>
+        <line class="flow" data-s="1 4" x1="186" y1="132" x2="258" y2="132" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 4">
+          <rect class="box" x="260" y="56" width="200" height="152" rx="8"/>
+          ${icon('shield-check', 276, 70)}
+          <text class="t-b" x="308" y="88">IdP</text>
+          <text class="t-sm t-mut" x="308" y="106">central authority</text>
+        </g>
+        <g data-s="2">
+          ${[['SAML', 276], ['OAuth', 336], ['OIDC', 396]].map(([t, x]) => `
+            <rect class="box" x="${x}" y="152" width="56" height="32" rx="4"/>
+            <text class="t-sm" x="${x + 28}" y="172" text-anchor="middle">${t}</text>`).join('')}
+        </g>
+        ${[[24, 96, 52], [108, 132, 136], [192, 168, 220]].map(([y, y1, y2]) => `
+          <g data-s="3 4">
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+            ${icon('app-window', 552, y + 16)}
+            <text class="t-b" x="584" y="${y + 25}">App</text>
+            <text class="t-sm t-mut" x="584" y="${y + 43}">no own passwords</text>
+          </g>
+          <line class="flow" data-s="3 4" x1="462" y1="${y1}" x2="534" y2="${y2}" marker-end="url(#ah-mut)"/>`).join('')}
+
+        ${badge(1, 222, 132, '1')}
+        ${badge(2, 444, 72, '2')}
+        ${badge(3, 498, 134, '3')}
+        ${badge(4, 168, 110, '4')}
       </svg>`,
 
     sase: () => `
@@ -3325,41 +3380,97 @@
       </svg>`,
 
     pkce: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="PKCE: the client sends a hashed code_challenge when authorising and proves the original code_verifier when redeeming, so an intercepted authorization code cannot be exchanged.">
-        <text class="t-b" x="150" y="28" text-anchor="middle">Client app</text>
-        <text class="t-b" x="560" y="28" text-anchor="middle">Authorization server</text>
-        <line class="divider" x1="150" y1="40" x2="150" y2="224"/>
-        <line class="divider" x1="560" y1="40" x2="560" y2="224"/>
-        ${[
-          ["1 · authorize · code_challenge = SHA-256(verifier)", 78, "mut", 1],
-          ["2 · authorization code", 116, "mut", 0],
-          ["3 · redeem code + code_verifier", 168, "acc", 1],
-          ["4 · access + ID tokens", 206, "acc", 0],
-        ].map(([t, y, m, dir]) => `
-          <line class="flow${m==='acc'?'-accent':''}" x1="${dir?150:560}" y1="${y}" x2="${dir?560:150}" y2="${y}" marker-end="url(#ah-${m})"/>
-          <text class="t-sm" x="355" y="${y-7}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <rect class="box stroke-bad" x="150" y="240" width="410" height="48" rx="8"/>
-        <text class="t-sm bad" x="355" y="262" text-anchor="middle">Stolen code, no code_verifier</text>
-        <text class="t-sm t-mut" x="355" y="279" text-anchor="middle">exchange rejected — the hash will not match</text>
+      <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The client commits to a hashed secret up front and proves it on redemption, so an intercepted code cannot be exchanged.">
+        <g data-s="1 2 4">
+          <rect class="box" x="24" y="16" width="180" height="220" rx="8"/>
+          ${icon('app-window', 40, 30)}
+          <text class="t-b" x="72" y="48">Client</text>
+        </g>
+        <g data-s="1 4">
+          <rect class="box" x="40" y="136" width="148" height="44" rx="6"/>
+          <text class="t-sm t-b" x="52" y="154">code_verifier</text>
+          <text class="t-sm t-mut" x="52" y="170">random secret</text>
+        </g>
+        <g data-s="2 3 4 5">
+          <rect class="box" x="516" y="16" width="180" height="220" rx="8"/>
+          ${icon('shield-check', 532, 30)}
+          <text class="t-b" x="564" y="48">Authorisation</text>
+          <text class="t-sm t-mut" x="564" y="64">server</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="532" y="176" width="148" height="44" rx="6"/>
+          <text class="t-sm t-b" x="544" y="194">re-hash and</text>
+          <text class="t-sm t-mut" x="544" y="210">compare</text>
+        </g>
+        <line class="flow" data-s="2" x1="206" y1="88" x2="514" y2="88" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="81" text-anchor="middle">code_challenge: SHA-256 hash</text>
+        <line class="flow" data-s="3" x1="514" y1="124" x2="206" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="117" text-anchor="middle">authorisation code</text>
+        <line class="flow" data-s="4" x1="206" y1="164" x2="514" y2="164" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="157" text-anchor="middle">code + code_verifier</text>
+        <line class="flow" data-s="4" x1="514" y1="200" x2="206" y2="200" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="193" text-anchor="middle">tokens</text>
+
+        <line class="flow-bad" data-s="5" x1="240" y1="126" x2="240" y2="246" marker-end="url(#ah-bad)"/>
+        <g data-s="5">
+          <rect class="box" x="220" y="248" width="200" height="52" rx="12"/>
+          ${icon('skull', 236, 262)}
+          <text class="t-b" x="268" y="270">Interceptor</text>
+          <text class="t-sm t-mut" x="268" y="288">code, no verifier</text>
+        </g>
+        <path class="flow-bad" data-s="5" d="M422 274 H606 V240" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="5" x="440" y="266">exchange fails</text>
+
+        ${badge(1, 172, 150, '1')}
+        ${badge(2, 240, 88, '2')}
+        ${badge(3, 480, 124, '3')}
+        ${badge(4, 240, 164, '4')}
+        ${badge(5, 240, 222, '5')}
       </svg>`,
 
     oidc: () => `
-      <svg class="dg" viewBox="0 0 720 250" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OIDC: an OpenID Provider issues an OAuth access token plus a signed ID Token, a JWT with sub, iss and aud claims, and exposes a UserInfo endpoint.">
-        <text class="t-sm t-mut" x="360" y="24" text-anchor="middle">Login request carries scope: openid</text>
-        <rect class="box-accent" x="36" y="92" width="150" height="74" rx="12"/>
-        <text class="t-b" x="111" y="124" text-anchor="middle">OpenID</text>
-        <text class="t-b" x="111" y="143" text-anchor="middle">Provider</text>
-        <rect class="box" x="300" y="48" width="384" height="58" rx="10"/>
-        <text class="t-b t-sm" x="318" y="73">Access token</text>
-        <text class="t-sm t-mut" x="318" y="91">opaque — authorises calls to the resource API</text>
-        <rect class="box-accent" x="300" y="126" width="384" height="80" rx="10"/>
-        <text class="t-b t-sm t-acc" x="318" y="151">ID Token — a signed JWT</text>
-        <text class="t-sm t-mut" x="318" y="171">claims: sub (who) · iss (issuer) · aud (audience)</text>
-        <text class="t-sm t-mut" x="318" y="190">+ UserInfo endpoint for profile details</text>
-        <line class="flow" x1="186" y1="120" x2="298" y2="78" marker-end="url(#ah-mut)"/>
-        <line class="flow-accent" x1="186" y1="140" x2="298" y2="162" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="360" y="234" text-anchor="middle">OAuth 2.0 issues the access token; OIDC adds the ID Token that proves identity.</text>
+      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OAuth grants an access token for APIs; OIDC adds a signed ID Token (a JWT) that attests who the user is.">
+        <g data-s="1 2 3 4">
+          <rect class="box" x="24" y="24" width="160" height="216" rx="8"/>
+          ${icon('app-window', 40, 38)}
+          <text class="t-b" x="72" y="56">App</text>
+        </g>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="536" y="24" width="160" height="216" rx="8"/>
+          ${icon('shield-check', 552, 38)}
+          <text class="t-b" x="584" y="56">OpenID</text>
+          <text class="t-sm t-mut" x="584" y="74">Provider</text>
+        </g>
+        <line class="flow" data-s="2" x1="186" y1="96" x2="534" y2="96" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="89" text-anchor="middle">request with the openid scope</text>
+
+        <line class="flow" data-s="1" x1="534" y1="132" x2="426" y2="132"/>
+        <line class="flow" data-s="1" x1="294" y1="132" x2="186" y2="132" marker-end="url(#ah-mut)"/>
+        <g data-s="1">
+          <rect class="box" x="296" y="116" width="128" height="32" rx="6"/>
+          <text class="t-sm t-b" x="360" y="136" text-anchor="middle">access token</text>
+        </g>
+
+        <line class="flow" data-s="3" x1="534" y1="180" x2="450" y2="180"/>
+        <line class="flow" data-s="3" x1="270" y1="180" x2="186" y2="180" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="272" y="158" width="176" height="44" rx="6"/>
+          <text class="t-sm t-b" x="360" y="176" text-anchor="middle">ID Token: signed JWT</text>
+          <text class="t-sm t-mut" x="360" y="192" text-anchor="middle">sub · iss · aud</text>
+        </g>
+
+        <line class="flow" data-s="4" x1="186" y1="222" x2="550" y2="222" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="215" text-anchor="middle">UserInfo call</text>
+        <g data-s="4">
+          <rect class="box" x="552" y="192" width="132" height="40" rx="6"/>
+          <text class="t-sm t-b" x="564" y="209">UserInfo</text>
+          <text class="t-sm t-mut" x="564" y="224">name, email</text>
+        </g>
+
+        ${badge(1, 480, 132, '1')}
+        ${badge(2, 220, 96, '2')}
+        ${badge(3, 492, 180, '3')}
+        ${badge(4, 220, 222, '4')}
       </svg>`,
 
     websockets: () => `
@@ -3465,45 +3576,80 @@
       </svg>`,
 
     scim: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SCIM: an identity provider pushes create, update, and deactivate operations over a REST and JSON API to the /Users and /Groups endpoints of several connected apps.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">SCIM 2.0 · REST + JSON · /Users · /Groups</text>
-        <rect class="box-accent" x="24" y="100" width="172" height="76" rx="12"/>
-        <text class="t-b" x="110" y="132" text-anchor="middle">Identity Provider</text>
-        <text class="t-sm t-mut" x="110" y="152" text-anchor="middle">source of truth</text>
-        ${[
-          ["create — joiner", 46, 73],
-          ["update — mover", 116, 143],
-          ["deactivate — leaver", 186, 213],
-        ].map(([label, by, cy]) => `
-          <rect class="box" x="512" y="${by}" width="184" height="54" rx="10"/>
-          <text class="t-sm t-b" x="604" y="${by+23}" text-anchor="middle">Connected app</text>
-          <text class="t-sm t-mut" x="604" y="${by+41}" text-anchor="middle">${label}</text>
-          <line class="flow-accent" x1="196" y1="138" x2="510" y2="${cy}" marker-end="url(#ah-acc)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">One change at the IdP fans out to every app — and offboarding revokes access everywhere.</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync.">
+        <g data-s="1 2 3">
+          <rect class="box" x="24" y="72" width="160" height="136" rx="8"/>
+          ${icon('users', 40, 86)}
+          <text class="t-b" x="72" y="104">Identity</text>
+          <text class="t-b" x="72" y="120">provider</text>
+          <text class="t-sm t-mut" x="40" y="160">pushes each</text>
+          <text class="t-sm t-mut" x="40" y="176">lifecycle change</text>
+        </g>
+        ${[['create: joiner', 100, '1'], ['update: mover', 140, '2'], ['deactivate: leaver', 180, '3']].map(([t, y, s]) => `
+          <line class="flow" data-s="${s}" x1="186" y1="${y}" x2="498" y2="${y}" marker-end="url(#ah-mut)"/>
+          <text class="t-sm" data-s="${s}" x="352" y="${y - 7}" text-anchor="middle">${t}</text>`).join('')}
+        <text class="t-sm bad" data-s="3" x="352" y="204" text-anchor="middle">no orphaned accounts</text>
+        <rect class="zone" x="500" y="16" width="196" height="248" rx="10"/>
+        <text class="t-sm t-mut" x="512" y="34">connected apps</text>
+        ${[44, 120, 196].map((y) => `
+          <g data-s="1 2 3 4">
+            <rect class="box" x="516" y="${y}" width="164" height="56" rx="8"/>
+            ${icon('app-window', 528, y + 16)}
+            <text class="t-b" x="560" y="${y + 25}">App</text>
+            <text class="t-sm t-mut" x="560" y="${y + 43}">/Users, /Groups</text>
+          </g>`).join('')}
+
+        ${badge(1, 216, 100, '1')}
+        ${badge(2, 216, 140, '2')}
+        ${badge(3, 216, 180, '3')}
+        ${badge(4, 664, 58, '4')}
       </svg>`,
 
     mfa: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it.">
-        <text class="t-sm t-mut" x="110" y="24" text-anchor="middle">independent factors</text>
-        ${[["Know","password",36],["Have","phone / key",96],["Are","fingerprint",156]].map(([t,s,y])=>`
-          <rect class="box" x="24" y="${y}" width="172" height="48" rx="8"/>
-          <text class="t-sm t-b" x="40" y="${y+21}">${t}</text>
-          <text class="t-sm t-mut" x="40" y="${y+38}">${s}</text>
-          <line class="flow" x1="196" y1="${y+24}" x2="256" y2="128" marker-end="url(#ah-mut)"/>
-        `).join("")}
-        <rect class="box-accent" x="258" y="84" width="150" height="88" rx="12"/>
-        <text class="t-b" x="333" y="122" text-anchor="middle">Verified</text>
-        <text class="t-sm t-mut" x="333" y="142" text-anchor="middle">all factors</text>
-        <rect class="box-accent" x="500" y="78" width="196" height="54" rx="10"/>
-        <text class="t-sm t-b" x="598" y="100" text-anchor="middle">real-site.com</text>
-        <text class="t-sm" x="598" y="120" text-anchor="middle" fill="var(--state-ok)">passkey origin-bound</text>
-        <rect class="box" x="500" y="158" width="196" height="54" rx="10"/>
-        <text class="t-sm t-b" x="598" y="180" text-anchor="middle">phishing-site</text>
-        <text class="t-sm" x="598" y="200" text-anchor="middle" fill="var(--state-bad)">replay refused</text>
-        <line class="flow-ok" x1="408" y1="112" x2="498" y2="104" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" x1="408" y1="140" x2="498" y2="184" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">The credential is cryptographically tied to the real origin — a fake page cannot reuse it.</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it.">
+        ${[['lock', 'Know', 'a password', 24], ['smartphone', 'Have', 'phone or key', 256], ['fingerprint', 'Are', 'a fingerprint', 488]].map(([ico, name, sub, x]) => `
+          <g data-s="1">
+            <rect class="box" x="${x}" y="16" width="208" height="56" rx="8"/>
+            ${icon(ico, x + 16, 32)}
+            <text class="t-b" x="${x + 48}" y="41">${name}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="59">${sub}</text>
+          </g>`).join('')}
+        <g data-s="2">
+          <rect class="box" x="24" y="104" width="180" height="56" rx="8"/>
+          ${icon('message-square', 40, 120)}
+          <text class="t-b" x="72" y="129">SMS or TOTP</text>
+          <text class="t-sm t-mut" x="72" y="147">a typed code</text>
+        </g>
+        <line class="flow-bad" data-s="2" x1="206" y1="132" x2="274" y2="132" marker-end="url(#ah-bad)"/>
+        <g data-s="2 3">
+          <rect class="box" x="276" y="104" width="184" height="56" rx="8"/>
+          ${icon('skull', 292, 120)}
+          <text class="t-b" x="324" y="129">Fake site</text>
+          <text class="t-sm t-mut" x="324" y="147">phishing page</text>
+        </g>
+        <g data-s="3 4">
+          <rect class="box" x="24" y="196" width="180" height="84" rx="8"/>
+          ${icon('key-round', 40, 210)}
+          <text class="t-b" x="72" y="228">Passkey</text>
+          <text class="t-sm t-mut" x="72" y="246">synced across</text>
+          <text class="t-sm t-mut" x="72" y="262">your devices</text>
+        </g>
+        <line class="flow-bad" data-s="3" x1="206" y1="206" x2="330" y2="164" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="3" x="344" y="186">cannot be replayed here</text>
+        <line class="flow-ok" data-s="3" x1="206" y1="240" x2="514" y2="240" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" data-s="3" x="360" y="233" text-anchor="middle">challenge bound to the origin</text>
+        <g data-s="3">
+          <rect class="box" x="516" y="208" width="180" height="64" rx="8"/>
+          ${icon('globe', 532, 224)}
+          <text class="t-b" x="564" y="236">Real site</text>
+          <text class="t-sm t-mut" x="564" y="254">its own origin</text>
+        </g>
+        <text class="t-sm" data-s="4" x="360" y="290" text-anchor="middle">a passkey replaces the password entirely</text>
+
+        ${badge(1, 216, 30, '1')}
+        ${badge(2, 240, 132, '2')}
+        ${badge(3, 490, 240, '3')}
+        ${badge(4, 188, 210, '4')}
       </svg>`,
 
     pki: () => `
