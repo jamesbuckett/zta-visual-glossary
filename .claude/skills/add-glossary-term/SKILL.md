@@ -59,7 +59,9 @@ chips, and each diagram element that belongs to a step carries `data-s="1 3"`.
   arrow that step centres on; the last argument lists the steps it lights, like `data-s`.
 
 Set `aria-label` to the caption text. Budget label widths at roughly 6.6px per character
-for the ~11px mono face.
+for the ~11px mono face. Build a table or aligned columns from one `<text>` per cell,
+each at its own `x`: SVG collapses a run of spaces to one, so space-padded columns render
+squashed together.
 
 Rules: 3–5 steps; every step lights something; tag a component's `<g>`, never both a
 group and its children (no nested `data-s`); a flow may run under its badge, but a
