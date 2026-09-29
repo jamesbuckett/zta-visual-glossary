@@ -1395,7 +1395,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Kubernetes", "Platforms & Apps", "Network Edge & Ops"],
       related: ["ebpf", "calico", "kubernetes", "microseg", "servicemesh"],
       source: { label: "Introduction to Cilium & Hubble — Cilium documentation", url: "https://docs.cilium.io/en/stable/overview/intro/" },
-      caption: "Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy."
+      caption: "Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy.",
+      steps: [
+        { title: "Labels, not addresses", text: "Pods are created and destroyed constantly, so an IP address identifies nothing durable. Cilium stops writing policy about addresses." },
+        { title: "A numeric identity", text: "Its control plane collapses each pod's label set into a numeric security identity and distributes that mapping cluster-wide." },
+        { title: "Identity travels", text: "The identity is carried with the packet, so the receiving node can decide without a second lookup." },
+        { title: "Policy between identities", text: "Policy names label selectors and holds as pods churn. Beyond layer 4 it can admit particular HTTP methods and paths, gRPC calls or DNS names, via an Envoy per node rather than a sidecar per pod." },
+        { title: "eBPF in the kernel", text: "The same eBPF data plane replaces kube-proxy, and Hubble reads those programs to produce per-flow records annotated with identity rather than IP." }
+      ],
+      fact: "The identity is only as good as the labels behind it: whoever can set labels can select a policy."
     },
     {
       id: "tailscale", term: "Tailscale", acronym: "WireGuard-Based Mesh VPN",
@@ -1552,7 +1560,15 @@
       types: ["Development Framework", "Security Technology"], provenance: ["Vendor"], domains: ["Platforms & Apps", "Network Edge & Ops"],
       related: ["bluefield", "dpu", "supernic", "edr", "microseg"],
       source: { label: "NVIDIA — DOCA Software Framework", url: "https://developer.nvidia.com/networking/doca" },
-      caption: "DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement."
+      caption: "DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement.",
+      steps: [
+        { title: "CUDA for the DPU", text: "DOCA is NVIDIA's software framework for programming BlueField DPUs and SuperNICs, positioned as the DPU's equivalent of CUDA for the GPU." },
+        { title: "Three layers", text: "It is layered: hardware drivers at the base, C/C++ libraries in the middle, and production-ready containerised microservices on top." },
+        { title: "Standard interfaces", text: "It is exposed through industry-standard interfaces such as DPDK, SPDK and Netlink rather than a closed silo, which keeps software portable across BlueField generations." },
+        { title: "Argus watches the host", text: "DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes: agentless intrusion detection that host malware cannot see or switch off." },
+        { title: "Integrity and tunnels", text: "App Shield adds process-integrity monitoring, and the IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed." }
+      ],
+      fact: "Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes running zero-trust enforcement."
     },
     {
       id: "ovs", term: "Open vSwitch", acronym: "OVS — multilayer virtual switch",
@@ -1652,7 +1668,15 @@
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Kubernetes"],
       related: ["kubernetes", "docker", "vault", "spiffe"],
       source: { label: "KEDA documentation — Concepts", url: "https://keda.sh/docs/latest/concepts/" },
-      caption: "The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds."
+      caption: "The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds.",
+      steps: [
+        { title: "The wrong signal", text: "A worker blocked on a queue read burns almost no CPU while messages pile up, so an HPA scaling on CPU and memory sees an idle deployment and does nothing." },
+        { title: "Declare triggers", text: "You write a ScaledObject pointing at an existing Deployment and declare triggers, such as Kafka consumer lag or SQS queue depth. The operator watches ScaledObjects." },
+        { title: "Zero to one", text: "KEDA drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning it to zero after a cooldown." },
+        { title: "One to many", text: "A metrics API server publishes each scaler's reading through the external metrics API, and from one replica upward an ordinary HPA does the scaling." },
+        { title: "A credential per poll", text: "Every scaler must authenticate to whatever it polls. TriggerAuthentication keeps those credentials out of the ScaledObject; a pod identity provider means nothing long-lived is stored." }
+      ],
+      fact: "Scale-to-zero is the thing a plain HPA has never done."
     },
     {
       id: "spinnaker", term: "Spinnaker", acronym: "Multi-Cloud Continuous Delivery",
@@ -1750,7 +1774,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Kubernetes", "Platforms & Apps", "Network Edge & Ops"],
       related: ["cilium", "ebpf", "kubernetes", "microseg", "bgp", "wireguard", "ovn"],
       source: { label: "About Calico — Calico Open Source documentation", url: "https://docs.tigera.io/calico/latest/about/" },
-      caption: "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override."
+      caption: "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.",
+      steps: [
+        { title: "Each node owns a block", text: "Each node owns a block of the pod address space, and a BGP daemon on that node advertises the block to the other nodes or to the physical fabric." },
+        { title: "Route, don't tunnel", text: "A pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. Where the underlay will not carry pod routes, Calico falls back to a VXLAN or IP-in-IP overlay." },
+        { title: "Felix programs the kernel", text: "A Felix agent on every node inserts routes into the kernel and access control rules into the chosen data plane: iptables, nftables, eBPF or Windows HNS." },
+        { title: "Tiers, in order", text: "Every policy lives in a tier, tiers are evaluated by order, and a tier can Pass a packet down to the next. A platform team writes global rules in a high-precedence tier." },
+        { title: "Developers can't override", text: "Developers' Kubernetes NetworkPolicies land in the default tier, fixed at order 1,000,000, where they cannot override what sits above. RBAC per tier enforces the boundary." }
+      ],
+      fact: "Calico resolves label selectors into IP sets, so a policy is only as trustworthy as the labels and the IPAM behind it."
     },
     {
       id: "envoy", term: "Envoy", acronym: "Envoy Proxy — L7 Proxy & Universal Data Plane",
@@ -1780,7 +1812,15 @@
       types: ["Network Technology", "Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Network Edge & Ops", "Detection & Response"],
       related: ["cilium", "calico", "kubernetes", "edr"],
       source: { label: "What is eBPF? — ebpf.io", url: "https://ebpf.io/what-is-ebpf/" },
-      caption: "A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps."
+      caption: "A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.",
+      steps: [
+        { title: "Load via bpf()", text: "You compile a small program to a bytecode and hand it to the kernel through the bpf() system call." },
+        { title: "The verifier checks", text: "Before it is accepted, the program is statically analysed across every execution path to prove that it terminates and never steps outside its bounds." },
+        { title: "JIT to native code", text: "Only then is it JIT-compiled to native instructions, so it runs at roughly the speed of compiled kernel code." },
+        { title: "Attach at a hook", text: "The kernel runs it at a defined hook: a packet at the driver (XDP), traffic control, a kprobe, a tracepoint, a socket operation or a security hook (BPF LSM)." },
+        { title: "Maps share state", text: "Programs hold no state of their own. Maps, readable and writable from both the program and a user-space agent, carry counters, policy tables and event streams across the boundary." }
+      ],
+      fact: "The verifier proves memory safety and termination, not benignity."
     },
     {
       id: "lora", term: "LoRA", acronym: "Low-Rank Adaptation",
@@ -1870,7 +1910,13 @@
     "file-code": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/>',
     package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/>',
     database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
-    cog: '<path d="M11 10.27 7 3.34"/><path d="m11 13.73-4 6.93"/><path d="M12 22v-2"/><path d="M12 2v2"/><path d="M14 12h8"/><path d="m17 20.66-1-1.73"/><path d="m17 3.34-1 1.73"/><path d="M2 12h2"/><path d="m20.66 17-1.73-1"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m3.34 7 1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/>'
+    cog: '<path d="M11 10.27 7 3.34"/><path d="m11 13.73-4 6.93"/><path d="M12 22v-2"/><path d="M12 2v2"/><path d="M14 12h8"/><path d="m17 20.66-1-1.73"/><path d="m17 3.34-1 1.73"/><path d="M2 12h2"/><path d="m20.66 17-1.73-1"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m3.34 7 1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/>',
+    inbox: '<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+    "scan-eye": '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="1"/><path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0"/>',
+    lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    binary: '<rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 10h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/>',
+    anchor: '<path d="M12 6v16"/><path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/><path d="M9 11h6"/><circle cx="12" cy="4" r="2"/>',
+    boxes: '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -3339,63 +3385,112 @@
       </svg>`,
 
     cilium: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy.">
-        <text class="t-sm t-mut" x="360" y="24" text-anchor="middle">Policy is written between identities, not addresses.</text>
-        <rect class="box" x="24" y="52" width="170" height="60" rx="10"/>
-        <text class="t-sm t-b" x="109" y="76" text-anchor="middle">Pod</text>
-        <text class="t-sm t-mut" x="109" y="94" text-anchor="middle">app=frontend</text>
-        <rect class="box" x="24" y="150" width="170" height="60" rx="10"/>
-        <text class="t-sm t-b" x="109" y="174" text-anchor="middle">Pod</text>
-        <text class="t-sm t-mut" x="109" y="192" text-anchor="middle">app=payments</text>
-        <rect class="box-accent" x="254" y="90" width="190" height="82" rx="12"/>
-        <text class="t-b" x="349" y="118" text-anchor="middle">Security identity</text>
-        <text class="t-sm t-mut" x="349" y="138" text-anchor="middle">numeric ID from</text>
-        <text class="t-sm t-mut" x="349" y="155" text-anchor="middle">the label set</text>
-        <line class="flow" x1="194" y1="82" x2="252" y2="112" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="194" y1="180" x2="252" y2="150" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="504" y="68" width="186" height="52" rx="10"/>
-        <text class="t-sm t-b" x="597" y="99" text-anchor="middle" fill="var(--state-ok)">allowed</text>
-        <rect class="box" x="504" y="150" width="186" height="52" rx="10"/>
-        <text class="t-sm t-b" x="597" y="181" text-anchor="middle" fill="var(--state-bad)">dropped in kernel</text>
-        <line class="flow-ok" x1="444" y1="118" x2="502" y2="94" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" x1="444" y1="146" x2="502" y2="176" marker-end="url(#ah-bad)"/>
-        <rect class="zone-accent" x="20" y="224" width="680" height="56" rx="14"/>
-        <text class="t-sm t-b" x="360" y="248" text-anchor="middle">eBPF programs in the kernel — no sidecar in the data path</text>
-        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">L3/L4 · HTTP and DNS rules · kube-proxy replacement · Hubble flow logs</text>
+      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy.">
+        <g data-s="2">
+          <rect class="box" x="260" y="16" width="200" height="60" rx="8"/>
+          ${icon('cog', 276, 34)}
+          <text class="t-b" x="308" y="42">Control plane</text>
+          <text class="t-sm t-mut" x="308" y="60">labels to identity</text>
+        </g>
+        <line class="flow" data-s="2" x1="300" y1="78" x2="200" y2="98" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="420" y1="78" x2="520" y2="98" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="96" text-anchor="middle">mapping, cluster-wide</text>
+
+        ${[['Node A', 24, 'sends'], ['Node B', 484, 'decides here']].map(([name, x, sub], i) => `
+          <rect class="zone" x="${x}" y="100" width="212" height="176" rx="10"/>
+          <text class="t-sm t-mut" x="${x + 12}" y="118">${name}</text>
+          <g data-s="1">
+            <rect class="box" x="${x + 16}" y="128" width="180" height="52" rx="8"/>
+            ${icon('box', x + 28, 142)}
+            <text class="t-b" x="${x + 60}" y="151">Pod</text>
+            <text class="t-sm t-mut" x="${x + 60}" y="168">labels, not IP</text>
+          </g>
+          <g data-s="${i ? '4 5' : '3 5'}">
+            <rect class="box" x="${x + 16}" y="208" width="180" height="52" rx="8"/>
+            ${icon('binary', x + 28, 222)}
+            <text class="t-b" x="${x + 60}" y="231">eBPF</text>
+            <text class="t-sm t-mut" x="${x + 60}" y="248">${sub}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="3" x1="130" y1="182" x2="130" y2="206" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="222" y1="234" x2="498" y2="234" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="372" y="226" text-anchor="middle">packet carries identity</text>
+        <line class="flow" data-s="4" x1="590" y1="206" x2="590" y2="182" marker-end="url(#ah-mut)"/>
+
+        <g data-s="4">
+          <rect class="box" x="260" y="116" width="200" height="84" rx="8"/>
+          ${icon('list-checks', 276, 130)}
+          <text class="t-b" x="308" y="148">Policy</text>
+          <text class="t-sm t-mut" x="308" y="166">identity to identity</text>
+          <text class="t-sm t-mut" x="308" y="182">L7 via Envoy</text>
+          <text class="t-sm t-mut" x="308" y="195">per node</text>
+        </g>
+        <line class="flow" data-s="4" x1="462" y1="158" x2="498" y2="158" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 204, 142, '1')}
+        ${badge(2, 444, 30, '2')}
+        ${badge(3, 250, 234, '3')}
+        ${badge(4, 444, 130, '4')}
+        ${badge(5, 664, 222, '5')}
       </svg>`,
 
     ebpf: () => `
-      <svg class="dg" viewBox="0 0 720 310" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.">
-        <text class="t-sm t-mut" x="30" y="26">user space</text>
-        <rect class="box" x="24" y="40" width="200" height="56" rx="10"/>
-        <text class="t-sm t-b" x="124" y="64" text-anchor="middle">eBPF program</text>
-        <text class="t-sm t-mut" x="124" y="82" text-anchor="middle">C · Rust · Go</text>
-        <rect class="box" x="496" y="40" width="200" height="56" rx="10"/>
-        <text class="t-sm t-b" x="596" y="64" text-anchor="middle">Agent</text>
-        <text class="t-sm t-mut" x="596" y="82" text-anchor="middle">reads counters, events</text>
-        <line class="divider" x1="20" y1="112" x2="700" y2="112"/>
-        <text class="t-sm t-mut" x="30" y="132">kernel</text>
-        <rect class="zone-accent" x="20" y="140" width="680" height="140" rx="14"/>
-        <rect class="box-accent" x="44" y="170" width="150" height="54" rx="10"/>
-        <text class="t-sm t-b" x="119" y="194" text-anchor="middle">Verifier</text>
-        <text class="t-sm t-mut" x="119" y="211" text-anchor="middle">safety checked</text>
-        <rect class="box" x="234" y="170" width="110" height="54" rx="10"/>
-        <text class="t-sm t-b" x="289" y="194" text-anchor="middle">JIT</text>
-        <text class="t-sm t-mut" x="289" y="211" text-anchor="middle">native code</text>
-        <rect class="box" x="384" y="170" width="170" height="54" rx="10"/>
-        <text class="t-sm t-b" x="469" y="194" text-anchor="middle">Attached at a hook</text>
-        <text class="t-sm t-mut" x="469" y="211" text-anchor="middle">XDP · tc · kprobe · LSM</text>
-        <rect class="box" x="594" y="170" width="100" height="54" rx="10"/>
-        <text class="t-sm t-b" x="644" y="194" text-anchor="middle">Maps</text>
-        <text class="t-sm t-mut" x="644" y="211" text-anchor="middle">shared state</text>
-        <line class="flow" x1="124" y1="96" x2="124" y2="168" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="150" y="136">bpf()</text>
-        <line class="flow" x1="194" y1="197" x2="232" y2="197" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="344" y1="197" x2="382" y2="197" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="554" y1="197" x2="592" y2="197" marker-end="url(#ah-mut)"/>
-        <line class="flow-accent" x1="644" y1="168" x2="644" y2="98" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="630" y="136" text-anchor="end">counters · events</text>
-        <text class="t-sm t-mut" x="360" y="300" text-anchor="middle">The verifier proves the program terminates and stays in bounds.</text>
+      <svg class="dg" viewBox="0 0 720 232" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.">
+        <text class="t-sm t-mut" x="696" y="28" text-anchor="end">user space</text>
+        <g data-s="1">
+          <rect class="box" x="24" y="16" width="180" height="64" rx="8"/>
+          ${icon('file-code', 40, 30)}
+          <text class="t-b" x="72" y="44">eBPF program</text>
+          <text class="t-sm t-mut" x="72" y="62">bytecode</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="496" y="40" width="200" height="56" rx="8"/>
+          ${icon('monitor', 512, 56)}
+          <text class="t-b" x="544" y="64">Agent</text>
+          <text class="t-sm t-mut" x="544" y="82">reads, writes maps</text>
+        </g>
+        <line class="divider" x1="16" y1="112" x2="704" y2="112"/>
+        <text class="t-sm t-mut" x="696" y="130" text-anchor="end">kernel</text>
+
+        <line class="flow" data-s="1" x1="114" y1="82" x2="114" y2="142" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="134" y="132">bpf()</text>
+        <g data-s="2">
+          <rect class="box" x="24" y="144" width="180" height="72" rx="8"/>
+          ${icon('shield-check', 40, 158)}
+          <text class="t-b" x="72" y="174">Verifier</text>
+          <text class="t-sm t-mut" x="72" y="192">every path checked</text>
+          <text class="t-sm t-mut" x="72" y="207">safe, terminates</text>
+        </g>
+        <line class="flow" data-s="3" x1="206" y1="180" x2="230" y2="180" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="232" y="144" width="120" height="72" rx="8"/>
+          <text class="t-b" x="292" y="174" text-anchor="middle">JIT</text>
+          <text class="t-sm t-mut" x="292" y="192" text-anchor="middle">native code</text>
+          <text class="t-sm t-mut" x="292" y="207" text-anchor="middle">kernel speed</text>
+        </g>
+        <line class="flow" data-s="4" x1="354" y1="180" x2="378" y2="180" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="380" y="144" width="168" height="72" rx="8"/>
+          ${icon('anchor', 396, 158)}
+          <text class="t-b" x="428" y="174">Hook</text>
+          <text class="t-sm t-mut" x="428" y="192">XDP · tc · kprobe</text>
+          <text class="t-sm t-mut" x="428" y="207">tracepoint · LSM</text>
+        </g>
+        <line class="flow" data-s="5" x1="550" y1="180" x2="574" y2="180" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="576" y="144" width="120" height="72" rx="8"/>
+          ${icon('database', 588, 158)}
+          <text class="t-b" x="620" y="174">Maps</text>
+          <text class="t-sm t-mut" x="620" y="192">shared</text>
+          <text class="t-sm t-mut" x="620" y="207">state</text>
+        </g>
+        <line class="flow" data-s="5" x1="636" y1="142" x2="636" y2="98" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="618" y="132" text-anchor="end">counters, policy, events</text>
+
+        ${badge(1, 114, 112, '1')}
+        ${badge(2, 188, 158, '2')}
+        ${badge(3, 336, 158, '3')}
+        ${badge(4, 532, 158, '4')}
+        ${badge(5, 680, 158, '5')}
       </svg>`,
 
     tailscale: () => `
@@ -3741,24 +3836,66 @@
       </svg>`,
 
     doca: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="DOCA is a layered SDK — services, libraries, runtime and drivers — that programs BlueField and SuperNIC silicon, the DPU's equivalent of CUDA for the GPU.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">DOCA is to the DPU what CUDA is to the GPU</text>
-        ${[
-          ["Security & network services","Argus · App Shield · IPsec gateway",44,"box-accent"],
-          ["DOCA libraries","Flow · crypto · DPDK / SPDK",98,"box-accent"],
-          ["DOCA runtime + drivers","standards-based interfaces",152,"box-accent"],
-          ["BlueField DPU / SuperNIC","the silicon",206,"box"]
-        ].map(([a,b,y,cls])=>`
-          <rect class="${cls}" x="150" y="${y}" width="420" height="46" rx="8"/>
-          <text class="t-sm t-b" x="360" y="${y+20}" text-anchor="middle">${a}</text>
-          <text class="t-sm t-mut" x="360" y="${y+38}" text-anchor="middle">${b}</text>
-        `).join("")}
-        <line class="flow-accent" x1="120" y1="50" x2="120" y2="246" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="600" y="72" text-anchor="start">you</text>
-        <text class="t-sm t-mut" x="600" y="86" text-anchor="start">program</text>
-        <text class="t-sm t-mut" x="600" y="228" text-anchor="start">runs on</text>
-        <text class="t-sm t-mut" x="600" y="242" text-anchor="start">silicon</text>
-        <text class="t-sm t-mut" x="360" y="284" text-anchor="middle">Without DOCA, BlueField is an idle accelerator; with it, the silicon runs zero-trust enforcement.</text>
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement.">
+        <g data-s="1">
+          <rect class="zone" x="24" y="16" width="400" height="208" rx="10"/>
+          ${icon('layers', 36, 24)}
+          <text class="t-b" x="68" y="42">DOCA</text>
+        </g>
+        ${[['Microservices', 'containerised, production-ready', 56], ['Libraries', 'C/C++', 112], ['Drivers', 'hardware', 168]].map(([name, sub, y]) => `
+          <g data-s="2">
+            <rect class="box" x="40" y="${y}" width="280" height="48" rx="6"/>
+            <text class="t-b" x="56" y="${y + 21}">${name}</text>
+            <text class="t-sm t-mut" x="56" y="${y + 38}">${sub}</text>
+          </g>`).join('')}
+        <g data-s="3">
+          <rect class="box" x="336" y="56" width="72" height="160" rx="6"/>
+          <text class="t-sm" x="372" y="112" text-anchor="middle">DPDK</text>
+          <text class="t-sm" x="372" y="136" text-anchor="middle">SPDK</text>
+          <text class="t-sm" x="372" y="160" text-anchor="middle">Netlink</text>
+          <text class="t-sm t-mut" x="372" y="200" text-anchor="middle">standard</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="24" y="240" width="400" height="56" rx="8"/>
+          ${icon('cpu', 40, 256)}
+          <text class="t-b" x="72" y="264">BlueField DPU / SuperNIC</text>
+          <text class="t-sm t-mut" x="72" y="282">the silicon DOCA programs</text>
+        </g>
+
+        <g data-s="4">
+          <rect class="box" x="480" y="16" width="216" height="64" rx="8"/>
+          ${icon('server', 496, 30)}
+          <text class="t-b" x="528" y="44">Host</text>
+          <text class="t-sm t-mut" x="528" y="62">memory, processes</text>
+        </g>
+        <line class="flow" data-s="4" x1="660" y1="136" x2="660" y2="82" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="650" y="94" text-anchor="end">inspects</text>
+        <rect class="zone" x="464" y="100" width="240" height="208" rx="10"/>
+        <text class="t-sm t-mut" x="476" y="124">zero-trust components</text>
+        <g data-s="4">
+          <rect class="box" x="480" y="138" width="212" height="52" rx="8"/>
+          ${icon('scan-eye', 492, 152)}
+          <text class="t-b" x="524" y="160">Argus</text>
+          <text class="t-sm t-mut" x="524" y="178">isolated DPU cores</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="480" y="198" width="212" height="48" rx="8"/>
+          ${icon('shield-check', 492, 210)}
+          <text class="t-b" x="524" y="219">App Shield</text>
+          <text class="t-sm t-mut" x="524" y="236">process integrity</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="480" y="252" width="212" height="48" rx="8"/>
+          ${icon('lock', 492, 264)}
+          <text class="t-b" x="524" y="273">IPsec/TLS gateways</text>
+          <text class="t-sm t-mut" x="524" y="290">wire-speed tunnels</text>
+        </g>
+
+        ${badge(1, 408, 256, '1')}
+        ${badge(2, 304, 72, '2')}
+        ${badge(3, 372, 76, '3')}
+        ${badge(4, 660, 116, '4')}
+        ${badge(5, 676, 214, '5')}
       </svg>`,
 
     ovs: () => `
@@ -4014,43 +4151,71 @@
       </svg>`,
 
     keda: () => `
-      <svg class="dg" viewBox="0 0 720 268" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric, and every poll needs a credential, which is what TriggerAuthentication holds.">
-        <text class="t-sm t-mut" x="20" y="22">The signal is the event source — not the pods' CPU</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds.">
+        <g data-s="1 3">
+          <rect class="box" x="24" y="20" width="200" height="72" rx="8"/>
+          ${icon('inbox', 40, 34)}
+          <text class="t-b" x="72" y="52">Event source</text>
+          <text class="t-sm t-mut" x="72" y="70">queue depth, lag</text>
+          <text class="t-sm t-mut" x="72" y="85">messages pile up</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="24" y="148" width="200" height="72" rx="8"/>
+          ${icon('file-text', 40, 162)}
+          <text class="t-b" x="72" y="180">ScaledObject</text>
+          <text class="t-sm t-mut" x="72" y="198">triggers, and the</text>
+          <text class="t-sm t-mut" x="72" y="213">Deployment to scale</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="236" width="200" height="56" rx="8"/>
+          ${icon('key-round', 40, 252)}
+          <text class="t-sm t-b" x="72" y="260">TriggerAuthentication</text>
+          <text class="t-sm t-mut" x="72" y="278">holds credentials</text>
+        </g>
+        <g data-s="2 3">
+          <rect class="box" x="276" y="20" width="192" height="72" rx="8"/>
+          ${icon('cog', 292, 34)}
+          <text class="t-b" x="324" y="52">Operator</text>
+          <text class="t-sm t-mut" x="324" y="70">handles zero</text>
+          <text class="t-sm t-mut" x="324" y="85">to one itself</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="276" y="148" width="192" height="72" rx="8"/>
+          ${icon('server', 292, 162)}
+          <text class="t-b" x="324" y="180">Metrics server</text>
+          <text class="t-sm t-mut" x="324" y="198">external</text>
+          <text class="t-sm t-mut" x="324" y="213">metrics API</text>
+        </g>
+        <g data-s="1 3 4">
+          <rect class="box" x="520" y="20" width="176" height="72" rx="8"/>
+          ${icon('boxes', 536, 34)}
+          <text class="t-b" x="568" y="52">Workload</text>
+          <text class="t-sm t-mut" x="568" y="70">idle on CPU</text>
+          <text class="t-sm t-mut" x="568" y="85">zero or more pods</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="520" y="148" width="176" height="72" rx="8"/>
+          ${icon('scale', 536, 162)}
+          <text class="t-b" x="568" y="180">HPA</text>
+          <text class="t-sm t-mut" x="568" y="198">from one</text>
+          <text class="t-sm t-mut" x="568" y="213">replica upward</text>
+        </g>
 
-        <rect class="box" x="20" y="76" width="160" height="54" rx="8"/>
-        <text class="t-b" x="100" y="100" text-anchor="middle">Event source</text>
-        <text class="t-sm t-mut" x="100" y="116" text-anchor="middle">queue depth · lag</text>
+        <line class="flow" data-s="2" x1="226" y1="160" x2="274" y2="84" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="226" y1="44" x2="274" y2="44" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="470" y1="56" x2="518" y2="56" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="494" y="46" text-anchor="middle">0 to 1</text>
+        <line class="flow" data-s="4" x1="470" y1="184" x2="518" y2="184" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="608" y1="146" x2="608" y2="94" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="618" y="124">1 to N</text>
+        <path class="flow" data-s="5" d="M226 264 H372 V222" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="384" y="268">a credential for each poll</text>
 
-        <rect class="box-accent" x="20" y="168" width="160" height="54" rx="8"/>
-        <text class="t-sm t-b" x="100" y="192" text-anchor="middle">TriggerAuthentication</text>
-        <text class="t-sm t-mut" x="100" y="208" text-anchor="middle">prefer pod identity</text>
-        <path class="flow-accent" d="M100 166 V134" marker-end="url(#ah-acc)"/>
-
-        <path class="flow" d="M180 103 H193 V71 H206" marker-end="url(#ah-mut)"/>
-        <path class="flow" d="M193 103 V177 H206" marker-end="url(#ah-mut)"/>
-
-        <rect class="box-accent" x="210" y="44" width="170" height="54" rx="8"/>
-        <text class="t-b" x="295" y="68" text-anchor="middle">keda-operator</text>
-        <text class="t-sm t-mut" x="295" y="84" text-anchor="middle">polls every 30s</text>
-
-        <rect class="box-accent" x="210" y="150" width="170" height="54" rx="8"/>
-        <text class="t-sm t-b" x="295" y="174" text-anchor="middle">keda-metrics-apiserver</text>
-        <text class="t-sm t-mut" x="295" y="190" text-anchor="middle">external metrics API</text>
-
-        <rect class="box" x="424" y="150" width="124" height="54" rx="8"/>
-        <text class="t-b" x="486" y="174" text-anchor="middle">HPA</text>
-        <text class="t-sm t-mut" x="486" y="190" text-anchor="middle">scales 1 &#8596; N</text>
-        <line class="flow" x1="380" y1="177" x2="420" y2="177" marker-end="url(#ah-mut)"/>
-
-        <rect class="data" x="590" y="97" width="110" height="54" rx="8"/>
-        <text class="t-b" x="645" y="121" text-anchor="middle">Workload</text>
-        <text class="t-sm t-mut" x="645" y="137" text-anchor="middle">0 &#8594; N pods</text>
-
-        <path class="flow-accent" d="M380 71 H645 V93" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b t-acc" x="505" y="62" text-anchor="middle">0 &#8596; 1 — the operator itself</text>
-        <path class="flow-accent" d="M548 177 H645 V155" marker-end="url(#ah-acc)"/>
-
-        <text class="t-sm t-mut" x="400" y="230" text-anchor="middle">1 &#8596; N — an ordinary HPA, reading the scaler's metric</text>
+        ${badge(1, 208, 36, '1')}
+        ${badge(2, 250, 122, '2')}
+        ${badge(3, 250, 44, '3')}
+        ${badge(4, 494, 184, '4')}
+        ${badge(5, 372, 243, '5')}
       </svg>`,
 
     spinnaker: () => `
@@ -4368,57 +4533,58 @@
       </svg>`,
 
     calico: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
-        <text class="t-sm t-mut" x="20" y="22">Pod IPs are routable addresses; the ACLs come from a tier ladder</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
+        ${[['Node A', 24, 36, 156], ['Node B', 404, 580, 416]].map(([name, zx, px, fx]) => `
+          <rect class="zone" x="${zx}" y="16" width="292" height="110" rx="10"/>
+          <text class="t-sm t-mut" x="${zx + 12}" y="34">${name}</text>
+          <g data-s="1 2">
+            <rect class="box" x="${px}" y="44" width="104" height="66" rx="8"/>
+            ${icon('box', px + 12, 58)}
+            <text class="t-b" x="${px + 44}" y="72">Pod</text>
+            <text class="t-sm t-mut" x="${px + 44}" y="90">own IP</text>
+          </g>
+          <g data-s="3">
+            <rect class="box" x="${fx}" y="44" width="148" height="66" rx="8"/>
+            ${icon('cog', fx + 12, 58)}
+            <text class="t-b" x="${fx + 44}" y="72">Felix</text>
+            <text class="t-sm t-mut" x="${fx + 44}" y="90">routes, ACLs</text>
+            <text class="t-sm t-mut" x="${fx + 44}" y="104">into the kernel</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="306" y1="77" x2="414" y2="77" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="100" text-anchor="middle">no tunnel</text>
+        <path class="flow" data-s="1" d="M170 128 V150 H550 V128" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="144" text-anchor="middle">BGP: each node advertises its block</text>
 
-        <rect class="zone" x="20" y="48" width="266" height="94" rx="12"/>
-        <text class="t-sm t-b" x="32" y="66">Node A</text>
-        <rect class="box" x="32" y="76" width="100" height="52" rx="8"/>
-        <text class="t-sm t-b" x="82" y="98" text-anchor="middle">Pod A</text>
-        <text class="t-sm t-mut" x="82" y="116" text-anchor="middle">10.244.1.5</text>
-        <line class="flow" x1="134" y1="102" x2="154" y2="102" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="158" y="76" width="118" height="52" rx="8"/>
-        <text class="t-sm t-b" x="217" y="98" text-anchor="middle">Felix ACLs</text>
-        <text class="t-sm t-mut" x="217" y="116" text-anchor="middle">iptables · eBPF</text>
+        <text class="t-sm t-mut" data-s="4" x="24" y="186">ACLs compile from tiers, evaluated in order</text>
+        <g data-s="4">
+          <rect class="box" x="24" y="200" width="200" height="66" rx="8"/>
+          ${icon('building-2', 40, 214)}
+          <text class="t-b" x="72" y="228">Platform tier</text>
+          <text class="t-sm t-mut" x="72" y="246">global rules</text>
+          <text class="t-sm t-mut" x="72" y="260">high precedence</text>
+        </g>
+        <line class="flow" data-s="4" x1="226" y1="236" x2="262" y2="236" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="244" y="226" text-anchor="middle">Pass</text>
+        <g data-s="5">
+          <rect class="box" x="264" y="200" width="200" height="66" rx="8"/>
+          ${icon('users', 280, 214)}
+          <text class="t-b" x="312" y="228">Default tier</text>
+          <text class="t-sm t-mut" x="312" y="246">developers' policies</text>
+          <text class="t-sm t-mut" x="312" y="260">order 1,000,000</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="504" y="200" width="192" height="66" rx="8"/>
+          ${icon('lock', 520, 214)}
+          <text class="t-b" x="552" y="228">RBAC per tier</text>
+          <text class="t-sm t-mut" x="552" y="246">developers cannot</text>
+          <text class="t-sm t-mut" x="552" y="260">override above</text>
+        </g>
 
-        <rect class="zone" x="434" y="48" width="266" height="94" rx="12"/>
-        <text class="t-sm t-b" x="446" y="66">Node B</text>
-        <rect class="box-accent" x="446" y="76" width="118" height="52" rx="8"/>
-        <text class="t-sm t-b" x="505" y="98" text-anchor="middle">Felix ACLs</text>
-        <text class="t-sm t-mut" x="505" y="116" text-anchor="middle">iptables · eBPF</text>
-        <line class="flow" x1="566" y1="102" x2="586" y2="102" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="590" y="76" width="100" height="52" rx="8"/>
-        <text class="t-sm t-b" x="640" y="98" text-anchor="middle">Pod B</text>
-        <text class="t-sm t-mut" x="640" y="116" text-anchor="middle">10.244.2.9</text>
-
-        <line class="flow-accent" x1="288" y1="102" x2="430" y2="102" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="360" y="92" text-anchor="middle">no encapsulation</text>
-        <text class="t-sm t-mut" x="360" y="122" text-anchor="middle">pod IP on the wire</text>
-
-        <path class="flow" d="M160 142 V166 H560 V142" style="stroke-dasharray:4 4" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="160" text-anchor="middle">BGP — each node advertises the /26 of pods it hosts</text>
-
-        <text class="t-sm t-mut" x="20" y="196">Those ACLs are compiled from a tier ladder, evaluated in order:</text>
-
-        <rect class="box" x="20" y="210" width="182" height="58" rx="8"/>
-        <text class="t-sm t-b" x="111" y="232" text-anchor="middle">security · order 300</text>
-        <text class="t-sm t-mut" x="111" y="250" text-anchor="middle">GlobalNetworkPolicy — ops</text>
-
-        <line class="flow" x1="204" y1="239" x2="265" y2="239" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="235" y="228" text-anchor="middle">Pass</text>
-
-        <rect class="box" x="269" y="210" width="182" height="58" rx="8"/>
-        <text class="t-sm t-b" x="360" y="232" text-anchor="middle">default · 1,000,000</text>
-        <text class="t-sm t-mut" x="360" y="250" text-anchor="middle">K8s NetworkPolicy — devs</text>
-
-        <line class="flow-bad" x1="453" y1="239" x2="514" y2="239" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="484" y="228" text-anchor="middle">no match</text>
-
-        <rect class="box" x="518" y="210" width="182" height="58" rx="8"/>
-        <text class="t-sm t-b" x="609" y="232" text-anchor="middle">nothing matched</text>
-        <text class="t-sm" x="609" y="250" text-anchor="middle" fill="var(--state-bad)">global default deny</text>
-
-        <text class="t-sm t-mut" x="360" y="288" text-anchor="middle">Tier RBAC means the developer tier cannot override the one above it.</text>
+        ${badge(1, 170, 139, '1')}
+        ${badge(2, 330, 77, '2')}
+        ${badge(3, 548, 58, '3')}
+        ${badge(4, 208, 214, '4')}
+        ${badge(5, 448, 214, '5')}
       </svg>`,
 
     envoy: () => `

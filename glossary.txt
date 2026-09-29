@@ -36,6 +36,12 @@ BOLA — Broken Object Level Authorization
 Calico — Project Calico — Kubernetes Networking & Network Policy
     The Kubernetes CNI that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.
     [Network Technology, Security Technology] · aka Project Calico, CNI, Container Network Interface, calico-node, Felix, Typha, BIRD, confd, calicoctl, GlobalNetworkPolicy, HostEndpoint, policy tiers, IPIP, VXLAN, IPAM, BGP peering, eBPF data plane, default deny, Tigera
+    1. Each node owns a block — Each node owns a block of the pod address space, and a BGP daemon on that node advertises the block to the other nodes or to the physical fabric.
+    2. Route, don't tunnel — A pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. Where the underlay will not carry pod routes, Calico falls back to a VXLAN or IP-in-IP overlay.
+    3. Felix programs the kernel — A Felix agent on every node inserts routes into the kernel and access control rules into the chosen data plane: iptables, nftables, eBPF or Windows HNS.
+    4. Tiers, in order — Every policy lives in a tier, tiers are evaluated by order, and a tier can Pass a packet down to the next. A platform team writes global rules in a high-precedence tier.
+    5. Developers can't override — Developers' Kubernetes NetworkPolicies land in the default tier, fixed at order 1,000,000, where they cannot override what sits above. RBAC per tier enforces the boundary.
+    Key fact: Calico resolves label selectors into IP sets, so a policy is only as trustworthy as the labels and the IPAM behind it.
 
 CASB — Cloud Access Security Broker
     A control point between users and SaaS apps that enforces cloud security policy.
@@ -44,6 +50,12 @@ CASB — Cloud Access Security Broker
 Cilium — eBPF-Based Kubernetes Networking, Observability & Security
     The Kubernetes CNI that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.
     [Network Technology, Security Technology] · aka CNI, Container Network Interface, cilium-agent, CiliumNetworkPolicy, CiliumClusterwideNetworkPolicy, security identity, kube-proxy replacement, Hubble, Cluster Mesh, Tetragon, Gateway API, Maglev, direct server return, Isovalent
+    1. Labels, not addresses — Pods are created and destroyed constantly, so an IP address identifies nothing durable. Cilium stops writing policy about addresses.
+    2. A numeric identity — Its control plane collapses each pod's label set into a numeric security identity and distributes that mapping cluster-wide.
+    3. Identity travels — The identity is carried with the packet, so the receiving node can decide without a second lookup.
+    4. Policy between identities — Policy names label selectors and holds as pods churn. Beyond layer 4 it can admit particular HTTP methods and paths, gRPC calls or DNS names, via an Envoy per node rather than a sidecar per pod.
+    5. eBPF in the kernel — The same eBPF data plane replaces kube-proxy, and Hubble reads those programs to produce per-flow records annotated with identity rather than IP.
+    Key fact: The identity is only as good as the labels behind it: whoever can set labels can select a policy.
 
 Cntlm — NTLM Authentication Proxy
     The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
@@ -106,6 +118,12 @@ DNS — Domain Name System
 DOCA — NVIDIA DPU Software Framework
     The SDK for BlueField — 'what CUDA is to the GPU, DOCA is to the DPU' — with libraries and services to offload networking, storage, and zero-trust security.
     [Development Framework, Security Technology] · aka NVIDIA DOCA, DOCA SDK, DOCA Argus, App Shield, DOCA Flow
+    1. CUDA for the DPU — DOCA is NVIDIA's software framework for programming BlueField DPUs and SuperNICs, positioned as the DPU's equivalent of CUDA for the GPU.
+    2. Three layers — It is layered: hardware drivers at the base, C/C++ libraries in the middle, and production-ready containerised microservices on top.
+    3. Standard interfaces — It is exposed through industry-standard interfaces such as DPDK, SPDK and Netlink rather than a closed silo, which keeps software portable across BlueField generations.
+    4. Argus watches the host — DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes: agentless intrusion detection that host malware cannot see or switch off.
+    5. Integrity and tunnels — App Shield adds process-integrity monitoring, and the IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed.
+    Key fact: Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes running zero-trust enforcement.
 
 Docker — Docker containers
     Packages an app and its dependencies into a portable container.
@@ -142,6 +160,12 @@ DPU — Data Processing Unit
 eBPF — extended Berkeley Packet Filter
     Sandboxed programs that run inside the Linux kernel at defined hook points, extending what it does without patching it or loading a module.
     [Network Technology, Development Framework] · aka BPF, bpf(), verifier, JIT, eBPF maps, XDP, kprobe, uprobe, tracepoint, BPF LSM, libbpf, CO-RE, BTF, bpftrace, kernel
+    1. Load via bpf() — You compile a small program to a bytecode and hand it to the kernel through the bpf() system call.
+    2. The verifier checks — Before it is accepted, the program is statically analysed across every execution path to prove that it terminates and never steps outside its bounds.
+    3. JIT to native code — Only then is it JIT-compiled to native instructions, so it runs at roughly the speed of compiled kernel code.
+    4. Attach at a hook — The kernel runs it at a defined hook: a packet at the driver (XDP), traffic control, a kprobe, a tracepoint, a socket operation or a security hook (BPF LSM).
+    5. Maps share state — Programs hold no state of their own. Maps, readable and writable from both the program and a user-space agent, carry counters, policy tables and event streams across the boundary.
+    Key fact: The verifier proves memory safety and termination, not benignity.
 
 EDR / XDR — Endpoint / Extended Detection & Response
     Agents that watch endpoints for malicious behaviour — and feed device-trust signals.
@@ -198,6 +222,12 @@ JWT — JSON Web Token
 KEDA — Kubernetes Event-driven Autoscaling
     Scales Kubernetes workloads on the event source itself — queue depth, consumer lag, a Prometheus query — and all the way down to zero, which CPU-based autoscaling cannot do.
     [Development Framework] · aka Kubernetes Event-driven Autoscaling, ScaledObject, ScaledJob, TriggerAuthentication, scale to zero, scaler, external metrics, HPA, Horizontal Pod Autoscaler, consumer lag
+    1. The wrong signal — A worker blocked on a queue read burns almost no CPU while messages pile up, so an HPA scaling on CPU and memory sees an idle deployment and does nothing.
+    2. Declare triggers — You write a ScaledObject pointing at an existing Deployment and declare triggers, such as Kafka consumer lag or SQS queue depth. The operator watches ScaledObjects.
+    3. Zero to one — KEDA drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning it to zero after a cooldown.
+    4. One to many — A metrics API server publishes each scaler's reading through the external metrics API, and from one replica upward an ordinary HPA does the scaling.
+    5. A credential per poll — Every scaler must authenticate to whatever it polls. TriggerAuthentication keeps those credentials out of the ScaledObject; a pod identity provider means nothing long-lived is stored.
+    Key fact: Scale-to-zero is the thing a plain HPA has never done.
 
 Kerberos — Kerberos Authentication Protocol
     Ticket-based authentication that proves identity without sending passwords over the wire.
