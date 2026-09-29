@@ -107,6 +107,12 @@ CVE / CVSS — Vulnerability IDs & Severity Scoring
 CyberArk PAM — Privileged Access Manager (now Idira, by Palo Alto Networks)
     The commercial PAM deployment most enterprises actually run — a hardened credential vault, scheduled rotation, and a proxy that opens privileged sessions so the administrator never learns the password.
     [Security Technology] · aka CyberArk, Idira, Idira PAM, Privileged Access Manager, Digital Vault, Enterprise Password Vault, CPM, PVWA, PSM, Privileged Session Manager, Privileged Threat Analytics, Privilege Cloud, Conjur, credential injection
+    1. The Digital Vault — The Digital Vault is a deliberately isolated, hardened server holding every privileged credential, reached by other components only over its own protocol.
+    2. Rotate on a schedule — The Central Policy Manager connects out to managed systems to rotate, verify and reconcile passwords on a schedule, so a leaked credential has a short useful life.
+    3. Request in the portal — Password Vault Web Access is the portal where people request and check out access.
+    4. PSM injects it — The Privileged Session Manager opens the RDP or SSH session from a hardened proxy, injects the credential there and streams a recording back to the Vault, so the human never learns the password.
+    5. Close the direct route — A session broker only controls what cannot be reached around it: direct network routes to the target quietly reinstate the risk.
+    Key fact: Gathering every privileged credential into one system makes it the most valuable target you own.
 
 DHCP — Dynamic Host Configuration Protocol
     Automatically hands out IP addresses to devices joining a network.
@@ -211,10 +217,21 @@ Envoy — Envoy Proxy — L7 Proxy & Universal Data Plane
 FAPI 2.0 — Financial-grade API Security Profile
     The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.
     [Protocol, Security Technology] · aka FAPI, Financial-grade API, FAPI 2.0 Security Profile, PAR, pushed authorization requests, DPoP, sender-constrained tokens, RFC 9126, RFC 9449, RFC 8705, attacker model, open banking, JARM, private_key_jwt
+    1. Pushed request (PAR) — The client sends the full authorisation request to the authorisation server over a client-authenticated back channel, and gets back an opaque request_uri.
+    2. Only a handle — The browser then carries only that handle, leaving nothing in the URL to tamper with or to leak through referrers, history and logs.
+    3. PKCE and iss — PKCE with S256 is required, and the authorisation response carries the iss parameter, which closes the mix-up attack between authorisation servers.
+    4. Sender-constrained — Access tokens are bound to an mTLS client certificate or a DPoP key, so an attacker who lifts a token cannot spend it without the matching private key.
+    Key fact: FAPI 2.0 retires the bearer token: a stolen token is useless without the client's private key.
 
 FIDO2 — WebAuthn + CTAP
     WebAuthn plus CTAP — registration mints a key pair scoped to one site's origin, so there is no shared secret to steal and a look-alike domain has no credential to ask for.
     [Protocol, Security Technology] · aka WebAuthn, CTAP, CTAP2, FIDO, FIDO Alliance, passkey, passwordless, security key, relying party ID, discoverable credential, resident key, user verification, attestation, YubiKey, cross-device authentication
+    1. Register a key pair — At registration the authenticator generates a key pair scoped to the site's Relying Party ID. It keeps the private key, and the site stores only the public key and a credential ID.
+    2. Sign a challenge — Every later sign-in is a challenge from the site and a signature over it.
+    3. The origin decides — The client tells the authenticator which origin is asking, and it will only sign for a credential whose RP ID matches.
+    4. Look-alike gets nothing — On a look-alike domain there is simply no credential to offer, so there is nothing to phish, even for an adversary-in-the-middle proxy.
+    5. Synced passkeys — Syncing a passkey through a cloud password manager moves the private key into a cloud account, so the guarantee becomes as strong as that account.
+    Key fact: The relying party stores only public keys, so breaching it yields nothing replayable.
 
 Firewall — Network Firewall
     Filters network traffic against a set of allow and deny rules.
@@ -254,6 +271,12 @@ IDS / IPS — Intrusion Detection / Prevention System
 Immuta — Policy-Based Access Control for Data Platforms
     Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point in front of many query engines.
     [Security Technology] · aka data access control, data governance, attribute-based access control, ABAC, dynamic masking, row-level security, column masking, subscription policy, data policy, policy pushdown, k-anonymity, differential privacy, Snowflake, Databricks, Unity Catalog
+    1. Role explosion — Expressing fine-grained rules through native grants alone means a role per combination, multiplied by every table, decaying the moment somebody changes team.
+    2. Classify and tag — Instead, data sources are registered and classified, with sensitive columns tagged as personal or health data.
+    3. Policy on attributes — Policy is written once against attributes rather than roles, using the requesting user's attributes pulled from Okta or Active Directory.
+    4. Compiled, not proxied — Immuta does not sit in the query path: it compiles policy into the platform's own row access and column masking policies, so users query natively at full engine speed.
+    5. Every query logged — Every query is logged alongside the policy that shaped it, the audit artefact regulators actually ask for.
+    Key fact: Immuta is a Policy Decision Point for data, and the warehouse is the Policy Enforcement Point.
 
 IPsec — Internet Protocol Security
     Encrypts and authenticates IP traffic at the network layer.
