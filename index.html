@@ -1612,7 +1612,15 @@
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Transport & Web"],
       related: ["oauth", "grpc", "loadbalancer", "http"],
       source: { label: "NIST SP 800-204 — Microservices Security", url: "https://csrc.nist.gov/pubs/sp/800/204/final" },
-      caption: "Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it."
+      caption: "Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.",
+      steps: [
+        { title: "One entry point", text: "An API gateway is a reverse proxy between clients and a fleet of backend services, presenting one coherent entry point." },
+        { title: "Authenticate", text: "It terminates TLS and validates OAuth tokens and API keys." },
+        { title: "Rate limit", text: "It enforces rate limits and quotas, rejecting unauthenticated or abusive traffic before it ever reaches a service." },
+        { title: "Route and shape", text: "It routes and versions requests and aggregates or transforms responses, so the services behind it stay small and focused on business logic." },
+        { title: "Don't overload it", text: "Push too much logic into it, though, and it becomes a bottleneck and a single point of failure." }
+      ],
+      fact: "By centralising authentication and throttling, an API gateway is a natural Zero Trust enforcement point at the application edge."
     },
     {
       id: "idsips", term: "IDS / IPS", acronym: "Intrusion Detection / Prevention System",
@@ -1747,7 +1755,14 @@
       types: ["Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Detection & Response"],
       related: ["sase", "dlp", "idp"],
       source: { label: "NIST glossary — Cloud Access Security Broker", url: "https://csrc.nist.gov/glossary/term/cloud_access_security_broker" },
-      caption: "User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud."
+      caption: "User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud.",
+      steps: [
+        { title: "A broker in between", text: "As work moved to SaaS, security teams lost the choke point a corporate network used to give them. A CASB restores it by sitting between users and cloud apps." },
+        { title: "See shadow IT", text: "It gives visibility into which cloud services are actually being used, including unsanctioned shadow IT." },
+        { title: "Enforce and protect", text: "It enforces access and data policies, detects risky configurations, and applies data-loss-prevention controls to information moving in and out." },
+        { title: "Inline or API", text: "Inline proxying gives real-time control but can break apps; API integration with the SaaS provider is gentler but after the fact." }
+      ],
+      fact: "A CASB is one of the core components of a SASE / SSE stack, alongside secure web gateways and ZTNA."
     },
     {
       id: "pac", term: "PAC File", acronym: "Proxy Auto-Configuration",
@@ -1909,7 +1924,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Platforms & Apps"],
       related: ["dpu", "doca", "supernic", "tpm", "microseg", "ipsec", "coreweave"],
       source: { label: "NVIDIA — BlueField Networking Platform", url: "https://www.nvidia.com/en-us/networking/products/data-processing-unit/" },
-      caption: "A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust."
+      caption: "A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust.",
+      steps: [
+        { title: "A ConnectX NIC", text: "Each BlueField chip starts with an NVIDIA ConnectX network ASIC." },
+        { title: "Arm cores and more", text: "It pairs the NIC with a cluster of Arm cores running their own Linux, onboard memory, and accelerators for crypto, compression and storage. BlueField-3 delivers 400 Gb/s and 16 Arm cores." },
+        { title: "Isolated from the host", text: "The Arm subsystem is isolated from the host across PCIe, so operators run infrastructure and security services directly on the card." },
+        { title: "A root of trust", text: "A hardware root of trust with DICE-based measured boot and remote attestation proves the card and its software are unmodified." },
+        { title: "Security on the card", text: "Line-rate IPsec/TLS encrypts traffic with no host CPU cost, and DOCA Argus reads the host's processes and memory to catch malware the host would conceal." }
+      ],
+      fact: "BlueField is NVIDIA's DPU product line, programmed with the DOCA framework."
     },
     {
       id: "supernic", term: "SuperNIC", acronym: "NVIDIA AI-Network Accelerator",
@@ -1919,7 +1942,15 @@
       types: ["Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops"],
       related: ["dpu", "bluefield", "doca", "ipsec"],
       source: { label: "NVIDIA — What Is a SuperNIC?", url: "https://blogs.nvidia.com/blog/what-is-a-supernic/" },
-      caption: "Built for AI's east-west traffic: each GPU gets line-rate RoCE Ethernet with the adaptive routing and congestion control that keep huge training jobs from stalling."
+      caption: "Built for AI's east-west traffic: each GPU gets line-rate RoCE Ethernet with the adaptive routing and congestion control that keep huge training jobs from stalling.",
+      steps: [
+        { title: "East-west, GPU to GPU", text: "A SuperNIC is built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets." },
+        { title: "RoCE per GPU", text: "It delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU." },
+        { title: "Adaptive routing", text: "Adaptive routing and congestion control let thousands of GPUs exchange gradients without the network becoming the bottleneck, as a pillar of Spectrum-X." },
+        { title: "Two kinds", text: "The BlueField-3 SuperNIC is a slimmed-down DPU with eight Arm cores; the ConnectX-8/9 SuperNICs are pure network adapters with no separate operating system." },
+        { title: "A thinner ZT story", text: "SuperNICs still encrypt traffic in flight at line rate, but host-introspection services such as DOCA Argus run only on BlueField in DPU mode." }
+      ],
+      fact: "Where a DPU is an infrastructure computer, a SuperNIC is a throughput engine."
     },
     {
       id: "doca", term: "DOCA", acronym: "NVIDIA DPU Software Framework",
@@ -4560,22 +4591,42 @@
       </svg>`,
 
     apigateway: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.">
-        <rect class="box" x="24" y="100" width="150" height="80" rx="10"/>
-        <text class="t-b" x="99" y="134" text-anchor="middle">Clients</text>
-        <text class="t-sm t-mut" x="99" y="154" text-anchor="middle">web · mobile</text>
-        <rect class="box-accent" x="240" y="40" width="180" height="200" rx="12"/>
-        <text class="t-b" x="330" y="76" text-anchor="middle">API Gateway</text>
-        ${["authenticate (OAuth)","rate-limit & quota","route & version","terminate TLS"].map((t,i)=>`
-          <text class="t-sm t-mut" x="330" y="${112+i*30}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <line class="flow" x1="174" y1="140" x2="238" y2="140" marker-end="url(#ah-mut)"/>
-        ${[["Orders",44],["Users",120],["Billing",196]].map(([t,y])=>`
-          <rect class="box" x="506" y="${y}" width="180" height="56" rx="10"/>
-          <text x="596" y="${y+33}" text-anchor="middle">${t}</text>
-          <line class="flow-accent" x1="420" y1="140" x2="504" y2="${y+28}" marker-end="url(#ah-acc)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="240" y="270" text-anchor="middle">One front door; the services behind stay small and focused.</text>
+      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.">
+        <g data-s="1">
+          <rect class="box" x="24" y="96" width="152" height="72" rx="12"/>
+          ${icon('users', 40, 110)}
+          <text class="t-b" x="72" y="128">Clients</text>
+          <text class="t-sm t-mut" x="72" y="146">north-south</text>
+        </g>
+        <line class="flow" data-s="1" x1="178" y1="120" x2="234" y2="120" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="3" x1="178" y1="152" x2="234" y2="152" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="3" x="24" y="196">abusive: rejected</text>
+        <g data-s="1 2 3 4 5">
+          <rect class="box" x="236" y="16" width="220" height="240" rx="8"/>
+          ${icon('route', 252, 30)}
+          <text class="t-b" x="284" y="48">API gateway</text>
+          <text class="t-sm t-mut" x="284" y="66">reverse proxy</text>
+        </g>
+        ${[['TLS, OAuth, API keys', 84, '2'], ['rate limits, quotas', 128, '3'], ['route, version', 172, '4'], ['aggregate, transform', 212, '4']].map(([t, y, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="252" y="${y}" width="188" height="32" rx="4"/>
+            <text class="t-sm" x="264" y="${y + 20}">${t}</text>
+          </g>`).join('')}
+        ${[32, 112, 192].map((y) => `
+          <g data-s="4">
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+            ${icon('server', 552, y + 16)}
+            <text class="t-b" x="584" y="${y + 25}">Service</text>
+            <text class="t-sm t-mut" x="584" y="${y + 43}">business logic</text>
+          </g>
+          <line class="flow" data-s="4" x1="458" y1="${y + 28 > 140 ? 196 : (y + 28 < 140 ? 84 : 140)}" x2="534" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
+        <text class="t-sm bad" data-s="5" x="346" y="278" text-anchor="middle">too much logic: a bottleneck, a single point of failure</text>
+
+        ${badge(1, 206, 120, '1')}
+        ${badge(2, 424, 100, '2')}
+        ${badge(3, 424, 144, '3')}
+        ${badge(4, 496, 140, '4')}
+        ${badge(5, 440, 30, '5')}
       </svg>`,
 
     idsips: () => `
@@ -4981,25 +5032,38 @@
       </svg>`,
 
     casb: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud.">
-        <rect class="box" x="24" y="100" width="150" height="72" rx="10"/>
-        <text class="t-b" x="99" y="132" text-anchor="middle">User</text>
-        <text class="t-sm t-mut" x="99" y="152" text-anchor="middle">on / off network</text>
-        <rect class="box-accent" x="244" y="46" width="180" height="178" rx="12"/>
-        <text class="t-b" x="334" y="80" text-anchor="middle">CASB</text>
-        ${["reveal shadow IT","enforce access","data controls (DLP)"].map((t,i)=>`
-          <text class="t-sm t-mut" x="334" y="${118+i*30}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <line class="flow" x1="174" y1="136" x2="242" y2="136" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="506" y="60" width="190" height="56" rx="10"/>
-        <text class="t-sm t-b" x="601" y="84" text-anchor="middle">Sanctioned SaaS</text>
-        <text class="t-sm" x="601" y="103" text-anchor="middle" fill="var(--state-ok)">allowed by policy</text>
-        <rect class="box" x="506" y="154" width="190" height="56" rx="10"/>
-        <text class="t-sm t-b" x="601" y="178" text-anchor="middle">Shadow IT</text>
-        <text class="t-sm" x="601" y="197" text-anchor="middle" fill="var(--state-bad)">surfaced &amp; controlled</text>
-        <line class="flow-ok" x1="424" y1="120" x2="504" y2="92" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" x1="424" y1="150" x2="504" y2="178" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="360" y="256" text-anchor="middle">A restored choke point for data that now lives in dozens of clouds.</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud.">
+        <g data-s="1">
+          <rect class="box" x="24" y="100" width="152" height="72" rx="12"/>
+          ${icon('users', 40, 114)}
+          <text class="t-b" x="72" y="132">Users</text>
+          <text class="t-sm t-mut" x="72" y="150">anywhere</text>
+        </g>
+        <line class="flow" data-s="1" x1="178" y1="136" x2="234" y2="136" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="236" y="16" width="220" height="252" rx="8"/>
+          ${icon('shield-check', 252, 30)}
+          <text class="t-b" x="284" y="48">CASB</text>
+          <text class="t-sm t-mut" x="284" y="66">broker</text>
+        </g>
+        ${[['which apps are used', 84, '2'], ['access, data policy', 128, '3'], ['risky configs, DLP', 172, '3'], ['inline proxy or API', 220, '4']].map(([t, y, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="252" y="${y}" width="188" height="32" rx="4"/>
+            <text class="t-sm" x="264" y="${y + 20}">${t}</text>
+          </g>`).join('')}
+        ${[['SaaS app', 'sanctioned', 32, '1'], ['SaaS app', 'sanctioned', 112, '1'], ['Shadow IT', 'unsanctioned', 192, '1 2']].map(([name, sub, y, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+            ${icon('cloud', 552, y + 16)}
+            <text class="t-b" x="584" y="${y + 25}">${name}</text>
+            <text class="t-sm ${sub === 'unsanctioned' ? 'bad' : 't-mut'}" x="584" y="${y + 43}">${sub}</text>
+          </g>
+          <line class="flow" data-s="1" x1="458" y1="${y + 28}" x2="534" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
+
+        ${badge(1, 206, 136, '1')}
+        ${badge(2, 680, 206, '2')}
+        ${badge(3, 424, 144, '3')}
+        ${badge(4, 424, 236, '4')}
       </svg>`,
 
     pac: () => `
@@ -5419,51 +5483,107 @@
       </svg>`,
 
     bluefield: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="BlueField pairs a ConnectX NIC with Arm cores, accelerators, and a hardware root of trust, running the data center's networking, storage, and security on the card.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">BlueField: a NIC that is also a computer, with its own root of trust</text>
-        <rect class="box" x="20" y="134" width="96" height="52" rx="10"/>
-        <text class="t-sm t-b" x="68" y="164" text-anchor="middle">Network</text>
-        <line class="flow" x1="116" y1="160" x2="136" y2="160" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="140" y="66" width="440" height="184" rx="12"/>
-        <text class="t-b" x="360" y="92" text-anchor="middle">BlueField DPU</text>
-        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">BlueField-3 · 400 Gb/s · own Linux</text>
-        ${[
-          ["ConnectX","NIC · 400G",150],
-          ["16 Arm","cores",258],
-          ["accel","crypto·storage",366],
-          ["Root of Trust","attestation",474]
-        ].map(([a,b,x])=>`
-          <rect class="box" x="${x}" y="150" width="98" height="80" rx="8"/>
-          <text class="t-sm t-b" x="${x+49}" y="184" text-anchor="middle">${a}</text>
-          <text class="t-sm t-mut" x="${x+49}" y="202" text-anchor="middle">${b}</text>
-        `).join("")}
-        <line class="flow" x1="580" y1="160" x2="600" y2="160" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="604" y="134" width="96" height="52" rx="10"/>
-        <text class="t-sm t-b" x="652" y="158" text-anchor="middle">Host</text>
-        <text class="t-sm t-mut" x="652" y="176" text-anchor="middle">PCIe</text>
-        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Networking, storage, and security run on the card — isolated from the host it serves.</text>
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust.">
+        <g data-s="1">
+          <rect class="box" x="24" y="52" width="120" height="56" rx="12"/>
+          ${icon('globe', 36, 68)}
+          <text class="t-b" x="68" y="85">Network</text>
+        </g>
+        <line class="flow" data-s="1" x1="146" y1="80" x2="182" y2="80" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="zone" x="168" y="16" width="528" height="220" rx="10"/>
+          <text class="t-sm t-mut" x="180" y="34">BlueField DPU</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="184" y="48" width="160" height="64" rx="8"/>
+          ${icon('network', 200, 62)}
+          <text class="t-b" x="232" y="80">ConnectX</text>
+          <text class="t-sm t-mut" x="232" y="98">network ASIC</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="360" y="48" width="320" height="64" rx="8"/>
+          ${icon('cpu', 376, 62)}
+          <text class="t-b" x="408" y="80">Arm cores</text>
+          <text class="t-sm t-mut" x="408" y="98">own Linux, memory; BF-3: 16 cores</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="184" y="124" width="160" height="56" rx="8"/>
+          <text class="t-b" x="200" y="144">Accelerators</text>
+          <text class="t-sm t-mut" x="200" y="162">crypto, storage,</text>
+          <text class="t-sm t-mut" x="200" y="175">compression</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="360" y="124" width="320" height="56" rx="8"/>
+          ${icon('shield-check', 376, 140)}
+          <text class="t-b" x="408" y="149">Root of trust</text>
+          <text class="t-sm t-mut" x="408" y="167">DICE measured boot, attestation</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="184" y="192" width="496" height="36" rx="6"/>
+          ${icon('lock', 196, 198)}
+          <text class="t-sm" x="228" y="214">IPsec/TLS at line rate · DOCA Argus host introspection</text>
+        </g>
+        <line class="flow" data-s="3" x1="300" y1="238" x2="300" y2="262" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="312" y="254">PCIe: isolated</text>
+        <line class="flow" data-s="5" x1="560" y1="230" x2="560" y2="262" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="572" y="254">reads the host</text>
+        <g data-s="3 5">
+          <rect class="box" x="168" y="264" width="528" height="44" rx="8"/>
+          ${icon('server', 184, 274)}
+          <text class="t-b" x="216" y="291">Host</text>
+          <text class="t-sm t-mut" x="272" y="291">its CPU and OS, separate from the card</text>
+        </g>
+
+        ${badge(1, 164, 80, '1')}
+        ${badge(2, 664, 62, '2')}
+        ${badge(3, 680, 30, '3')}
+        ${badge(4, 664, 138, '4')}
+        ${badge(5, 664, 210, '5')}
       </svg>`,
 
     supernic: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="SuperNICs give each GPU line-rate RoCE Ethernet through a Spectrum-X fabric, carrying east-west GPU-to-GPU traffic for AI training.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">SuperNIC: line-rate GPU-to-GPU Ethernet for AI clusters</text>
-        <rect class="box-accent" x="288" y="128" width="144" height="60" rx="10"/>
-        <text class="t-b" x="360" y="152" text-anchor="middle">Spectrum-X</text>
-        <text class="t-sm t-mut" x="360" y="172" text-anchor="middle">Ethernet fabric</text>
-        ${[
-          ["node 1",40,68],
-          ["node 2",40,196],
-          ["node 3",530,132]
-        ].map(([n,x,y])=>`
-          <rect class="box" x="${x}" y="${y}" width="150" height="62" rx="10"/>
-          <text class="t-sm t-b" x="${x+75}" y="${y+28}" text-anchor="middle">GPU + SuperNIC</text>
-          <text class="t-sm t-mut" x="${x+75}" y="${y+47}" text-anchor="middle">${n}</text>
-        `).join("")}
-        <line class="flow-accent" x1="190" y1="104" x2="290" y2="146" marker-start="url(#ah-acc)" marker-end="url(#ah-acc)"/>
-        <line class="flow-accent" x1="190" y1="222" x2="290" y2="170" marker-start="url(#ah-acc)" marker-end="url(#ah-acc)"/>
-        <line class="flow-accent" x1="528" y1="160" x2="432" y2="158" marker-start="url(#ah-acc)" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="360" y="112" text-anchor="middle">RoCE · 400 Gb/s per GPU</text>
-        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Adaptive routing and congestion control keep thousands of GPUs from stalling the network.</text>
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Built for AI's east-west traffic: each GPU gets line-rate RoCE Ethernet with the adaptive routing and congestion control that keep huge training jobs from stalling.">
+        ${[24, 200, 376, 552].map((x) => `
+          <g data-s="1">
+            <rect class="box" x="${x}" y="16" width="144" height="44" rx="8"/>
+            ${icon('cpu', x + 12, 26)}
+            <text class="t-b" x="${x + 44}" y="43">GPU</text>
+          </g>
+          <line class="flow" data-s="1 2" x1="${x + 72}" y1="62" x2="${x + 72}" y2="72" marker-end="url(#ah-mut)"/>
+          <g data-s="2">
+            <rect class="box" x="${x}" y="74" width="144" height="40" rx="6"/>
+            <text class="t-sm t-b" x="${x + 12}" y="92">SuperNIC</text>
+            <text class="t-sm t-mut" x="${x + 12}" y="107">RoCE, per GPU</text>
+          </g>
+          <line class="flow" data-s="1 3" x1="${x + 72}" y1="116" x2="${x + 72}" y2="134"/>`).join('')}
+        <g data-s="1 3">
+          <rect class="box" x="24" y="136" width="672" height="44" rx="8"/>
+          ${icon('network', 36, 146)}
+          <text class="t-sm t-b" x="68" y="155">Spectrum-X Ethernet fabric</text>
+          <text class="t-sm t-mut" x="68" y="170">adaptive routing, congestion control: east-west</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="24" y="200" width="328" height="52" rx="8"/>
+          <text class="t-sm t-b" x="40" y="220">BlueField-3 SuperNIC</text>
+          <text class="t-sm t-mut" x="40" y="238">a slim DPU, eight Arm cores</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="368" y="200" width="328" height="52" rx="8"/>
+          <text class="t-sm t-b" x="384" y="220">ConnectX-8/9 SuperNIC</text>
+          <text class="t-sm t-mut" x="384" y="238">pure adapter, no separate OS</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="264" width="672" height="40" rx="8"/>
+          ${icon('lock', 36, 272)}
+          <text class="t-sm" x="68" y="289">encrypts in flight at line rate</text>
+          <text class="t-sm bad" x="316" y="289">host introspection: DPU mode only</text>
+        </g>
+
+        ${badge(1, 152, 30, '1')}
+        ${badge(2, 152, 94, '2')}
+        ${badge(3, 680, 150, '3')}
+        ${badge(4, 680, 214, '4')}
+        ${badge(5, 680, 284, '5')}
       </svg>`,
 
     doca: () => `

@@ -21,6 +21,12 @@ Alpaca — Local HTTP Proxy for Command-Line Tools
 API Gateway — API Gateway
     A single front door for APIs that handles auth, rate limits, and routing.
     [Network Technology, Security Technology] · aka gateway, rate limiting, BFF, Kong, ingress, API management
+    1. One entry point — An API gateway is a reverse proxy between clients and a fleet of backend services, presenting one coherent entry point.
+    2. Authenticate — It terminates TLS and validates OAuth tokens and API keys.
+    3. Rate limit — It enforces rate limits and quotas, rejecting unauthenticated or abusive traffic before it ever reaches a service.
+    4. Route and shape — It routes and versions requests and aggregates or transforms responses, so the services behind it stay small and focused on business logic.
+    5. Don't overload it — Push too much logic into it, though, and it becomes a bottleneck and a single point of failure.
+    Key fact: By centralising authentication and throttling, an API gateway is a natural Zero Trust enforcement point at the application edge.
 
 BGP — Border Gateway Protocol
     The routing protocol that stitches the internet's networks together.
@@ -34,6 +40,12 @@ BGP — Border Gateway Protocol
 BlueField — NVIDIA Data Processing Unit (DPU)
     NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data center's networking, storage, and zero-trust security on the card.
     [Network Technology, Security Technology] · aka NVIDIA BlueField, BlueField-3, BlueField-2, BlueField-4, BF3, ConnectX, DPU
+    1. A ConnectX NIC — Each BlueField chip starts with an NVIDIA ConnectX network ASIC.
+    2. Arm cores and more — It pairs the NIC with a cluster of Arm cores running their own Linux, onboard memory, and accelerators for crypto, compression and storage. BlueField-3 delivers 400 Gb/s and 16 Arm cores.
+    3. Isolated from the host — The Arm subsystem is isolated from the host across PCIe, so operators run infrastructure and security services directly on the card.
+    4. A root of trust — A hardware root of trust with DICE-based measured boot and remote attestation proves the card and its software are unmodified.
+    5. Security on the card — Line-rate IPsec/TLS encrypts traffic with no host CPU cost, and DOCA Argus reads the host's processes and memory to catch malware the host would conceal.
+    Key fact: BlueField is NVIDIA's DPU product line, programmed with the DOCA framework.
 
 BOLA — Broken Object Level Authorization
     Swap the ID in an API request and read another user's object — because the server never checked it was yours.
@@ -57,6 +69,11 @@ Calico — Project Calico — Kubernetes Networking & Network Policy
 CASB — Cloud Access Security Broker
     A control point between users and SaaS apps that enforces cloud security policy.
     [Security Technology] · aka shadow IT, SaaS security, cloud security, SSE
+    1. A broker in between — As work moved to SaaS, security teams lost the choke point a corporate network used to give them. A CASB restores it by sitting between users and cloud apps.
+    2. See shadow IT — It gives visibility into which cloud services are actually being used, including unsanctioned shadow IT.
+    3. Enforce and protect — It enforces access and data policies, detects risky configurations, and applies data-loss-prevention controls to information moving in and out.
+    4. Inline or API — Inline proxying gives real-time control but can break apps; API integration with the SaaS provider is gentler but after the fact.
+    Key fact: A CASB is one of the core components of a SASE / SSE stack, alongside secure web gateways and ZTNA.
 
 Cilium — eBPF-Based Kubernetes Networking, Observability & Security
     The Kubernetes CNI that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.
@@ -739,6 +756,12 @@ SSH — Secure Shell
 SuperNIC — NVIDIA AI-Network Accelerator
     A network accelerator tuned for AI: line-rate GPU-to-GPU Ethernet (RoCE) with the congestion control huge training clusters need — the DPU's performance-focused sibling.
     [Network Technology] · aka NVIDIA SuperNIC, BlueField-3 SuperNIC, ConnectX SuperNIC, Spectrum-X, RoCE, AI networking
+    1. East-west, GPU to GPU — A SuperNIC is built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets.
+    2. RoCE per GPU — It delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU.
+    3. Adaptive routing — Adaptive routing and congestion control let thousands of GPUs exchange gradients without the network becoming the bottleneck, as a pillar of Spectrum-X.
+    4. Two kinds — The BlueField-3 SuperNIC is a slimmed-down DPU with eight Arm cores; the ConnectX-8/9 SuperNICs are pure network adapters with no separate operating system.
+    5. A thinner ZT story — SuperNICs still encrypt traffic in flight at line rate, but host-introspection services such as DOCA Argus run only on BlueField in DPU mode.
+    Key fact: Where a DPU is an infrastructure computer, a SuperNIC is a throughput engine.
 
 Tailscale — WireGuard-Based Mesh VPN
     A zero-config mesh VPN that connects your devices directly over WireGuard.
