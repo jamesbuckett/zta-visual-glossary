@@ -786,8 +786,8 @@
       steps: [
         { title: "Client requests", text: "A browser or API client asks for a resource, using a method such as GET or POST." },
         { title: "Server responds", text: "The server answers the request with the resource." },
-        { title: "Stateless", text: "Each request stands alone. Cookies or tokens carry context from one request to the next." },
-        { title: "HTTPS wraps it in TLS", text: "HTTPS is the very same protocol running inside a TLS-encrypted channel, so the traffic is private and tamper-evident." }
+        { title: "Each request stands alone", text: "Each request stands alone. Cookies or tokens carry context from one request to the next." },
+        { title: "HTTPS adds TLS", text: "HTTPS is the very same protocol running inside a TLS-encrypted channel, so the traffic is private and tamper-evident." }
       ],
       fact: "HTTPS is now the default transport for nearly all web traffic."
     },
@@ -896,7 +896,7 @@
       source: { label: "NIST glossary — VPN", url: "https://csrc.nist.gov/glossary/term/virtual_private_network" },
       caption: "An encrypted tunnel carries private traffic across the untrusted public internet.",
       steps: [
-        { title: "A device or a site", text: "A VPN starts from a device, or a whole site, that needs to reach a network." },
+        { title: "Device or site", text: "A VPN starts from a device, or a whole site, that needs to reach a network." },
         { title: "An encrypted tunnel", text: "It builds an encrypted tunnel so traffic crosses the untrusted internet as if it were on a private link." },
         { title: "Into the network", text: "At the far end the traffic reaches the private network: remote access to corporate resources, and a shield on hostile networks." },
         { title: "The protocol decides", text: "Underneath sits a specific protocol: IPsec, WireGuard or a TLS-based design." }
@@ -1091,10 +1091,10 @@
       source: { label: "RFC 2131 — DHCP", url: "https://www.rfc-editor.org/info/rfc2131" },
       caption: "The DORA exchange — Discover, Offer, Request, Acknowledge — leases an address to a client.",
       steps: [
-        { title: "Discover", text: "A device that has just connected begins a short exchange with a DHCP server by sending a Discover." },
-        { title: "Offer", text: "The DHCP server replies with an Offer." },
-        { title: "Request", text: "The device answers with a Request." },
-        { title: "Acknowledge", text: "The server confirms with an Acknowledge. The device now has its IP address, subnet mask, default gateway and DNS servers, with no manual setup." },
+        { title: "Device sends Discover", text: "A device that has just connected begins a short exchange with a DHCP server by sending a Discover." },
+        { title: "Server sends Offer", text: "The DHCP server replies with an Offer." },
+        { title: "Device sends Request", text: "The device answers with a Request." },
+        { title: "Server sends Acknowledge", text: "The server confirms with an Acknowledge. The device now has its IP address, subnet mask, default gateway and DNS servers, with no manual setup." },
         { title: "A limited lease", text: "The server leases each address for a limited time." }
       ],
       fact: "DHCP is why a phone just works the moment it joins a new Wi-Fi network."
@@ -1108,7 +1108,7 @@
       source: { label: "OASIS SAML 2.0 Core", url: "https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf" },
       caption: "SSO via a signed assertion — the IdP authenticates, the service provider trusts the result.",
       steps: [
-        { title: "Log in at the IdP", text: "An identity provider authenticates the user." },
+        { title: "IdP authenticates", text: "An identity provider authenticates the user." },
         { title: "A signed assertion", text: "The identity provider issues a digitally signed XML assertion." },
         { title: "The SP trusts it", text: "The signature is what lets a service provider trust the assertion without ever seeing the password." },
         { title: "One login, many apps", text: "Because service providers trust the assertion, users log in once for many applications: enterprise single sign-on." }
@@ -1274,7 +1274,7 @@
       steps: [
         { title: "Ingest everything", text: "A SIEM ingests logs and events from across the estate: firewalls, servers, applications and cloud services." },
         { title: "Normalise and store", text: "It normalises the events into one shape and stores them." },
-        { title: "Correlate", text: "It correlates them to surface suspicious patterns." },
+        { title: "Correlate the events", text: "It correlates them to surface suspicious patterns." },
         { title: "Prioritised alerts", text: "The result is prioritised alerts, giving a security operations centre one place to detect, investigate and report on threats, and to satisfy audit requirements." }
       ],
       fact: "Modern SIEM platforms layer analytics and automated response on top of detection."
@@ -1392,7 +1392,7 @@
       source: { label: "openziti.io", url: "https://openziti.io/" },
       caption: "Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny).",
       steps: [
-        { title: "Every party has an identity", text: "Every participant, whether app, device or service, carries an X.509 identity." },
+        { title: "Identities for everyone", text: "Every participant, whether app, device or service, carries an X.509 identity." },
         { title: "Dark services", text: "Services open no inbound ports: they dial out to the fabric, so they are invisible to port scans." },
         { title: "Explicit policy", text: "A connection is allowed only when a policy explicitly grants that identity access to a named service." },
         { title: "mTLS on every hop", text: "The connection crosses a mesh of edge routers, and every hop is mutually authenticated with mTLS." },
@@ -1430,7 +1430,7 @@
         { title: "Independent factors", text: "MFA requires two or more independent proofs: something you know, something you have, or something you are, so a stolen password alone is not enough." },
         { title: "Codes can be phished", text: "Classic second factors like SMS codes and TOTP apps can still be phished: a user can be tricked into typing them into a fake site." },
         { title: "Bound to the origin", text: "With FIDO2 and WebAuthn, the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere." },
-        { title: "Passkeys", text: "A passkey is a discoverable FIDO credential synced across your devices that replaces the password entirely." }
+        { title: "Passkeys replace passwords", text: "A passkey is a discoverable FIDO credential synced across your devices that replaces the password entirely." }
       ],
       fact: "For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be."
     },
@@ -1590,7 +1590,7 @@
         { title: "The engine decides", text: "The Policy Engine runs the trust algorithm to grant or deny." },
         { title: "The admin enacts", text: "The Policy Administrator executes that decision. Together, engine and administrator make up the Policy Decision Point." },
         { title: "The PEP enforces", text: "The Policy Enforcement Point sits in the data path and lets traffic through only when told." },
-        { title: "Seven tenets", text: "The components enforce seven tenets, starting with: every resource access is authenticated and authorised dynamically." }
+        { title: "Seven tenets", text: "The components enforce seven tenets, such as: every resource access is authenticated and authorised dynamically." }
       ],
       fact: "NIST SP 800-207 is the spec the PEP / PDP terms in this glossary come from."
     },
@@ -1623,7 +1623,7 @@
       caption: "Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.",
       steps: [
         { title: "One entry point", text: "An API gateway is a reverse proxy between clients and a fleet of backend services, presenting one coherent entry point." },
-        { title: "Authenticate", text: "It terminates TLS and validates OAuth tokens and API keys." },
+        { title: "Authenticate every call", text: "It terminates TLS and validates OAuth tokens and API keys." },
         { title: "Rate limit", text: "It enforces rate limits and quotas, rejecting unauthenticated or abusive traffic before it ever reaches a service." },
         { title: "Route and shape", text: "It routes and versions requests and aggregates or transforms responses, so the services behind it stay small and focused on business logic." },
         { title: "Don't overload it", text: "Push too much logic into it, though, and it becomes a bottleneck and a single point of failure." }
@@ -1641,7 +1641,7 @@
       caption: "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.",
       steps: [
         { title: "Inspect the traffic", text: "The engine inspects network traffic for known exploit signatures, protocol anomalies, or deviations from a learned baseline." },
-        { title: "IDS: alert on a copy", text: "An Intrusion Detection System works on a mirrored copy of the traffic and raises an alert when it sees an attack." },
+        { title: "IDS alerts on copies", text: "An Intrusion Detection System works on a mirrored copy of the traffic and raises an alert when it sees an attack." },
         { title: "IPS: drop it inline", text: "An Intrusion Prevention System is the same engine placed inline, so it drops or resets the malicious connection rather than merely reporting it." },
         { title: "Feed the SIEM", text: "Detections feed a SIEM for correlation and a SOC for response." },
         { title: "The classic weakness", text: "Detection mode produces false positives, and prevention mode risks blocking legitimate traffic." }
@@ -1694,8 +1694,8 @@
       caption: "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.",
       steps: [
         { title: "An alert arrives", text: "Security teams drown in alerts, most needing the same repetitive triage steps. SOAR picks each one up from SIEM detection." },
-        { title: "Enrich", text: "A codified playbook enriches the alert, drawing on the tools an analyst would otherwise click through, such as threat intelligence." },
-        { title: "Decide", text: "The playbook decides whether the alert is real." },
+        { title: "Enrich the alert", text: "A codified playbook enriches the alert, drawing on the tools an analyst would otherwise click through, such as threat intelligence." },
+        { title: "Decide if real", text: "The playbook decides whether the alert is real." },
         { title: "Act across tools", text: "Then it acts: isolate a host, disable an account, block an IP, open a case, cutting response time from hours to seconds." },
         { title: "Humans gate the risky", text: "Its risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval." }
       ],
@@ -1747,7 +1747,7 @@
       source: { label: "How Tailscale works (architecture)", url: "https://tailscale.com/blog/how-tailscale-works" },
       caption: "An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh.",
       steps: [
-        { title: "Sign in via your IdP", text: "A central coordination server handles authentication through your existing identity provider." },
+        { title: "Sign in via IdP", text: "A central coordination server handles authentication through your existing identity provider." },
         { title: "Keys, then step aside", text: "It also distributes keys, then steps out of the data path." },
         { title: "A direct mesh", text: "Devices connect directly to each other over encrypted WireGuard tunnels in a flat mesh, instead of backhauling through a central gateway." },
         { title: "Relay if blocked", text: "NAT traversal, with relay fallback (DERP), makes peer-to-peer connectivity work even behind firewalls." },
@@ -1785,7 +1785,7 @@
         { title: "Locate the file", text: "The browser locates the PAC file from a manually configured URL, or via WPAD, which finds it through DHCP or DNS." },
         { title: "Called per request", text: "The browser or OS calls the file's one function, FindProxyForURL(url, host), for every request to decide how to reach it." },
         { title: "Internal goes direct", text: "Built-in helpers like shExpMatch(), dnsDomainIs() and isInNet() let rules match on hostname, domain or IP range, so internal traffic goes DIRECT." },
-        { title: "The rest via a gateway", text: "Everything else is steered through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup." },
+        { title: "Rest via the gateway", text: "Everything else is steered through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup." },
         { title: "WPAD can be poisoned", text: "WPAD discovery has been repeatedly abused: a poisoned response can route all of a victim's traffic through an attacker's proxy." }
       ],
       fact: "A PAC file is the classic, agentless way to funnel web traffic through a Secure Web Gateway."
@@ -1821,7 +1821,7 @@
         { title: "Privileged accounts", text: "A handful of privileged accounts, such as domain admins, root and cloud owners, can do catastrophic damage." },
         { title: "Check out, not know", text: "PAM vaults their credentials, so admins check them out rather than knowing them." },
         { title: "A recorded gateway", text: "Sessions are brokered through a gateway that records keystrokes for audit, the accountability trail regulators expect." },
-        { title: "Just-in-time", text: "Privileges are elevated for a specific task and a short window, then automatically revoked." }
+        { title: "Just-in-time elevation", text: "Privileges are elevated for a specific task and a short window, then automatically revoked." }
       ],
       fact: "Just-in-time access shrinks the standing attack surface to near zero."
     },
@@ -1838,7 +1838,7 @@
         { title: "A shared name", text: "A disclosed vulnerability gets a CVE identifier, like CVE-2021-44228 for Log4Shell, under a programme coordinated by MITRE, so everyone points at the same flaw." },
         { title: "Severity, 0 to 10", text: "CVSS rates its severity from 0 to 10 from characteristics like attack vector, complexity and impact. CVSS v4.0 was released in November 2023." },
         { title: "The NVD enriches it", text: "NIST's National Vulnerability Database enriches CVE records with CVSS scores and affected-product data that feed automated scanners." },
-        { title: "Prioritise", text: "Teams can rank what to patch first: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access." },
+        { title: "Rank what to patch", text: "Teams can rank what to patch first: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access." },
         { title: "Context decides", text: "The score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context." }
       ],
       fact: "A CVE id means vendors, scanners and defenders all point at the same flaw."
@@ -1857,7 +1857,7 @@
         { title: "Access control first", text: "The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one." },
         { title: "Supply chain enters", text: "Software Supply Chain Failures enters at number three, expanded from 2021's Vulnerable and Outdated Components, reflecting where attacks have moved." },
         { title: "A shared baseline", text: "Developers code against it, WAFs ship rule sets named after it, and auditors check for it." },
-        { title: "A floor, not a programme", text: "The Top 10 is a floor for awareness; OWASP maintains deeper resources like the ASVS and the Cheat Sheet Series." }
+        { title: "Only a floor", text: "The Top 10 is a floor for awareness; OWASP maintains deeper resources like the ASVS and the Cheat Sheet Series." }
       ],
       fact: "The Top 10 is a floor for awareness, not a complete security programme."
     },
@@ -1907,7 +1907,7 @@
       caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.",
       steps: [
         { title: "The key problem", text: "Signing has meant guarding long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key." },
-        { title: "Sign as who you are", text: "The developer authenticates with an OIDC identity, such as a Google, GitHub or corporate login." },
+        { title: "Sign as yourself", text: "The developer authenticates with an OIDC identity, such as a Google, GitHub or corporate login." },
         { title: "A short-lived cert", text: "Fulcio issues a short-lived certificate against that identity, and Cosign uses it to sign the artifact." },
         { title: "Logged in Rekor", text: "Every signature is recorded in Rekor, a public, append-only transparency log." },
         { title: "Anyone can verify", text: "Anyone can verify that an artifact was signed by a given identity, and detect tampering after the fact." }
@@ -1924,9 +1924,9 @@
       source: { label: "NIST SP 1800-35 — Implementing Zero Trust", url: "https://csrc.nist.gov/pubs/sp/1800/35/final" },
       caption: "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.",
       steps: [
-        { title: "A VPN lets you roam", text: "A VPN drops an authenticated user onto the network and trusts them to roam." },
+        { title: "VPNs let you roam", text: "A VPN drops an authenticated user onto the network and trusts them to roam." },
         { title: "Verify every request", text: "ZTNA verifies user identity and device posture on every request." },
-        { title: "One app at a time", text: "A broker grants access to one specific application at a time, and keeps everything else invisible." },
+        { title: "Per-app access", text: "A broker grants access to one specific application at a time, and keeps everything else invisible." },
         { title: "No inbound port", text: "Applications sit behind the broker and connect outbound to it, so they are never exposed to the open internet and there is no inbound port to attack." }
       ],
       fact: "ZTNA shifts from connect-then-authenticate to authenticate, authorise, then connect, and only to what you need."
@@ -2033,7 +2033,7 @@
         { title: "Compiled to flows", text: "OVN's daemons translate that intent into OpenFlow." },
         { title: "One overlay, many hosts", text: "They program every OVS instance across the cluster, so one logical network spans many hosts as an overlay." },
         { title: "Services on every node", text: "Routing, DHCP, DNS and a stateful distributed firewall run in the data plane on each node, rather than at a central choke point." },
-        { title: "Microsegmentation", text: "Per-port ACLs isolate workloads from one another east-west, not just at the perimeter." }
+        { title: "Isolate each workload", text: "Per-port ACLs isolate workloads from one another east-west, not just at the perimeter." }
       ],
       fact: "If OVS is the distributed switch, OVN is the brain that turns thousands of them into one programmable, segmented virtual network."
     },
@@ -2066,7 +2066,7 @@
       caption: "Enterprise calls terminate on the SBC at the border and re-originate encrypted toward the carrier — topology hidden, toll fraud and DoS dropped at the edge.",
       steps: [
         { title: "At the voice border", text: "A Session Border Controller sits where VoIP traffic crosses a network boundary, such as between an organisation's phone system and its SIP trunk provider." },
-        { title: "Back-to-back", text: "Each call's SIP signalling, and usually its RTP media, terminates on the SBC and is re-originated toward the far side, so the two networks never touch directly." },
+        { title: "Back-to-back agent", text: "Each call's SIP signalling, and usually its RTP media, terminates on the SBC and is re-originated toward the far side, so the two networks never touch directly." },
         { title: "Hide and encrypt", text: "That position lets it hide internal topology and encrypt signalling and media with SIP over TLS and SRTP." },
         { title: "Police the edge", text: "It polices access against denial-of-service and toll fraud, maintains NAT bindings and enforces call-admission limits so voice quality holds." },
         { title: "Why not a firewall", text: "Ordinary firewalls handle VoIP poorly: SIP embeds addresses inside its messages and negotiates dynamic media ports per call." }
@@ -2103,7 +2103,7 @@
         { title: "Supervised fine-tuning", text: "Supervised fine-tuning first teaches the base model to imitate human-written demonstrations." },
         { title: "Humans rank answers", text: "Labellers are shown several candidate answers to the same prompt and rank them." },
         { title: "Train a reward model", text: "Those comparisons train a separate reward model to predict which output a human would prefer." },
-        { title: "PPO on a KL leash", text: "Reinforcement learning, classically PPO, optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference." },
+        { title: "PPO with KL leash", text: "Reinforcement learning, classically PPO, optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference." },
         { title: "Safety in the weights", text: "Refusal behaviour and safety policy are installed here, at training time, so they are a property of the weights. The weakness is reward hacking: the reward model is only a proxy." }
       ],
       fact: "InstructGPT's 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3."
@@ -2247,7 +2247,7 @@
         { title: "Pushed request (PAR)", text: "The client sends the full authorisation request to the authorisation server over a client-authenticated back channel, and gets back an opaque request_uri." },
         { title: "Only a handle", text: "The browser then carries only that handle, leaving nothing in the URL to tamper with or to leak through referrers, history and logs." },
         { title: "PKCE and iss", text: "PKCE with S256 is required, and the authorisation response carries the iss parameter, which closes the mix-up attack between authorisation servers." },
-        { title: "Sender-constrained", text: "Access tokens are bound to an mTLS client certificate or a DPoP key, so an attacker who lifts a token cannot spend it without the matching private key." }
+        { title: "Sender-constrained tokens", text: "Access tokens are bound to an mTLS client certificate or a DPoP key, so an attacker who lifts a token cannot spend it without the matching private key." }
       ],
       fact: "FAPI 2.0 retires the bearer token: a stolen token is useless without the client's private key."
     },
@@ -2298,10 +2298,10 @@
       caption: "The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.",
       steps: [
         { title: "Tools know one proxy", text: "curl, git, npm, pip and docker mostly understand one thing: an http_proxy variable naming a single host and port. Alpaca is that host and port, on loopback." },
-        { title: "The PAC picks a route", text: "For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use." },
+        { title: "PAC picks the route", text: "For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use." },
         { title: "A CONNECT tunnel", text: "For HTTPS it opens a CONNECT tunnel, so it sees only the host and port." },
         { title: "It answers the 407", text: "When the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself: Negotiate, then NTLM, then Basic." },
-        { title: "Any process can use it", text: "The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress." }
+        { title: "Any process uses it", text: "The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress." }
       ],
       fact: "Alpaca is an honest compatibility shim for the perimeter model rather than a zero-trust component."
     },
@@ -2332,7 +2332,7 @@
       source: { label: "About Calico — Calico Open Source documentation", url: "https://docs.tigera.io/calico/latest/about/" },
       caption: "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.",
       steps: [
-        { title: "Each node owns a block", text: "Each node owns a block of the pod address space, and a BGP daemon on that node advertises the block to the other nodes or to the physical fabric." },
+        { title: "Nodes own blocks", text: "Each node owns a block of the pod address space, and a BGP daemon on that node advertises the block to the other nodes or to the physical fabric." },
         { title: "Route, don't tunnel", text: "A pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. Where the underlay will not carry pod routes, Calico falls back to a VXLAN or IP-in-IP overlay." },
         { title: "Felix programs the kernel", text: "A Felix agent on every node inserts routes into the kernel and access control rules into the chosen data plane: iptables, nftables, eBPF or Windows HNS." },
         { title: "Tiers, in order", text: "Every policy lives in a tier, tiers are evaluated by order, and a tier can Pass a packet down to the next. A platform team writes global rules in a high-precedence tier." },
@@ -2368,7 +2368,7 @@
       source: { label: "Istio documentation — Architecture", url: "https://istio.io/latest/docs/ops/deployment/architecture/" },
       caption: "istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.",
       steps: [
-        { title: "istiod", text: "Istio's control plane is a single binary, istiod: service discovery, translating intent into Envoy configuration, and the mesh's certificate authority." },
+        { title: "One binary: istiod", text: "Istio's control plane is a single binary, istiod: service discovery, translating intent into Envoy configuration, and the mesh's certificate authority." },
         { title: "A SPIFFE identity", text: "istiod issues every workload an X.509 certificate carrying a SPIFFE ID derived from its Kubernetes service account, and rotates it automatically." },
         { title: "Policy resources", text: "PeerAuthentication turns mTLS on, RequestAuthentication validates end-user JWTs, and AuthorizationPolicy is the rule that actually decides." },
         { title: "Sidecar mode", text: "In sidecar mode an Envoy proxy runs beside each workload, which taxes every pod with a proxy's memory and every call with an extra hop." },
@@ -2426,7 +2426,7 @@
         { title: "NF4, quantised twice", text: "4-bit NormalFloat places its sixteen levels at the quantiles of a normal distribution, and double quantisation also quantises the per-block scaling constants." },
         { title: "Dequantise per layer", text: "On each forward pass a layer's weights are dequantised to BF16 on the fly; gradients flow back through them, and only the adapters are updated." },
         { title: "Paged optimisers", text: "Paged optimisers spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash." },
-        { title: "One GPU, at a cost", text: "Fine-tuning a 65B model drops from more than 780 GB of GPU memory to under 48 GB, but training is slower than plain LoRA." }
+        { title: "One GPU, slower", text: "Fine-tuning a 65B model drops from more than 780 GB of GPU memory to under 48 GB, but training is slower than plain LoRA." }
       ],
       fact: "QLoRA made customising, or de-aligning, a large open-weight model affordable for an individual."
     },
