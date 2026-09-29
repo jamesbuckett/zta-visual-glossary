@@ -359,6 +359,11 @@ MFA / Passkeys — Multi-Factor Authentication (FIDO2 · WebAuthn)
 Microsegmentation — Network Microsegmentation
     Divides a network into tiny zones, each with its own access policy.
     [Network Technology, Security Technology] · aka segmentation, lateral movement, east-west
+    1. A flat network — Without microsegmentation, traffic between workloads crosses a single flat internal network.
+    2. Per-workload segments — Microsegmentation pushes isolation right down to individual workloads or applications.
+    3. Only needed flows — Traffic between them is governed by fine-grained policy: each segment permits only the flows it genuinely needs.
+    4. A breach is contained — If one host is compromised, lateral movement is contained, because its segment permits nothing it does not need.
+    Key fact: Microsegmentation is a practical building block of zero-trust networking, usually enforced in software.
 
 MQTT — MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)
     A lightweight publish/subscribe protocol for IoT and constrained devices.
@@ -425,6 +430,12 @@ OIDC — OpenID Connect
 OPA — Open Policy Agent
     A general-purpose policy engine that answers allow / deny from code, not config.
     [Security Technology] · aka Rego, policy as code, Gatekeeper, policy engine
+    1. Ask a question — A service asks OPA a question, can subject X perform action Y on resource Z, sending JSON context.
+    2. Evaluate Rego — OPA evaluates rules written in its declarative Rego language.
+    3. A structured decision — It returns a structured decision, such as allow or deny.
+    4. Many call sites — The same engine enforces policy across microservices, Kubernetes admission (as Gatekeeper), CI pipelines and API gateways.
+    5. Policy as code — Organisations express authorisation once, as version-controlled policy as code, rather than scattering if-statements through every app.
+    Key fact: OPA is the canonical software implementation of a Zero Trust Policy Decision Point.
 
 Open Virtual Network — OVN — SDN control plane for OVS
     An SDN control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.
@@ -437,6 +448,12 @@ Open vSwitch — OVS — multilayer virtual switch
 OpenZiti — Open-source zero-trust networking overlay
     An open-source overlay that gives every app an identity and a default-deny, encrypted path — a zero-trust VPN replacement.
     [Network Technology, Security Technology] · aka Ziti, NetFoundry, ZTNA, zero trust overlay
+    1. Every party has an identity — Every participant, whether app, device or service, carries an X.509 identity.
+    2. Dark services — Services open no inbound ports: they dial out to the fabric, so they are invisible to port scans.
+    3. Explicit policy — A connection is allowed only when a policy explicitly grants that identity access to a named service.
+    4. mTLS on every hop — The connection crosses a mesh of edge routers, and every hop is mutually authenticated with mTLS.
+    5. The network grants nothing — Unlike a VPN, being on the network grants nothing on its own: a scanner finds no open port to reach.
+    Key fact: OpenZiti replaces network-perimeter trust with per-connection, identity-based access.
 
 OWASP Top 10 — Open Worldwide Application Security Project
     The community's ranked list of the most critical web application risks.
@@ -474,6 +491,12 @@ PASETO — Platform-Agnostic Security Tokens
 PEP / PDP — Policy Enforcement Point / Policy Decision Point
     The enforce-here, decide-there split at the heart of access control.
     [Security Technology] · aka policy enforcement, policy decision, policy engine
+    1. A request — A subject makes an access attempt against a resource.
+    2. The PEP intercepts — The Policy Enforcement Point sits in the request path and intercepts each access attempt.
+    3. The PDP decides — The Policy Decision Point evaluates the rules and returns an allow or deny.
+    4. Enforce the answer — The enforcement point applies the answer: an allowed request reaches the resource, a denied one does not.
+    5. One brain, many PEPs — Separating enforcement from decision lets a single central policy brain govern many enforcement points consistently.
+    Key fact: The PEP / PDP pattern is the control core of zero-trust architectures.
 
 PKCE — Proof Key for Code Exchange
     Stops a stolen OAuth authorization code from being redeemed by anyone but the app that began the flow.
@@ -733,6 +756,11 @@ WireGuard — WireGuard VPN protocol
 Zero Trust — Zero Trust Architecture
     Trust nothing by default; verify every request regardless of network location.
     [Security Technology] · aka ZTA, ZTNA, BeyondCorp
+    1. No safe inside — Zero Trust abandons the idea of a safe internal network: a request is treated the same whether it originates inside or outside the old perimeter.
+    2. Verify every request — Every request must be authenticated, authorised and encrypted, based on identity and context.
+    3. Least privilege — Access is least-privilege: a verified request reaches only what it needs.
+    4. Keep verifying — Verification is continuous, rather than a hard shell around a soft, trusted interior.
+    Key fact: Zero Trust leans on strong identity, least-privilege access and continuous verification.
 
 ZTNA — Zero Trust Network Access
     The VPN replacement that grants access to single apps, never the whole network.

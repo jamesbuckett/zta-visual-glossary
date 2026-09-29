@@ -926,7 +926,14 @@
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core"],
       related: ["mtls", "microseg", "peppdp", "idp", "sase"],
       source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
-      caption: "Every request is verified at a policy gate — no implicit trust by network location."
+      caption: "Every request is verified at a policy gate — no implicit trust by network location.",
+      steps: [
+        { title: "No safe inside", text: "Zero Trust abandons the idea of a safe internal network: a request is treated the same whether it originates inside or outside the old perimeter." },
+        { title: "Verify every request", text: "Every request must be authenticated, authorised and encrypted, based on identity and context." },
+        { title: "Least privilege", text: "Access is least-privilege: a verified request reaches only what it needs." },
+        { title: "Keep verifying", text: "Verification is continuous, rather than a hard shell around a soft, trusted interior." }
+      ],
+      fact: "Zero Trust leans on strong identity, least-privilege access and continuous verification."
     },
     {
       id: "firewall", term: "Firewall", acronym: "Network Firewall", aliases: ["NGFW", "iptables", "packet filter"],
@@ -1166,7 +1173,14 @@
       types: ["Network Technology", "Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Network Edge & Ops"],
       related: ["zerotrust", "vlan", "firewall"],
       source: { label: "NIST SP 800-215 — Secure Enterprise Network Landscape", url: "https://csrc.nist.gov/pubs/sp/800/215/final" },
-      caption: "Per-workload segments permit only required flows, containing lateral movement after a breach."
+      caption: "Per-workload segments permit only required flows, containing lateral movement after a breach.",
+      steps: [
+        { title: "A flat network", text: "Without microsegmentation, traffic between workloads crosses a single flat internal network." },
+        { title: "Per-workload segments", text: "Microsegmentation pushes isolation right down to individual workloads or applications." },
+        { title: "Only needed flows", text: "Traffic between them is governed by fine-grained policy: each segment permits only the flows it genuinely needs." },
+        { title: "A breach is contained", text: "If one host is compromised, lateral movement is contained, because its segment permits nothing it does not need." }
+      ],
+      fact: "Microsegmentation is a practical building block of zero-trust networking, usually enforced in software."
     },
     {
       id: "peppdp", term: "PEP / PDP", acronym: "Policy Enforcement Point / Policy Decision Point",
@@ -1176,7 +1190,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Identity & Access"],
       related: ["zerotrust", "idp", "rlhf", "dpo", "rag"],
       source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
-      caption: "The enforcement point intercepts a request; the decision point evaluates policy and replies."
+      caption: "The enforcement point intercepts a request; the decision point evaluates policy and replies.",
+      steps: [
+        { title: "A request", text: "A subject makes an access attempt against a resource." },
+        { title: "The PEP intercepts", text: "The Policy Enforcement Point sits in the request path and intercepts each access attempt." },
+        { title: "The PDP decides", text: "The Policy Decision Point evaluates the rules and returns an allow or deny." },
+        { title: "Enforce the answer", text: "The enforcement point applies the answer: an allowed request reaches the resource, a denied one does not." },
+        { title: "One brain, many PEPs", text: "Separating enforcement from decision lets a single central policy brain govern many enforcement points consistently." }
+      ],
+      fact: "The PEP / PDP pattern is the control core of zero-trust architectures."
     },
     {
       id: "idp", term: "Identity Provider", acronym: "Identity Provider (IdP)", aliases: ["IdP", "SSO", "OIDC", "Keycloak"],
@@ -1332,7 +1354,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Network Edge & Ops"],
       related: ["zerotrust", "mtls", "spiffe", "vpn"],
       source: { label: "openziti.io", url: "https://openziti.io/" },
-      caption: "Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny)."
+      caption: "Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny).",
+      steps: [
+        { title: "Every party has an identity", text: "Every participant, whether app, device or service, carries an X.509 identity." },
+        { title: "Dark services", text: "Services open no inbound ports: they dial out to the fabric, so they are invisible to port scans." },
+        { title: "Explicit policy", text: "A connection is allowed only when a policy explicitly grants that identity access to a named service." },
+        { title: "mTLS on every hop", text: "The connection crosses a mesh of edge routers, and every hop is mutually authenticated with mTLS." },
+        { title: "The network grants nothing", text: "Unlike a VPN, being on the network grants nothing on its own: a scanner finds no open port to reach." }
+      ],
+      fact: "OpenZiti replaces network-perimeter trust with per-connection, identity-based access."
     },
     {
       id: "scim", term: "SCIM", acronym: "System for Cross-domain Identity Management",
@@ -1410,7 +1440,15 @@
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Identity & Access"],
       related: ["peppdp", "rbac", "kubernetes", "zerotrust", "rlhf"],
       source: { label: "Open Policy Agent documentation", url: "https://www.openpolicyagent.org/docs" },
-      caption: "Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites."
+      caption: "Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites.",
+      steps: [
+        { title: "Ask a question", text: "A service asks OPA a question, can subject X perform action Y on resource Z, sending JSON context." },
+        { title: "Evaluate Rego", text: "OPA evaluates rules written in its declarative Rego language." },
+        { title: "A structured decision", text: "It returns a structured decision, such as allow or deny." },
+        { title: "Many call sites", text: "The same engine enforces policy across microservices, Kubernetes admission (as Gatekeeper), CI pipelines and API gateways." },
+        { title: "Policy as code", text: "Organisations express authorisation once, as version-controlled policy as code, rather than scattering if-statements through every app." }
+      ],
+      fact: "OPA is the canonical software implementation of a Zero Trust Policy Decision Point."
     },
     {
       id: "servicemesh", term: "Service Mesh", acronym: "Service Mesh (Istio · Linkerd · Envoy)",
@@ -2228,7 +2266,8 @@
     "radio-tower": '<path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.11.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="M9.5 18h5"/><path d="m8 22 4-11 4 11"/>',
     eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
     fingerprint: '<path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>',
-    "message-square": '<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>'
+    "message-square": '<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>',
+    "git-branch": '<path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -2675,25 +2714,52 @@
       </svg>`,
 
     zerotrust: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Requests from inside and outside both pass a policy gate that verifies identity and context before reaching a resource.">
-        <rect class="zone" x="20" y="28" width="200" height="84" rx="10"/>
-        <text class="t-sm t-mut" x="34" y="46">outside</text>
-        <rect class="box" x="44" y="52" width="150" height="46" rx="8"/>
-        <text x="119" y="80" text-anchor="middle">User</text>
-        <rect class="zone" x="20" y="156" width="200" height="84" rx="10"/>
-        <text class="t-sm t-mut" x="34" y="174">inside network</text>
-        <rect class="box" x="44" y="180" width="150" height="46" rx="8"/>
-        <text x="119" y="208" text-anchor="middle">Service</text>
-        <rect class="box-accent" x="300" y="78" width="180" height="120" rx="12"/>
-        <text class="t-b" x="390" y="128" text-anchor="middle">Policy gate</text>
-        <text class="t-sm t-mut" x="390" y="150" text-anchor="middle">verify identity</text>
-        <text class="t-sm t-mut" x="390" y="167" text-anchor="middle">+ context, every time</text>
-        <line class="flow" x1="194" y1="74" x2="298" y2="110" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="194" y1="204" x2="298" y2="166" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="560" y="98" width="140" height="80" rx="10"/>
-        <text class="t-b" x="630" y="142" text-anchor="middle">Resource</text>
-        <line class="flow-ok" x1="480" y1="138" x2="558" y2="138" marker-end="url(#ah-ok)"/>
-        <text class="t-sm t-mut" x="390" y="248" text-anchor="middle">network location alone grants no trust</text>
+      <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every request is verified at a policy gate — no implicit trust by network location.">
+        <g data-s="1">
+          <rect class="zone" x="16" y="16" width="220" height="132" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="34">old perimeter</text>
+        </g>
+        <g data-s="1 2">
+          <rect class="box" x="32" y="48" width="188" height="72" rx="12"/>
+          ${icon('user', 48, 62)}
+          <text class="t-b" x="80" y="80">Inside</text>
+          <text class="t-sm t-mut" x="80" y="98">no implicit trust</text>
+        </g>
+        <g data-s="1 2">
+          <rect class="box" x="32" y="176" width="188" height="72" rx="12"/>
+          ${icon('laptop', 48, 190)}
+          <text class="t-b" x="80" y="208">Outside</text>
+          <text class="t-sm t-mut" x="80" y="226">the same checks</text>
+        </g>
+        <line class="flow" data-s="1 2" x1="222" y1="84" x2="290" y2="120" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 2" x1="222" y1="212" x2="290" y2="176" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4">
+          <rect class="box" x="292" y="48" width="160" height="200" rx="8"/>
+          ${icon('shield-check', 308, 62)}
+          <text class="t-b" x="340" y="80">Policy gate</text>
+          <text class="t-sm t-mut" x="308" y="104">identity + context</text>
+        </g>
+        <g data-s="2">
+          ${[['authenticate', 120], ['authorise', 160], ['encrypt', 200]].map(([t, y]) => `
+            <rect class="box" x="308" y="${y}" width="128" height="32" rx="4"/>
+            <text class="t-sm" x="372" y="${y + 20}" text-anchor="middle">${t}</text>`).join('')}
+        </g>
+        <path class="flow" data-s="4" d="M332 250 C332 282, 412 282, 412 250" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="428" y="282">verified continuously</text>
+
+        ${[24, 112, 200].map((y, i) => `
+          <g${i === 1 ? ' data-s="3"' : ''}>
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+            ${icon('database', 552, y + 16)}
+            <text class="t-b" x="584" y="${y + 25}">Resource</text>
+            <text class="t-sm t-mut" x="584" y="${y + 43}">${i === 1 ? 'the one needed' : 'not needed'}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="3" x1="454" y1="140" x2="534" y2="140" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 220, 30, '1')}
+        ${badge(2, 436, 62, '2')}
+        ${badge(3, 494, 140, '3')}
+        ${badge(4, 372, 274, '4')}
       </svg>`,
 
     firewall: () => `
@@ -3231,42 +3297,82 @@
       </svg>`,
 
     microseg: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Each workload sits in its own segment; only required flows are allowed, so lateral movement is blocked.">
-        ${[["Web", 40, 36], ["API", 460, 36], ["Database", 40, 158], ["Cache", 460, 158]].map(([t, x, y]) => `
-          <rect class="zone" x="${x}" y="${y}" width="220" height="86" rx="10"/>
-          <rect class="box" x="${x + 20}" y="${y + 16}" width="180" height="54" rx="8"/>
-          <text class="t-b" x="${x + 110}" y="${y + 48}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <line class="flow-ok" x1="260" y1="62" x2="460" y2="62" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" x="360" y="52" text-anchor="middle" fill="var(--state-ok)">allowed (required)</text>
-        <line class="flow-bad" x1="150" y1="122" x2="150" y2="158" marker-end="url(#ah-bad)"/>
-        <line class="stroke-bad" x1="138" y1="132" x2="162" y2="148" style="stroke-width:2.5"/>
-        <line class="stroke-bad" x1="162" y1="132" x2="138" y2="148" style="stroke-width:2.5"/>
-        <text class="t-sm" x="250" y="146" fill="var(--state-bad)">lateral blocked</text>
-        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">a breach in one segment cannot spread to the others</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Per-workload segments permit only required flows, containing lateral movement after a breach.">
+        <g data-s="1">
+          <rect class="zone" x="16" y="12" width="688" height="256" rx="12"/>
+          <text class="t-sm t-mut" x="28" y="30">one flat internal network</text>
+        </g>
+        ${[['A', 40, 40], ['B', 280, 40], ['C', 520, 40], ['D', 280, 164]].map(([n, x, y]) => `
+          <g data-s="2">
+            <rect class="zone" x="${x}" y="${y}" width="160" height="92" rx="8"/>
+            <text class="t-sm t-mut" x="${x + 12}" y="${y + 16}">segment</text>
+          </g>
+          <g data-s="${n === 'D' ? '4' : '1 3'}">
+            <rect class="box" x="${x + 12}" y="${y + 24}" width="136" height="56" rx="8"/>
+            ${icon('server', x + 24, y + 40)}
+            <text class="t-b" x="${x + 56}" y="${y + 49}">Workload ${n}</text>
+            <text class="t-sm ${n === 'D' ? 'bad' : 't-mut'}" x="${x + 56}" y="${y + 67}">${n === 'D' ? 'compromised' : 'isolated'}</text>
+          </g>`).join('')}
+        <line class="flow-ok" data-s="3" x1="190" y1="92" x2="290" y2="92" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="3" x1="430" y1="92" x2="530" y2="92" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" data-s="4" x1="292" y1="186" x2="176" y2="136" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="4" x1="360" y1="186" x2="360" y2="138" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="4" x1="428" y1="186" x2="544" y2="136" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="460" y="228">lateral moves blocked</text>
+
+        ${badge(1, 688, 28, '1')}
+        ${badge(2, 188, 52, '2')}
+        ${badge(3, 240, 92, '3')}
+        ${badge(4, 234, 161, '4')}
       </svg>`,
 
     peppdp: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request hits the enforcement point, which asks the decision point to evaluate policy and returns allow or deny.">
-        <rect class="box" x="20" y="124" width="120" height="56" rx="10"/>
-        <text class="t-sm t-b" x="80" y="156" text-anchor="middle">Request</text>
-        <rect class="box-accent" x="210" y="112" width="160" height="84" rx="12"/>
-        <text class="t-b" x="290" y="148" text-anchor="middle">PEP</text>
-        <text class="t-sm t-mut" x="290" y="168" text-anchor="middle">enforces</text>
-        <rect class="box" x="210" y="14" width="160" height="74" rx="12"/>
-        <text class="t-b" x="290" y="48" text-anchor="middle">PDP</text>
-        <text class="t-sm t-mut" x="290" y="68" text-anchor="middle">evaluates policy</text>
-        <rect class="box" x="560" y="124" width="140" height="56" rx="10"/>
-        <text class="t-sm t-b" x="630" y="156" text-anchor="middle">Resource</text>
-        <line class="flow" x1="140" y1="152" x2="208" y2="152" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="174" y="118" text-anchor="middle">access?</text>
-        <line class="flow" x1="270" y1="112" x2="270" y2="90" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="235" y="104" text-anchor="end">evaluate</text>
-        <line class="flow-accent" x1="312" y1="90" x2="312" y2="112" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b t-acc" x="345" y="104">allow / deny</text>
-        <line class="flow-ok" x1="370" y1="152" x2="558" y2="152" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" x="464" y="142" text-anchor="middle" fill="var(--state-ok)">if allowed</text>
-        <text class="t-sm t-mut" x="360" y="248" text-anchor="middle">one central policy brain, many enforcement points</text>
+      <svg class="dg" viewBox="0 0 720 196" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The enforcement point intercepts a request; the decision point evaluates policy and replies.">
+        <g data-s="1 4">
+          <rect class="box" x="24" y="112" width="140" height="64" rx="12"/>
+          ${icon('user', 40, 126)}
+          <text class="t-b" x="72" y="144">Subject</text>
+        </g>
+        <line class="flow" data-s="1 2" x1="166" y1="132" x2="230" y2="132" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="198" y="124" text-anchor="middle">request</text>
+        <line class="flow-bad" data-s="4" x1="230" y1="160" x2="166" y2="160" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="198" y="178" text-anchor="middle">deny</text>
+        <g data-s="2 3 4">
+          <rect class="box" x="232" y="112" width="160" height="64" rx="8"/>
+          ${icon('shield', 248, 126)}
+          <text class="t-b" x="280" y="144">PEP</text>
+          <text class="t-sm t-mut" x="280" y="162">in the path</text>
+        </g>
+        <g data-s="3 5">
+          <rect class="box" x="232" y="16" width="160" height="56" rx="8"/>
+          ${icon('scale', 248, 32)}
+          <text class="t-b" x="280" y="41">PDP</text>
+          <text class="t-sm t-mut" x="280" y="59">evaluates rules</text>
+        </g>
+        <line class="flow" data-s="3" x1="296" y1="110" x2="296" y2="74" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="286" y="96" text-anchor="end">ask</text>
+        <line class="flow" data-s="3" x1="328" y1="74" x2="328" y2="110" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="340" y="96">allow or deny</text>
+        <line class="flow-ok" data-s="4" x1="394" y1="144" x2="554" y2="144" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" data-s="4" x="474" y="136" text-anchor="middle">allow</text>
+        <g data-s="4">
+          <rect class="box" x="556" y="112" width="140" height="64" rx="8"/>
+          ${icon('database', 572, 126)}
+          <text class="t-b" x="604" y="144">Resource</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="456" y="16" width="240" height="56" rx="8"/>
+          ${icon('shield', 472, 32)}
+          <text class="t-b" x="504" y="41">Other PEPs</text>
+          <text class="t-sm t-mut" x="504" y="59">same central policy</text>
+        </g>
+        <line class="flow" data-s="5" x1="394" y1="44" x2="454" y2="44" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 148, 126, '1')}
+        ${badge(2, 376, 126, '2')}
+        ${badge(3, 328, 92, '3')}
+        ${badge(4, 520, 144, '4')}
+        ${badge(5, 424, 44, '5')}
       </svg>`,
 
     idp: () => `
@@ -3614,33 +3720,55 @@
       </svg>`,
 
     openziti: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OpenZiti: a client identity reaches a dark, port-less service across an mTLS mesh of edge routers governed by a controller; a service policy must explicitly allow the connection.">
-        <rect class="zone" x="232" y="40" width="256" height="216" rx="12"/>
-        <text class="t-sm t-mut" x="360" y="58" text-anchor="middle">OpenZiti fabric</text>
-        <rect class="box-accent" x="250" y="70" width="220" height="52" rx="10"/>
-        <text class="t-b" x="360" y="92" text-anchor="middle">Controller</text>
-        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">policy · PKI · identities</text>
-        <rect class="box" x="252" y="158" width="100" height="56" rx="10"/>
-        <text class="t-sm t-b" x="302" y="182" text-anchor="middle">Edge</text>
-        <text class="t-sm t-mut" x="302" y="199" text-anchor="middle">router</text>
-        <rect class="box" x="368" y="158" width="100" height="56" rx="10"/>
-        <text class="t-sm t-b" x="418" y="182" text-anchor="middle">Edge</text>
-        <text class="t-sm t-mut" x="418" y="199" text-anchor="middle">router</text>
-        <line class="flow" x1="352" y1="186" x2="368" y2="186" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="360" y1="122" x2="320" y2="156" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="360" y1="122" x2="416" y2="156" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="24" y="158" width="150" height="56" rx="10"/>
-        <text class="t-sm t-b" x="99" y="182" text-anchor="middle">Client · identity A</text>
-        <text class="t-sm t-mut" x="99" y="199" text-anchor="middle">SDK or tunneler</text>
-        <rect class="box" x="546" y="158" width="150" height="56" rx="10"/>
-        <text class="t-sm t-b" x="621" y="182" text-anchor="middle">Service — dark</text>
-        <text class="t-sm t-mut" x="621" y="199" text-anchor="middle">no inbound ports</text>
-        <line class="flow-accent" x1="174" y1="186" x2="250" y2="186" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-acc" x="212" y="178" text-anchor="middle">mTLS</text>
-        <line class="flow-accent" x1="546" y1="186" x2="470" y2="186" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-acc" x="508" y="232" text-anchor="middle">outbound bind</text>
-        <text class="t-sm t-mut" x="360" y="274" text-anchor="middle">Default-deny: a service policy must explicitly allow identity A to the service.</text>
-        <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">Services dial out to the fabric; nothing listens for inbound connections.</text>
+      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny).">
+        <g data-s="3">
+          <rect class="box" x="272" y="8" width="176" height="52" rx="8"/>
+          ${icon('cog', 288, 22)}
+          <text class="t-b" x="320" y="30">Controller</text>
+          <text class="t-sm t-mut" x="320" y="48">default deny</text>
+        </g>
+        <line class="flow" data-s="3" x1="360" y1="62" x2="360" y2="82" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="zone" x="216" y="84" width="288" height="152" rx="10"/>
+          <text class="t-sm t-mut" x="228" y="102">edge router mesh</text>
+        </g>
+        ${[[236, 112], [388, 112], [312, 176]].map(([x, y]) => `
+          <g data-s="4">
+            <rect class="box" x="${x}" y="${y}" width="96" height="44" rx="6"/>
+            ${icon('router', x + 10, y + 10)}
+            <text class="t-sm" x="${x + 40}" y="${y + 27}">router</text>
+          </g>`).join('')}
+        <line class="flow" data-s="4" x1="334" y1="134" x2="386" y2="134" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="300" y1="158" x2="330" y2="174" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="420" y1="158" x2="390" y2="174" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3">
+          <rect class="box" x="24" y="100" width="148" height="80" rx="12"/>
+          ${icon('laptop', 40, 114)}
+          <text class="t-b" x="72" y="132">App</text>
+          <text class="t-sm t-mut" x="40" y="160">X.509 identity</text>
+        </g>
+        <line class="flow" data-s="3 4" x1="174" y1="134" x2="234" y2="134" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3">
+          <rect class="box" x="560" y="100" width="136" height="80" rx="8"/>
+          ${icon('server', 576, 114)}
+          <text class="t-b" x="608" y="132">Service</text>
+          <text class="t-sm t-mut" x="576" y="154">no inbound port</text>
+          <text class="t-sm t-mut" x="576" y="170">dials out</text>
+        </g>
+        <line class="flow" data-s="2 4" x1="558" y1="134" x2="486" y2="134" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="560" y="220" width="136" height="52" rx="12"/>
+          ${icon('skull', 576, 234)}
+          <text class="t-b" x="608" y="242">Scanner</text>
+          <text class="t-sm t-mut" x="576" y="264">no port found</text>
+        </g>
+        <line class="flow-bad" data-s="5" x1="628" y1="218" x2="628" y2="182" marker-end="url(#ah-bad)"/>
+
+        ${badge(1, 156, 114, '1')}
+        ${badge(2, 530, 134, '2')}
+        ${badge(3, 432, 22, '3')}
+        ${badge(4, 488, 100, '4')}
+        ${badge(5, 628, 200, '5')}
       </svg>`,
 
     scim: () => `
@@ -3826,23 +3954,47 @@
       </svg>`,
 
     opa: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny.">
-        ${[["Service A",36],["Service B",110],["Service C",184]].map(([t,y])=>`
-          <rect class="box" x="24" y="${y}" width="172" height="54" rx="10"/>
-          <text class="t-b" x="110" y="${y+32}" text-anchor="middle">${t}</text>
-          <line class="flow" x1="196" y1="${y+27}" x2="296" y2="142" marker-end="url(#ah-mut)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="244" y="78" text-anchor="middle">context</text>
-        <rect class="box-accent" x="298" y="98" width="150" height="92" rx="12"/>
-        <text class="t-b" x="373" y="136" text-anchor="middle">OPA</text>
-        <text class="t-sm t-mut" x="373" y="156" text-anchor="middle">evaluates Rego</text>
-        <rect class="box" x="540" y="86" width="156" height="46" rx="8"/>
-        <text class="t-sm t-b" x="618" y="114" text-anchor="middle" fill="var(--state-ok)">allow</text>
-        <rect class="box" x="540" y="156" width="156" height="46" rx="8"/>
-        <text class="t-sm t-b" x="618" y="184" text-anchor="middle" fill="var(--state-bad)">deny</text>
-        <line class="flow-ok" x1="448" y1="128" x2="538" y2="108" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" x1="448" y1="160" x2="538" y2="178" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="360" y="266" text-anchor="middle">One policy engine answers allow / deny for many call sites.</text>
+      <svg class="dg" viewBox="0 60 720 216" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites.">
+        <g data-s="1 3">
+          <rect class="box" x="24" y="96" width="152" height="80" rx="8"/>
+          ${icon('server', 40, 110)}
+          <text class="t-b" x="72" y="128">Service</text>
+          <text class="t-sm t-mut" x="40" y="160">asks a question</text>
+        </g>
+        <line class="flow" data-s="1" x1="178" y1="116" x2="314" y2="116" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="246" y="108" text-anchor="middle">can X do Y to Z?</text>
+        <line class="flow" data-s="3" x1="314" y1="152" x2="178" y2="152" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="246" y="170" text-anchor="middle">decision</text>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="316" y="72" width="160" height="120" rx="8"/>
+          ${icon('scale', 332, 86)}
+          <text class="t-b" x="364" y="104">OPA</text>
+          <text class="t-sm t-mut" x="364" y="122">decision point</text>
+        </g>
+        <g data-s="2 5">
+          <rect class="box" x="332" y="140" width="128" height="36" rx="4"/>
+          <text class="t-sm" x="396" y="162" text-anchor="middle">Rego rules</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="536" y="96" width="160" height="72" rx="8"/>
+          ${icon('git-branch', 552, 110)}
+          <text class="t-b" x="584" y="128">Policy</text>
+          <text class="t-sm t-mut" x="584" y="146">as code</text>
+          <text class="t-sm t-mut" x="584" y="160">versioned</text>
+        </g>
+        <line class="flow" data-s="5" x1="534" y1="132" x2="478" y2="132" marker-end="url(#ah-mut)"/>
+        ${[['K8s admission', 24, 120, 356], ['CI pipelines', 236, 332, 396], ['API gateways', 448, 544, 436]].map(([t, x, x1, x2]) => `
+          <g data-s="4">
+            <rect class="box" x="${x}" y="224" width="192" height="40" rx="6"/>
+            <text class="t-sm" x="${x + 16}" y="248">${t}</text>
+          </g>
+          <line class="flow" data-s="4" x1="${x1}" y1="222" x2="${x2}" y2="194" marker-end="url(#ah-mut)"/>`).join('')}
+
+        ${badge(1, 160, 110, '1')}
+        ${badge(2, 448, 158, '2')}
+        ${badge(3, 296, 152, '3')}
+        ${badge(4, 200, 238, '4')}
+        ${badge(5, 506, 132, '5')}
       </svg>`,
 
     servicemesh: () => `
