@@ -290,6 +290,12 @@ IPsec — Internet Protocol Security
 Istio — Istio Service Mesh
     The most widely deployed service mesh — istiod issues every workload a SPIFFE identity and drives Envoy so that mTLS and per-request authorisation are the default, with an ambient mode that drops the sidecar entirely.
     [Network Technology, Security Technology] · aka istiod, ambient mode, ztunnel, waypoint proxy, HBONE, sidecar injection, PeerAuthentication, AuthorizationPolicy, RequestAuthentication, VirtualService, DestinationRule, ServiceEntry, trust domain, STRICT mTLS, PERMISSIVE, Gateway API, east-west
+    1. istiod — Istio's control plane is a single binary, istiod: service discovery, translating intent into Envoy configuration, and the mesh's certificate authority.
+    2. A SPIFFE identity — istiod issues every workload an X.509 certificate carrying a SPIFFE ID derived from its Kubernetes service account, and rotates it automatically.
+    3. Policy resources — PeerAuthentication turns mTLS on, RequestAuthentication validates end-user JWTs, and AuthorizationPolicy is the rule that actually decides.
+    4. Sidecar mode — In sidecar mode an Envoy proxy runs beside each workload, which taxes every pod with a proxy's memory and every call with an extra hop.
+    5. Ambient mode — In ambient mode a per-node ztunnel handles only L3 and L4, carrying traffic in HBONE, and a waypoint proxy runs only where L7 rules are wanted.
+    Key fact: If no ALLOW policy exists for a workload the request is permitted, so default-deny is something you configure rather than inherit.
 
 JWT — JSON Web Token
     A signed, self-contained token that carries identity claims.
@@ -399,6 +405,12 @@ nDLP — Network Data Loss Prevention
 NIST SP 800-207 — Zero Trust Architecture (NIST)
     The reference document that defines Zero Trust and its policy components.
     [Security Technology] · aka 800-207, zero trust architecture, trust algorithm, policy engine, policy administrator, CISA ZTMM
+    1. A subject asks — A subject requests access to a resource. No asset is trusted by network location, and access is per-session and least-privilege.
+    2. The engine decides — The Policy Engine runs the trust algorithm to grant or deny.
+    3. The admin enacts — The Policy Administrator executes that decision. Together, engine and administrator make up the Policy Decision Point.
+    4. The PEP enforces — The Policy Enforcement Point sits in the data path and lets traffic through only when told.
+    5. Seven tenets — The components enforce seven tenets, starting with: every resource access is authenticated and authorised dynamically.
+    Key fact: NIST SP 800-207 is the spec the PEP / PDP terms in this glossary come from.
 
 OAuth 2.0 — Open Authorization 2.0
     Lets an app access your data on another service without your password.
@@ -627,10 +639,21 @@ SentryWire — Full Packet Capture & Network Security Monitoring Platform
 Service Mesh — Service Mesh (Istio · Linkerd · Envoy)
     A networking layer that gives every service identity, mTLS, and traffic control for free.
     [Network Technology, Security Technology] · aka Istio, Linkerd, Envoy, sidecar, data plane, control plane
+    1. Out of the app — A service mesh moves mutual TLS, retries, timeouts, load balancing and observability out of application code and into a dedicated infrastructure layer.
+    2. A sidecar per workload — A proxy is deployed beside each workload as a sidecar. Together these proxies form the data plane that carries traffic.
+    3. The control plane — A control plane configures the proxies and distributes identities and certificates.
+    4. mTLS on every hop — Every call flows through a mutually authenticated, policy-checked hop, so east-west traffic is encrypted and workloads carry an identity, without changing a line of app code.
+    5. The trade-off — The price is operational complexity and the latency of an extra network hop.
+    Key fact: A service mesh is where SPIFFE identities, mTLS and microsegmentation meet inside a Kubernetes cluster.
 
 SIEM — Security Information and Event Management
     Collects logs from everywhere and correlates them into security alerts.
     [Security Technology] · aka SOC, log management, correlation
+    1. Ingest everything — A SIEM ingests logs and events from across the estate: firewalls, servers, applications and cloud services.
+    2. Normalise and store — It normalises the events into one shape and stores them.
+    3. Correlate — It correlates them to surface suspicious patterns.
+    4. Prioritised alerts — The result is prioritised alerts, giving a security operations centre one place to detect, investigate and report on threats, and to satisfy audit requirements.
+    Key fact: Modern SIEM platforms layer analytics and automated response on top of detection.
 
 Sigstore — Keyless Artifact Signing (Cosign)
     Easy, keyless signing of software artifacts backed by a public transparency log.
@@ -765,3 +788,8 @@ Zero Trust — Zero Trust Architecture
 ZTNA — Zero Trust Network Access
     The VPN replacement that grants access to single apps, never the whole network.
     [Security Technology, Network Technology] · aka zero trust network access, software-defined perimeter, SDP, identity-aware proxy, BeyondCorp
+    1. A VPN lets you roam — A VPN drops an authenticated user onto the network and trusts them to roam.
+    2. Verify every request — ZTNA verifies user identity and device posture on every request.
+    3. One app at a time — A broker grants access to one specific application at a time, and keeps everything else invisible.
+    4. No inbound port — Applications sit behind the broker and connect outbound to it, so they are never exposed to the open internet and there is no inbound port to attack.
+    Key fact: ZTNA shifts from connect-then-authenticate to authenticate, authorise, then connect, and only to what you need.

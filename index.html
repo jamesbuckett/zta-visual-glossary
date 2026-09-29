@@ -1241,7 +1241,14 @@
       types: ["Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Detection & Response"],
       related: ["firewall", "zerotrust", "radius"],
       source: { label: "NIST glossary — SIEM", url: "https://csrc.nist.gov/glossary/term/security_information_and_event_management" },
-      caption: "Logs from many sources are normalised and correlated into prioritised alerts for the SOC."
+      caption: "Logs from many sources are normalised and correlated into prioritised alerts for the SOC.",
+      steps: [
+        { title: "Ingest everything", text: "A SIEM ingests logs and events from across the estate: firewalls, servers, applications and cloud services." },
+        { title: "Normalise and store", text: "It normalises the events into one shape and stores them." },
+        { title: "Correlate", text: "It correlates them to surface suspicious patterns." },
+        { title: "Prioritised alerts", text: "The result is prioritised alerts, giving a security operations centre one place to detect, investigate and report on threats, and to satisfy audit requirements." }
+      ],
+      fact: "Modern SIEM platforms layer analytics and automated response on top of detection."
     },
     {
       id: "quic", term: "QUIC", acronym: "QUIC (a name, not an acronym — RFC 9000)",
@@ -1458,7 +1465,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps", "Kubernetes"],
       related: ["istio", "envoy", "mtls", "spiffe", "kubernetes", "microseg"],
       source: { label: "NIST SP 800-204A — Service-Mesh Security", url: "https://csrc.nist.gov/pubs/sp/800/204/a/final" },
-      caption: "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default."
+      caption: "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default.",
+      steps: [
+        { title: "Out of the app", text: "A service mesh moves mutual TLS, retries, timeouts, load balancing and observability out of application code and into a dedicated infrastructure layer." },
+        { title: "A sidecar per workload", text: "A proxy is deployed beside each workload as a sidecar. Together these proxies form the data plane that carries traffic." },
+        { title: "The control plane", text: "A control plane configures the proxies and distributes identities and certificates." },
+        { title: "mTLS on every hop", text: "Every call flows through a mutually authenticated, policy-checked hop, so east-west traffic is encrypted and workloads carry an identity, without changing a line of app code." },
+        { title: "The trade-off", text: "The price is operational complexity and the latency of an extra network hop." }
+      ],
+      fact: "A service mesh is where SPIFFE identities, mTLS and microsegmentation meet inside a Kubernetes cluster."
     },
     {
       id: "edr", term: "EDR / XDR", acronym: "Endpoint / Extended Detection & Response",
@@ -1524,7 +1539,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Zero-Trust Core", "Governance & Supply Chain"],
       related: ["zerotrust", "peppdp", "ztna", "microseg"],
       source: { label: "NIST SP 800-207 — Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
-      caption: "NIST 800-207's control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces."
+      caption: "NIST 800-207's control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces.",
+      steps: [
+        { title: "A subject asks", text: "A subject requests access to a resource. No asset is trusted by network location, and access is per-session and least-privilege." },
+        { title: "The engine decides", text: "The Policy Engine runs the trust algorithm to grant or deny." },
+        { title: "The admin enacts", text: "The Policy Administrator executes that decision. Together, engine and administrator make up the Policy Decision Point." },
+        { title: "The PEP enforces", text: "The Policy Enforcement Point sits in the data path and lets traffic through only when told." },
+        { title: "Seven tenets", text: "The components enforce seven tenets, starting with: every resource access is authenticated and authorised dynamically." }
+      ],
+      fact: "NIST SP 800-207 is the spec the PEP / PDP terms in this glossary come from."
     },
     {
       id: "sbom", term: "SBOM & SLSA", acronym: "Software Supply-Chain Integrity",
@@ -1783,7 +1806,14 @@
       types: ["Security Technology", "Network Technology"], provenance: [], domains: ["Zero-Trust Core"],
       related: ["zerotrust", "sase", "openziti", "vpn"],
       source: { label: "NIST SP 1800-35 — Implementing Zero Trust", url: "https://csrc.nist.gov/pubs/sp/1800/35/final" },
-      caption: "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden."
+      caption: "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.",
+      steps: [
+        { title: "A VPN lets you roam", text: "A VPN drops an authenticated user onto the network and trusts them to roam." },
+        { title: "Verify every request", text: "ZTNA verifies user identity and device posture on every request." },
+        { title: "One app at a time", text: "A broker grants access to one specific application at a time, and keeps everything else invisible." },
+        { title: "No inbound port", text: "Applications sit behind the broker and connect outbound to it, so they are never exposed to the open internet and there is no inbound port to attack." }
+      ],
+      fact: "ZTNA shifts from connect-then-authenticate to authenticate, authorise, then connect, and only to what you need."
     },
     {
       id: "dpu", term: "DPU", acronym: "Data Processing Unit",
@@ -2141,7 +2171,15 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source"], domains: ["Zero-Trust Core", "Platforms & Apps", "Kubernetes"],
       related: ["envoy", "servicemesh", "spiffe", "mtls", "kubernetes", "peppdp"],
       source: { label: "Istio documentation — Architecture", url: "https://istio.io/latest/docs/ops/deployment/architecture/" },
-      caption: "istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed."
+      caption: "istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.",
+      steps: [
+        { title: "istiod", text: "Istio's control plane is a single binary, istiod: service discovery, translating intent into Envoy configuration, and the mesh's certificate authority." },
+        { title: "A SPIFFE identity", text: "istiod issues every workload an X.509 certificate carrying a SPIFFE ID derived from its Kubernetes service account, and rotates it automatically." },
+        { title: "Policy resources", text: "PeerAuthentication turns mTLS on, RequestAuthentication validates end-user JWTs, and AuthorizationPolicy is the rule that actually decides." },
+        { title: "Sidecar mode", text: "In sidecar mode an Envoy proxy runs beside each workload, which taxes every pod with a proxy's memory and every call with an extra hop." },
+        { title: "Ambient mode", text: "In ambient mode a per-node ztunnel handles only L3 and L4, carrying traffic in HBONE, and a waypoint proxy runs only where L7 rules are wanted." }
+      ],
+      fact: "If no ALLOW policy exists for a workload the request is permitted, so default-deny is something you configure rather than inherit."
     },
     {
       id: "ebpf", term: "eBPF", acronym: "extended Berkeley Packet Filter",
@@ -2267,7 +2305,9 @@
     eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
     fingerprint: '<path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>',
     "message-square": '<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>',
-    "git-branch": '<path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>'
+    "git-branch": '<path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>',
+    activity: '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+    "brick-wall": '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 9v6"/><path d="M16 15v6"/><path d="M16 3v6"/><path d="M3 15h18"/><path d="M3 9h18"/><path d="M8 15v6"/><path d="M8 3v6"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -3453,23 +3493,40 @@
       </svg>`,
 
     siem: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Logs from many sources are collected and correlated by a SIEM into prioritised alerts for the SOC.">
-        ${[["Firewall", 28], ["Servers", 90], ["Apps", 152], ["Cloud", 214]].map(([t, y]) => `
-          <rect class="box" x="20" y="${y}" width="140" height="48" rx="8"/>
-          <text class="t-sm" x="90" y="${y + 29}" text-anchor="middle">${t}</text>
-          <line class="flow" x1="160" y1="${y + 24}" x2="258" y2="145" marker-end="url(#ah-mut)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="90" y="280" text-anchor="middle">log sources</text>
-        <rect class="box-accent" x="260" y="86" width="200" height="118" rx="14"/>
-        <text class="t-b" x="360" y="122" text-anchor="middle">SIEM</text>
-        <text class="t-sm t-mut" x="360" y="150" text-anchor="middle">collect · normalise</text>
-        <text class="t-sm t-mut" x="360" y="168" text-anchor="middle">correlate · alert</text>
-        <rect class="box" x="540" y="110" width="160" height="70" rx="12"/>
-        <text class="t-sm t-b" x="620" y="142" text-anchor="middle">SOC analyst</text>
-        <text class="t-sm t-mut" x="620" y="162" text-anchor="middle">investigate</text>
-        <line class="flow-accent" x1="460" y1="145" x2="538" y2="145" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b t-acc" x="499" y="135" text-anchor="middle">alerts</text>
-        <text class="t-sm t-mut" x="360" y="252" text-anchor="middle">prioritised alerts from correlated events</text>
+      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Logs from many sources are normalised and correlated into prioritised alerts for the SOC.">
+        ${[['brick-wall', 'Firewalls', 24], ['server', 'Servers', 84], ['app-window', 'Applications', 144], ['cloud', 'Cloud', 204]].map(([ico, name, y]) => `
+          <g data-s="1">
+            <rect class="box" x="24" y="${y}" width="168" height="44" rx="8"/>
+            ${icon(ico, 36, y + 10)}
+            <text class="t-b" x="68" y="${y + 27}">${name}</text>
+          </g>
+          <line class="flow" data-s="1" x1="194" y1="${y + 22}" x2="262" y2="${136 + (y - 114) / 4}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="1 2 3 4">
+          <rect class="box" x="264" y="16" width="192" height="240" rx="8"/>
+          ${icon('activity', 280, 30)}
+          <text class="t-b" x="312" y="48">SIEM</text>
+        </g>
+        ${[['normalise', 72, '2'], ['store', 124, '2'], ['correlate', 176, '3']].map(([t, y, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="280" y="${y}" width="160" height="40" rx="6"/>
+            <text class="t-sm" x="360" y="${y + 24}" text-anchor="middle">${t}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="360" y1="114" x2="360" y2="122" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="360" y1="166" x2="360" y2="174" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="458" y1="196" x2="534" y2="152" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="462" y="150">alerts</text>
+        <g data-s="4">
+          <rect class="box" x="536" y="96" width="160" height="96" rx="12"/>
+          ${icon('users', 552, 110)}
+          <text class="t-b" x="584" y="128">SOC</text>
+          <text class="t-sm t-mut" x="552" y="156">detect, investigate,</text>
+          <text class="t-sm t-mut" x="552" y="172">report</text>
+        </g>
+
+        ${badge(1, 228, 124, '1')}
+        ${badge(2, 424, 92, '2')}
+        ${badge(3, 424, 196, '3')}
+        ${badge(4, 680, 110, '4')}
       </svg>`,
 
     quic: () => `
@@ -3998,26 +4055,46 @@
       </svg>`,
 
     servicemesh: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config so every hop is mTLS by default.">
-        <rect class="box-accent" x="232" y="26" width="256" height="60" rx="12"/>
-        <text class="t-b" x="360" y="52" text-anchor="middle">Control plane</text>
-        <text class="t-sm t-mut" x="360" y="72" text-anchor="middle">identity · certs · config</text>
-        <rect class="box" x="30" y="150" width="124" height="74" rx="10"/>
-        <text class="t-sm t-b" x="92" y="192" text-anchor="middle">Service A</text>
-        <rect class="box-accent" x="158" y="150" width="86" height="74" rx="10"/>
-        <text class="t-sm t-b" x="201" y="184" text-anchor="middle">proxy</text>
-        <text class="t-sm t-mut" x="201" y="201" text-anchor="middle">sidecar</text>
-        <rect class="box-accent" x="476" y="150" width="86" height="74" rx="10"/>
-        <text class="t-sm t-b" x="519" y="184" text-anchor="middle">proxy</text>
-        <text class="t-sm t-mut" x="519" y="201" text-anchor="middle">sidecar</text>
-        <rect class="box" x="566" y="150" width="124" height="74" rx="10"/>
-        <text class="t-sm t-b" x="628" y="192" text-anchor="middle">Service B</text>
-        <line class="flow-accent" x1="244" y1="187" x2="476" y2="187" marker-end="url(#ah-acc)" marker-start="url(#ah-acc)" style="stroke-width:3"/>
-        <text class="t-sm t-b t-acc" x="360" y="178" text-anchor="middle">mTLS</text>
-        <text class="t-sm t-mut" x="360" y="206" text-anchor="middle">data plane</text>
-        <line class="flow" x1="320" y1="86" x2="206" y2="148" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="400" y1="86" x2="514" y2="148" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Sidecars handle mTLS, retries, and telemetry — the app code is untouched.</text>
+      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default.">
+        <g data-s="3">
+          <rect class="box" x="236" y="16" width="248" height="56" rx="8"/>
+          ${icon('cog', 252, 32)}
+          <text class="t-b" x="284" y="41">Control plane</text>
+          <text class="t-sm t-mut" x="284" y="59">config and identity</text>
+        </g>
+        ${[['Service A', 24, 40, 192], ['Service B', 400, 544, 416]].map(([name, zx, sx, px]) => `
+          <rect class="zone" x="${zx}" y="100" width="296" height="112" rx="10"/>
+          <text class="t-sm t-mut" x="${zx + 12}" y="208">workload</text>
+          <g data-s="1">
+            <rect class="box" x="${sx}" y="128" width="136" height="68" rx="8"/>
+            ${icon('server', sx + 12, 142)}
+            <text class="t-b" x="${sx + 44}" y="160">${name}</text>
+            <text class="t-sm t-mut" x="${sx + 44}" y="178">app code</text>
+          </g>
+          <g data-s="2 3 4 5">
+            <rect class="box" x="${px}" y="128" width="112" height="68" rx="8"/>
+            ${icon('shield', px + 10, 142)}
+            <text class="t-b" x="${px + 40}" y="160">Sidecar</text>
+            <text class="t-sm t-mut" x="${px + 40}" y="178">proxy</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="178" y1="162" x2="190" y2="162" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="530" y1="162" x2="542" y2="162" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="300" y1="74" x2="256" y2="126" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="420" y1="74" x2="464" y2="126" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="306" y1="162" x2="414" y2="162" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="150" text-anchor="middle">mTLS</text>
+        <text class="t-sm bad" data-s="5" x="360" y="196" text-anchor="middle">extra hop</text>
+        <g data-s="1">
+          <rect class="box" x="24" y="232" width="672" height="44" rx="8"/>
+          ${icon('layers', 40, 242)}
+          <text class="t-sm" x="72" y="259">out of app code: mTLS · retries · timeouts · load balancing · observability</text>
+        </g>
+
+        ${badge(1, 680, 254, '1')}
+        ${badge(2, 236, 114, '2')}
+        ${badge(3, 278, 100, '3')}
+        ${badge(4, 336, 162, '4')}
+        ${badge(5, 360, 214, '5')}
       </svg>`,
 
     edr: () => `
@@ -4155,28 +4232,65 @@
       </svg>`,
 
     nist207: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="NIST 800-207 control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces.">
-        <rect class="zone-accent" x="176" y="22" width="368" height="96" rx="12"/>
-        <text class="t-sm t-mut" x="360" y="42" text-anchor="middle">Control plane</text>
-        <rect class="box-accent" x="194" y="52" width="156" height="54" rx="10"/>
-        <text class="t-sm t-b" x="272" y="78" text-anchor="middle">Policy Engine</text>
-        <text class="t-sm t-mut" x="272" y="95" text-anchor="middle">trust algorithm</text>
-        <rect class="box" x="368" y="52" width="156" height="54" rx="10"/>
-        <text class="t-sm t-b" x="446" y="78" text-anchor="middle">Policy Admin</text>
-        <text class="t-sm t-mut" x="446" y="95" text-anchor="middle">enacts decision</text>
-        <line class="flow" x1="350" y1="79" x2="366" y2="79" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="36" y="188" width="150" height="64" rx="10"/>
-        <text class="t-b" x="111" y="226" text-anchor="middle">Subject</text>
-        <rect class="box-accent" x="288" y="180" width="144" height="80" rx="12"/>
-        <text class="t-b" x="360" y="214" text-anchor="middle">PEP</text>
-        <text class="t-sm t-mut" x="360" y="234" text-anchor="middle">enforces, in-path</text>
-        <rect class="box" x="534" y="188" width="150" height="64" rx="10"/>
-        <text class="t-b" x="609" y="226" text-anchor="middle">Resource</text>
-        <line class="flow" x1="186" y1="220" x2="286" y2="220" marker-end="url(#ah-mut)"/>
-        <line class="flow-ok" x1="432" y1="220" x2="532" y2="220" marker-end="url(#ah-ok)"/>
-        <line class="flow-accent" x1="360" y1="118" x2="360" y2="178" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b t-acc" x="404" y="150">allow / deny</text>
-        <text class="t-sm t-mut" x="360" y="278" text-anchor="middle">Per-session, least-privilege decisions; no trust granted by network location.</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="NIST 800-207's control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces.">
+        <text class="t-sm t-mut" x="24" y="30">control plane</text>
+        <g data-s="2 3">
+          <rect class="zone" x="200" y="12" width="320" height="116" rx="10"/>
+          <text class="t-sm t-mut" x="212" y="30">Policy Decision Point</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="216" y="40" width="140" height="72" rx="8"/>
+          ${icon('scale', 228, 54)}
+          <text class="t-b" x="260" y="72">Engine</text>
+          <text class="t-sm t-mut" x="228" y="100">trust algorithm</text>
+        </g>
+        <line class="flow" data-s="3" x1="358" y1="76" x2="370" y2="76" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="372" y="40" width="136" height="72" rx="8"/>
+          ${icon('cog', 384, 54)}
+          <text class="t-b" x="416" y="72">Admin</text>
+          <text class="t-sm t-mut" x="384" y="100">executes it</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="544" y="12" width="152" height="116" rx="8"/>
+          ${icon('list-checks', 560, 26)}
+          <text class="t-b" x="592" y="44">7 tenets</text>
+          <text class="t-sm t-mut" x="560" y="70">dynamic authn</text>
+          <text class="t-sm t-mut" x="560" y="86">and authz</text>
+          <text class="t-sm t-mut" x="560" y="102">no trust by location</text>
+          <text class="t-sm t-mut" x="560" y="118">per-session</text>
+        </g>
+        <line class="divider" x1="16" y1="146" x2="704" y2="146"/>
+        <text class="t-sm t-mut" x="24" y="166">data plane</text>
+        <g data-s="1">
+          <rect class="box" x="24" y="176" width="160" height="64" rx="12"/>
+          ${icon('user', 40, 190)}
+          <text class="t-b" x="72" y="208">Subject</text>
+          <text class="t-sm t-mut" x="72" y="226">asks for access</text>
+        </g>
+        <line class="flow" data-s="1" x1="186" y1="208" x2="278" y2="208" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3 4">
+          <rect class="box" x="280" y="176" width="160" height="64" rx="8"/>
+          ${icon('shield', 296, 190)}
+          <text class="t-b" x="328" y="208">PEP</text>
+          <text class="t-sm t-mut" x="328" y="226">in the data path</text>
+        </g>
+        <line class="flow" data-s="2" x1="320" y1="174" x2="300" y2="114" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="430" y1="114" x2="400" y2="174" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="424" y="162">enact</text>
+        <line class="flow-ok" data-s="4" x1="442" y1="208" x2="534" y2="208" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" data-s="4" x="488" y="200" text-anchor="middle">if told</text>
+        <g data-s="1 4">
+          <rect class="box" x="536" y="176" width="160" height="64" rx="8"/>
+          ${icon('database', 552, 190)}
+          <text class="t-b" x="584" y="208">Resource</text>
+        </g>
+
+        ${badge(1, 168, 190, '1')}
+        ${badge(2, 340, 54, '2')}
+        ${badge(3, 492, 54, '3')}
+        ${badge(4, 488, 222, '4')}
+        ${badge(5, 680, 26, '5')}
       </svg>`,
 
     sbom: () => `
@@ -4890,25 +5004,55 @@
       </svg>`,
 
     ztna: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.">
-        <rect class="box" x="24" y="100" width="150" height="76" rx="10"/>
-        <text class="t-b" x="99" y="132" text-anchor="middle">User</text>
-        <text class="t-sm t-mut" x="99" y="152" text-anchor="middle">+ device</text>
-        <rect class="box-accent" x="240" y="92" width="184" height="92" rx="12"/>
-        <text class="t-b" x="332" y="128" text-anchor="middle">ZTNA broker</text>
-        <text class="t-sm t-mut" x="332" y="150" text-anchor="middle">verify identity</text>
-        <text class="t-sm t-mut" x="332" y="168" text-anchor="middle">+ device posture</text>
-        <line class="flow" x1="174" y1="138" x2="238" y2="138" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="508" y="44" width="188" height="56" rx="10"/>
-        <text class="t-sm t-b" x="602" y="68" text-anchor="middle">App you may use</text>
-        <text class="t-sm" x="602" y="87" text-anchor="middle" fill="var(--state-ok)">per-app access</text>
-        ${[["Other app",120],["Other app",194]].map(([t,y])=>`
-          <rect class="box-soft" x="508" y="${y}" width="188" height="52" rx="10" style="stroke-dasharray:5 5"/>
-          <text class="t-sm t-mut" x="602" y="${y+24}" text-anchor="middle">${t}</text>
-          <text class="t-sm t-mut" x="602" y="${y+42}" text-anchor="middle">dark — never exposed</text>
-        `).join("")}
-        <line class="flow-ok" x1="424" y1="120" x2="506" y2="78" marker-end="url(#ah-ok)"/>
-        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Authenticate, authorise, then connect — and only to the one app.</text>
+      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.">
+        <g data-s="1">
+          <text class="t-sm t-b" x="24" y="44">VPN</text>
+          <rect class="box" x="72" y="20" width="152" height="40" rx="12"/>
+          ${icon('user', 84, 28)}
+          <text class="t-sm" x="116" y="45">authenticated</text>
+          <rect class="zone" x="312" y="16" width="384" height="48" rx="8"/>
+          <text class="t-sm" x="328" y="45">the whole network</text>
+          <text class="t-sm bad" x="684" y="45" text-anchor="end">free to roam</text>
+        </g>
+        <line class="flow-bad" data-s="1" x1="226" y1="40" x2="310" y2="40" marker-end="url(#ah-bad)"/>
+        <line class="divider" x1="16" y1="84" x2="704" y2="84"/>
+        <text class="t-sm t-b" x="24" y="108">ZTNA</text>
+        <g data-s="2 3">
+          <rect class="box" x="24" y="140" width="160" height="80" rx="12"/>
+          ${icon('laptop', 40, 154)}
+          <text class="t-b" x="72" y="172">User</text>
+          <text class="t-sm t-mut" x="40" y="198">identity + device</text>
+        </g>
+        <line class="flow" data-s="2 3" x1="186" y1="180" x2="262" y2="180" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4">
+          <rect class="box" x="264" y="100" width="192" height="172" rx="8"/>
+          ${icon('shield-check', 280, 114)}
+          <text class="t-b" x="312" y="132">Broker</text>
+          <text class="t-sm t-mut" x="312" y="150">every request</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="280" y="168" width="160" height="32" rx="4"/>
+          <text class="t-sm" x="360" y="188" text-anchor="middle">identity</text>
+          <rect class="box" x="280" y="212" width="160" height="32" rx="4"/>
+          <text class="t-sm" x="360" y="232" text-anchor="middle">device posture</text>
+        </g>
+        <g data-s="3 4">
+          <rect class="box" x="536" y="100" width="160" height="56" rx="8"/>
+          ${icon('app-window', 552, 116)}
+          <text class="t-b" x="584" y="125">App</text>
+          <text class="t-sm t-mut" x="584" y="143">the one needed</text>
+        </g>
+        ${[168, 224].map((y) => `
+          <rect class="box" x="536" y="${y}" width="160" height="48" rx="8"/>
+          <text class="t-sm t-mut" x="552" y="${y + 29}">other apps: hidden</text>`).join('')}
+        <line class="flow" data-s="3" x1="458" y1="116" x2="534" y2="116" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="534" y1="144" x2="458" y2="144" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="496" y="168" text-anchor="middle">outbound</text>
+
+        ${badge(1, 268, 40, '1')}
+        ${badge(2, 440, 114, '2')}
+        ${badge(3, 496, 116, '3')}
+        ${badge(4, 512, 144, '4')}
       </svg>`,
 
     dpu: () => `
@@ -6007,41 +6151,71 @@
 
     istio: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.">
-        <text class="t-sm t-mut" x="20" y="22">One control plane, two data planes — the identity is the same either way</text>
+        <g data-s="1 2 3">
+          <rect class="box" x="232" y="16" width="232" height="68" rx="8"/>
+          ${icon('cog', 248, 30)}
+          <text class="t-b" x="280" y="48">istiod</text>
+          <text class="t-sm t-mut" x="280" y="66">discovery, config, CA</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="496" y="12" width="200" height="80" rx="8"/>
+          <text class="t-sm t-b" x="508" y="30">policy</text>
+          <text class="t-sm t-mut" x="508" y="48">PeerAuthentication</text>
+          <text class="t-sm t-mut" x="508" y="64">RequestAuthentication</text>
+          <text class="t-sm t-mut" x="508" y="80">AuthorizationPolicy</text>
+        </g>
+        <line class="flow" data-s="3" x1="494" y1="50" x2="466" y2="50" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 4" x1="290" y1="86" x2="200" y2="126" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 5" x1="410" y1="86" x2="520" y2="126" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="350" y="116" text-anchor="middle">SPIFFE ID</text>
 
-        <rect class="box-accent" x="250" y="40" width="220" height="52" rx="10"/>
-        <text class="t-b" x="360" y="62" text-anchor="middle">istiod</text>
-        <text class="t-sm t-mut" x="360" y="80" text-anchor="middle">CA · config · discovery</text>
+        <g data-s="4">
+          <rect class="zone" x="16" y="128" width="328" height="160" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="146">sidecar mode</text>
+        </g>
+        <g data-s="1 4">
+          <rect class="box" x="32" y="160" width="136" height="68" rx="8"/>
+          ${icon('app-window', 44, 174)}
+          <text class="t-b" x="76" y="192">app</text>
+        </g>
+        <line class="flow" data-s="4" x1="170" y1="194" x2="190" y2="194" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="192" y="160" width="136" height="68" rx="8"/>
+          ${icon('shield', 204, 174)}
+          <text class="t-b" x="236" y="192">Envoy</text>
+          <text class="t-sm t-mut" x="236" y="210">sidecar</text>
+        </g>
+        <text class="t-sm t-mut" data-s="4" x="32" y="264">one proxy in every pod</text>
 
-        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">issues spiffe://&lt;trust-domain&gt;/ns/&lt;ns&gt;/sa/&lt;sa&gt;</text>
+        <g data-s="5">
+          <rect class="zone" x="376" y="128" width="328" height="160" rx="10"/>
+          <text class="t-sm t-mut" x="388" y="146">ambient mode</text>
+        </g>
+        ${[392, 488].map((x) => `
+          <g data-s="1 5">
+            <rect class="box" x="${x}" y="156" width="88" height="44" rx="8"/>
+            ${icon('app-window', x + 8, 166)}
+            <text class="t-b" x="${x + 40}" y="183">app</text>
+          </g>
+          <line class="flow" data-s="5" x1="${x + 44}" y1="202" x2="${x + 44}" y2="222" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5">
+          <rect class="box" x="592" y="156" width="96" height="44" rx="8"/>
+          <text class="t-sm t-b" x="604" y="174">waypoint</text>
+          <text class="t-sm t-mut" x="604" y="190">L7 only</text>
+        </g>
+        <line class="flow" data-s="5" x1="640" y1="222" x2="640" y2="202" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="392" y="224" width="296" height="48" rx="8"/>
+          ${icon('network', 404, 236)}
+          <text class="t-b" x="436" y="246">ztunnel</text>
+          <text class="t-sm t-mut" x="436" y="262">per node: L3/L4, HBONE</text>
+        </g>
 
-        <path class="flow-accent" d="M250 66 H185 V124" marker-end="url(#ah-acc)"/>
-        <path class="flow-accent" d="M470 66 H535 V124" marker-end="url(#ah-acc)"/>
-
-        <rect class="zone" x="20" y="126" width="330" height="118" rx="12"/>
-        <text class="t-sm t-b" x="32" y="146">Sidecar mode</text>
-        <rect class="box" x="36" y="158" width="130" height="54" rx="8"/>
-        <text class="t-sm t-b" x="101" y="182" text-anchor="middle">App</text>
-        <text class="t-sm t-mut" x="101" y="200" text-anchor="middle">no code change</text>
-        <line class="flow" x1="168" y1="185" x2="192" y2="185" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="196" y="158" width="130" height="54" rx="8"/>
-        <text class="t-sm t-b" x="261" y="182" text-anchor="middle">Envoy sidecar</text>
-        <text class="t-sm t-mut" x="261" y="200" text-anchor="middle">per pod · full L7</text>
-        <text class="t-sm t-mut" x="185" y="232" text-anchor="middle">one proxy inside every pod</text>
-
-        <rect class="zone" x="370" y="126" width="330" height="118" rx="12"/>
-        <text class="t-sm t-b" x="382" y="146">Ambient mode</text>
-        <rect class="box" x="386" y="158" width="130" height="54" rx="8"/>
-        <text class="t-sm t-b" x="451" y="182" text-anchor="middle">App pods</text>
-        <text class="t-sm t-mut" x="451" y="200" text-anchor="middle">no sidecar</text>
-        <line class="flow" x1="518" y1="185" x2="542" y2="185" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="546" y="158" width="130" height="54" rx="8"/>
-        <text class="t-sm t-b" x="611" y="182" text-anchor="middle">ztunnel</text>
-        <text class="t-sm t-mut" x="611" y="200" text-anchor="middle">per node · L4 only</text>
-        <text class="t-sm t-mut" x="535" y="232" text-anchor="middle">HBONE — mTLS on :15008</text>
-
-        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">AuthorizationPolicy runs CUSTOM first, then DENY, then ALLOW — matched on identity, not IP.</text>
-        <text class="t-sm t-mut" x="360" y="288" text-anchor="middle">Ambient trades the per-pod sidecar for a per-node ztunnel: cheaper, but a wider blast radius.</text>
+        ${badge(1, 448, 30, '1')}
+        ${badge(2, 245, 106, '2')}
+        ${badge(3, 680, 26, '3')}
+        ${badge(4, 312, 174, '4')}
+        ${badge(5, 672, 238, '5')}
       </svg>`,
 
     lora: () => `
