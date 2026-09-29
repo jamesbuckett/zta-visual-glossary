@@ -120,6 +120,12 @@ CSRF / XSS / CSP — Web App Attacks & Content Security Policy
 CVE / CVSS — Vulnerability IDs & Severity Scoring
     The shared ID and 0–10 score that let everyone talk about the same flaw.
     [Security Technology] · aka common vulnerabilities and exposures, CVSS, NVD, severity score, vulnerability
+    1. A shared name — A disclosed vulnerability gets a CVE identifier, like CVE-2021-44228 for Log4Shell, under a programme coordinated by MITRE, so everyone points at the same flaw.
+    2. Severity, 0 to 10 — CVSS rates its severity from 0 to 10 from characteristics like attack vector, complexity and impact. CVSS v4.0 was released in November 2023.
+    3. The NVD enriches it — NIST's National Vulnerability Database enriches CVE records with CVSS scores and affected-product data that feed automated scanners.
+    4. Prioritise — Teams can rank what to patch first: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access.
+    5. Context decides — The score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context.
+    Key fact: A CVE id means vendors, scanners and defenders all point at the same flaw.
 
 CyberArk PAM — Privileged Access Manager (now Idira, by Palo Alto Networks)
     The commercial PAM deployment most enterprises actually run — a hardened credential vault, scheduled rotation, and a proxy that opens privileged sessions so the administrator never learns the password.
@@ -532,6 +538,12 @@ OpenZiti — Open-source zero-trust networking overlay
 OWASP Top 10 — Open Worldwide Application Security Project
     The community's ranked list of the most critical web application risks.
     [Security Technology] · aka OWASP, Top 10, broken access control, injection, ASVS
+    1. A ranked list — The OWASP Top 10 is a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input.
+    2. Access control first — The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one.
+    3. Supply chain enters — Software Supply Chain Failures enters at number three, expanded from 2021's Vulnerable and Outdated Components, reflecting where attacks have moved.
+    4. A shared baseline — Developers code against it, WAFs ship rule sets named after it, and auditors check for it.
+    5. A floor, not a programme — The Top 10 is a floor for awareness; OWASP maintains deeper resources like the ASVS and the Cheat Sheet Series.
+    Key fact: The Top 10 is a floor for awareness, not a complete security programme.
 
 PAC File — Proxy Auto-Configuration
     A snippet of JavaScript the browser runs for every URL to decide: go direct, or through which proxy?
@@ -682,6 +694,12 @@ SBC — Session Border Controller
 SBOM & SLSA — Software Supply-Chain Integrity
     Knowing exactly what is in your software, and proving how it was built.
     [Security Technology] · aka software bill of materials, SLSA, provenance, CycloneDX, SPDX, supply chain
+    1. Built from dependencies — Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself.
+    2. An SBOM inventory — A Software Bill of Materials is a machine-readable inventory, in formats like CycloneDX or SPDX, of every component and version in a build.
+    3. Are we affected? — When the next Log4Shell lands, the SBOM lets you answer 'are we affected?' in seconds instead of weeks.
+    4. SLSA provenance — SLSA's Build Track levels 1 to 3 raise how tamper-resistant the pipeline is, producing signed provenance that says exactly how and where an artifact was built.
+    5. Consumers verify — Together, SBOM and provenance make the supply chain auditable and verifiable.
+    Key fact: Software Supply Chain Failures is now a category in the OWASP Top 10:2025.
 
 SCIM — System for Cross-domain Identity Management
     Automates creating and removing user accounts across apps when people join or leave.
@@ -743,6 +761,12 @@ SIEM — Security Information and Event Management
 Sigstore — Keyless Artifact Signing (Cosign)
     Easy, keyless signing of software artifacts backed by a public transparency log.
     [Security Technology] · aka Cosign, Fulcio, Rekor, keyless signing, transparency log
+    1. The key problem — Signing has meant guarding long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key.
+    2. Sign as who you are — The developer authenticates with an OIDC identity, such as a Google, GitHub or corporate login.
+    3. A short-lived cert — Fulcio issues a short-lived certificate against that identity, and Cosign uses it to sign the artifact.
+    4. Logged in Rekor — Every signature is recorded in Rekor, a public, append-only transparency log.
+    5. Anyone can verify — Anyone can verify that an artifact was signed by a given identity, and detect tampering after the fact.
+    Key fact: Sigstore makes verifiable provenance practical at ecosystem scale.
 
 SOAR — Security Orchestration, Automation & Response
     Automation that turns security alerts into executed response playbooks.
@@ -766,6 +790,12 @@ SPIFFE / SPIRE — Secure Production Identity Framework For Everyone
 Spinnaker — Multi-Cloud Continuous Delivery
     The deployment half of the pipeline — takes a built artifact and rolls it out across clouds, with blue/green and canary as configurable strategies rather than hand-written scripts.
     [Development Framework] · aka continuous delivery, CD, deployment pipeline, blue/green, red/black, canary deployment, Kayenta, Fiat, Clouddriver, server group, immutable infrastructure
+    1. After CI — Spinnaker owns the pipeline once CI has produced an artifact. A pipeline is a sequence of stages triggered by a build, a new image, a schedule or a person.
+    2. App, cluster, group — An application is a set of clusters, a cluster is a set of server groups, and a server group is the deployable thing with its configuration.
+    3. Strategies built in — Rosco bakes immutable images, and deployment strategies such as blue/green and canary are configuration: Spinnaker runs the health checks, the traffic cutover and the rollback.
+    4. Kayenta judges — Kayenta automates the canary judgement, comparing the canary's metrics against a baseline and passing or failing the stage on the statistics.
+    5. Fiat guards access — Spinnaker holds credentials for every cloud account it manages. Fiat resolves a user's roles from the identity provider into permissions on specific applications and accounts.
+    Key fact: Whoever controls Spinnaker's pipelines controls production, so treat pipeline definitions as production code.
 
 SSH — Secure Shell
     An encrypted channel for remote login and command execution.

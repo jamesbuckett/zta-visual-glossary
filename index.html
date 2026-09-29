@@ -1602,7 +1602,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain"],
       related: ["sigstore", "docker", "cve", "opa", "dora", "rlhf", "dpo"],
       source: { label: "CISA — Software Bill of Materials", url: "https://www.cisa.gov/sbom" },
-      caption: "An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both."
+      caption: "An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both.",
+      steps: [
+        { title: "Built from dependencies", text: "Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself." },
+        { title: "An SBOM inventory", text: "A Software Bill of Materials is a machine-readable inventory, in formats like CycloneDX or SPDX, of every component and version in a build." },
+        { title: "Are we affected?", text: "When the next Log4Shell lands, the SBOM lets you answer 'are we affected?' in seconds instead of weeks." },
+        { title: "SLSA provenance", text: "SLSA's Build Track levels 1 to 3 raise how tamper-resistant the pipeline is, producing signed provenance that says exactly how and where an artifact was built." },
+        { title: "Consumers verify", text: "Together, SBOM and provenance make the supply chain auditable and verifiable." }
+      ],
+      fact: "Software Supply Chain Failures is now a category in the OWASP Top 10:2025."
     },
     {
       id: "apigateway", term: "API Gateway", acronym: "API Gateway",
@@ -1825,7 +1833,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain"],
       related: ["sbom", "owasp", "siem"],
       source: { label: "CVE Program", url: "https://www.cve.org/" },
-      caption: "A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first."
+      caption: "A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first.",
+      steps: [
+        { title: "A shared name", text: "A disclosed vulnerability gets a CVE identifier, like CVE-2021-44228 for Log4Shell, under a programme coordinated by MITRE, so everyone points at the same flaw." },
+        { title: "Severity, 0 to 10", text: "CVSS rates its severity from 0 to 10 from characteristics like attack vector, complexity and impact. CVSS v4.0 was released in November 2023." },
+        { title: "The NVD enriches it", text: "NIST's National Vulnerability Database enriches CVE records with CVSS scores and affected-product data that feed automated scanners." },
+        { title: "Prioritise", text: "Teams can rank what to patch first: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access." },
+        { title: "Context decides", text: "The score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context." }
+      ],
+      fact: "A CVE id means vendors, scanners and defenders all point at the same flaw."
     },
     {
       id: "owasp", term: "OWASP Top 10", acronym: "Open Worldwide Application Security Project",
@@ -1835,7 +1851,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Governance & Supply Chain", "Transport & Web"],
       related: ["websec", "waf", "cve"],
       source: { label: "OWASP Top 10:2025", url: "https://owasp.org/Top10/2025/" },
-      caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures entering at number three in the 2025 edition."
+      caption: "A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures entering at number three in the 2025 edition.",
+      steps: [
+        { title: "A ranked list", text: "The OWASP Top 10 is a periodically updated, ranked list of the most critical web application security risks, derived from real-world vulnerability data and practitioner input." },
+        { title: "Access control first", text: "The latest edition, OWASP Top 10:2025, keeps Broken Access Control at number one." },
+        { title: "Supply chain enters", text: "Software Supply Chain Failures enters at number three, expanded from 2021's Vulnerable and Outdated Components, reflecting where attacks have moved." },
+        { title: "A shared baseline", text: "Developers code against it, WAFs ship rule sets named after it, and auditors check for it." },
+        { title: "A floor, not a programme", text: "The Top 10 is a floor for awareness; OWASP maintains deeper resources like the ASVS and the Cheat Sheet Series." }
+      ],
+      fact: "The Top 10 is a floor for awareness, not a complete security programme."
     },
     {
       id: "bola", term: "BOLA", acronym: "Broken Object Level Authorization",
@@ -1880,7 +1904,15 @@
       types: ["Security Technology"], provenance: ["Open Source"], domains: ["Governance & Supply Chain", "Secure Channels & Crypto"],
       related: ["sbom", "pki", "docker", "spinnaker", "dpo"],
       source: { label: "sigstore.dev", url: "https://www.sigstore.dev/" },
-      caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later."
+      caption: "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.",
+      steps: [
+        { title: "The key problem", text: "Signing has meant guarding long-lived private keys that, once leaked, forge trust. Sigstore removes the long-lived key." },
+        { title: "Sign as who you are", text: "The developer authenticates with an OIDC identity, such as a Google, GitHub or corporate login." },
+        { title: "A short-lived cert", text: "Fulcio issues a short-lived certificate against that identity, and Cosign uses it to sign the artifact." },
+        { title: "Logged in Rekor", text: "Every signature is recorded in Rekor, a public, append-only transparency log." },
+        { title: "Anyone can verify", text: "Anyone can verify that an artifact was signed by a given identity, and detect tampering after the fact." }
+      ],
+      fact: "Sigstore makes verifiable provenance practical at ecosystem scale."
     },
     {
       id: "ztna", term: "ZTNA", acronym: "Zero Trust Network Access",
@@ -2132,7 +2164,15 @@
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Governance & Supply Chain", "Platforms & Apps"],
       related: ["sigstore", "sbom", "kubernetes", "rbac"],
       source: { label: "Spinnaker documentation — Concepts", url: "https://spinnaker.io/docs/concepts/" },
-      caption: "CI hands off the artifact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all."
+      caption: "CI hands off the artifact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all.",
+      steps: [
+        { title: "After CI", text: "Spinnaker owns the pipeline once CI has produced an artifact. A pipeline is a sequence of stages triggered by a build, a new image, a schedule or a person." },
+        { title: "App, cluster, group", text: "An application is a set of clusters, a cluster is a set of server groups, and a server group is the deployable thing with its configuration." },
+        { title: "Strategies built in", text: "Rosco bakes immutable images, and deployment strategies such as blue/green and canary are configuration: Spinnaker runs the health checks, the traffic cutover and the rollback." },
+        { title: "Kayenta judges", text: "Kayenta automates the canary judgement, comparing the canary's metrics against a baseline and passing or failing the stage on the statistics." },
+        { title: "Fiat guards access", text: "Spinnaker holds credentials for every cloud account it manages. Fiat resolves a user's roles from the identity provider into permissions on specific applications and accounts." }
+      ],
+      fact: "Whoever controls Spinnaker's pipelines controls production, so treat pipeline definitions as production code."
     },
     {
       id: "cyberark", term: "CyberArk PAM", acronym: "Privileged Access Manager (now Idira, by Palo Alto Networks)",
@@ -2449,7 +2489,11 @@
     "brick-wall": '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 9v6"/><path d="M16 15v6"/><path d="M16 3v6"/><path d="M3 15h18"/><path d="M3 9h18"/><path d="M8 15v6"/><path d="M8 3v6"/>',
     "hard-drive": '<path d="M10 16h.01"/><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M21.946 12.013H2.054"/><path d="M6 16h.01"/>',
     mail: '<path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/>',
-    "file-search": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3 15 18"/>'
+    "file-search": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3 15 18"/>',
+    bug: '<path d="M12 20v-9"/><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z"/><path d="M14.12 3.88 16 2"/><path d="M21 21a4 4 0 0 0-3.81-4"/><path d="M21 5a4 4 0 0 1-3.55 3.97"/><path d="M22 13h-4"/><path d="M3 21a4 4 0 0 1 3.81-4"/><path d="M3 5a4 4 0 0 0 3.55 3.97"/><path d="M6 13H2"/><path d="m8 2 1.88 1.88"/><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13"/>',
+    gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+    "scroll-text": '<path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/>',
+    workflow: '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -4597,28 +4641,65 @@
       </svg>`,
 
     sbom: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both.">
-        <rect class="box" x="24" y="66" width="156" height="76" rx="10"/>
-        <text class="t-sm t-b" x="102" y="98" text-anchor="middle">Components</text>
-        <text class="t-sm t-mut" x="102" y="118" text-anchor="middle">100s of deps</text>
-        <rect class="box-accent" x="262" y="58" width="160" height="92" rx="12"/>
-        <text class="t-b" x="342" y="98" text-anchor="middle">Build</text>
-        <text class="t-sm t-mut" x="342" y="118" text-anchor="middle">pipeline</text>
-        <rect class="box" x="504" y="66" width="170" height="76" rx="10"/>
-        <text class="t-sm t-b" x="589" y="98" text-anchor="middle">Signed artifact</text>
-        <text class="t-sm t-mut" x="589" y="118" text-anchor="middle">image / package</text>
-        <line class="flow" x1="180" y1="104" x2="260" y2="104" marker-end="url(#ah-mut)"/>
-        <line class="flow-accent" x1="422" y1="104" x2="502" y2="104" marker-end="url(#ah-acc)"/>
-        <rect class="box" x="200" y="186" width="150" height="58" rx="8"/>
-        <text class="t-sm t-b" x="275" y="210" text-anchor="middle">SBOM</text>
-        <text class="t-sm t-mut" x="275" y="228" text-anchor="middle">what's inside</text>
-        <rect class="box" x="372" y="186" width="170" height="58" rx="8"/>
-        <text class="t-sm t-b" x="457" y="210" text-anchor="middle">SLSA provenance</text>
-        <text class="t-sm t-mut" x="457" y="228" text-anchor="middle">how it was built</text>
-        <line class="flow-accent" x1="324" y1="150" x2="294" y2="184" marker-end="url(#ah-acc)"/>
-        <line class="flow-accent" x1="420" y1="150" x2="450" y2="184" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="600" y="210" text-anchor="middle">verify both</text>
-        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">Answer "are we affected?" in seconds, and prove the build was not tampered with.</text>
+      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An SBOM lists every component going into the build; SLSA provenance attests how the artifact was produced, so consumers can verify both.">
+        <g data-s="1 2">
+          ${[24, 64, 104].map((y) => `
+            <rect class="box" x="24" y="${y}" width="152" height="32" rx="4"/>
+            <text class="t-sm" x="40" y="${y + 20}">dependency</text>`).join('')}
+        </g>
+        ${[40, 80, 120].map((y, i) => `
+          <line class="flow" data-s="1" x1="178" y1="${y}" x2="234" y2="${96 + i * 16}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="1 4">
+          <rect class="box" x="236" y="48" width="200" height="128" rx="8"/>
+          ${icon('cog', 252, 62)}
+          <text class="t-b" x="284" y="80">Build</text>
+          <text class="t-sm t-mut" x="284" y="98">pipeline</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="252" y="124" width="168" height="36" rx="4"/>
+          <text class="t-sm" x="336" y="146" text-anchor="middle">SLSA Build L1 to L3</text>
+        </g>
+        <line class="flow" data-s="1" x1="438" y1="80" x2="498" y2="68" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="438" y1="120" x2="498" y2="150" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="438" y1="160" x2="498" y2="232" marker-end="url(#ah-mut)"/>
+        <g data-s="1">
+          <rect class="box" x="500" y="40" width="196" height="56" rx="8"/>
+          ${icon('package', 516, 56)}
+          <text class="t-b" x="548" y="73">Artifact</text>
+        </g>
+        <g data-s="2 3 5">
+          <rect class="box" x="500" y="120" width="196" height="64" rx="8"/>
+          ${icon('list-checks', 516, 136)}
+          <text class="t-b" x="548" y="146">SBOM</text>
+          <text class="t-sm t-mut" x="548" y="164">CycloneDX or SPDX</text>
+        </g>
+        <g data-s="4 5">
+          <rect class="box" x="500" y="204" width="196" height="64" rx="8"/>
+          ${icon('file-badge', 516, 220)}
+          <text class="t-b" x="548" y="230">Provenance</text>
+          <text class="t-sm t-mut" x="548" y="248">signed: how, where</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="24" y="184" width="152" height="64" rx="12"/>
+          ${icon('bug', 40, 198)}
+          <text class="t-b" x="72" y="216">New flaw</text>
+          <text class="t-sm t-mut" x="40" y="240">are we affected?</text>
+        </g>
+        <line class="flow" data-s="3" x1="178" y1="212" x2="498" y2="170" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="236" y="224" width="200" height="56" rx="8"/>
+          ${icon('shield-check', 252, 240)}
+          <text class="t-b" x="284" y="249">Consumer</text>
+          <text class="t-sm t-mut" x="284" y="267">verifies both</text>
+        </g>
+        <line class="flow" data-s="5" x1="498" y1="178" x2="438" y2="238" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" x1="498" y1="250" x2="438" y2="254" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 206, 60, '1')}
+        ${badge(2, 680, 134, '2')}
+        ${badge(3, 160, 198, '3')}
+        ${badge(4, 680, 218, '4')}
+        ${badge(5, 420, 238, '5')}
       </svg>`,
 
     apigateway: () => `
@@ -5246,43 +5327,102 @@
       </svg>`,
 
     cve: () => `
-      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A disclosed flaw gets a CVE id everyone shares and a 0 to 10 CVSS severity score, so teams can rank what to patch first.">
-        <rect class="box" x="24" y="56" width="150" height="68" rx="10"/>
-        <text class="t-sm t-b" x="99" y="88" text-anchor="middle">Disclosed flaw</text>
-        <text class="t-sm t-mut" x="99" y="108" text-anchor="middle">e.g. Log4Shell</text>
-        <rect class="box-accent" x="238" y="48" width="230" height="84" rx="12"/>
-        <text class="t-b" x="353" y="82" text-anchor="middle">CVE-2021-44228</text>
-        <text class="t-sm t-mut" x="353" y="104" text-anchor="middle">one shared identifier</text>
-        <line class="flow" x1="174" y1="90" x2="236" y2="90" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="520" y="56" width="176" height="68" rx="10"/>
-        <text class="t-sm t-b" x="608" y="88" text-anchor="middle">Patch priority</text>
-        <text class="t-sm t-mut" x="608" y="108" text-anchor="middle">rank by risk</text>
-        <line class="flow-accent" x1="468" y1="90" x2="518" y2="90" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="120" y="182">CVSS</text>
-        ${["--cat-4","--cat-3","--cat-2","--cat-1"].map((c,i)=>`
-          <rect x="${170+i*120}" y="190" width="120" height="22" rx="3" fill="var(${c})" opacity="0.85"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="170" y="230">0</text>
-        <text class="t-sm t-mut" x="650" y="230" text-anchor="end">10</text>
-        <line class="stroke-bad" x1="648" y1="184" x2="648" y2="218" style="stroke-width:2.5"/>
-        <text class="t-sm t-b" x="650" y="180" text-anchor="end" fill="var(--state-bad)">10.0 critical</text>
+      <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first.">
+        <g data-s="1">
+          <rect class="box" x="24" y="32" width="152" height="64" rx="12"/>
+          ${icon('bug', 40, 46)}
+          <text class="t-b" x="72" y="64">Flaw</text>
+          <text class="t-sm t-mut" x="72" y="82">disclosed</text>
+        </g>
+        <line class="flow" data-s="1" x1="178" y1="64" x2="222" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3">
+          <rect class="box" x="224" y="24" width="208" height="80" rx="8"/>
+          ${icon('file-text', 240, 38)}
+          <text class="t-b" x="272" y="56">CVE id</text>
+          <text class="t-sm t-mut" x="272" y="74">CVE-2021-44228</text>
+          <text class="t-sm t-mut" x="272" y="90">one shared name</text>
+        </g>
+        <line class="flow" data-s="2" x1="328" y1="106" x2="328" y2="118" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3">
+          <rect class="box" x="224" y="120" width="208" height="64" rx="8"/>
+          ${icon('gauge', 240, 136)}
+          <text class="t-b" x="272" y="146">CVSS</text>
+          <text class="t-sm t-mut" x="272" y="164">0 to 10</text>
+        </g>
+        <line class="flow" data-s="3" x1="434" y1="64" x2="478" y2="88" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="434" y1="152" x2="478" y2="124" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="480" y="64" width="216" height="80" rx="8"/>
+          ${icon('database', 496, 78)}
+          <text class="t-b" x="528" y="96">NVD</text>
+          <text class="t-sm t-mut" x="528" y="114">adds scores and</text>
+          <text class="t-sm t-mut" x="528" y="130">affected products</text>
+        </g>
+        <g data-s="4">
+          <text class="t-sm t-b" x="224" y="220">patch first</text>
+          <rect class="box" x="224" y="228" width="472" height="28" rx="4"/>
+          <text class="t-sm t-b" x="236" y="246">9.8 · reachable from the internet</text>
+          <rect class="box" x="224" y="260" width="472" height="28" rx="4"/>
+          <text class="t-sm" x="236" y="278">4.0 · needs local access</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="208" width="152" height="80" rx="8"/>
+          ${icon('scale', 40, 222)}
+          <text class="t-b" x="72" y="240">Context</text>
+          <text class="t-sm t-mut" x="40" y="264">exploitable</text>
+          <text class="t-sm t-mut" x="40" y="280">here?</text>
+        </g>
+
+        ${badge(1, 200, 64, '1')}
+        ${badge(2, 416, 134, '2')}
+        ${badge(3, 680, 78, '3')}
+        ${badge(4, 680, 242, '4')}
+        ${badge(5, 160, 222, '5')}
       </svg>`,
 
     owasp: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ranked list of the ten most critical web app risks, led by Broken Access Control, with Software Supply Chain Failures entering at number three in the 2025 edition.">
-        <text class="t-sm t-mut" x="360" y="28" text-anchor="middle">OWASP Top 10 : 2025 — ranked web app risks</text>
-        ${[
-          ["01","Broken Access Control","still #1",true,false],
-          ["02","Security Misconfiguration","",false,false],
-          ["03","Software Supply Chain Failures","expanded",false,true],
-          ["··","Cryptographic Failures · Injection · …","",false,false]
-        ].map(([n,t,tag,lead,isnew],i)=>`
-          <rect class="${lead?'box-accent':(isnew?'box':'box-soft')}" x="120" y="${50+i*52}" width="480" height="44" rx="8"/>
-          <text class="t-b" x="146" y="${77+i*52}">${n}</text>
-          <text class="t-sm" x="196" y="${77+i*52}">${t}</text>
-          ${tag?`<text class="t-sm t-b" x="584" y="${77+i*52}" text-anchor="end" fill="${isnew?'var(--state-ok)':'var(--accent)'}">${tag}</text>`:""}
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="276" text-anchor="middle">A baseline for awareness — used by developers, WAF rule sets, and auditors.</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures entering at number three in the 2025 edition.">
+        <g data-s="1">
+          <rect class="zone" x="24" y="16" width="400" height="232" rx="10"/>
+          ${icon('list-checks', 36, 26)}
+          <text class="t-b" x="68" y="44">OWASP Top 10:2025</text>
+          <text class="t-sm t-mut" x="40" y="236">ranked from real-world data</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="40" y="60" width="368" height="36" rx="4"/>
+          <text class="t-sm t-b" x="52" y="83">1 · Broken Access Control</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="40" y="104" width="368" height="24" rx="4"/>
+          <text class="t-sm t-mut" x="52" y="120">2 · …</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="40" y="136" width="368" height="48" rx="4"/>
+          <text class="t-sm t-b" x="52" y="156">3 · Software Supply Chain Failures</text>
+          <text class="t-sm t-mut" x="52" y="173">new: was Vulnerable and Outdated</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="40" y="192" width="368" height="24" rx="4"/>
+          <text class="t-sm t-mut" x="52" y="208">4 to 10 · …</text>
+        </g>
+        ${[['code', 'Developers', 'code against it', 16], ['shield', 'WAF rule sets', 'named after it', 96], ['list-checks', 'Auditors', 'check for it', 176]].map(([ico, name, sub, y]) => `
+          <g data-s="4">
+            <rect class="box" x="488" y="${y}" width="208" height="64" rx="8"/>
+            ${icon(ico, 504, y + 18)}
+            <text class="t-b" x="536" y="${y + 29}">${name}</text>
+            <text class="t-sm t-mut" x="536" y="${y + 47}">${sub}</text>
+          </g>
+          <line class="flow" data-s="4" x1="426" y1="${y + 32}" x2="486" y2="${y + 32}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5">
+          <rect class="box" x="24" y="260" width="672" height="32" rx="6"/>
+          <text class="t-sm" x="40" y="281">a floor for awareness; go deeper with ASVS and the Cheat Sheet Series</text>
+        </g>
+
+        ${badge(1, 408, 32, '1')}
+        ${badge(2, 392, 78, '2')}
+        ${badge(3, 392, 152, '3')}
+        ${badge(4, 456, 128, '4')}
+        ${badge(5, 680, 276, '5')}
       </svg>`,
 
     bola: () => `
@@ -5388,27 +5528,62 @@
       </svg>`,
 
     sigstore: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.">
-        <rect class="box" x="24" y="48" width="150" height="68" rx="10"/>
-        <text class="t-sm t-b" x="99" y="80" text-anchor="middle">Developer</text>
-        <text class="t-sm t-mut" x="99" y="100" text-anchor="middle">OIDC login</text>
-        <rect class="box-accent" x="214" y="40" width="164" height="84" rx="12"/>
-        <text class="t-b" x="296" y="76" text-anchor="middle">Fulcio</text>
-        <text class="t-sm t-mut" x="296" y="98" text-anchor="middle">short-lived cert</text>
-        <rect class="box" x="418" y="48" width="170" height="68" rx="10"/>
-        <text class="t-sm t-b" x="503" y="80" text-anchor="middle">Cosign signs</text>
-        <text class="t-sm t-mut" x="503" y="100" text-anchor="middle">no long-lived key</text>
-        <line class="flow-accent" x1="174" y1="82" x2="212" y2="82" marker-end="url(#ah-acc)"/>
-        <line class="flow-accent" x1="378" y1="82" x2="416" y2="82" marker-end="url(#ah-acc)"/>
-        <rect class="box" x="214" y="176" width="374" height="66" rx="12"/>
-        <text class="t-b" x="401" y="206" text-anchor="middle">Rekor</text>
-        <text class="t-sm t-mut" x="401" y="226" text-anchor="middle">public, append-only transparency log</text>
-        <line class="flow-accent" x1="503" y1="116" x2="430" y2="174" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="492" y="150">recorded</text>
-        <line class="flow" x1="214" y1="209" x2="120" y2="209" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="100" y="182" text-anchor="middle">anyone</text>
-        <text class="t-sm t-mut" x="100" y="200" text-anchor="middle">verifies</text>
-        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Sign as who you are, not as a key you must guard.</text>
+      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.">
+        <g data-s="1">
+          <rect class="box" x="24" y="16" width="160" height="60" rx="8"/>
+          ${icon('key-round', 40, 32)}
+          <text class="t-b" x="72" y="42">Long-lived</text>
+          <text class="t-sm bad" x="72" y="60">key: removed</text>
+        </g>
+        <g data-s="2 3">
+          <rect class="box" x="24" y="108" width="160" height="72" rx="12"/>
+          ${icon('user', 40, 122)}
+          <text class="t-b" x="72" y="140">Developer</text>
+          <text class="t-sm t-mut" x="72" y="158">signs as self</text>
+        </g>
+        <line class="flow" data-s="2" x1="186" y1="124" x2="246" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="2">
+          <rect class="box" x="248" y="16" width="200" height="60" rx="8"/>
+          ${icon('users', 264, 32)}
+          <text class="t-b" x="296" y="42">OIDC login</text>
+          <text class="t-sm t-mut" x="296" y="60">your identity</text>
+        </g>
+        <line class="flow" data-s="3" x1="348" y1="78" x2="348" y2="106" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="248" y="108" width="200" height="72" rx="8"/>
+          ${icon('file-badge', 264, 122)}
+          <text class="t-b" x="296" y="140">Fulcio</text>
+          <text class="t-sm t-mut" x="296" y="158">short-lived cert</text>
+        </g>
+        <line class="flow" data-s="3" x1="246" y1="152" x2="186" y2="152" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="450" y1="144" x2="518" y2="144" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="484" y="136" text-anchor="middle">Cosign</text>
+        <g data-s="3 4 5">
+          <rect class="box" x="520" y="108" width="176" height="72" rx="8"/>
+          ${icon('package', 536, 122)}
+          <text class="t-b" x="568" y="140">Artifact</text>
+          <text class="t-sm t-mut" x="568" y="158">signed</text>
+        </g>
+        <line class="flow" data-s="4" x1="608" y1="182" x2="608" y2="206" marker-end="url(#ah-mut)"/>
+        <g data-s="4 5">
+          <rect class="box" x="520" y="208" width="176" height="64" rx="8"/>
+          ${icon('scroll-text', 536, 222)}
+          <text class="t-b" x="568" y="232">Rekor</text>
+          <text class="t-sm t-mut" x="568" y="250">public log</text>
+        </g>
+        <line class="flow" data-s="5" x1="518" y1="240" x2="450" y2="240" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="248" y="208" width="200" height="64" rx="12"/>
+          ${icon('shield-check', 264, 222)}
+          <text class="t-b" x="296" y="232">Anyone</text>
+          <text class="t-sm t-mut" x="296" y="250">verifies who signed</text>
+        </g>
+
+        ${badge(1, 168, 30, '1')}
+        ${badge(2, 216, 94, '2')}
+        ${badge(3, 432, 122, '3')}
+        ${badge(4, 680, 222, '4')}
+        ${badge(5, 484, 240, '5')}
       </svg>`,
 
     ztna: () => `
@@ -6141,51 +6316,57 @@
       </svg>`,
 
     spinnaker: () => `
-      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CI hands off the artifact; the pipeline drives a strategy, here a canary judged automatically by Kayenta, while Fiat decides which applications and cloud accounts the user may touch at all.">
-        <text class="t-sm t-mut" x="20" y="22">Pipeline — CI hands off the artifact, Spinnaker takes it to production</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CI hands off the artifact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all.">
+        <g data-s="1">
+          <rect class="box" x="24" y="40" width="144" height="64" rx="8"/>
+          ${icon('git-branch', 40, 54)}
+          <text class="t-b" x="72" y="72">CI</text>
+          <text class="t-sm t-mut" x="72" y="90">artifact</text>
+        </g>
+        <line class="flow" data-s="1" x1="170" y1="72" x2="198" y2="72" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3 4">
+          <rect class="zone" x="200" y="16" width="496" height="108" rx="10"/>
+          ${icon('workflow', 212, 22)}
+          <text class="t-sm t-b" x="244" y="40">Pipeline</text>
+        </g>
+        ${[['bake image', 'Rosco', 216, '3'], ['deploy canary', 'health, cutover', 368, '3'], ['judge canary', 'Kayenta', 528, '4']].map(([t, sub, x, s], i) => `
+          <g data-s="${s}">
+            <rect class="box" x="${x}" y="56" width="${i === 2 ? 152 : 136}" height="52" rx="6"/>
+            <text class="t-sm t-b" x="${x + 12}" y="78">${t}</text>
+            <text class="t-sm t-mut" x="${x + 12}" y="96">${sub}</text>
+          </g>
+          ${i < 2 ? `<line class="flow" data-s="${s}" x1="${x + 138}" y1="82" x2="${x + 150}" y2="82" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+        <g data-s="2">
+          <rect class="zone" x="24" y="144" width="296" height="144" rx="10"/>
+          <text class="t-sm t-mut" x="36" y="162">application</text>
+          <rect class="zone" x="40" y="172" width="264" height="104" rx="8"/>
+          <text class="t-sm t-mut" x="52" y="190">cluster</text>
+          <rect class="box" x="56" y="200" width="232" height="64" rx="6"/>
+          ${icon('box', 68, 214)}
+          <text class="t-b" x="100" y="224">Server group</text>
+          <text class="t-sm t-mut" x="100" y="242">image, container</text>
+          <text class="t-sm t-mut" x="100" y="256">or manifest</text>
+        </g>
+        <line class="flow" data-s="5" x1="600" y1="126" x2="600" y2="146" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="352" y="148" width="344" height="64" rx="8"/>
+          ${icon('lock', 368, 164)}
+          <text class="t-b" x="400" y="174">Fiat</text>
+          <text class="t-sm t-mut" x="400" y="192">IdP roles to app and account permissions</text>
+        </g>
+        <line class="flow" data-s="5" x1="600" y1="214" x2="600" y2="230" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="352" y="232" width="344" height="56" rx="8"/>
+          ${icon('cloud', 368, 248)}
+          <text class="t-b" x="400" y="257">Cloud accounts</text>
+          <text class="t-sm bad" x="400" y="275">Spinnaker holds every credential</text>
+        </g>
 
-        <rect class="box" x="20" y="100" width="120" height="52" rx="8"/>
-        <text class="t-b" x="80" y="124" text-anchor="middle">Artifact</text>
-        <text class="t-sm t-mut" x="80" y="140" text-anchor="middle">from CI</text>
-        <line class="flow" x1="140" y1="126" x2="172" y2="126" marker-end="url(#ah-mut)"/>
-
-        <rect class="box" x="174" y="100" width="120" height="52" rx="8"/>
-        <text class="t-b" x="234" y="124" text-anchor="middle">Bake</text>
-        <text class="t-sm t-mut" x="234" y="140" text-anchor="middle">immutable image</text>
-
-        <path class="flow" d="M294 126 H317 V80 H336" marker-end="url(#ah-mut)"/>
-        <path class="flow-accent" d="M317 126 V172 H336" marker-end="url(#ah-acc)"/>
-
-        <rect class="box" x="340" y="56" width="140" height="48" rx="8"/>
-        <text class="t-sm t-b" x="410" y="78" text-anchor="middle">Baseline v1</text>
-        <text class="t-sm t-mut" x="410" y="94" text-anchor="middle">current traffic</text>
-
-        <rect class="box-accent" x="340" y="148" width="140" height="48" rx="8"/>
-        <text class="t-sm t-b" x="410" y="170" text-anchor="middle">Canary v2</text>
-        <text class="t-sm t-mut" x="410" y="186" text-anchor="middle">a slice of traffic</text>
-
-        <path class="flow" d="M480 80 H500 V126 H516" marker-end="url(#ah-mut)"/>
-        <path class="flow-accent" d="M480 172 H500 V126" />
-
-        <rect class="box-accent" x="520" y="100" width="170" height="52" rx="8"/>
-        <text class="t-b" x="605" y="124" text-anchor="middle">Kayenta</text>
-        <text class="t-sm t-mut" x="605" y="140" text-anchor="middle">compares the metrics</text>
-
-        <path class="flow-ok" d="M605 152 V194 H525 V210" marker-end="url(#ah-ok)"/>
-        <path class="flow-bad" d="M605 194 H650 V210" marker-end="url(#ah-bad)"/>
-
-        <rect class="box" x="465" y="212" width="120" height="46" rx="8"/>
-        <text class="t-sm t-b" x="525" y="233" text-anchor="middle">Promote</text>
-        <text class="t-sm t-mut" x="525" y="249" text-anchor="middle">cut traffic over</text>
-
-        <rect class="box" x="600" y="212" width="100" height="46" rx="8"/>
-        <text class="t-sm t-b" x="650" y="233" text-anchor="middle">Roll back</text>
-        <text class="t-sm t-mut" x="650" y="249" text-anchor="middle">automatic</text>
-
-        <rect class="box-accent" x="20" y="212" width="250" height="46" rx="8"/>
-        <text class="t-sm t-b" x="145" y="233" text-anchor="middle">Fiat — authorisation</text>
-        <text class="t-sm t-mut" x="145" y="249" text-anchor="middle">which apps and accounts, per user</text>
-        <path class="flow-accent" d="M156 210 V136" marker-end="url(#ah-acc)"/>
+        ${badge(1, 184, 72, '1')}
+        ${badge(2, 272, 214, '2')}
+        ${badge(3, 336, 70, '3')}
+        ${badge(4, 664, 70, '4')}
+        ${badge(5, 680, 162, '5')}
       </svg>`,
 
     cyberark: () => `
