@@ -2098,7 +2098,15 @@
       types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["dpo", "peppdp", "opa", "sbom", "rag", "lora"],
       source: { label: "Ouyang et al. — Training language models to follow instructions with human feedback", url: "https://arxiv.org/abs/2203.02155" },
-      caption: "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash."
+      caption: "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.",
+      steps: [
+        { title: "Supervised fine-tuning", text: "Supervised fine-tuning first teaches the base model to imitate human-written demonstrations." },
+        { title: "Humans rank answers", text: "Labellers are shown several candidate answers to the same prompt and rank them." },
+        { title: "Train a reward model", text: "Those comparisons train a separate reward model to predict which output a human would prefer." },
+        { title: "PPO on a KL leash", text: "Reinforcement learning, classically PPO, optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference." },
+        { title: "Safety in the weights", text: "Refusal behaviour and safety policy are installed here, at training time, so they are a property of the weights. The weakness is reward hacking: the reward model is only a proxy." }
+      ],
+      fact: "InstructGPT's 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3."
     },
     {
       id: "dpo", term: "DPO", acronym: "Direct Preference Optimization",
@@ -2108,7 +2116,15 @@
       types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["rlhf", "peppdp", "sbom", "sigstore", "rag", "lora", "qlora"],
       source: { label: "Rafailov et al. — Direct Preference Optimization: Your Language Model is Secretly a Reward Model", url: "https://arxiv.org/abs/2305.18290" },
-      caption: "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference."
+      caption: "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference.",
+      steps: [
+        { title: "Preference pairs", text: "DPO trains on the same preference data as RLHF: triples of prompt, chosen answer and rejected answer." },
+        { title: "No reward model", text: "The KL-constrained reward maximisation RLHF solves has a closed-form optimum, so DPO drops the separate reward model and the PPO loop." },
+        { title: "Chosen up, rejected down", text: "An ordinary classification loss raises the model's log-probability of the chosen answer and lowers it for the rejected one, in one training loop." },
+        { title: "A frozen reference", text: "Each is measured against a frozen reference copy of the model, which does the job RLHF gave to the KL penalty." },
+        { title: "Offline only", text: "It learns only from pairs somebody already collected, so it cannot explore responses the dataset never contained." }
+      ],
+      fact: "DPO rewrites the reward in terms of the policy itself: the language model is secretly a reward model."
     },
     {
       id: "paseto", term: "PASETO", acronym: "Platform-Agnostic Security Tokens",
@@ -2136,7 +2152,15 @@
       types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["rlhf", "dpo", "rbac", "peppdp"],
       source: { label: "Lewis et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", url: "https://arxiv.org/abs/2005.11401" },
-      caption: "Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled."
+      caption: "Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.",
+      steps: [
+        { title: "Index ahead of time", text: "Ahead of any query, documents are split into chunks, each chunk is turned into a vector by an embedding model, and those vectors go into an index." },
+        { title: "Embed the question", text: "When a question arrives it is embedded the same way." },
+        { title: "Retrieve as the user", text: "The nearest chunks come back, and retrieval must run as the asking user, so a document they may not read is filtered out at retrieval time." },
+        { title: "Answer from the text", text: "The passages are pasted into the prompt, so the model answers from text placed in front of it, with citations a reader can check." },
+        { title: "Untrusted input", text: "Retrieved text is untrusted input, the indirect prompt-injection path, and grounding lowers hallucination without removing it." }
+      ],
+      fact: "Instructing the model to keep a secret is not access control: filter at retrieval time."
     },
     {
       id: "keda", term: "KEDA", acronym: "Kubernetes Event-driven Autoscaling",
@@ -2378,7 +2402,15 @@
       types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["qlora", "dpo", "rlhf", "sbom"],
       source: { label: "Hu et al. — LoRA: Low-Rank Adaptation of Large Language Models", url: "https://arxiv.org/abs/2106.09685" },
-      caption: "The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own."
+      caption: "The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own.",
+      steps: [
+        { title: "Freeze W", text: "LoRA freezes the pretrained weight matrix W: fine-tuning's change has a low intrinsic rank, so W itself need not move." },
+        { title: "A low-rank pair", text: "The update is learned as two thin matrices, B times A, with a rank of perhaps 8 or 16 against a hidden dimension in the thousands. B starts at zero, and only A and B get gradients." },
+        { title: "Sum the outputs", text: "Each adapted layer computes Wx + BAx, so training starts from exactly the original model." },
+        { title: "Merge or ship", text: "Merge BA into W and the served model keeps its size and speed; or keep the adapter as a file of megabytes that one base model can hot-swap per task or tenant." },
+        { title: "Guard the adapter", text: "A cheap LoRA run has been shown to strip safety training, so an adapter deserves the same provenance and signing controls as the weights it modifies." }
+      ],
+      fact: "On GPT-3 175B, LoRA cut trainable parameters by a factor of 10,000 and GPU memory by three."
     },
     {
       id: "qlora", term: "QLoRA", acronym: "Quantized LoRA",
@@ -2388,7 +2420,15 @@
       types: ["Method"], provenance: [], domains: ["AI & Models"],
       related: ["lora", "dpo", "rlhf", "sbom"],
       source: { label: "Dettmers et al. — QLoRA: Efficient Finetuning of Quantized LLMs", url: "https://arxiv.org/abs/2305.14314" },
-      caption: "The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM."
+      caption: "The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM.",
+      steps: [
+        { title: "Base in 4 bits", text: "QLoRA stores the frozen base model in 4 bits instead of 16, and trains ordinary LoRA adapters on top of it in 16-bit precision." },
+        { title: "NF4, quantised twice", text: "4-bit NormalFloat places its sixteen levels at the quantiles of a normal distribution, and double quantisation also quantises the per-block scaling constants." },
+        { title: "Dequantise per layer", text: "On each forward pass a layer's weights are dequantised to BF16 on the fly; gradients flow back through them, and only the adapters are updated." },
+        { title: "Paged optimisers", text: "Paged optimisers spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash." },
+        { title: "One GPU, at a cost", text: "Fine-tuning a 65B model drops from more than 780 GB of GPU memory to under 48 GB, but training is slower than plain LoRA." }
+      ],
+      fact: "QLoRA made customising, or de-aligning, a large open-weight model affordable for an individual."
     },
     {
       id: "sentrywire", term: "SentryWire", acronym: "Full Packet Capture & Network Security Monitoring Platform",
@@ -2416,7 +2456,15 @@
       types: ["Cloud Platform"], provenance: ["Vendor"], domains: ["AI & Models", "Platforms & Apps", "Kubernetes"],
       related: ["kubernetes", "bluefield", "dpu", "lora"],
       source: { label: "CoreWeave Docs — CoreWeave Kubernetes Service (CKS)", url: "https://docs.coreweave.com/docs/products/cks" },
-      caption: "CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric."
+      caption: "CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.",
+      steps: [
+        { title: "Bare metal", text: "CoreWeave Kubernetes Service runs Kubernetes directly on bare-metal nodes with no hypervisor, so a job gets the whole machine." },
+        { title: "A managed control plane", text: "CoreWeave runs the control plane, manages the GPU drivers and validates each node before it joins; nodes boot a clean OS image every time." },
+        { title: "Isolation on the DPU", text: "Isolation moves into single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server that runs networking and host security out of the workload's reach." },
+        { title: "An InfiniBand fabric", text: "GPU-to-GPU traffic travels a separate non-blocking InfiniBand fabric with in-network reduction (SHARP)." },
+        { title: "A specialist", text: "Managed databases, identity services and compliance are thinner than a hyperscaler's, so most organisations run it alongside another cloud." }
+      ],
+      fact: "Enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls."
     }
   ];
 
@@ -2493,7 +2541,9 @@
     bug: '<path d="M12 20v-9"/><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z"/><path d="M14.12 3.88 16 2"/><path d="M21 21a4 4 0 0 0-3.81-4"/><path d="M21 5a4 4 0 0 1-3.55 3.97"/><path d="M22 13h-4"/><path d="M3 21a4 4 0 0 1 3.81-4"/><path d="M3 5a4 4 0 0 0 3.55 3.97"/><path d="M6 13H2"/><path d="m8 2 1.88 1.88"/><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13"/>',
     gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
     "scroll-text": '<path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/>',
-    workflow: '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>'
+    workflow: '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>',
+    "memory-stick": '<path d="M12 12v-2"/><path d="M12 18v-2"/><path d="M16 12v-2"/><path d="M16 18v-2"/><path d="M2 11h1.5"/><path d="M20 18v-2"/><path d="M20.5 11H22"/><path d="M4 18v-2"/><path d="M8 12v-2"/><path d="M8 18v-2"/><rect x="2" y="6" width="20" height="10" rx="2"/>',
+    sigma: '<path d="M18 7V5a1 1 0 0 0-1-1H6.5a.5.5 0 0 0-.4.8l4.5 6a2 2 0 0 1 0 2.4l-4.5 6a.5.5 0 0 0 .4.8H17a1 1 0 0 0 1-1v-2"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -6089,57 +6139,110 @@
       </svg>`,
 
     rlhf: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.">
-        <rect class="box" x="24" y="60" width="192" height="86" rx="10"/>
-        <text class="t-sm t-b" x="120" y="88" text-anchor="middle">1 · Fine-tuning</text>
-        <text class="t-sm t-mut" x="120" y="110" text-anchor="middle">base model imitates</text>
-        <text class="t-sm t-mut" x="120" y="128" text-anchor="middle">written demonstrations</text>
-        <line class="flow" x1="216" y1="103" x2="256" y2="103" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="264" y="60" width="192" height="86" rx="12"/>
-        <text class="t-sm t-b" x="360" y="88" text-anchor="middle">2 · Reward model</text>
-        <text class="t-sm t-mut" x="360" y="110" text-anchor="middle">learns to score what</text>
-        <text class="t-sm t-mut" x="360" y="128" text-anchor="middle">a human would prefer</text>
-        <line class="flow" x1="456" y1="103" x2="496" y2="103" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="504" y="60" width="192" height="86" rx="12"/>
-        <text class="t-sm t-b" x="600" y="88" text-anchor="middle">3 · PPO</text>
-        <text class="t-sm t-mut" x="600" y="110" text-anchor="middle">RL tunes the policy</text>
-        <text class="t-sm t-mut" x="600" y="128" text-anchor="middle">against that score</text>
-        <rect class="box" x="264" y="196" width="192" height="72" rx="10"/>
-        <text class="t-sm t-b" x="360" y="224" text-anchor="middle">Human rankings</text>
-        <text class="t-sm t-mut" x="360" y="246" text-anchor="middle">A &gt; B &gt; C on one prompt</text>
-        <line class="flow-accent" x1="360" y1="194" x2="360" y2="150" marker-end="url(#ah-acc)"/>
-        <rect class="box" x="504" y="196" width="192" height="72" rx="10"/>
-        <text class="t-sm t-b" x="600" y="224" text-anchor="middle">Frozen reference</text>
-        <text class="t-sm t-mut" x="600" y="246" text-anchor="middle">KL penalty · anti-drift</text>
-        <line class="flow" x1="600" y1="194" x2="600" y2="150" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="290" text-anchor="middle">three models in play — policy, reward model, and frozen reference — the cost DPO removes.</text>
+      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.">
+        <text class="t-sm t-mut" x="24" y="24">stage 1</text>
+        <text class="t-sm t-mut" x="260" y="24">stage 2</text>
+        <text class="t-sm t-mut" x="496" y="24">stage 3</text>
+        <g data-s="1 4">
+          <rect class="box" x="24" y="36" width="200" height="88" rx="8"/>
+          ${icon('file-text', 40, 50)}
+          <text class="t-b" x="72" y="68">Fine-tuning</text>
+          <text class="t-sm t-mut" x="40" y="96">imitates human</text>
+          <text class="t-sm t-mut" x="40" y="112">demonstrations</text>
+        </g>
+        <line class="flow" data-s="2" x1="226" y1="64" x2="258" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="2">
+          <rect class="box" x="260" y="36" width="200" height="56" rx="8"/>
+          ${icon('users', 276, 52)}
+          <text class="t-b" x="308" y="60">Labellers rank</text>
+          <text class="t-sm t-mut" x="308" y="78">candidate answers</text>
+        </g>
+        <line class="flow" data-s="3" x1="360" y1="94" x2="360" y2="114" marker-end="url(#ah-mut)"/>
+        <g data-s="3 4">
+          <rect class="box" x="260" y="116" width="200" height="56" rx="8"/>
+          ${icon('scale', 276, 132)}
+          <text class="t-b" x="308" y="140">Reward model</text>
+          <text class="t-sm t-mut" x="308" y="158">predicts preference</text>
+        </g>
+        <line class="flow" data-s="4" x1="462" y1="144" x2="494" y2="100" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="496" y="36" width="200" height="88" rx="8"/>
+          ${icon('cog', 512, 50)}
+          <text class="t-b" x="544" y="68">PPO</text>
+          <text class="t-sm t-mut" x="512" y="96">optimises against</text>
+          <text class="t-sm t-mut" x="512" y="112">the reward</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="496" y="136" width="200" height="36" rx="4"/>
+          <text class="t-sm" x="596" y="158" text-anchor="middle">KL leash to reference</text>
+        </g>
+        <path class="flow" data-s="4" d="M124 126 V196 H596 V174" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="4" x="140" y="190">the fine-tuned reference</text>
+        <g data-s="5">
+          <rect class="box" x="24" y="216" width="672" height="56" rx="8"/>
+          ${icon('shield', 40, 232)}
+          <text class="t-b" x="72" y="240">Safety lives in the weights</text>
+          <text class="t-sm bad" x="72" y="258">installed at training time; risk: reward hacking</text>
+        </g>
+
+        ${badge(1, 208, 50, '1')}
+        ${badge(2, 444, 50, '2')}
+        ${badge(3, 444, 130, '3')}
+        ${badge(4, 680, 50, '4')}
+        ${badge(5, 680, 230, '5')}
       </svg>`,
 
     dpo: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference.">
-        <rect class="box" x="24" y="76" width="164" height="96" rx="10"/>
-        <text class="t-sm t-b" x="106" y="106" text-anchor="middle">Preference pair</text>
-        <text class="t-sm t-mut" x="106" y="130" text-anchor="middle">prompt +</text>
-        <text class="t-sm t-mut" x="106" y="148" text-anchor="middle">chosen / rejected</text>
-        <line class="flow" x1="188" y1="124" x2="248" y2="124" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="256" y="76" width="164" height="96" rx="12"/>
-        <text class="t-b" x="338" y="114" text-anchor="middle">Policy</text>
-        <text class="t-sm t-mut" x="338" y="140" text-anchor="middle">model being trained</text>
-        <line class="flow" x1="420" y1="124" x2="480" y2="124" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="488" y="76" width="200" height="96" rx="12"/>
-        <text class="t-sm t-b" x="588" y="106" text-anchor="middle">DPO loss</text>
-        <text class="t-sm t-mut" x="588" y="130" text-anchor="middle">one classification step on</text>
-        <text class="t-sm t-mut" x="588" y="148" text-anchor="middle">the log-prob ratio</text>
-        <rect class="box" x="256" y="212" width="164" height="64" rx="10"/>
-        <text class="t-sm t-b" x="338" y="238" text-anchor="middle">Frozen reference</text>
-        <text class="t-sm t-mut" x="338" y="258" text-anchor="middle">replaces the KL leash</text>
-        <line class="flow" x1="338" y1="210" x2="338" y2="176" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="590" y="192" text-anchor="middle">log-probability</text>
-        <line class="flow-ok" x1="536" y1="252" x2="536" y2="204" marker-end="url(#ah-ok)"/>
-        <text class="t-sm t-mut" x="536" y="270" text-anchor="middle">chosen</text>
-        <line class="flow-bad" x1="644" y1="204" x2="644" y2="252" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="644" y="270" text-anchor="middle">rejected</text>
-        <text class="t-sm t-mut" x="360" y="292" text-anchor="middle">no reward model, no RL loop — the same preference data, one gradient step.</text>
+      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference.">
+        <g data-s="1">
+          <rect class="box" x="24" y="24" width="200" height="176" rx="8"/>
+          ${icon('list-checks', 40, 38)}
+          <text class="t-b" x="72" y="56">Preference</text>
+          <text class="t-b" x="72" y="72">pairs</text>
+          <rect class="box" x="40" y="88" width="168" height="28" rx="4"/>
+          <text class="t-sm" x="52" y="106">prompt</text>
+          <rect class="box" x="40" y="124" width="168" height="28" rx="4"/>
+          <text class="t-sm ok" x="52" y="142">chosen answer</text>
+          <rect class="box" x="40" y="160" width="168" height="28" rx="4"/>
+          <text class="t-sm bad" x="52" y="178">rejected answer</text>
+        </g>
+        <line class="flow" data-s="1 3" x1="226" y1="112" x2="274" y2="112" marker-end="url(#ah-mut)"/>
+        <g data-s="3 4">
+          <rect class="box" x="276" y="24" width="192" height="176" rx="8"/>
+          ${icon('cpu', 292, 38)}
+          <text class="t-b" x="324" y="56">Model</text>
+          <text class="t-sm t-mut" x="324" y="74">one training loop</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="292" y="100" width="160" height="36" rx="4"/>
+          <text class="t-sm ok" x="304" y="122">chosen: log-prob up</text>
+          <rect class="box" x="292" y="148" width="160" height="36" rx="4"/>
+          <text class="t-sm bad" x="304" y="170">rejected: down</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="520" y="24" width="176" height="76" rx="8"/>
+          ${icon('lock', 536, 38)}
+          <text class="t-b" x="568" y="56">Reference</text>
+          <text class="t-sm t-mut" x="536" y="84">frozen copy</text>
+        </g>
+        <line class="flow" data-s="4" x1="518" y1="62" x2="470" y2="62" marker-end="url(#ah-mut)"/>
+        <g data-s="2">
+          <rect class="box" x="520" y="124" width="176" height="76" rx="8"/>
+          ${icon('scale', 536, 138)}
+          <text class="t-b" x="568" y="156">Reward model</text>
+          <text class="t-sm bad" x="536" y="184">and PPO: dropped</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="224" width="672" height="48" rx="8"/>
+          ${icon('database', 40, 236)}
+          <text class="t-sm" x="72" y="253">offline: learns only from pairs already collected, cannot explore</text>
+        </g>
+
+        ${badge(1, 208, 38, '1')}
+        ${badge(2, 680, 138, '2')}
+        ${badge(3, 250, 112, '3')}
+        ${badge(4, 680, 38, '4')}
+        ${badge(5, 680, 248, '5')}
       </svg>`,
 
     paseto: () => `
@@ -6216,35 +6319,63 @@
       </svg>`,
 
     rag: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.">
-        <text class="t-sm t-mut" x="24" y="22">Index time — once, ahead of any question</text>
-        ${[
-          ["Documents", "wiki, tickets, PDFs", 24, 140, "box"],
-          ["Chunk", "split with overlap", 196, 124, "box"],
-          ["Embed", "text to vector", 352, 124, "box"],
-          ["Vector index", "vectors + metadata", 508, 164, "data"]
-        ].map(([n, s, x, w, cls], i) => `
-          <rect class="${cls}" x="${x}" y="32" width="${w}" height="48" rx="8"/>
-          <text class="t-b" x="${x + w/2}" y="56" text-anchor="middle">${n}</text>
-          <text class="t-sm t-mut" x="${x + w/2}" y="72" text-anchor="middle">${s}</text>
-          ${i < 3 ? `<line class="flow" x1="${x + w}" y1="56" x2="${x + w + 32}" y2="56" marker-end="url(#ah-mut)"/>` : ""}
-        `).join("")}
-        <path class="flow-accent" d="M590 80 V104 H255 V132" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="24" y="124">Query time — as the asking user</text>
-        ${[
-          ["Question", "from a user", 24, 129, "box", "flow-accent", "ah-acc"],
-          ["Retrieve top-k", "hybrid, reranked", 185, 140, "box", "flow-accent", "ah-acc"],
-          ["Permission filter", "as the asking user", 357, 150, "box-accent", "flow-ok", "ah-ok"],
-          ["Answer", "grounded, cited", 539, 133, "box", "", ""]
-        ].map(([n, s, x, w, cls, flow, mark]) => `
-          <rect class="${cls}" x="${x}" y="132" width="${w}" height="48" rx="8"/>
-          <text class="t-b" x="${x + w/2}" y="156" text-anchor="middle">${n}</text>
-          <text class="t-sm t-mut" x="${x + w/2}" y="172" text-anchor="middle">${s}</text>
-          ${flow ? `<line class="${flow}" x1="${x + w}" y1="156" x2="${x + w + 32}" y2="156" marker-end="url(#${mark})"/>` : ""}
-        `).join("")}
-        <line class="flow-bad" x1="432" y1="180" x2="432" y2="214" marker-end="url(#ah-bad)"/>
-        <text class="t-sm t-mut" x="432" y="234" text-anchor="middle">a document this user may not read —</text>
-        <text class="t-sm t-mut" x="432" y="250" text-anchor="middle">dropped before the prompt is assembled</text>
+      <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.">
+        <text class="t-sm t-mut" x="24" y="20">ahead of time</text>
+        ${[['file-text', 'Documents', 24], ['layers', 'Chunks', 196], ['binary', 'Embed', 368]].map(([ico, t, x], i) => `
+          <g data-s="1">
+            <rect class="box" x="${x}" y="32" width="136" height="48" rx="8"/>
+            ${icon(ico, x + 12, 44)}
+            <text class="t-b" x="${x + 44}" y="61">${t}</text>
+          </g>
+          <line class="flow" data-s="1" x1="${x + 138}" y1="56" x2="${x + 170}" y2="56" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="1 3">
+          <rect class="box" x="540" y="32" width="156" height="48" rx="8"/>
+          ${icon('database', 552, 44)}
+          <text class="t-b" x="584" y="61">Index</text>
+        </g>
+        <line class="divider" x1="16" y1="100" x2="704" y2="100"/>
+        <text class="t-sm t-mut" x="24" y="120">at query time</text>
+        <g data-s="2 3">
+          <rect class="box" x="24" y="132" width="136" height="64" rx="12"/>
+          ${icon('user', 36, 146)}
+          <text class="t-b" x="68" y="164">User</text>
+          <text class="t-sm t-mut" x="68" y="182">asks</text>
+        </g>
+        <line class="flow" data-s="2" x1="162" y1="164" x2="194" y2="164" marker-end="url(#ah-mut)"/>
+        <g data-s="2">
+          <rect class="box" x="196" y="132" width="136" height="64" rx="8"/>
+          ${icon('binary', 208, 146)}
+          <text class="t-b" x="240" y="164">Embed</text>
+          <text class="t-sm t-mut" x="240" y="182">question</text>
+        </g>
+        <line class="flow" data-s="2 3" x1="334" y1="164" x2="366" y2="164" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="368" y="124" width="156" height="92" rx="8"/>
+          ${icon('search', 380, 138)}
+          <text class="t-b" x="412" y="156">Retrieve</text>
+          <text class="t-sm t-mut" x="380" y="182">as the user</text>
+          <text class="t-sm bad" x="380" y="200">not allowed: dropped</text>
+        </g>
+        <line class="flow" data-s="3" x1="600" y1="82" x2="500" y2="122" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="526" y1="170" x2="566" y2="170" marker-end="url(#ah-mut)"/>
+        <g data-s="4 5">
+          <rect class="box" x="568" y="132" width="128" height="84" rx="8"/>
+          ${icon('cpu', 580, 146)}
+          <text class="t-b" x="612" y="164">Model</text>
+          <text class="t-sm t-mut" x="580" y="190">answers from</text>
+          <text class="t-sm t-mut" x="580" y="206">the passages</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="236" width="672" height="48" rx="8"/>
+          ${icon('skull', 40, 248)}
+          <text class="t-sm bad" x="72" y="265">retrieved text is untrusted: indirect prompt injection</text>
+        </g>
+
+        ${badge(1, 520, 56, '1')}
+        ${badge(2, 180, 164, '2')}
+        ${badge(3, 508, 138, '3')}
+        ${badge(4, 680, 146, '4')}
+        ${badge(5, 680, 260, '5')}
       </svg>`,
 
     keda: () => `
@@ -6962,62 +7093,118 @@
 
     lora: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">Only the small adapter trains — the big matrix never moves</text>
-        <rect class="box" x="24" y="110" width="90" height="60" rx="10"/>
-        <text class="t-sm t-b" x="69" y="136" text-anchor="middle">Input x</text>
-        <text class="t-sm t-mut" x="69" y="156" text-anchor="middle">activations</text>
-        <path class="flow" d="M114 130 H150 V80 H176" marker-end="url(#ah-mut)"/>
-        <path class="flow-accent" d="M114 150 H150 V195 H176" marker-end="url(#ah-acc)"/>
-        <rect class="box" x="180" y="40" width="220" height="80" rx="10"/>
-        <text class="t-b" x="290" y="72" text-anchor="middle">Pretrained W</text>
-        <text class="t-sm t-mut" x="290" y="96" text-anchor="middle">d × d · frozen, no gradients</text>
-        <rect class="box-accent" x="180" y="160" width="100" height="70" rx="10"/>
-        <text class="t-b" x="230" y="190" text-anchor="middle">A</text>
-        <text class="t-sm t-mut" x="230" y="212" text-anchor="middle">r × d</text>
-        <line class="flow-accent" x1="280" y1="195" x2="296" y2="195" marker-end="url(#ah-acc)"/>
-        <rect class="box-accent" x="300" y="160" width="100" height="70" rx="10"/>
-        <text class="t-b" x="350" y="190" text-anchor="middle">B</text>
-        <text class="t-sm t-mut" x="350" y="212" text-anchor="middle">d × r · zero</text>
-        <text class="t-sm t-mut" x="290" y="252" text-anchor="middle">trainable adapter · rank r ≪ d (e.g. 8)</text>
-        <path class="flow" d="M400 80 H440 V120 H466" marker-end="url(#ah-mut)"/>
-        <path class="flow-accent" d="M400 195 H440 V160 H466" marker-end="url(#ah-acc)"/>
-        <rect class="box-accent" x="470" y="100" width="80" height="80" rx="10"/>
-        <text class="t-sm t-b" x="510" y="134" text-anchor="middle">Sum</text>
-        <text class="t-sm t-mut" x="510" y="156" text-anchor="middle">Wx + BAx</text>
-        <line class="flow" x1="550" y1="140" x2="596" y2="140" marker-end="url(#ah-mut)"/>
-        <rect class="box" x="600" y="110" width="96" height="60" rx="10"/>
-        <text class="t-sm t-b" x="648" y="136" text-anchor="middle">Output h</text>
-        <text class="t-sm t-mut" x="648" y="156" text-anchor="middle">same shape</text>
-        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">Serve merged (W + BA: no extra latency) or keep the adapter as a small file to swap.</text>
+        <g data-s="1 2">
+          <rect class="box" x="24" y="96" width="96" height="56" rx="8"/>
+          <text class="t-b" x="40" y="120">x</text>
+          <text class="t-sm t-mut" x="40" y="138">input</text>
+        </g>
+        <line class="flow" data-s="1" x1="122" y1="110" x2="170" y2="60" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="122" y1="140" x2="170" y2="186" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3">
+          <rect class="box" x="172" y="24" width="200" height="72" rx="8"/>
+          ${icon('lock', 188, 40)}
+          <text class="t-b" x="220" y="58">W</text>
+          <text class="t-sm t-mut" x="220" y="76">frozen, pretrained</text>
+        </g>
+        <g data-s="2 3">
+          <rect class="box" x="172" y="160" width="90" height="56" rx="6"/>
+          <text class="t-b" x="188" y="184">A</text>
+          <text class="t-sm t-mut" x="188" y="202">rank r</text>
+          <rect class="box" x="282" y="160" width="90" height="56" rx="6"/>
+          <text class="t-b" x="298" y="184">B</text>
+          <text class="t-sm t-mut" x="298" y="202">zero init</text>
+        </g>
+        <line class="flow" data-s="2" x1="264" y1="188" x2="280" y2="188" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="374" y1="60" x2="422" y2="104" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="374" y1="188" x2="422" y2="146" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="424" y="100" width="88" height="48" rx="8"/>
+          <text class="t-b" x="468" y="130" text-anchor="middle">+</text>
+          <text class="t-sm" x="468" y="168" text-anchor="middle">Wx + BAx</text>
+        </g>
+        <line class="flow" data-s="3" x1="514" y1="124" x2="558" y2="124" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="560" y="100" width="136" height="48" rx="8"/>
+          <text class="t-b" x="576" y="129">output</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="24" y="236" width="328" height="56" rx="8"/>
+          ${icon('layers', 40, 252)}
+          <text class="t-b" x="72" y="260">Merge BA into W</text>
+          <text class="t-sm t-mut" x="72" y="278">same size and speed</text>
+        </g>
+        <g data-s="4 5">
+          <rect class="box" x="368" y="236" width="328" height="56" rx="8"/>
+          ${icon('package', 384, 252)}
+          <text class="t-b" x="416" y="260">Or ship the adapter</text>
+          <text class="t-sm t-mut" x="416" y="278">megabytes, hot-swap</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="560" y="164" width="136" height="56" rx="8"/>
+          <text class="t-sm bad" x="572" y="186">can strip safety:</text>
+          <text class="t-sm t-mut" x="572" y="204">sign it</text>
+        </g>
+
+        ${badge(1, 356, 38, '1')}
+        ${badge(2, 146, 164, '2')}
+        ${badge(3, 536, 124, '3')}
+        ${badge(4, 336, 250, '4')}
+        ${badge(5, 680, 208, '5')}
       </svg>`,
 
     qlora: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM.">
-        <text class="t-sm t-mut" x="360" y="22" text-anchor="middle">The base is stored in 4 bits; only the adapter trains, in 16</text>
-        <rect class="box" x="24" y="44" width="200" height="80" rx="10"/>
-        <text class="t-sm t-b" x="124" y="70" text-anchor="middle">Base weights</text>
-        <text class="t-sm t-mut" x="124" y="92" text-anchor="middle">NF4 · 4-bit · frozen</text>
-        <text class="t-sm t-mut" x="124" y="112" text-anchor="middle">double-quantised scales</text>
-        <line class="flow" x1="224" y1="84" x2="296" y2="84" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="260" y="74" text-anchor="middle">dequantise</text>
-        <rect class="box" x="300" y="44" width="180" height="80" rx="10"/>
-        <text class="t-sm t-b" x="390" y="76" text-anchor="middle">Forward pass</text>
-        <text class="t-sm t-mut" x="390" y="100" text-anchor="middle">BF16 compute, per layer</text>
-        <line class="flow" x1="480" y1="84" x2="556" y2="84" marker-end="url(#ah-mut)"/>
-        <rect class="box-accent" x="560" y="44" width="136" height="80" rx="10"/>
-        <text class="t-sm t-b" x="628" y="76" text-anchor="middle">LoRA adapters</text>
-        <text class="t-sm t-mut" x="628" y="100" text-anchor="middle">BF16 · trainable</text>
-        <path class="flow-accent" d="M390 124 V150 H628 V128" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="510" y="170" text-anchor="middle">gradients pass through; only the adapter updates</text>
-        <rect class="box" x="24" y="190" width="200" height="56" rx="10"/>
-        <text class="t-sm t-b" x="124" y="214" text-anchor="middle">Paged optimiser</text>
-        <text class="t-sm t-mut" x="124" y="234" text-anchor="middle">state spills to CPU RAM</text>
-        <text class="t-sm t-b" x="380" y="200" text-anchor="start">GPU memory to fine-tune 65B</text>
-        <text class="t-sm t-mut" x="372" y="224" text-anchor="end">16-bit: &gt;780 GB</text>
-        <rect class="box" x="380" y="213" width="316" height="14" rx="3"/>
-        <text class="t-sm t-mut" x="372" y="248" text-anchor="end">QLoRA: &lt;48 GB</text>
-        <rect class="box-accent" x="380" y="237" width="20" height="14" rx="3"/>
-        <text class="t-sm t-mut" x="360" y="286" text-anchor="middle">One 48 GB GPU for a 65B model — paid for in slower steps and quantisation error.</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM.">
+        <g data-s="5">
+          <rect class="zone" x="16" y="16" width="544" height="228" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="34">one data-centre GPU</text>
+          <text class="t-sm" x="32" y="208">65B fine-tune: over 780 GB before, under 48 GB</text>
+          <text class="t-sm bad" x="32" y="226">slower than plain LoRA</text>
+        </g>
+        <g data-s="1 3">
+          <rect class="box" x="32" y="48" width="200" height="104" rx="8"/>
+          ${icon('database', 48, 62)}
+          <text class="t-b" x="80" y="80">Base model</text>
+          <text class="t-sm t-mut" x="80" y="98">frozen, 4-bit</text>
+        </g>
+        <g data-s="2">
+          <rect class="box" x="48" y="112" width="64" height="28" rx="4"/>
+          <text class="t-sm t-b" x="80" y="131" text-anchor="middle">NF4</text>
+          <rect class="box" x="120" y="112" width="100" height="28" rx="4"/>
+          <text class="t-sm" x="170" y="131" text-anchor="middle">double quant</text>
+        </g>
+        <line class="flow" data-s="3" x1="234" y1="84" x2="250" y2="84" marker-end="url(#ah-mut)"/>
+        <g data-s="3">
+          <rect class="box" x="252" y="48" width="140" height="76" rx="8"/>
+          ${icon('layers', 264, 62)}
+          <text class="t-b" x="296" y="80">Dequantise</text>
+          <text class="t-sm t-mut" x="296" y="98">to BF16,</text>
+          <text class="t-sm t-mut" x="296" y="114">per layer</text>
+        </g>
+        <line class="flow" data-s="3" x1="394" y1="84" x2="410" y2="84" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3 4">
+          <rect class="box" x="412" y="48" width="132" height="76" rx="8"/>
+          ${icon('sigma', 424, 62)}
+          <text class="t-b" x="456" y="80">LoRA</text>
+          <text class="t-sm t-mut" x="456" y="98">16-bit,</text>
+          <text class="t-sm t-mut" x="456" y="114">trained</text>
+        </g>
+        <path class="flow" data-s="3" d="M478 126 V150 H322 V126" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="400" y="168" text-anchor="middle">gradients</text>
+        <line class="flow" data-s="4" x1="546" y1="86" x2="582" y2="86" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="584" y="48" width="112" height="100" rx="8"/>
+          ${icon('memory-stick', 596, 62)}
+          <text class="t-b" x="628" y="80">CPU</text>
+          <text class="t-sm t-mut" x="596" y="106">paged</text>
+          <text class="t-sm t-mut" x="596" y="122">optimiser</text>
+          <text class="t-sm t-mut" x="596" y="138">state</text>
+        </g>
+
+        ${badge(1, 216, 62, '1')}
+        ${badge(2, 216, 96, '2')}
+        ${badge(3, 322, 138, '3')}
+        ${badge(4, 564, 70, '4')}
+        ${badge(5, 544, 32, '5')}
       </svg>`,
 
     sentrywire: () => `
@@ -7070,49 +7257,50 @@
       </svg>`,
 
     coreweave: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.">
-        <text class="t-sm t-mut" x="20" y="20">No hypervisor: the tenant gets the whole machine, the DPU keeps the boundary</text>
+      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.">
+        <g data-s="2">
+          <rect class="box" x="200" y="12" width="320" height="52" rx="8"/>
+          ${icon('cog', 216, 26)}
+          <text class="t-b" x="248" y="34">Control plane</text>
+          <text class="t-sm t-mut" x="248" y="52">drivers, node checks</text>
+        </g>
+        <line class="flow" data-s="2" x1="300" y1="66" x2="128" y2="94" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="360" y1="66" x2="360" y2="94" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="420" y1="66" x2="592" y2="94" marker-end="url(#ah-mut)"/>
+        ${[24, 256, 488].map((x) => `
+          <g data-s="1 2">
+            <rect class="zone" x="${x}" y="96" width="208" height="128" rx="10"/>
+            <text class="t-sm t-mut" x="${x + 12}" y="114">bare-metal node</text>
+          </g>
+          <g data-s="1 4">
+            <rect class="box" x="${x + 12}" y="122" width="176" height="40" rx="6"/>
+            ${icon('cpu', x + 20, 130)}
+            <text class="t-sm t-b" x="${x + 52}" y="140">GPUs</text>
+            <text class="t-sm t-mut" x="${x + 52}" y="155">whole machine</text>
+          </g>
+          <g data-s="3">
+            <rect class="box" x="${x + 12}" y="172" width="176" height="44" rx="6"/>
+            ${icon('shield', x + 20, 182)}
+            <text class="t-sm t-b" x="${x + 52}" y="190">BlueField DPU</text>
+            <text class="t-sm t-mut" x="${x + 52}" y="206">host security</text>
+          </g>
+          <path class="flow" data-s="4" d="M${x + 190} 142 H${x + 198} V234" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="4">
+          <rect class="box" x="24" y="236" width="672" height="36" rx="8"/>
+          ${icon('network', 36, 242)}
+          <text class="t-sm" x="68" y="258">InfiniBand fabric: GPU to GPU, non-blocking, SHARP</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="24" y="280" width="672" height="32" rx="6"/>
+          <text class="t-sm bad" x="36" y="300">a specialist: usually run alongside another cloud</text>
+        </g>
 
-        <rect class="box" x="20" y="40" width="200" height="56" rx="8"/>
-        <text class="t-b" x="120" y="63" text-anchor="middle">Control plane</text>
-        <text class="t-sm t-mut" x="120" y="81" text-anchor="middle">managed by CoreWeave</text>
-        <line class="flow" x1="220" y1="68" x2="248" y2="68" marker-end="url(#ah-mut)"/>
-
-        <rect class="box" x="20" y="128" width="200" height="56" rx="8"/>
-        <text class="t-b" x="120" y="151" text-anchor="middle">Your team</text>
-        <text class="t-sm t-mut" x="120" y="169" text-anchor="middle">kubectl + node access</text>
-        <path class="flow-accent" d="M220 156 H236 V96 H260" marker-end="url(#ah-acc)"/>
-
-        <text class="t-sm t-mut" x="20" y="226">Stateless nodes boot a clean</text>
-        <text class="t-sm t-mut" x="20" y="244">OS image; GPU drivers and</text>
-        <text class="t-sm t-mut" x="20" y="262">node checks are CoreWeave's</text>
-
-        <rect class="zone-accent" x="250" y="36" width="210" height="164" rx="10"/>
-        <text class="t-sm t-mut" x="262" y="54">Node · single tenant</text>
-        <rect class="box-accent" x="262" y="64" width="186" height="52" rx="8"/>
-        <text class="t-b" x="355" y="86" text-anchor="middle">GPUs · your pods</text>
-        <text class="t-sm t-mut" x="355" y="104" text-anchor="middle">bare metal, no hypervisor</text>
-        <rect class="box" x="320" y="132" width="128" height="52" rx="8"/>
-        <text class="t-b" x="384" y="154" text-anchor="middle">BlueField DPU</text>
-        <text class="t-sm t-mut" x="384" y="172" text-anchor="middle">VPC, host access</text>
-        <line class="flow-accent" x1="285" y1="116" x2="285" y2="224" marker-end="url(#ah-acc)"/>
-
-        <rect class="zone-accent" x="490" y="36" width="210" height="164" rx="10"/>
-        <text class="t-sm t-mut" x="502" y="54">Node · single tenant</text>
-        <rect class="box-accent" x="502" y="64" width="186" height="52" rx="8"/>
-        <text class="t-b" x="595" y="86" text-anchor="middle">GPUs · your pods</text>
-        <text class="t-sm t-mut" x="595" y="104" text-anchor="middle">bare metal, no hypervisor</text>
-        <rect class="box" x="560" y="132" width="128" height="52" rx="8"/>
-        <text class="t-b" x="624" y="154" text-anchor="middle">BlueField DPU</text>
-        <text class="t-sm t-mut" x="624" y="172" text-anchor="middle">VPC, host access</text>
-        <line class="flow-accent" x1="525" y1="116" x2="525" y2="224" marker-end="url(#ah-acc)"/>
-
-        <rect class="box" x="250" y="226" width="450" height="46" rx="8"/>
-        <text class="t-b" x="475" y="246" text-anchor="middle">InfiniBand fabric</text>
-        <text class="t-sm t-mut" x="475" y="263" text-anchor="middle">non-blocking fat tree, GPU-to-GPU RDMA</text>
-
-        <text class="t-sm t-mut" x="360" y="292" text-anchor="middle">Isolation is dedicated hardware plus the DPU — the shared dependency is the provider itself</text>
-      </svg>`
+        ${badge(1, 216, 110, '1')}
+        ${badge(2, 504, 26, '2')}
+        ${badge(3, 184, 206, '3')}
+        ${badge(4, 680, 254, '4')}
+        ${badge(5, 680, 296, '5')}
+      </svg>`,
   };
 
   /* ====================================================================

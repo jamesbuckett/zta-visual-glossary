@@ -97,6 +97,12 @@ Cntlm — NTLM Authentication Proxy
 CoreWeave — GPU Cloud Platform for AI
     A GPU-first cloud that runs Kubernetes straight on bare-metal NVIDIA servers, trading the hypervisor for a DPU in every node and an InfiniBand fabric built for AI training.
     [Cloud Platform] · aka neocloud, GPU cloud, AI cloud, CKS, CoreWeave Kubernetes Service, bare-metal Kubernetes, Atlantic Crypto, CRWV, InfiniBand, SHARP
+    1. Bare metal — CoreWeave Kubernetes Service runs Kubernetes directly on bare-metal nodes with no hypervisor, so a job gets the whole machine.
+    2. A managed control plane — CoreWeave runs the control plane, manages the GPU drivers and validates each node before it joins; nodes boot a clean OS image every time.
+    3. Isolation on the DPU — Isolation moves into single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server that runs networking and host security out of the workload's reach.
+    4. An InfiniBand fabric — GPU-to-GPU traffic travels a separate non-blocking InfiniBand fabric with in-network reduction (SHARP).
+    5. A specialist — Managed databases, identity services and compliance are thinner than a hyperscaler's, so most organisations run it alongside another cloud.
+    Key fact: Enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls.
 
 CORS — Cross-Origin Resource Sharing
     A browser rule that lets a server declare which other origins may read its responses.
@@ -209,6 +215,12 @@ DORA — Digital Operational Resilience Act
 DPO — Direct Preference Optimization
     RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.
     [Method] · aka direct preference optimization, preference pairs, reference model, offline alignment, chosen rejected, IPO, KTO
+    1. Preference pairs — DPO trains on the same preference data as RLHF: triples of prompt, chosen answer and rejected answer.
+    2. No reward model — The KL-constrained reward maximisation RLHF solves has a closed-form optimum, so DPO drops the separate reward model and the PPO loop.
+    3. Chosen up, rejected down — An ordinary classification loss raises the model's log-probability of the chosen answer and lowers it for the rejected one, in one training loop.
+    4. A frozen reference — Each is measured against a frozen reference copy of the model, which does the job RLHF gave to the KL penalty.
+    5. Offline only — It learns only from pairs somebody already collected, so it cannot explore responses the dataset never contained.
+    Key fact: DPO rewrites the reward in terms of the policy itself: the language model is secretly a reward model.
 
 DPU — Data Processing Unit
     A programmable processor on the network card that offloads networking, storage, and security from the host — and runs them in its own isolated trust domain.
@@ -403,6 +415,12 @@ Load Balancer — Load Balancer
 LoRA — Low-Rank Adaptation
     Fine-tune a large model by freezing it and training two small matrices beside each layer, so the task-specific change fits in megabytes rather than a full copy of the weights.
     [Method] · aka low-rank adaptation, adapter, PEFT, parameter-efficient fine-tuning, fine-tuning, rank, BA matrices, merged weights
+    1. Freeze W — LoRA freezes the pretrained weight matrix W: fine-tuning's change has a low intrinsic rank, so W itself need not move.
+    2. A low-rank pair — The update is learned as two thin matrices, B times A, with a rank of perhaps 8 or 16 against a hidden dimension in the thousands. B starts at zero, and only A and B get gradients.
+    3. Sum the outputs — Each adapted layer computes Wx + BAx, so training starts from exactly the original model.
+    4. Merge or ship — Merge BA into W and the served model keeps its size and speed; or keep the adapter as a file of megabytes that one base model can hot-swap per task or tenant.
+    5. Guard the adapter — A cheap LoRA run has been shown to strip safety training, so an adapter deserves the same provenance and signing controls as the weights it modifies.
+    Key fact: On GPT-3 175B, LoRA cut trainable parameters by a factor of 10,000 and GPU memory by three.
 
 MFA / Passkeys — Multi-Factor Authentication (FIDO2 · WebAuthn)
     Proving identity with more than a password — and passkeys that cannot be phished.
@@ -616,6 +634,12 @@ Post-Quantum Cryptography — Post-Quantum Cryptography (PQC)
 QLoRA — Quantized LoRA
     LoRA on a base model squeezed to 4 bits — the frozen weights shrink fourfold, so a 65-billion-parameter model can be fine-tuned on a single GPU.
     [Method] · aka quantized LoRA, 4-bit fine-tuning, NF4, NormalFloat, double quantization, paged optimizers, bitsandbytes, Guanaco, quantisation
+    1. Base in 4 bits — QLoRA stores the frozen base model in 4 bits instead of 16, and trains ordinary LoRA adapters on top of it in 16-bit precision.
+    2. NF4, quantised twice — 4-bit NormalFloat places its sixteen levels at the quantiles of a normal distribution, and double quantisation also quantises the per-block scaling constants.
+    3. Dequantise per layer — On each forward pass a layer's weights are dequantised to BF16 on the fly; gradients flow back through them, and only the adapters are updated.
+    4. Paged optimisers — Paged optimisers spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash.
+    5. One GPU, at a cost — Fine-tuning a 65B model drops from more than 780 GB of GPU memory to under 48 GB, but training is slower than plain LoRA.
+    Key fact: QLoRA made customising, or de-aligning, a large open-weight model affordable for an individual.
 
 QUIC — QUIC (a name, not an acronym — RFC 9000)
     A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.
@@ -638,6 +662,12 @@ RADIUS — Remote Authentication Dial-In User Service
 RAG — Retrieval-Augmented Generation
     Look the answer up before answering — retrieve the relevant passages at query time and put them in the prompt, so the model works from sources rather than memory.
     [Method] · aka retrieval-augmented generation, vector database, embeddings, chunking, semantic search, hybrid search, reranking, grounding, prompt injection, context window
+    1. Index ahead of time — Ahead of any query, documents are split into chunks, each chunk is turned into a vector by an embedding model, and those vectors go into an index.
+    2. Embed the question — When a question arrives it is embedded the same way.
+    3. Retrieve as the user — The nearest chunks come back, and retrieval must run as the asking user, so a document they may not read is filtered out at retrieval time.
+    4. Answer from the text — The passages are pasted into the prompt, so the model answers from text placed in front of it, with citations a reader can check.
+    5. Untrusted input — Retrieved text is untrusted input, the indirect prompt-injection path, and grounding lowers hallucination without removing it.
+    Key fact: Instructing the model to keep a secret is not access control: filter at retrieval time.
 
 RBAC & ABAC — Role- / Attribute-Based Access Control
     Two models for deciding who may do what — by role, or by attributes and context.
@@ -661,6 +691,12 @@ React — React (UI library)
 RLHF — Reinforcement Learning from Human Feedback
     Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.
     [Method] · aka human feedback, reward model, PPO, preference tuning, alignment, InstructGPT, RLAIF
+    1. Supervised fine-tuning — Supervised fine-tuning first teaches the base model to imitate human-written demonstrations.
+    2. Humans rank answers — Labellers are shown several candidate answers to the same prompt and rank them.
+    3. Train a reward model — Those comparisons train a separate reward model to predict which output a human would prefer.
+    4. PPO on a KL leash — Reinforcement learning, classically PPO, optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference.
+    5. Safety in the weights — Refusal behaviour and safety policy are installed here, at training time, so they are a property of the weights. The weakness is reward hacking: the reward model is only a proxy.
+    Key fact: InstructGPT's 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3.
 
 SAML — Security Assertion Markup Language
     An XML standard for single sign-on between identity and service providers.
