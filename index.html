@@ -1162,7 +1162,14 @@
       types: ["Protocol", "Security Technology"], provenance: [], domains: ["Transport & Web"],
       related: ["http", "oauth", "zerotrust"],
       source: { label: "WHATWG Fetch standard — CORS", url: "https://fetch.spec.whatwg.org/" },
-      caption: "A simple request round-trips with Origin / Allow-Origin headers; a non-simple one adds a preflight OPTIONS check first."
+      caption: "A simple request round-trips with Origin / Allow-Origin headers; a non-simple one adds a preflight OPTIONS check first.",
+      steps: [
+        { title: "Script calls another site", text: "When script on one site calls another, the browser attaches an Origin header to the request." },
+        { title: "Server allows the origin", text: "The browser only exposes the reply if the server returns a matching Access-Control-Allow-Origin. That is how a server relaxes the same-origin policy." },
+        { title: "Preflight first", text: "Requests that are not simple, with custom headers or methods like PUT, trigger a preflight OPTIONS check first." },
+        { title: "Browsers only", text: "CORS is enforced only by browsers: it governs in-browser JavaScript, not server-to-server calls." }
+      ],
+      fact: "CORS is no substitute for real authorisation."
     },
     {
       id: "pkce", term: "PKCE", acronym: "Proof Key for Code Exchange",
@@ -1192,7 +1199,14 @@
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Transport & Web"],
       related: ["http", "tcpip", "webtransport"],
       source: { label: "RFC 6455 — WebSocket Protocol", url: "https://www.rfc-editor.org/info/rfc6455" },
-      caption: "An HTTP Upgrade handshake flips a single TCP connection into a persistent, two-way frame stream."
+      caption: "An HTTP Upgrade handshake flips a single TCP connection into a persistent, two-way frame stream.",
+      steps: [
+        { title: "Ask to upgrade", text: "The connection starts as an HTTP/1.1 GET carrying an Upgrade: websocket header." },
+        { title: "101 Switching Protocols", text: "The server answers 101 Switching Protocols." },
+        { title: "Frames both ways", text: "The same TCP socket then carries lightweight binary frames in both directions, so client and server can push messages at any time." },
+        { title: "wss:// adds TLS", text: "Run it as wss:// to wrap the connection in TLS." }
+      ],
+      fact: "WebSocket removes the request/response turn-taking of plain HTTP, which is why it powers chat, collaborative editing, live dashboards and trading feeds."
     },
     {
       id: "webtransport", term: "WebTransport", acronym: "Multiplexed streams and datagrams over HTTP/3",
@@ -1202,7 +1216,14 @@
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Transport & Web"],
       related: ["quic", "http", "websockets"],
       source: { label: "W3C WebTransport (Working Draft)", url: "https://www.w3.org/TR/webtransport/" },
-      caption: "One HTTP/3 connection carries many independent streams plus unreliable datagrams — no cross-stream head-of-line blocking."
+      caption: "One HTTP/3 connection carries many independent streams plus unreliable datagrams — no cross-stream head-of-line blocking.",
+      steps: [
+        { title: "A session over HTTP/3", text: "WebTransport gives browser code a low-latency session over HTTP/3, and therefore over QUIC and UDP." },
+        { title: "Reliable streams", text: "Within one connection it offers reliable bidirectional and unidirectional streams." },
+        { title: "Unreliable datagrams", text: "It also offers unreliable datagrams, so an app can mix guaranteed delivery with fire-and-forget packets for things like game state or live media." },
+        { title: "No head-of-line blocking", text: "Because it inherits QUIC's independent streams, one lost packet stalls only its own stream, avoiding the head-of-line blocking WebSockets suffer over TCP." }
+      ],
+      fact: "WebTransport is the emerging alternative to WebSockets, though its W3C and IETF specifications are still drafts."
     },
     {
       id: "openziti", term: "OpenZiti", acronym: "Open-source zero-trust networking overlay",
@@ -1316,7 +1337,15 @@
       types: ["Security Technology", "Protocol"], provenance: [], domains: ["Transport & Web"],
       related: ["cors", "http", "pkce", "waf"],
       source: { label: "W3C Content Security Policy Level 3", url: "https://www.w3.org/TR/CSP3/" },
-      caption: "XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach."
+      caption: "XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach.",
+      steps: [
+        { title: "XSS injects script", text: "Cross-Site Scripting injects attacker-controlled script into a page so it runs with the victim's session, stealing tokens or acting as the user." },
+        { title: "Escape and validate", text: "XSS is defeated by escaping output and validating input." },
+        { title: "CSRF forges a request", text: "Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where they are authenticated." },
+        { title: "Tokens and SameSite", text: "CSRF is defended with anti-CSRF tokens and SameSite cookies." },
+        { title: "CSP limits the damage", text: "Content Security Policy is a response header that whitelists which script, style and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through." }
+      ],
+      fact: "None is sufficient alone: defence in depth is the point."
     },
     {
       id: "vault", term: "Secrets Management", acronym: "Secrets Management (HashiCorp Vault)",
@@ -1946,7 +1975,8 @@
     anchor: '<path d="M12 6v16"/><path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/><path d="M9 11h6"/><circle cx="12" cy="4" r="2"/>',
     boxes: '<path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/>',
     radio: '<path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/>',
-    wifi: '<path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/>'
+    wifi: '<path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/>',
+    send: '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -2903,25 +2933,38 @@
       </svg>`,
 
     cors: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CORS: a simple request exchanges Origin and Access-Control-Allow-Origin headers; a non-simple request adds a preflight OPTIONS round trip first.">
-        <text class="t-b" x="150" y="30" text-anchor="middle">Browser (site A)</text>
-        <text class="t-b" x="570" y="30" text-anchor="middle">Server (site B)</text>
-        <line class="divider" x1="150" y1="42" x2="150" y2="258"/>
-        <line class="divider" x1="570" y1="42" x2="570" y2="258"/>
-        <text class="t-sm t-mut" x="360" y="62" text-anchor="middle">Simple request</text>
-        <text class="t-sm t-mut" x="360" y="148" text-anchor="middle">Preflighted request (PUT, custom headers)</text>
-        ${[
-          ["GET · Origin: A", 84, "mut", 1],
-          ["200 · Access-Control-Allow-Origin: A", 108, "acc", 0],
-          ["OPTIONS preflight · Origin: A", 170, "mut", 1],
-          ["Allow-Methods / Allow-Headers", 194, "mut", 0],
-          ["PUT · Origin: A", 218, "mut", 1],
-          ["200 · Allow-Origin: A", 242, "acc", 0],
-        ].map(([t, y, m, dir]) => `
-          <line class="flow${m==='acc'?'-accent':''}" x1="${dir?150:570}" y1="${y}" x2="${dir?570:150}" y2="${y}" marker-end="url(#ah-${m})"/>
-          <text class="t-sm" x="360" y="${y-7}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="282" text-anchor="middle">Browser-enforced: CORS gates JavaScript reads, not server-to-server calls.</text>
+      <svg class="dg" viewBox="0 0 720 312" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A simple request round-trips with Origin / Allow-Origin headers; a non-simple one adds a preflight OPTIONS check first.">
+        <g data-s="1 4">
+          <rect class="box" x="24" y="12" width="180" height="44" rx="12"/>
+          ${icon('app-window', 40, 22)}
+          <text class="t-b" x="72" y="39">Browser</text>
+          <text class="t-sm t-mut" x="140" y="39">site A</text>
+        </g>
+        <g data-s="2 3">
+          <rect class="box" x="516" y="12" width="180" height="44" rx="8"/>
+          ${icon('server', 532, 22)}
+          <text class="t-b" x="564" y="39">Server</text>
+          <text class="t-sm t-mut" x="624" y="39">site B</text>
+        </g>
+        <line class="divider" x1="114" y1="58" x2="114" y2="240"/>
+        <line class="divider" x1="606" y1="58" x2="606" y2="240"/>
+        <text class="t-sm t-mut" x="360" y="76" text-anchor="middle">simple request</text>
+        <text class="t-sm t-mut" x="360" y="152" text-anchor="middle">not simple: custom headers or PUT</text>
+        ${[['request + Origin: site A', 98, 1, '1'], ['reply + matching Allow-Origin', 126, 0, '2'],
+           ['preflight OPTIONS check', 176, 1, '3'], ['check passes', 204, 0, '3'], ['PUT, then as above', 232, 1, '3']].map(([t, y, right, s]) => `
+          <line class="flow" data-s="${s}" x1="${right ? 116 : 604}" y1="${y}" x2="${right ? 604 : 116}" y2="${y}" marker-end="url(#ah-mut)"/>
+          <text class="t-sm" data-s="${s}" x="360" y="${y - 7}" text-anchor="middle">${t}</text>`).join('')}
+        <g data-s="4">
+          <rect class="box" x="24" y="252" width="672" height="48" rx="8"/>
+          ${icon('shield', 40, 264)}
+          <text class="t-b" x="72" y="274">Enforced by the browser only</text>
+          <text class="t-sm t-mut" x="72" y="291">not applied to server-to-server calls, and not real authorisation</text>
+        </g>
+
+        ${badge(1, 150, 98, '1')}
+        ${badge(2, 570, 126, '2')}
+        ${badge(3, 150, 176, '3')}
+        ${badge(4, 680, 266, '4')}
       </svg>`,
 
     pkce: () => `
@@ -2963,36 +3006,75 @@
       </svg>`,
 
     websockets: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="WebSocket: an HTTP Upgrade handshake answered by 101 Switching Protocols, after which a single TCP connection carries full-duplex frames in both directions.">
-        <text class="t-b" x="150" y="28" text-anchor="middle">Client</text>
-        <text class="t-b" x="570" y="28" text-anchor="middle">Server</text>
-        <line class="divider" x1="150" y1="40" x2="150" y2="250"/>
-        <line class="divider" x1="570" y1="40" x2="570" y2="250"/>
-        ${[
-          ["GET · Upgrade: websocket · Sec-WebSocket-Key", 78, "mut", 1],
-          ["101 Switching Protocols · Sec-WebSocket-Accept", 114, "mut", 0],
-        ].map(([t, y, m, dir]) => `
-          <line class="flow${m==='acc'?'-accent':''}" x1="${dir?150:570}" y1="${y}" x2="${dir?570:150}" y2="${y}" marker-end="url(#ah-${m})"/>
-          <text class="t-sm" x="360" y="${y-7}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="150" text-anchor="middle">Same TCP socket, now upgraded</text>
-        <rect class="zone-accent" x="150" y="162" width="420" height="74" rx="8"/>
-        <text class="t-b t-sm t-acc" x="360" y="184" text-anchor="middle">Full-duplex frame stream</text>
-        <line class="flow-accent" x1="174" y1="206" x2="546" y2="206" marker-end="url(#ah-acc)"/>
-        <line class="flow-accent" x1="546" y1="224" x2="174" y2="224" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">Either side sends at any time — no request/response turn-taking.</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An HTTP Upgrade handshake flips a single TCP connection into a persistent, two-way frame stream.">
+        <g data-s="1 3">
+          <rect class="box" x="24" y="12" width="180" height="44" rx="12"/>
+          ${icon('laptop', 40, 22)}
+          <text class="t-b" x="72" y="39">Client</text>
+        </g>
+        <g data-s="2 3">
+          <rect class="box" x="516" y="12" width="180" height="44" rx="8"/>
+          ${icon('server', 532, 22)}
+          <text class="t-b" x="564" y="39">Server</text>
+        </g>
+        <line class="divider" x1="114" y1="58" x2="114" y2="240"/>
+        <line class="divider" x1="606" y1="58" x2="606" y2="240"/>
+        <line class="flow" data-s="1" x1="116" y1="92" x2="604" y2="92" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="85" text-anchor="middle">HTTP/1.1 GET + Upgrade: websocket</text>
+        <line class="flow" data-s="2" x1="604" y1="124" x2="116" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="117" text-anchor="middle">101 Switching Protocols</text>
+        <g data-s="3">
+          <rect class="zone" x="104" y="144" width="512" height="96" rx="8"/>
+          <text class="t-sm" x="360" y="164" text-anchor="middle">same TCP socket: binary frames, any time</text>
+        </g>
+        <line class="flow" data-s="3" x1="116" y1="188" x2="604" y2="188" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="604" y1="216" x2="116" y2="216" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="24" y="252" width="672" height="40" rx="8"/>
+          ${icon('lock', 40, 260)}
+          <text class="t-b" x="72" y="277">wss://</text>
+          <text class="t-sm t-mut" x="136" y="277">wraps the connection in TLS</text>
+        </g>
+
+        ${badge(1, 150, 92, '1')}
+        ${badge(2, 570, 124, '2')}
+        ${badge(3, 150, 188, '3')}
+        ${badge(4, 680, 272, '4')}
       </svg>`,
 
     webtransport: () => `
-      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="WebTransport: one HTTP/3 connection over QUIC and UDP carries several independent reliable streams plus an unreliable datagram.">
-        <text class="t-b" x="80" y="28" text-anchor="middle">Browser</text>
-        <text class="t-b" x="640" y="28" text-anchor="middle">Server</text>
-        <rect class="zone-accent" x="40" y="44" width="640" height="142" rx="10"/>
-        <text class="t-b t-sm t-acc" x="360" y="68" text-anchor="middle">One HTTP/3 connection — QUIC over UDP</text>
-        ${[104, 124, 144].map((y) => `<line class="flow-accent" x1="120" y1="${y}" x2="600" y2="${y}" marker-end="url(#ah-acc)"/>`).join("")}
-        <text class="t-sm t-mut" x="360" y="172" text-anchor="middle">Independent reliable streams — one lost packet stalls only its own</text>
-        <line class="flow" x1="120" y1="222" x2="600" y2="222" stroke-dasharray="5 4" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="360" y="214" text-anchor="middle">Unreliable datagram — fire-and-forget, may be dropped</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One HTTP/3 connection carries many independent streams plus unreliable datagrams — no cross-stream head-of-line blocking.">
+        <g data-s="1 2 3">
+          <rect class="box" x="24" y="72" width="140" height="120" rx="12"/>
+          ${icon('app-window', 40, 86)}
+          <text class="t-b" x="72" y="104">Browser</text>
+          <text class="t-sm t-mut" x="40" y="130">browser code</text>
+        </g>
+        <g data-s="1 2 3">
+          <rect class="box" x="556" y="72" width="140" height="120" rx="8"/>
+          ${icon('server', 572, 86)}
+          <text class="t-b" x="604" y="104">Server</text>
+        </g>
+        <g data-s="1">
+          <rect class="zone" x="180" y="16" width="360" height="228" rx="10"/>
+          <text class="t-sm" x="360" y="36" text-anchor="middle">one HTTP/3 connection · QUIC · UDP</text>
+        </g>
+        <text class="t-sm t-mut" data-s="2 4" x="376" y="64">bidirectional stream</text>
+        <line class="flow" data-s="2 4" x1="166" y1="74" x2="554" y2="74" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="2 4" x="376" y="104">unidirectional stream</text>
+        <line class="flow" data-s="2 4" x1="166" y1="114" x2="554" y2="114" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="2 4" x="376" y="144">unidirectional stream</text>
+        <line class="flow-bad" data-s="2 4" x1="166" y1="154" x2="346" y2="154"/>
+        <line class="stroke-bad" data-s="4" x1="352" y1="146" x2="368" y2="162" stroke-width="2"/>
+        <line class="stroke-bad" data-s="4" x1="368" y1="146" x2="352" y2="162" stroke-width="2"/>
+        <text class="t-sm bad" data-s="4" x="378" y="158">lost: only this waits</text>
+        <text class="t-sm t-mut" data-s="3" x="376" y="200">datagrams: fire-and-forget</text>
+        <line class="flow" data-s="3" x1="166" y1="210" x2="554" y2="210" stroke-dasharray="2 6" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 520, 36, '1')}
+        ${badge(2, 520, 74, '2')}
+        ${badge(3, 300, 210, '3')}
+        ${badge(4, 330, 154, '4')}
       </svg>`,
 
     openziti: () => `
@@ -3259,20 +3341,43 @@
       </svg>`,
 
     websec: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach.">
-        <text class="t-sm t-mut" x="244" y="30" text-anchor="middle">two classic browser attacks</text>
-        <text class="t-sm t-b" x="592" y="30" text-anchor="middle" fill="var(--state-ok)">the defence</text>
-        ${[
-          ["XSS","--cat-1","injected script runs","in your session",24],
-          ["CSRF","--cat-2","forged request rides","your cookies",256],
-          ["CSP","--cat-4","whitelist limits","what code can load",488]
-        ].map(([t,c,l1,l2,x])=>`
-          <rect x="${x}" y="50" width="208" height="150" rx="12" fill="color-mix(in srgb, var(${c}) 10%, var(--surface))" stroke="var(${c})" stroke-width="1.5"/>
-          <text class="t-b" x="${x+104}" y="92" text-anchor="middle" fill="var(${c})">${t}</text>
-          <text class="t-sm t-mut" x="${x+104}" y="126" text-anchor="middle">${l1}</text>
-          <text class="t-sm t-mut" x="${x+104}" y="146" text-anchor="middle">${l2}</text>
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="240" text-anchor="middle">Escape output, use anti-CSRF tokens and SameSite, and ship a CSP — defence in depth.</text>
+      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP whitelist limits what injected code can reach.">
+        <path class="flow" data-s="5" d="M592 42 V24 H128 V42" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="360" y="16" text-anchor="middle">limits what injected code can do</text>
+        ${[['code', 'XSS', 'injected script runs', "in the victim's session", 24, '1'], ['send', 'CSRF', 'forged request from', 'a logged-in browser', 256, '3']].map(([ico, name, l1, l2, x, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="${x}" y="44" width="208" height="84" rx="8"/>
+            ${icon(ico, x + 16, 58)}
+            <text class="t-b" x="${x + 48}" y="76">${name}</text>
+            <text class="t-sm bad" x="${x + 48 + name.length * 8 + 8}" y="76">attack</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="98">${l1}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="114">${l2}</text>
+          </g>`).join('')}
+        ${[['shield-check', 'Escape output', 'and validate input', 24, '2'], ['key-round', 'Anti-CSRF tokens', 'and SameSite cookies', 256, '4']].map(([ico, name, sub, x, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="${x}" y="164" width="208" height="64" rx="8"/>
+            ${icon(ico, x + 16, 176)}
+            <text class="t-b" x="${x + 48}" y="194">${name}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="212">${sub}</text>
+          </g>
+          <line class="flow" data-s="${s}" x1="${x + 104}" y1="130" x2="${x + 104}" y2="162" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5">
+          <rect class="box" x="488" y="44" width="208" height="184" rx="8"/>
+          ${icon('list-checks', 504, 58)}
+          <text class="t-b" x="536" y="76">CSP</text>
+          <text class="t-sm t-mut" x="536" y="98">response header</text>
+          <text class="t-sm t-mut" x="504" y="130">whitelists which</text>
+          <text class="t-sm t-mut" x="504" y="146">script, style and</text>
+          <text class="t-sm t-mut" x="504" y="162">connection sources</text>
+          <text class="t-sm t-mut" x="504" y="178">a page may load</text>
+        </g>
+        <text class="t-sm t-mut" x="360" y="260" text-anchor="middle">Together: the core of browser-side application security.</text>
+
+        ${badge(1, 216, 60, '1')}
+        ${badge(2, 128, 146, '2')}
+        ${badge(3, 448, 60, '3')}
+        ${badge(4, 360, 146, '4')}
+        ${badge(5, 680, 60, '5')}
       </svg>`,
 
     vault: () => `

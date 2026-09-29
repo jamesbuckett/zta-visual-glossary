@@ -68,10 +68,21 @@ CoreWeave — GPU Cloud Platform for AI
 CORS — Cross-Origin Resource Sharing
     A browser rule that lets a server declare which other origins may read its responses.
     [Protocol, Security Technology] · aka same-origin policy, preflight, Access-Control-Allow-Origin
+    1. Script calls another site — When script on one site calls another, the browser attaches an Origin header to the request.
+    2. Server allows the origin — The browser only exposes the reply if the server returns a matching Access-Control-Allow-Origin. That is how a server relaxes the same-origin policy.
+    3. Preflight first — Requests that are not simple, with custom headers or methods like PUT, trigger a preflight OPTIONS check first.
+    4. Browsers only — CORS is enforced only by browsers: it governs in-browser JavaScript, not server-to-server calls.
+    Key fact: CORS is no substitute for real authorisation.
 
 CSRF / XSS / CSP — Web App Attacks & Content Security Policy
     The two classic browser attacks — and the header that helps shut them down.
     [Security Technology, Protocol] · aka cross-site request forgery, cross-site scripting, content security policy, same-origin, SameSite, injection
+    1. XSS injects script — Cross-Site Scripting injects attacker-controlled script into a page so it runs with the victim's session, stealing tokens or acting as the user.
+    2. Escape and validate — XSS is defeated by escaping output and validating input.
+    3. CSRF forges a request — Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where they are authenticated.
+    4. Tokens and SameSite — CSRF is defended with anti-CSRF tokens and SameSite cookies.
+    5. CSP limits the damage — Content Security Policy is a response header that whitelists which script, style and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through.
+    Key fact: None is sufficient alone: defence in depth is the point.
 
 CVE / CVSS — Vulnerability IDs & Severity Scoring
     The shared ID and 0–10 score that let everyone talk about the same flaw.
@@ -522,10 +533,20 @@ WAF — Web Application Firewall
 WebSockets — WebSocket Protocol (RFC 6455)
     Upgrades an HTTP connection into a persistent, two-way channel for live data.
     [Protocol, Network Technology] · aka ws, wss, RFC 6455, Sec-WebSocket-Key
+    1. Ask to upgrade — The connection starts as an HTTP/1.1 GET carrying an Upgrade: websocket header.
+    2. 101 Switching Protocols — The server answers 101 Switching Protocols.
+    3. Frames both ways — The same TCP socket then carries lightweight binary frames in both directions, so client and server can push messages at any time.
+    4. wss:// adds TLS — Run it as wss:// to wrap the connection in TLS.
+    Key fact: WebSocket removes the request/response turn-taking of plain HTTP, which is why it powers chat, collaborative editing, live dashboards and trading feeds.
 
 WebTransport — Multiplexed streams and datagrams over HTTP/3
     A newer browser transport over HTTP/3 offering multiplexed streams and fire-and-forget datagrams.
     [Protocol, Network Technology] · aka HTTP/3 transport, datagrams, WebTransport API
+    1. A session over HTTP/3 — WebTransport gives browser code a low-latency session over HTTP/3, and therefore over QUIC and UDP.
+    2. Reliable streams — Within one connection it offers reliable bidirectional and unidirectional streams.
+    3. Unreliable datagrams — It also offers unreliable datagrams, so an app can mix guaranteed delivery with fire-and-forget packets for things like game state or live media.
+    4. No head-of-line blocking — Because it inherits QUIC's independent streams, one lost packet stalls only its own stream, avoiding the head-of-line blocking WebSockets suffer over TCP.
+    Key fact: WebTransport is the emerging alternative to WebSockets, though its W3C and IETF specifications are still drafts.
 
 WireGuard — WireGuard VPN protocol
     A fast, modern, minimal VPN protocol built on current cryptography.
