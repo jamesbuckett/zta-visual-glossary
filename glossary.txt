@@ -38,6 +38,11 @@ BlueField — NVIDIA Data Processing Unit (DPU)
 BOLA — Broken Object Level Authorization
     Swap the ID in an API request and read another user's object — because the server never checked it was yours.
     [Security Technology] · aka IDOR, insecure direct object reference, API1:2023, object-level authorization, broken access control
+    1. An authenticated caller — The API authenticates the caller, answering 'who are you?'
+    2. Their own object — An endpoint exposes objects by identifier, such as GET /orders/1001.
+    3. Change the ID — The attacker simply changes the ID to 1002, and the API hands back another user's record, because no one answered 'is this yours?'
+    4. Check every request — The fix is a server-side ownership or policy check on every request that takes a client-supplied identifier, ideally in the data-access layer.
+    Key fact: Unpredictable IDs such as UUIDs raise the bar but are obscurity, not authorisation: the check is what counts.
 
 Calico — Project Calico — Kubernetes Networking & Network Policy
     The Kubernetes CNI that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.
@@ -304,6 +309,12 @@ Kubernetes — Kubernetes (K8s)
 LDAP / Active Directory — Lightweight Directory Access Protocol
     The directory that stores users, groups, and devices — and answers who is this?
     [Protocol, Security Technology] · aka Active Directory, AD, directory service, distinguished name, DN, OpenLDAP
+    1. A directory tree — LDAP queries and modifies a directory: a hierarchical database of entries such as users, groups and computers, each identified by a distinguished name and described by attributes.
+    2. Bind to authenticate — Applications bind to the directory to authenticate a user.
+    3. Read group membership — They also read the user's group membership, which downstream systems map to permissions.
+    4. The source of truth — The directory is the source of truth that RADIUS, SAML and SCIM build on, and that identity providers federate outward to the cloud.
+    5. A prime target — Because it holds the keys to every account, the directory is a prime target: compromise it and you own the estate.
+    Key fact: Active Directory combines an LDAP directory with Kerberos authentication and policy to become the identity backbone of most corporate networks.
 
 Load Balancer — Load Balancer
     Spreads incoming traffic across many backend servers.
@@ -373,6 +384,11 @@ OAuth 2.0 — Open Authorization 2.0
 OBO / Token Exchange — On-Behalf-Of (OAuth 2.0 Token Exchange)
     Lets a middle-tier service swap the user's token for a downstream-scoped one, so identity and least privilege survive the whole call chain.
     [Protocol, Security Technology] · aka on-behalf-of, RFC 8693, delegation, impersonation, act claim, middle tier
+    1. Client calls API A — A client calls API A with the user's access token, and API A must now call API B.
+    2. Exchange the token — Rather than calling B as itself, API A presents the token it received to the authorisation server and exchanges it for a new one.
+    3. Scoped to API B — The new token is audience-restricted to B and scoped to what the user may do there, so B authorises the real subject rather than a generic service account.
+    4. Forwarding fails — Forwarding the original token downstream breaks audience restriction, and calling with the service's own credentials leaves B unable to tell users apart: the confused deputy.
+    Key fact: OAuth 2.0 Token Exchange (RFC 8693) records the acting party in the token's act claim.
 
 OIDC — OpenID Connect
     An identity layer on top of OAuth 2.0 that tells an app who the user is.
@@ -416,10 +432,21 @@ PAC File — Proxy Auto-Configuration
 PAM — Privileged Access Management
     Tight control over the powerful admin accounts attackers most want.
     [Security Technology] · aka privileged accounts, just-in-time access, credential vaulting, session recording
+    1. Privileged accounts — A handful of privileged accounts, such as domain admins, root and cloud owners, can do catastrophic damage.
+    2. Check out, not know — PAM vaults their credentials, so admins check them out rather than knowing them.
+    3. A recorded gateway — Sessions are brokered through a gateway that records keystrokes for audit, the accountability trail regulators expect.
+    4. Just-in-time — Privileges are elevated for a specific task and a short window, then automatically revoked.
+    Key fact: Just-in-time access shrinks the standing attack surface to near zero.
 
 PASETO — Platform-Agnostic Security Tokens
     A JWT alternative with no algorithm field — the version prefix pins the cryptography, so there is nothing for an attacker to downgrade.
     [Security Technology, Protocol] · aka v4.local, v4.public, PASERK, JWT alternative, versioned protocols, algorithm confusion, implicit assertion, footer
+    1. JWT's alg field — JWT negotiates its algorithm in-band through the header's alg field, which makes algorithm-confusion attacks possible: swap RS256 for HS256, or alg: none once skipped verification altogether.
+    2. Version fixes the suite — A PASETO token reads version.purpose.payload, and the version names the entire cipher suite before parsing begins. There is no field to tamper with.
+    3. Local or public — The purpose is one of two: local means the payload is encrypted under a shared symmetric key; public means it is signed and readable by anyone holding the public key.
+    4. The optional footer — An optional footer is authenticated but left in the clear, for things like key identifiers.
+    5. The adoption caveat — The IETF draft expired, PASETO never became an RFC, and usage trails JWT by orders of magnitude.
+    Key fact: PASETO's claim is that it should not have been possible to get wrong in the first place.
 
 PEP / PDP — Policy Enforcement Point / Policy Decision Point
     The enforce-here, decide-there split at the heart of access control.
