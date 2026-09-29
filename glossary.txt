@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-100 terms, alphabetical. Generated from index.html by glossary.mjs.
+101 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -300,12 +300,22 @@ gRPC — gRPC Remote Procedure Call
 
 HTTP / HTTPS — HyperText Transfer Protocol (Secure)
     The request/response protocol of the web; HTTPS is HTTP wrapped in TLS.
-    [Protocol] · aka HTTP, HTTPS, HTTP/2, web
+    [Protocol] · aka HTTP, HTTPS, web
     1. Client requests — A browser or API client asks for a resource, using a method such as GET or POST.
     2. Server responds — The server answers the request with the resource.
     3. Each request stands alone — Each request stands alone. Cookies or tokens carry context from one request to the next.
     4. HTTPS adds TLS — HTTPS is the very same protocol running inside a TLS-encrypted channel, so the traffic is private and tamper-evident.
     Key fact: HTTPS is now the default transport for nearly all web traffic.
+
+HTTP/2 — HyperText Transfer Protocol version 2 (RFC 9113)
+    HTTP's binary, multiplexed version: many requests share one connection at once, with compressed headers.
+    [Protocol] · aka h2, h2c, RFC 9113, RFC 7540, HPACK, SPDY, multiplexing
+    1. Same HTTP semantics — HTTP/2 keeps the methods, status codes and headers of HTTP/1.1 but changes how they travel on the wire.
+    2. Binary frames — Each request and response is split into binary frames tagged with a stream ID.
+    3. One connection, many streams — Many exchanges interleave over one TCP connection at once, where HTTP/1.1 clients open several parallel connections to get the same concurrency.
+    4. HPACK compresses headers — Headers are compressed with HPACK, so fields repeated from earlier requests, such as cookies, shrink to a short index.
+    5. TCP head-of-line blocking — Every stream shares one ordered TCP byte stream, so a single lost packet stalls all of them. HTTP/3 over QUIC was built to remove this.
+    Key fact: A single lost packet stalls every HTTP/2 stream on the connection, which is the head-of-line blocking HTTP/3 over QUIC was built to remove.
 
 Identity Provider — Identity Provider (IdP)
     The trusted service that authenticates users and vouches for who they are.

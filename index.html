@@ -652,7 +652,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">100</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">101</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -663,11 +663,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, a tight explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of zero trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">100</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">101</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">100</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">101</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -776,11 +776,11 @@
     },
     {
       id: "http", term: "HTTP / HTTPS", acronym: "HyperText Transfer Protocol (Secure)",
-      aliases: ["HTTP", "HTTPS", "HTTP/2", "web"],
+      aliases: ["HTTP", "HTTPS", "web"],
       tldr: "The request/response protocol of the web; HTTPS is HTTP wrapped in TLS.",
       explainer: `HTTP is the application protocol browsers and APIs use to fetch and submit resources via methods such as GET and POST. It is stateless: each request stands alone, with cookies or tokens carrying context between them. HTTPS is the very same protocol running inside a TLS-encrypted channel, so traffic is private and tamper-evident. It is now the default transport for nearly all web traffic.`,
       types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
-      related: ["tls", "tcpip", "grpc"],
+      related: ["tls", "tcpip", "grpc", "http2"],
       source: { label: "RFC 9110 — HTTP Semantics", url: "https://www.rfc-editor.org/info/rfc9110" },
       caption: "Request/response — the client asks, the server answers; HTTPS wraps the exchange in TLS.",
       steps: [
@@ -1039,7 +1039,7 @@
       tldr: "A fast, contract-first RPC framework using Protocol Buffers over HTTP/2.",
       explainer: `gRPC lets services call one another as if invoking local functions, defining the contract in a .proto file from which client and server code is generated. It serialises data with compact binary Protocol Buffers and rides HTTP/2, enabling multiplexing and streaming with low latency. It is a common choice for internal microservice communication where REST and JSON prove too chatty.`,
       types: ["Protocol", "Development Framework"], provenance: ["Open Source"], domains: ["Transport & Web", "Platforms & Apps"],
-      related: ["http", "kubernetes", "mtls"],
+      related: ["http", "kubernetes", "mtls", "http2"],
       source: { label: "gRPC documentation", url: "https://grpc.io/docs/" },
       caption: "A .proto contract generates client and server stubs; calls ride HTTP/2 with streaming.",
       steps: [
@@ -1285,7 +1285,7 @@
       tldr: "A fast, always-encrypted transport that runs over UDP and folds in the work of TCP plus TLS.",
       explainer: `QUIC is a transport protocol that runs over UDP and combines connection setup, TLS 1.3 encryption, and multiplexed streams into one design. Because the transport and cryptographic handshakes happen together, a new connection is usually ready after a single round trip — or zero when resuming — where TCP-then-TLS needs several. Independent streams mean one lost packet stalls only its own stream, removing the head-of-line blocking — one stalled packet holding up everything queued behind it — that slows HTTP/2 over TCP. It is the foundation of HTTP/3 and ships in every major browser, with encryption built in rather than bolted on.`,
       types: ["Protocol", "Network Technology", "Security Technology"], provenance: [], domains: ["Transport & Web", "Secure Channels & Crypto"],
-      related: ["tls", "tcpip", "http"],
+      related: ["tls", "tcpip", "http", "http2"],
       source: { label: "RFC 9000 — QUIC", url: "https://www.rfc-editor.org/info/rfc9000" },
       caption: "Combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP.",
       steps: [
@@ -2465,6 +2465,24 @@
         { title: "A specialist", text: "Managed databases, identity services and compliance are thinner than a hyperscaler's, so most organisations run it alongside another cloud." }
       ],
       fact: "Enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls."
+    },
+    {
+      id: "http2", term: "HTTP/2", acronym: "HyperText Transfer Protocol version 2 (RFC 9113)",
+      aliases: ["h2", "h2c", "RFC 9113", "RFC 7540", "HPACK", "SPDY", "multiplexing"],
+      tldr: "HTTP's binary, multiplexed version: many requests share one connection at once, with compressed headers.",
+      explainer: `Standardised in 2015 from Google's SPDY experiment, HTTP/2 keeps the methods, status codes and headers of HTTP/1.1 but changes how they travel on the wire. Each request and response is split into binary frames tagged with a stream ID, so many exchanges interleave over one TCP connection at once, where HTTP/1.1 clients open several parallel connections to get the same concurrency. Headers are compressed with HPACK, so fields repeated from earlier requests, such as cookies, shrink to a short index; browsers use HTTP/2 only over TLS, and gRPC is built on it. The limitation is TCP itself: every stream shares one ordered byte stream, so a single lost packet stalls all of them — the head-of-line blocking that HTTP/3 over QUIC was built to remove.`,
+      types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
+      related: ["http", "quic", "grpc", "tls"],
+      source: { label: "RFC 9113 — HTTP/2", url: "https://www.rfc-editor.org/info/rfc9113" },
+      caption: "Requests and responses become binary frames tagged by stream, interleaved on one TCP connection; one lost packet stalls every stream.",
+      steps: [
+        { title: "Same HTTP semantics", text: "HTTP/2 keeps the methods, status codes and headers of HTTP/1.1 but changes how they travel on the wire." },
+        { title: "Binary frames", text: "Each request and response is split into binary frames tagged with a stream ID." },
+        { title: "One connection, many streams", text: "Many exchanges interleave over one TCP connection at once, where HTTP/1.1 clients open several parallel connections to get the same concurrency." },
+        { title: "HPACK compresses headers", text: "Headers are compressed with HPACK, so fields repeated from earlier requests, such as cookies, shrink to a short index." },
+        { title: "TCP head-of-line blocking", text: "Every stream shares one ordered TCP byte stream, so a single lost packet stalls all of them. HTTP/3 over QUIC was built to remove this." }
+      ],
+      fact: "A single lost packet stalls every HTTP/2 stream on the connection, which is the head-of-line blocking HTTP/3 over QUIC was built to remove."
     }
   ];
 
@@ -7300,6 +7318,66 @@
         ${badge(3, 184, 206, '3')}
         ${badge(4, 680, 254, '4')}
         ${badge(5, 680, 296, '5')}
+      </svg>`,
+
+    http2: () => `
+      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Requests and responses become binary frames tagged by stream, interleaved on one TCP connection; one lost packet stalls every stream.">
+        <g data-s="1">
+          <rect class="box" x="24" y="60" width="148" height="132" rx="12"/>
+          ${icon('laptop', 40, 74)}
+          <text class="t-b" x="72" y="92">Client</text>
+          <text class="t-sm t-mut" x="40" y="130">GET /index</text>
+          <text class="t-sm t-mut" x="40" y="152">GET /app.js</text>
+          <text class="t-sm t-mut" x="40" y="174">GET /logo</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="548" y="60" width="148" height="132" rx="8"/>
+          ${icon('server', 564, 74)}
+          <text class="t-b" x="596" y="92">Server</text>
+          <text class="t-sm t-mut" x="564" y="130">200 · html</text>
+          <text class="t-sm t-mut" x="564" y="152">200 · js</text>
+          <text class="t-sm t-mut" x="564" y="174">200 · png</text>
+        </g>
+        <g data-s="3">
+          <rect class="zone" x="188" y="16" width="344" height="212" rx="10"/>
+          <text class="t-sm" x="360" y="36" text-anchor="middle">one TCP connection, over TLS</text>
+        </g>
+
+        <text class="t-sm t-mut" data-s="3" x="200" y="90">requests</text>
+        <line class="flow" data-s="3" x1="174" y1="96" x2="546" y2="96" marker-end="url(#ah-mut)"/>
+        ${[['H1', 304], ['H3', 344], ['H5', 384]].map(([f, x]) => `
+          <g data-s="2">
+            <rect class="box" x="${x}" y="74" width="32" height="20" rx="3"/>
+            <text class="t-sm" x="${x + 16}" y="88" text-anchor="middle">${f}</text>
+          </g>`).join('')}
+
+        <g data-s="4">
+          <rect class="box" x="220" y="108" width="280" height="24" rx="6"/>
+          <text class="t-sm" x="360" y="124" text-anchor="middle">HPACK: repeated headers sent as an index</text>
+        </g>
+
+        ${[['H3', 224], ['D3', 264], ['H1', 304], ['D1', 344], ['H5', 384], ['D5', 424], ['D1', 464]].map(([f, x]) => `
+          <g data-s="2">
+            <rect class="box" x="${x}" y="148" width="32" height="20" rx="3"/>
+            <text class="t-sm" x="${x + 16}" y="162" text-anchor="middle">${f}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="3" x1="546" y1="170" x2="174" y2="170" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="3" x="360" y="188" text-anchor="middle">responses, interleaved</text>
+        <text class="t-sm t-mut" data-s="2" x="360" y="214" text-anchor="middle">H = HEADERS · D = DATA · n = stream ID</text>
+
+        <g data-s="5">
+          <rect class="box" x="24" y="244" width="672" height="36" rx="6"/>
+          <text class="t-b" x="40" y="267">TCP</text>
+          <line class="stroke-bad" x1="84" y1="254" x2="100" y2="270" stroke-width="2"/>
+          <line class="stroke-bad" x1="100" y1="254" x2="84" y2="270" stroke-width="2"/>
+          <text class="t-sm bad" x="112" y="267">one ordered byte stream: a lost packet stalls every stream</text>
+        </g>
+
+        ${badge(1, 152, 84, '1')}
+        ${badge(2, 440, 84, '2')}
+        ${badge(3, 512, 36, '3')}
+        ${badge(4, 510, 120, '4')}
+        ${badge(5, 680, 262, '5')}
       </svg>`,
   };
 
