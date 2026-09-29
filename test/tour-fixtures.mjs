@@ -54,6 +54,9 @@ const CASES = [
   ['two steps rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: "b" }], fact: "f"`), 'validate', 1, 'tour-data'],
   ['empty step text rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: " " }, { title: "C", text: "c" }], fact: "f"`), 'validate', 1, 'tour-data'],
   ['missing fact rejected', withTour(base, `steps: [{ title: "A", text: "a" }, { title: "B", text: "b" }, { title: "C", text: "c" }]`), 'validate', 1, 'tour-data'],
+  ['term without a tour rejected',
+    base.replace(/(id: "wireguard"[\s\S]*?)\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1'),
+    'validate', 1, 'tour-data'],
   // Enabled by the Task 4 checks (tour stepping and badge/icon geometry).
   ['good tour verifies', withDiagram(withTour(base, GOOD_STEPS), svg()), 'verify', 0, null],
   ['step that lights nothing', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '1' })), 'verify', 1, 'tour'],

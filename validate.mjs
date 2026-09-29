@@ -95,13 +95,11 @@ if (html.includes('const TERMS = [')) {
     err('data-parse', `DIAGRAMS: ${e.message}`);
   }
 
-  // Diagram tours: a term that has steps or a fact must have both, with 3–5
-  // steps that each carry a title and text. Phase 3 of the infographic
-  // rollout makes this mandatory for every term.
+  // Diagram tours: every term must have steps and a fact, with 3–5 steps
+  // that each carry a title and text.
   let terms = [];
   try { terms = extractArray(html, 'TERMS'); } catch { /* reported above */ }
   for (const t of terms) {
-    if (t.steps === undefined && t.fact === undefined) continue;
     const where = t.id || '(no id)';
     if (!Array.isArray(t.steps) || t.steps.length < 3 || t.steps.length > 5) {
       err('tour-data', `${where}: steps must be an array of 3–5 entries`);

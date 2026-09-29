@@ -317,7 +317,8 @@ for (const t of targets) {
   for (const o of found.overflow)   err('overflow',  `${t.id}: "${o.text}" extends outside the viewBox (x ${o.x}..${o.right})`);
   for (const b of found.badgeHits)  err('badge', `${t.id}: ${b.badge} covers "${b.text}"`);
 
-  if (t.steps) {
+  if (!t.steps) err('tour', `${t.id}: no steps — every diagram is a tour`);
+  else {
     const n = t.steps.length;
     const tour = await page.evaluate(TOUR_PROBE);
     if (!tour.card) { err('tour', `${t.id}: has steps but no tour card rendered`); }

@@ -7446,9 +7446,7 @@
   /* ---- detail rendering ---- */
   function diagramHtml(e) {
     const fn = DIAGRAMS[e.id];
-    const svg = fn ? fn() : fallbackDiagram(e);
-    if (e.steps) return tourHtml(e, svg);
-    return `<figure class="diagram-frame" aria-labelledby="dgcap-${e.id}">${svg}<figcaption id="dgcap-${e.id}">${esc(e.caption || (e.term + " — schematic"))}</figcaption></figure>`;
+    return tourHtml(e, fn ? fn() : fallbackDiagram(e));
   }
   // Step-through card. setStep() fills the panel, so it starts empty here.
   function tourHtml(e, svg) {
