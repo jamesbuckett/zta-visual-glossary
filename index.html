@@ -911,7 +911,14 @@
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["kubernetes", "grpc"],
       source: { label: "Docker documentation", url: "https://docs.docker.com/" },
-      caption: "An image is a stack of read-only layers; containers share the host kernel."
+      caption: "An image is a stack of read-only layers; containers share the host kernel.",
+      steps: [
+        { title: "Stacked image layers", text: "An image is built in stacked, cacheable, read-only layers that bundle an application with everything it needs to run." },
+        { title: "Run a container", text: "A container runs from the image as a lightweight, isolated process." },
+        { title: "Share the kernel", text: "Containers share the host's kernel instead of booting a whole virtual machine." },
+        { title: "Same on any host", text: "The same image runs identically on any host, which makes works-on-my-machine reproducible." }
+      ],
+      fact: "The container is the unit most modern deployment, including Kubernetes, builds upon."
     },
     {
       id: "kubernetes", term: "Kubernetes", acronym: "Kubernetes (K8s)", aliases: ["K8s", "orchestration", "pod"],
@@ -920,7 +927,15 @@
       types: ["Development Framework", "Network Technology"], provenance: ["Open Source"], domains: ["Platforms & Apps", "Kubernetes"],
       related: ["docker", "keda", "loadbalancer", "spiffe"],
       source: { label: "Kubernetes documentation — Concepts", url: "https://kubernetes.io/docs/concepts/" },
-      caption: "The control plane reconciles desired state, scheduling pods onto worker nodes."
+      caption: "The control plane reconciles desired state, scheduling pods onto worker nodes.",
+      steps: [
+        { title: "Declare desired state", text: "You declare the desired state: how many replicas, which images, what networking." },
+        { title: "Reconcile continuously", text: "The control plane continuously reconciles reality to match the desired state." },
+        { title: "Schedule pods", text: "It schedules pods, the smallest deployable unit, onto the worker nodes of the cluster." },
+        { title: "Reschedule failures", text: "When a workload fails, the control plane reschedules it." },
+        { title: "Scale on demand", text: "It also scales on demand, adding pods as they are needed." }
+      ],
+      fact: "Kubernetes turns a fleet of machines into one programmable platform."
     },
     {
       id: "react", term: "React", acronym: "React (UI library)", aliases: ["ReactJS", "JSX", "component"],
@@ -929,7 +944,15 @@
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["django", "grpc"],
       source: { label: "react.dev", url: "https://react.dev/" },
-      caption: "A component tree renders from state; data flows down to children as props."
+      caption: "A component tree renders from state; data flows down to children as props.",
+      steps: [
+        { title: "Tree of components", text: "You build the user interface as a tree of reusable components." },
+        { title: "Props flow down", text: "Data flows down to child components as props. Each component's output is a function of its state and props." },
+        { title: "State changes", text: "When state changes, React re-renders." },
+        { title: "Diff the virtual DOM", text: "It re-renders efficiently by diffing a lightweight virtual representation of the DOM." },
+        { title: "Patch what changed", text: "Only what changed is patched." }
+      ],
+      fact: "React's declarative model describes what the UI should look like, not the steps to mutate it."
     },
     {
       id: "django", term: "Django", acronym: "Django (Python web framework)", aliases: ["MTV", "ORM"],
@@ -938,7 +961,15 @@
       types: ["Development Framework"], provenance: ["Open Source"], domains: ["Platforms & Apps"],
       related: ["react", "http"],
       source: { label: "djangoproject.com", url: "https://www.djangoproject.com/" },
-      caption: "MTV request flow — URL routing to a view, models for data, a template for the response."
+      caption: "MTV request flow — URL routing to a view, models for data, a template for the response.",
+      steps: [
+        { title: "Route the request", text: "An incoming request is routed by its URL to a view." },
+        { title: "Pull data via models", text: "The view pulls data through models, using the ORM (object-relational mapper) for database access." },
+        { title: "Render a template", text: "The view renders a template. Model, template and view make up Django's MTV pattern." },
+        { title: "Return the response", text: "The rendered template becomes the response." },
+        { title: "Out of the box", text: "Django ships with an ORM, an auto-generated admin interface, authentication and routing out of the box." }
+      ],
+      fact: "Django's philosophy is to handle the plumbing so you can focus on the application."
     },
     {
       id: "grpc", term: "gRPC", acronym: "gRPC Remote Procedure Call", aliases: ["protobuf", "Protocol Buffers", "RPC"],
@@ -974,7 +1005,15 @@
       types: ["Protocol", "Network Technology"], provenance: [], domains: ["Addressing & Routing"],
       related: ["dns", "nat", "tcpip"],
       source: { label: "RFC 2131 — DHCP", url: "https://www.rfc-editor.org/info/rfc2131" },
-      caption: "The DORA exchange — Discover, Offer, Request, Acknowledge — leases an address to a client."
+      caption: "The DORA exchange — Discover, Offer, Request, Acknowledge — leases an address to a client.",
+      steps: [
+        { title: "Discover", text: "A device that has just connected begins a short exchange with a DHCP server by sending a Discover." },
+        { title: "Offer", text: "The DHCP server replies with an Offer." },
+        { title: "Request", text: "The device answers with a Request." },
+        { title: "Acknowledge", text: "The server confirms with an Acknowledge. The device now has its IP address, subnet mask, default gateway and DNS servers, with no manual setup." },
+        { title: "A limited lease", text: "The server leases each address for a limited time." }
+      ],
+      fact: "DHCP is why a phone just works the moment it joins a new Wi-Fi network."
     },
     {
       id: "saml", term: "SAML", acronym: "Security Assertion Markup Language", aliases: ["SSO", "assertion", "federation"],
@@ -1817,7 +1856,21 @@
     laptop: '<path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z"/><path d="M20.054 15.987H3.946"/>',
     search: '<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
     router: '<rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6.01 18H6"/><path d="M10.01 18H10"/><path d="M15 10v4"/><path d="M17.84 7.17a4 4 0 0 0-5.66 0"/><path d="M20.66 4.34a8 8 0 0 0-11.31 0"/>',
-    phone: '<path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>'
+    phone: '<path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>',
+    smartphone: '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    layers: '<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>',
+    box: '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+    component: '<path d="M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z"/><path d="M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z"/><path d="M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z"/><path d="M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z"/>',
+    monitor: '<rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>',
+    route: '<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+    code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+    table: '<path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/>',
+    "layout-template": '<rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/>',
+    "file-code": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/>',
+    package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/>',
+    database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
+    cog: '<path d="M11 10.27 7 3.34"/><path d="m11 13.73-4 6.93"/><path d="M12 22v-2"/><path d="M12 2v2"/><path d="M14 12h8"/><path d="m17 20.66-1-1.73"/><path d="m17 3.34-1 1.73"/><path d="M2 12h2"/><path d="m20.66 17-1.73-1"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m3.34 7 1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/>'
   };
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
@@ -2206,86 +2259,161 @@
       </svg>`,
 
     docker: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A Docker image is stacked read-only layers; a container runs from it and shares the host kernel.">
-        <text class="t-sm t-mut" x="230" y="28" text-anchor="middle">Image — read-only layers</text>
-        <rect class="box-accent" x="100" y="40" width="260" height="40" rx="6"/>
-        <text x="230" y="65" text-anchor="middle">App code</text>
-        <rect class="box" x="100" y="84" width="260" height="40" rx="6"/>
-        <text x="230" y="109" text-anchor="middle">Dependencies</text>
-        <rect class="box" x="100" y="128" width="260" height="40" rx="6"/>
-        <text x="230" y="153" text-anchor="middle">Base image (OS libs)</text>
-        <line class="flow-accent" x1="360" y1="104" x2="446" y2="104" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="403" y="96" text-anchor="middle">run</text>
-        <rect class="box-accent" x="450" y="48" width="210" height="120" rx="10"/>
-        <text class="t-b" x="555" y="100" text-anchor="middle">Container</text>
-        <text class="t-sm t-mut" x="555" y="120" text-anchor="middle">isolated process</text>
-        <rect class="box-soft" x="80" y="208" width="560" height="48" rx="8"/>
-        <text class="t-b" x="360" y="237" text-anchor="middle">Shared host OS kernel</text>
-        <line class="flow" x1="230" y1="168" x2="230" y2="206" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="555" y1="168" x2="555" y2="206" marker-end="url(#ah-mut)"/>
+      <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An image is a stack of read-only layers; containers share the host kernel.">
+        <g data-s="1">
+          <rect class="zone" x="24" y="24" width="220" height="236" rx="10"/>
+          ${icon('layers', 36, 36)}
+          <text class="t-b" x="68" y="54">Image</text>
+          ${[['application', 88], ['what it needs', 136], ['base layer', 184]].map(([t, y]) => `
+            <rect class="box" x="36" y="${y}" width="196" height="40" rx="6"/>
+            <text class="t-sm" x="52" y="${y + 25}">${t}</text>
+            <text class="t-sm t-mut" x="220" y="${y + 25}" text-anchor="end">read-only</text>`).join('')}
+          <text class="t-sm t-mut" x="36" y="248">stacked, cacheable</text>
+        </g>
+        ${[['Host 1', 24, '2 3', '3'], ['Host 2', 156, '4', '4']].map(([name, y, cs, ks]) => `
+          <rect class="zone" x="300" y="${y}" width="396" height="104" rx="10"/>
+          <text class="t-sm t-mut" x="312" y="${y + 20}">${name}</text>
+          <g data-s="${cs}">
+            <rect class="box" x="316" y="${y + 28}" width="170" height="64" rx="8"/>
+            ${icon('box', 332, y + 48)}
+            <text class="t-b" x="364" y="${y + 58}">Container</text>
+            <text class="t-sm t-mut" x="364" y="${y + 76}">isolated process</text>
+          </g>
+          <line class="flow" data-s="${ks}" x1="488" y1="${y + 60}" x2="554" y2="${y + 60}" marker-end="url(#ah-mut)"/>
+          <g data-s="${ks}">
+            <rect class="box" x="556" y="${y + 28}" width="128" height="64" rx="8"/>
+            ${icon('cpu', 568, y + 48)}
+            <text class="t-b" x="600" y="${y + 58}">Kernel</text>
+            <text class="t-sm t-mut" x="600" y="${y + 76}">shared</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="246" y1="112" x2="314" y2="84" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="246" y1="176" x2="314" y2="216" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 224, 44, '1')}
+        ${badge(2, 280, 98, '2')}
+        ${badge(3, 668, 66, '3')}
+        ${badge(4, 280, 196, '4')}
       </svg>`,
 
     kubernetes: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The control plane reconciles desired state and schedules pods onto worker nodes.">
-        <rect class="box-accent" x="30" y="90" width="200" height="100" rx="12"/>
-        <text class="t-b" x="130" y="130" text-anchor="middle">Control plane</text>
-        <text class="t-sm t-mut" x="130" y="150" text-anchor="middle">reconciles state</text>
-        ${[40, 150].map((ny, i) => `
-          <rect class="box" x="320" y="${ny}" width="370" height="100" rx="10"/>
-          <text class="t-sm t-mut" x="338" y="${ny + 22}">Node ${i + 1}</text>
-          <rect class="data" x="338" y="${ny + 32}" width="150" height="52" rx="6"/>
-          <text class="t-sm" x="413" y="${ny + 63}" text-anchor="middle">Pod</text>
-          <rect class="data" x="510" y="${ny + 32}" width="150" height="52" rx="6"/>
-          <text class="t-sm" x="585" y="${ny + 63}" text-anchor="middle">Pod</text>
-          <line class="flow" x1="230" y1="${i === 0 ? 122 : 158}" x2="318" y2="${ny + 50}" marker-end="url(#ah-mut)"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="130" y="222" text-anchor="middle">schedules &amp; heals</text>
+      <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The control plane reconciles desired state, scheduling pods onto worker nodes.">
+        <g data-s="1">
+          <rect class="box" x="24" y="16" width="196" height="96" rx="8"/>
+          ${icon('file-text', 40, 30)}
+          <text class="t-b" x="72" y="48">Desired state</text>
+          <text class="t-sm t-mut" x="72" y="68">replicas</text>
+          <text class="t-sm t-mut" x="72" y="84">images</text>
+          <text class="t-sm t-mut" x="72" y="100">networking</text>
+        </g>
+        <line class="flow" data-s="1" x1="122" y1="114" x2="122" y2="148" marker-end="url(#ah-mut)"/>
+        <g data-s="2 4 5">
+          <rect class="box" x="24" y="150" width="196" height="100" rx="8"/>
+          ${icon('cog', 40, 164)}
+          <text class="t-b" x="72" y="182">Control plane</text>
+          <text class="t-sm t-mut" x="72" y="202">reconciles reality</text>
+          <text class="t-sm t-mut" x="72" y="218">to match</text>
+        </g>
+        <path class="flow" data-s="2" d="M70 252 C70 284, 174 284, 174 252" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="2" x="186" y="284">continuously</text>
+
+        ${[['worker node 1', 16], ['worker node 2', 150]].map(([t, y]) => `
+          <g data-s="3">
+            <rect class="zone" x="300" y="${y}" width="396" height="108" rx="10"/>
+            <text class="t-sm t-mut" x="312" y="${y + 18}">${t}</text>
+          </g>`).join('')}
+        ${[[316, 44, 'scheduled', '', '3'], [444, 44, 'failed', ' bad', '3 4'], [572, 44, 'on demand', '', '5'],
+           [316, 178, 'scheduled', '', '3'], [444, 178, 'rescheduled', '', '4']].map(([x, y, sub, cls, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="${x}" y="${y}" width="112" height="64" rx="8"/>
+            <text class="t-b" x="${x + 56}" y="${y + 29}" text-anchor="middle">Pod</text>
+            <text class="t-sm${cls}" x="${x + 56}" y="${y + 47}" text-anchor="middle">${sub}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="3" x1="222" y1="180" x2="298" y2="76" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="222" y1="214" x2="298" y2="210" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" x1="500" y1="110" x2="500" y2="176" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 122, 131, '1')}
+        ${badge(2, 122, 276, '2')}
+        ${badge(3, 260, 128, '3')}
+        ${badge(4, 500, 143, '4')}
+        ${badge(5, 668, 58, '5')}
       </svg>`,
 
     react: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A React component tree: the App root passes data down to child components as props.">
-        <rect class="box-accent" x="300" y="26" width="120" height="54" rx="10"/>
-        <text class="t-b" x="360" y="58" text-anchor="middle">App</text>
-        <rect class="box" x="110" y="130" width="140" height="54" rx="10"/>
-        <text x="180" y="162" text-anchor="middle">Header</text>
-        <rect class="box" x="440" y="130" width="150" height="54" rx="10"/>
-        <text x="515" y="162" text-anchor="middle">Main</text>
-        <rect class="box" x="380" y="224" width="120" height="48" rx="10"/>
-        <text class="t-sm" x="440" y="253" text-anchor="middle">ListItem</text>
-        <rect class="box" x="530" y="224" width="120" height="48" rx="10"/>
-        <text class="t-sm" x="590" y="253" text-anchor="middle">ListItem</text>
-        <line class="flow" x1="330" y1="80" x2="200" y2="128" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="390" y1="80" x2="505" y2="128" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="495" y1="184" x2="450" y2="222" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="540" y1="184" x2="585" y2="222" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-b t-acc" x="360" y="112" text-anchor="middle">props ↓</text>
-        <text class="t-sm t-mut" x="180" y="262" text-anchor="middle">state change re-renders the tree</text>
+      <svg class="dg" viewBox="0 0 720 268" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A component tree renders from state; data flows down to children as props.">
+        <g data-s="1 3">
+          <rect class="box" x="112" y="20" width="160" height="56" rx="8"/>
+          ${icon('component', 128, 36)}
+          <text class="t-b" x="160" y="45">Root</text>
+          <text class="t-sm t-mut" x="160" y="63">holds state</text>
+        </g>
+        ${[24, 200].map((x) => `
+          <g data-s="1 2">
+            <rect class="box" x="${x}" y="140" width="160" height="56" rx="8"/>
+            ${icon('component', x + 16, 156)}
+            <text class="t-b" x="${x + 48}" y="165">Child</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="183">gets props</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="170" y1="78" x2="110" y2="138" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="214" y1="78" x2="274" y2="138" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="126" y="106" text-anchor="end">props</text>
+        <text class="t-sm" data-s="2" x="268" y="106">props</text>
+
+        <line class="flow" data-s="3" x1="274" y1="48" x2="438" y2="48" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="370" y="40" text-anchor="middle">re-render</text>
+        <g data-s="4">
+          <rect class="box" x="440" y="20" width="256" height="76" rx="8"/>
+          ${icon('code', 456, 34)}
+          <text class="t-b" x="488" y="50">Virtual DOM</text>
+          <text class="t-sm t-mut" x="488" y="68">virtual representation</text>
+          <text class="t-sm t-mut" x="488" y="84">diffed on change</text>
+        </g>
+        <line class="flow" data-s="5" x1="568" y1="98" x2="568" y2="174" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="558" y="124" text-anchor="end">patch only what changed</text>
+        <g data-s="5">
+          <rect class="box" x="440" y="176" width="256" height="64" rx="8"/>
+          ${icon('monitor', 456, 196)}
+          <text class="t-b" x="488" y="205">DOM</text>
+          <text class="t-sm t-mut" x="488" y="223">only changes patched</text>
+        </g>
+
+        ${badge(1, 256, 34, '1')}
+        ${badge(2, 140, 108, '2')}
+        ${badge(3, 300, 48, '3')}
+        ${badge(4, 680, 34, '4')}
+        ${badge(5, 568, 150, '5')}
       </svg>`,
 
     django: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Django MTV flow: a request is routed to a view, which uses models for data and a template to build the response.">
-        <rect class="box" x="20" y="116" width="110" height="54" rx="10"/>
-        <text class="t-sm t-b" x="75" y="148" text-anchor="middle">Request</text>
-        <rect class="box" x="160" y="116" width="120" height="54" rx="10"/>
-        <text class="t-sm t-b" x="220" y="148" text-anchor="middle">URL router</text>
-        <rect class="box-accent" x="320" y="116" width="120" height="54" rx="10"/>
-        <text class="t-sm t-b" x="380" y="148" text-anchor="middle">View</text>
-        <rect class="box" x="320" y="28" width="120" height="50" rx="10"/>
-        <text class="t-sm t-b" x="380" y="58" text-anchor="middle">Template</text>
-        <rect class="box" x="320" y="206" width="120" height="50" rx="10"/>
-        <text class="t-sm t-b" x="380" y="236" text-anchor="middle">Model</text>
-        <rect class="box-soft" x="500" y="206" width="130" height="50" rx="10"/>
-        <text class="t-sm" x="565" y="236" text-anchor="middle">Database</text>
-        <rect class="box" x="560" y="116" width="140" height="54" rx="10"/>
-        <text class="t-sm t-b" x="630" y="148" text-anchor="middle">Response</text>
-        <line class="flow" x1="130" y1="143" x2="158" y2="143" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="280" y1="143" x2="318" y2="143" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="380" y1="116" x2="380" y2="80" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="448" y="100">render</text>
-        <line class="flow" x1="380" y1="170" x2="380" y2="204" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" x="448" y="192">query</text>
-        <line class="flow" x1="440" y1="231" x2="498" y2="231" marker-end="url(#ah-mut)"/>
-        <line class="flow-accent" x1="440" y1="143" x2="558" y2="143" marker-end="url(#ah-acc)"/>
+      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="MTV request flow — URL routing to a view, models for data, a template for the response.">
+        ${[['globe', 'Request', 24, 118, 116, '1'], ['route', 'URL router', 172, 118, 164, '1'], ['code', 'View', 368, 118, 144, '1 2 3'],
+           ['layout-template', 'Template', 368, 16, 144, '3'], ['file-code', 'Response', 552, 16, 144, '4'],
+           ['table', 'Model', 368, 216, 144, '2'], ['database', 'Database', 552, 216, 144, '2']].map(([ico, name, x, y, w, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="${x}" y="${y}" width="${w}" height="52" rx="8"/>
+            ${icon(ico, x + 12, y + 14)}
+            <text class="t-b" x="${x + 44}" y="${y + 31}">${name}</text>
+          </g>`).join('')}
+        <g data-s="5">
+          <rect class="box" x="24" y="216" width="312" height="52" rx="8"/>
+          ${icon('package', 40, 230)}
+          <text class="t-b" x="72" y="238">Out of the box</text>
+          <text class="t-sm t-mut" x="72" y="256">ORM · admin · auth · routing</text>
+        </g>
+        <line class="flow" data-s="1" x1="142" y1="144" x2="170" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" x1="338" y1="144" x2="366" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="440" y1="172" x2="440" y2="214" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="456" y="198">pulls data</text>
+        <line class="flow" data-s="2" x1="514" y1="242" x2="550" y2="242" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" x1="440" y1="116" x2="440" y2="70" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="456" y="98">renders</text>
+        <line class="flow" data-s="4" x1="514" y1="42" x2="550" y2="42" marker-end="url(#ah-mut)"/>
+
+        ${badge(1, 320, 130, '1')}
+        ${badge(2, 440, 193, '2')}
+        ${badge(3, 440, 93, '3')}
+        ${badge(4, 680, 28, '4')}
+        ${badge(5, 320, 230, '5')}
       </svg>`,
 
     grpc: () => `
@@ -2346,16 +2474,34 @@
       </svg>`,
 
     dhcp: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="DHCP DORA exchange: Discover, Offer, Request, Acknowledge — leasing an address to a new client.">
-        <text class="t-b" x="150" y="32" text-anchor="middle">New client</text>
-        <text class="t-b" x="570" y="32" text-anchor="middle">DHCP server</text>
-        <line class="divider" x1="150" y1="44" x2="150" y2="250"/>
-        <line class="divider" x1="570" y1="44" x2="570" y2="250"/>
-        ${[["Discover  (broadcast)", 80, 1, "mut"], ["Offer  (here's an IP)", 124, 0, "mut"], ["Request  (I'll take it)", 168, 1, "mut"], ["Acknowledge  (it's yours)", 212, 0, "acc"]].map(([t, y, dir, m]) => `
-          <line class="flow${m === 'acc' ? '-accent' : ''}" x1="${dir ? 150 : 570}" y1="${y}" x2="${dir ? 570 : 150}" y2="${y}" marker-end="url(#ah-${m})"/>
-          <text class="t-sm" x="360" y="${y - 8}" text-anchor="middle">${t}</text>
-        `).join("")}
-        <text class="t-sm t-mut" x="360" y="270" text-anchor="middle">lease includes IP, mask, gateway, and DNS</text>
+      <svg class="dg" viewBox="0 0 720 310" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The DORA exchange — Discover, Offer, Request, Acknowledge — leases an address to a client.">
+        <g data-s="1 3 4">
+          <rect class="box" x="24" y="16" width="180" height="56" rx="12"/>
+          ${icon('smartphone', 40, 32)}
+          <text class="t-b" x="72" y="41">New device</text>
+          <text class="t-sm t-mut" x="72" y="59">just connected</text>
+        </g>
+        <g data-s="2 4 5">
+          <rect class="box" x="516" y="16" width="180" height="56" rx="8"/>
+          ${icon('server', 532, 32)}
+          <text class="t-b" x="564" y="41">DHCP server</text>
+          <text class="t-sm t-mut" x="564" y="59">leases addresses</text>
+        </g>
+        <line class="divider" x1="114" y1="74" x2="114" y2="236"/>
+        <line class="divider" x1="606" y1="74" x2="606" y2="236"/>
+        ${[['Discover', 100, 1], ['Offer', 140, 0], ['Request', 180, 1], ['Acknowledge', 220, 0]].map(([t, y, right], i) => `
+          <line class="flow" data-s="${i + 1}" x1="${right ? 116 : 604}" y1="${y}" x2="${right ? 604 : 116}" y2="${y}" marker-end="url(#ah-mut)"/>
+          <text class="t-sm" data-s="${i + 1}" x="360" y="${y - 8}" text-anchor="middle">${t}</text>
+          ${badge(i + 1, 150, y, String(i + 1))}`).join('')}
+        <g data-s="4 5">
+          <rect class="box" x="160" y="244" width="400" height="52" rx="8"/>
+          ${icon('clock', 176, 258)}
+          <text class="t-b" x="208" y="266">Lease</text>
+          <text class="t-sm t-mut" x="208" y="284">limited time</text>
+          <text class="t-sm" x="330" y="266">IP address, subnet mask</text>
+          <text class="t-sm" x="330" y="284">default gateway, DNS servers</text>
+        </g>
+        ${badge(5, 544, 260, '5')}
       </svg>`,
 
     saml: () => `

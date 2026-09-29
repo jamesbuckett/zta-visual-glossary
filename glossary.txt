@@ -72,10 +72,22 @@ CyberArk PAM — Privileged Access Manager (now Idira, by Palo Alto Networks)
 DHCP — Dynamic Host Configuration Protocol
     Automatically hands out IP addresses to devices joining a network.
     [Protocol, Network Technology] · aka DORA, lease
+    1. Discover — A device that has just connected begins a short exchange with a DHCP server by sending a Discover.
+    2. Offer — The DHCP server replies with an Offer.
+    3. Request — The device answers with a Request.
+    4. Acknowledge — The server confirms with an Acknowledge. The device now has its IP address, subnet mask, default gateway and DNS servers, with no manual setup.
+    5. A limited lease — The server leases each address for a limited time.
+    Key fact: DHCP is why a phone just works the moment it joins a new Wi-Fi network.
 
 Django — Django (Python web framework)
     A batteries-included Python web framework for building sites fast.
     [Development Framework] · aka MTV, ORM
+    1. Route the request — An incoming request is routed by its URL to a view.
+    2. Pull data via models — The view pulls data through models, using the ORM (object-relational mapper) for database access.
+    3. Render a template — The view renders a template. Model, template and view make up Django's MTV pattern.
+    4. Return the response — The rendered template becomes the response.
+    5. Out of the box — Django ships with an ORM, an auto-generated admin interface, authentication and routing out of the box.
+    Key fact: Django's philosophy is to handle the plumbing so you can focus on the application.
 
 DLP — Data Loss Prevention
     Controls that detect and stop sensitive data from leaving where it should not.
@@ -98,6 +110,11 @@ DOCA — NVIDIA DPU Software Framework
 Docker — Docker containers
     Packages an app and its dependencies into a portable container.
     [Development Framework] · aka container, OCI image
+    1. Stacked image layers — An image is built in stacked, cacheable, read-only layers that bundle an application with everything it needs to run.
+    2. Run a container — A container runs from the image as a lightweight, isolated process.
+    3. Share the kernel — Containers share the host's kernel instead of booting a whole virtual machine.
+    4. Same on any host — The same image runs identically on any host, which makes works-on-my-machine reproducible.
+    Key fact: The container is the unit most modern deployment, including Kubernetes, builds upon.
 
 DORA — Digital Operational Resilience Act
     The EU regulation that makes surviving an IT failure a supervisory matter for financial firms — and, for the first time, lets European regulators oversee the cloud providers those firms depend on.
@@ -194,6 +211,12 @@ Kerberos — Kerberos Authentication Protocol
 Kubernetes — Kubernetes (K8s)
     Automates deploying, scaling, and healing containerized apps across machines.
     [Development Framework, Network Technology] · aka K8s, orchestration, pod
+    1. Declare desired state — You declare the desired state: how many replicas, which images, what networking.
+    2. Reconcile continuously — The control plane continuously reconciles reality to match the desired state.
+    3. Schedule pods — It schedules pods, the smallest deployable unit, onto the worker nodes of the cluster.
+    4. Reschedule failures — When a workload fails, the control plane reschedules it.
+    5. Scale on demand — It also scales on demand, adding pods as they are needed.
+    Key fact: Kubernetes turns a fleet of machines into one programmable platform.
 
 LDAP / Active Directory — Lightweight Directory Access Protocol
     The directory that stores users, groups, and devices — and answers who is this?
@@ -333,6 +356,12 @@ RBAC & ABAC — Role- / Attribute-Based Access Control
 React — React (UI library)
     A JavaScript library for building user interfaces from composable components.
     [Development Framework] · aka ReactJS, JSX, component
+    1. Tree of components — You build the user interface as a tree of reusable components.
+    2. Props flow down — Data flows down to child components as props. Each component's output is a function of its state and props.
+    3. State changes — When state changes, React re-renders.
+    4. Diff the virtual DOM — It re-renders efficiently by diffing a lightweight virtual representation of the DOM.
+    5. Patch what changed — Only what changed is patched.
+    Key fact: React's declarative model describes what the UI should look like, not the steps to mutate it.
 
 RLHF — Reinforcement Learning from Human Feedback
     Trains a model on what people actually prefer — humans rank its answers, a reward model learns that taste, and reinforcement learning tunes the model against it.
