@@ -59,6 +59,7 @@ const CASES = [
   ['term without a tour rejected',
     base.replace(/(id: "wireguard"[\s\S]*?)\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1'),
     'validate', 1, 'tour-data'],
+  ['space-padded label rejected', withDiagram(withTour(base, GOOD_STEPS), svg().replace('>Peer B<', '>Peer    B<')), 'validate', 1, 'svg-whitespace'],
   // Enabled by the Task 4 checks (tour stepping and badge/icon geometry).
   ['good tour verifies', withDiagram(withTour(base, GOOD_STEPS), svg()), 'verify', 0, null],
   ['step that lights nothing', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '1' })), 'verify', 1, 'tour'],

@@ -146,6 +146,18 @@ html.split('\n').forEach((line, i) => {
   }
 });
 
+// ----- svg-whitespace: no space-padded diagram labels ------------------------
+// SVG collapses a run of spaces to one, so columns lined up with spaces render
+// squashed together. Only runs between two words are flagged.
+
+html.split('\n').forEach((line, i) => {
+  for (const [, label] of line.matchAll(/<text[\s>][^>]*>([^<]*)<\/text>/g)) {
+    if (/\S[ \t]{2,}\S/.test(label)) {
+      err('svg-whitespace', `line ${i + 1}: <text> "${label}" has a run of spaces — SVG collapses it to one; give each column its own <text> at its own x`);
+    }
+  }
+});
+
 // ----- external resources: only Google Fonts allowed ------------------------
 
 const externals = [...html.matchAll(/<(?:script|link)[^>]+(?:src|href)\s*=\s*"([^"]+)"/gi)];
