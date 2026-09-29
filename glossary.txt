@@ -248,6 +248,11 @@ FIDO2 — WebAuthn + CTAP
 Firewall — Network Firewall
     Filters network traffic against a set of allow and deny rules.
     [Network Technology, Security Technology] · aka NGFW, iptables, packet filter
+    1. At the boundary — A firewall sits at a network boundary, separating trusted zones from untrusted ones.
+    2. Check the rules — Traffic is checked against an ordered set of rules based on addresses, ports and, increasingly, application and identity.
+    3. Allow or block — Traffic that the rules permit passes; the rest is blocked.
+    4. Stateful, next-gen — Stateful firewalls track the state of connections; next-generation firewalls inspect deeper into the traffic itself.
+    Key fact: The firewall is the classic first line of network defence.
 
 gRPC — gRPC Remote Procedure Call
     A fast, contract-first RPC framework using Protocol Buffers over HTTP/2.
@@ -366,6 +371,11 @@ LDAP / Active Directory — Lightweight Directory Access Protocol
 Load Balancer — Load Balancer
     Spreads incoming traffic across many backend servers.
     [Network Technology] · aka LB, reverse proxy, HAProxy
+    1. One entry point — Clients send their requests to a single entry point.
+    2. Spread the load — The load balancer distributes requests across a pool of servers, so no single one is overwhelmed, by round-robin or by load, health or request content.
+    3. Drop the unhealthy — It removes unhealthy backends from rotation automatically.
+    4. Layer 4 or 7 — It operates at layer 4 (connections) or layer 7 (HTTP), and is a natural place to terminate TLS.
+    Key fact: A load balancer improves both capacity and resilience.
 
 LoRA — Low-Rank Adaptation
     Fine-tune a large model by freezing it and training two small matrices beside each layer, so the task-specific change fits in megabytes rather than a full copy of the weights.
@@ -618,6 +628,12 @@ SAML — Security Assertion Markup Language
 SASE — Secure Access Service Edge
     Delivers networking and security together from the cloud edge, near the user.
     [Security Technology, Network Technology] · aka SSE, ZTNA, cloud security
+    1. Users anywhere — Users and branches connect from wherever they are.
+    2. The nearest edge — Each request goes to a cloud point of presence close to the user.
+    3. A converged stack — There, wide-area networking converges with a stack of security services: secure web gateway, cloud access security broker, firewall-as-a-service and zero-trust network access.
+    4. No backhaul — Instead of hauling all traffic back to a central datacentre for inspection, each request is checked and policy-enforced at the nearest edge.
+    5. On to the apps — Traffic that passes policy continues from the edge to the applications.
+    Key fact: SASE is the cloud-delivered way most organisations now run zero trust.
 
 SBC — Session Border Controller
     The border guard for VoIP — calls terminate on it, are policed and normalised, then re-originated toward the far side.
@@ -639,6 +655,11 @@ SCIM — System for Cross-domain Identity Management
 SD-WAN — Software-Defined Wide Area Network
     Software steers branch traffic across multiple links by policy, not fixed routing.
     [Network Technology] · aka overlay, WAN, edge
+    1. Several transports — A branch has several transports: private MPLS circuits, broadband and cellular. SD-WAN lays an intelligent overlay across them.
+    2. A central controller — A central controller replaces rigid, device-by-device WAN configuration with centralised management.
+    3. Best path per app — The controller steers each application over the best available path, by policy and live link quality.
+    4. Cheaper links — Using cheap internet links alongside or instead of expensive private lines cuts cost.
+    Key fact: SD-WAN is frequently paired with SASE for security.
 
 Secrets Management — Secrets Management (HashiCorp Vault)
     A central, audited vault for the passwords, keys, and tokens that machines need.
@@ -778,6 +799,12 @@ VPN — Virtual Private Network
 WAF — Web Application Firewall
     A firewall that inspects HTTP to block web attacks a network firewall cannot see.
     [Security Technology] · aka OWASP CRS, layer 7 firewall, application firewall, virtual patching
+    1. Layer 7, in front — A Web Application Firewall sits in front of an application and inspects HTTP requests and responses at layer 7.
+    2. Benign traffic passes — Benign requests reach the application.
+    3. Exploits are dropped — SQL injection, cross-site scripting and path traversal are blocked, although a packet-filtering network firewall, which only sees ports and addresses, would happily pass them.
+    4. Rules and models — Traffic is matched against rule sets such as the OWASP Core Rule Set and, increasingly, learned models of normal behaviour.
+    5. Not instead of code — A WAF is a control at the application edge: complementary to secure code, not a replacement for it.
+    Key fact: A WAF can virtually patch a known vulnerability by dropping the malicious pattern until the code is fixed.
 
 WebSockets — WebSocket Protocol (RFC 6455)
     Upgrades an HTTP connection into a persistent, two-way channel for live data.

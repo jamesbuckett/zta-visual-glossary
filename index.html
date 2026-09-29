@@ -942,7 +942,14 @@
       types: ["Network Technology", "Security Technology"], provenance: ["Open Source", "Vendor"], domains: ["Network Edge & Ops"],
       related: ["microseg", "nat", "vlan", "siem", "sbc"],
       source: { label: "NIST SP 800-41 Rev. 1 — Firewall Guidelines", url: "https://csrc.nist.gov/pubs/sp/800/41/r1/final" },
-      caption: "Traffic is checked against an ordered rule set; matches are allowed or denied."
+      caption: "Traffic is checked against an ordered rule set; matches are allowed or denied.",
+      steps: [
+        { title: "At the boundary", text: "A firewall sits at a network boundary, separating trusted zones from untrusted ones." },
+        { title: "Check the rules", text: "Traffic is checked against an ordered set of rules based on addresses, ports and, increasingly, application and identity." },
+        { title: "Allow or block", text: "Traffic that the rules permit passes; the rest is blocked." },
+        { title: "Stateful, next-gen", text: "Stateful firewalls track the state of connections; next-generation firewalls inspect deeper into the traffic itself." }
+      ],
+      fact: "The firewall is the classic first line of network defence."
     },
     {
       id: "loadbalancer", term: "Load Balancer", acronym: "Load Balancer", aliases: ["LB", "reverse proxy", "HAProxy"],
@@ -951,7 +958,14 @@
       types: ["Network Technology"], provenance: ["Open Source", "Vendor"], domains: ["Network Edge & Ops"],
       related: ["tls", "kubernetes", "http"],
       source: { label: "HAProxy documentation", url: "https://docs.haproxy.org/" },
-      caption: "One entry point distributes requests across a pool of health-checked backends."
+      caption: "One entry point distributes requests across a pool of health-checked backends.",
+      steps: [
+        { title: "One entry point", text: "Clients send their requests to a single entry point." },
+        { title: "Spread the load", text: "The load balancer distributes requests across a pool of servers, so no single one is overwhelmed, by round-robin or by load, health or request content." },
+        { title: "Drop the unhealthy", text: "It removes unhealthy backends from rotation automatically." },
+        { title: "Layer 4 or 7", text: "It operates at layer 4 (connections) or layer 7 (HTTP), and is a natural place to terminate TLS." }
+      ],
+      fact: "A load balancer improves both capacity and resilience."
     },
     {
       id: "docker", term: "Docker", acronym: "Docker containers", aliases: ["container", "OCI image"],
@@ -1223,7 +1237,15 @@
       types: ["Security Technology", "Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Zero-Trust Core"],
       related: ["zerotrust", "vpn", "sdwan", "firewall"],
       source: { label: "NIST glossary — Secure Access Service Edge", url: "https://csrc.nist.gov/glossary/term/secure_access_service_edge" },
-      caption: "User traffic is inspected and policy-checked at a nearby cloud edge, not backhauled to HQ."
+      caption: "User traffic is inspected and policy-checked at a nearby cloud edge, not backhauled to HQ.",
+      steps: [
+        { title: "Users anywhere", text: "Users and branches connect from wherever they are." },
+        { title: "The nearest edge", text: "Each request goes to a cloud point of presence close to the user." },
+        { title: "A converged stack", text: "There, wide-area networking converges with a stack of security services: secure web gateway, cloud access security broker, firewall-as-a-service and zero-trust network access." },
+        { title: "No backhaul", text: "Instead of hauling all traffic back to a central datacentre for inspection, each request is checked and policy-enforced at the nearest edge." },
+        { title: "On to the apps", text: "Traffic that passes policy continues from the edge to the applications." }
+      ],
+      fact: "SASE is the cloud-delivered way most organisations now run zero trust."
     },
     {
       id: "sdwan", term: "SD-WAN", acronym: "Software-Defined Wide Area Network", aliases: ["overlay", "WAN", "edge"],
@@ -1232,7 +1254,14 @@
       types: ["Network Technology"], provenance: ["Vendor"], domains: ["Network Edge & Ops", "Addressing & Routing"],
       related: ["sase", "vpn", "bgp", "loadbalancer"],
       source: { label: "MEF 70.2 — SD-WAN Service Attributes", url: "https://www.mplify.net/wp-content/uploads/MEF-70.2.pdf" },
-      caption: "A central controller steers each app over the best of several transport links by policy."
+      caption: "A central controller steers each app over the best of several transport links by policy.",
+      steps: [
+        { title: "Several transports", text: "A branch has several transports: private MPLS circuits, broadband and cellular. SD-WAN lays an intelligent overlay across them." },
+        { title: "A central controller", text: "A central controller replaces rigid, device-by-device WAN configuration with centralised management." },
+        { title: "Best path per app", text: "The controller steers each application over the best available path, by policy and live link quality." },
+        { title: "Cheaper links", text: "Using cheap internet links alongside or instead of expensive private lines cuts cost." }
+      ],
+      fact: "SD-WAN is frequently paired with SASE for security."
     },
     {
       id: "siem", term: "SIEM", acronym: "Security Information and Event Management", aliases: ["SOC", "log management", "correlation"],
@@ -1501,7 +1530,15 @@
       types: ["Security Technology"], provenance: [], domains: ["Network Edge & Ops", "Detection & Response"],
       related: ["firewall", "http", "owasp", "websec"],
       source: { label: "OWASP — Web Application Firewall", url: "https://owasp.org/www-community/Web_Application_Firewall" },
-      caption: "Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge."
+      caption: "Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge.",
+      steps: [
+        { title: "Layer 7, in front", text: "A Web Application Firewall sits in front of an application and inspects HTTP requests and responses at layer 7." },
+        { title: "Benign traffic passes", text: "Benign requests reach the application." },
+        { title: "Exploits are dropped", text: "SQL injection, cross-site scripting and path traversal are blocked, although a packet-filtering network firewall, which only sees ports and addresses, would happily pass them." },
+        { title: "Rules and models", text: "Traffic is matched against rule sets such as the OWASP Core Rule Set and, increasingly, learned models of normal behaviour." },
+        { title: "Not instead of code", text: "A WAF is a control at the application edge: complementary to secure code, not a replacement for it." }
+      ],
+      fact: "A WAF can virtually patch a known vulnerability by dropping the malicious pattern until the code is fixed."
     },
     {
       id: "websec", term: "CSRF / XSS / CSP", acronym: "Web App Attacks & Content Security Policy",
@@ -2846,42 +2883,88 @@
       </svg>`,
 
     firewall: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Traffic is matched against an ordered rule set; permitted flows pass, others are blocked at the firewall.">
-        <rect class="box" x="20" y="70" width="150" height="100" rx="10"/>
-        <text class="t-b" x="95" y="114" text-anchor="middle">Untrusted</text>
-        <text class="t-sm t-mut" x="95" y="134" text-anchor="middle">internet</text>
-        <rect class="box-accent" x="280" y="30" width="170" height="200" rx="12"/>
-        <text class="t-b" x="365" y="58" text-anchor="middle">Firewall</text>
-        <text class="t-sm t-mut" x="300" y="92">rules, top-down:</text>
-        <text class="t-sm" x="300" y="116">› allow tcp/443</text>
-        <text class="t-sm" x="300" y="138">› allow tcp/22</text>
-        <text class="t-sm" x="300" y="160">› deny&nbsp;&nbsp;all else</text>
-        <rect class="box" x="550" y="70" width="150" height="100" rx="10"/>
-        <text class="t-b" x="625" y="114" text-anchor="middle">Trusted</text>
-        <text class="t-sm t-mut" x="625" y="134" text-anchor="middle">internal LAN</text>
-        <line class="flow-ok" x1="170" y1="96" x2="278" y2="96" marker-end="url(#ah-ok)"/>
-        <line class="flow-ok" x1="452" y1="96" x2="548" y2="96" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" x="500" y="86" text-anchor="middle" fill="var(--state-ok)">443 allowed</text>
-        <line class="flow-bad" x1="170" y1="150" x2="270" y2="150" marker-end="url(#ah-bad)"/>
-        <line class="stroke-bad" x1="266" y1="142" x2="282" y2="158" style="stroke-width:2.5"/>
-        <line class="stroke-bad" x1="282" y1="142" x2="266" y2="158" style="stroke-width:2.5"/>
-        <text class="t-sm" x="150" y="192" text-anchor="middle" fill="var(--state-bad)">others denied</text>
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Traffic is checked against an ordered rule set; matches are allowed or denied.">
+        <g data-s="1">
+          <rect class="zone" x="16" y="16" width="216" height="248" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="34">untrusted</text>
+          <rect class="zone" x="488" y="16" width="216" height="248" rx="10"/>
+          <text class="t-sm t-mut" x="500" y="34">trusted</text>
+        </g>
+        <g data-s="1 3">
+          <rect class="box" x="40" y="88" width="168" height="96" rx="12"/>
+          ${icon('globe', 56, 102)}
+          <text class="t-b" x="88" y="120">Internet</text>
+          <text class="t-sm t-mut" x="56" y="160">incoming traffic</text>
+        </g>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="264" y="24" width="192" height="232" rx="8"/>
+          ${icon('brick-wall', 280, 38)}
+          <text class="t-b" x="312" y="56">Firewall</text>
+        </g>
+        <g data-s="2">
+          ${[['1 · addresses', 76], ['2 · ports', 116], ['3 · app, identity', 156]].map(([t, y]) => `
+            <rect class="box" x="280" y="${y}" width="160" height="32" rx="4"/>
+            <text class="t-sm" x="292" y="${y + 20}">${t}</text>`).join('')}
+        </g>
+        <g data-s="4">
+          <rect class="box" x="280" y="200" width="160" height="44" rx="4"/>
+          <text class="t-sm" x="292" y="218">stateful: tracks</text>
+          <text class="t-sm" x="292" y="234">NGFW: inspects deeper</text>
+        </g>
+        <line class="flow-ok" data-s="3" x1="210" y1="112" x2="262" y2="112" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="3" x1="458" y1="112" x2="518" y2="112" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" data-s="3" x="488" y="104" text-anchor="middle">allowed</text>
+        <line class="flow-bad" data-s="3" x1="210" y1="160" x2="262" y2="160" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="3" x="236" y="200" text-anchor="middle">blocked</text>
+        <g data-s="1 3">
+          <rect class="box" x="520" y="80" width="160" height="64" rx="8"/>
+          ${icon('server', 536, 94)}
+          <text class="t-b" x="568" y="112">Server</text>
+          <text class="t-sm t-mut" x="568" y="130">protected</text>
+        </g>
+
+        ${badge(1, 216, 30, '1')}
+        ${badge(2, 424, 92, '2')}
+        ${badge(3, 236, 176, '3')}
+        ${badge(4, 440, 38, '4')}
       </svg>`,
 
     loadbalancer: () => `
-      <svg class="dg" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A load balancer spreads client requests across healthy backends and skips one that is down.">
-        <rect class="box" x="20" y="105" width="130" height="60" rx="10"/>
-        <text class="t-b" x="85" y="140" text-anchor="middle">Client</text>
-        <rect class="box-accent" x="230" y="95" width="170" height="80" rx="12"/>
-        <text class="t-b" x="315" y="128" text-anchor="middle">Load balancer</text>
-        <text class="t-sm t-mut" x="315" y="148" text-anchor="middle">health-checked pool</text>
-        <line class="flow" x1="150" y1="135" x2="228" y2="135" marker-end="url(#ah-mut)"/>
-        ${[["Server 1", 20, "up"], ["Server 2", 108, "up"], ["Server 3 · down", 196, "down"]].map(([t, y, st]) => `
-          <rect class="box" x="500" y="${y}" width="200" height="54" rx="10"${st === 'down' ? ' style="stroke:var(--state-bad)"' : ''}/>
-          <text class="${st === 'down' ? 'bad' : ''}" x="600" y="${y + 31}" text-anchor="middle">${t}</text>
-          <line class="flow${st === 'down' ? '-bad' : '-accent'}" x1="400" y1="135" x2="498" y2="${y + 27}" marker-end="url(#ah-${st === 'down' ? 'bad' : 'acc'})"/>
-        `).join("")}
-        <text class="t-sm t-mut" x="315" y="210" text-anchor="middle">unhealthy backends are removed automatically</text>
+      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One entry point distributes requests across a pool of health-checked backends.">
+        <g data-s="1">
+          <rect class="box" x="24" y="96" width="152" height="72" rx="12"/>
+          ${icon('users', 40, 110)}
+          <text class="t-b" x="72" y="128">Clients</text>
+          <text class="t-sm t-mut" x="72" y="146">requests</text>
+        </g>
+        <line class="flow" data-s="1" x1="178" y1="132" x2="242" y2="132" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="244" y="48" width="200" height="168" rx="8"/>
+          ${icon('scale', 260, 62)}
+          <text class="t-b" x="292" y="80">Load balancer</text>
+          <text class="t-sm t-mut" x="292" y="98">one entry point</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="260" y="120" width="168" height="32" rx="4"/>
+          <text class="t-sm" x="344" y="140" text-anchor="middle">layer 4 or layer 7</text>
+          <rect class="box" x="260" y="164" width="168" height="32" rx="4"/>
+          <text class="t-sm" x="344" y="184" text-anchor="middle">TLS ends here</text>
+        </g>
+        ${[['Server', 24, 'healthy', '2'], ['Server', 104, 'healthy', '2'], ['Server', 184, 'unhealthy: out', '3']].map(([name, y, sub, s]) => `
+          <g data-s="${s}">
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+            ${icon('server', 552, y + 16)}
+            <text class="t-b" x="584" y="${y + 25}">${name}</text>
+            <text class="t-sm ${sub === 'unhealthy: out' ? 'bad' : 't-mut'}" x="584" y="${y + 43}">${sub}</text>
+          </g>`).join('')}
+        <line class="flow" data-s="2" x1="446" y1="96" x2="534" y2="52" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="446" y1="132" x2="534" y2="132" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="3" x1="446" y1="176" x2="534" y2="212" marker-end="url(#ah-bad)"/>
+
+        ${badge(1, 210, 132, '1')}
+        ${badge(2, 490, 132, '2')}
+        ${badge(3, 490, 194, '3')}
+        ${badge(4, 428, 62, '4')}
       </svg>`,
 
     docker: () => `
@@ -3494,45 +3577,87 @@
       </svg>`,
 
     sase: () => `
-      <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Remote users and branches reach apps through a cloud SASE edge that bundles security services and applies policy.">
-        <rect class="box" x="20" y="48" width="150" height="56" rx="10"/>
-        <text class="t-sm t-b" x="95" y="80" text-anchor="middle">Remote user</text>
-        <rect class="box" x="20" y="150" width="150" height="56" rx="10"/>
-        <text class="t-sm t-b" x="95" y="182" text-anchor="middle">Branch office</text>
-        <rect class="box-accent" x="250" y="36" width="220" height="186" rx="14"/>
-        <text class="t-b" x="360" y="62" text-anchor="middle">SASE cloud edge</text>
-        ${[["SWG", 270], ["CASB", 372]].map(([t, x]) => `<rect class="box" x="${x}" y="78" width="88" height="38" rx="6"/><text class="t-sm" x="${x + 44}" y="102" text-anchor="middle">${t}</text>`).join("")}
-        ${[["FWaaS", 270], ["ZTNA", 372]].map(([t, x]) => `<rect class="box" x="${x}" y="124" width="88" height="38" rx="6"/><text class="t-sm" x="${x + 44}" y="148" text-anchor="middle">${t}</text>`).join("")}
-        <text class="t-sm t-mut" x="360" y="194" text-anchor="middle">inspect + apply policy</text>
-        <rect class="box" x="550" y="48" width="150" height="56" rx="10"/>
-        <text class="t-sm t-b" x="625" y="80" text-anchor="middle">SaaS apps</text>
-        <rect class="box" x="550" y="150" width="150" height="56" rx="10"/>
-        <text class="t-sm t-b" x="625" y="182" text-anchor="middle">Internet</text>
-        <line class="flow" x1="170" y1="76" x2="248" y2="98" marker-end="url(#ah-mut)"/>
-        <line class="flow" x1="170" y1="178" x2="248" y2="160" marker-end="url(#ah-mut)"/>
-        <line class="flow-accent" x1="470" y1="98" x2="548" y2="76" marker-end="url(#ah-acc)"/>
-        <line class="flow-accent" x1="470" y1="160" x2="548" y2="178" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-mut" x="360" y="268" text-anchor="middle">policy enforced at a nearby edge — no backhaul to a datacentre</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="User traffic is inspected and policy-checked at a nearby cloud edge, not backhauled to HQ.">
+        <g data-s="1 2">
+          <rect class="box" x="24" y="40" width="160" height="64" rx="12"/>
+          ${icon('laptop', 40, 54)}
+          <text class="t-b" x="72" y="72">Remote user</text>
+        </g>
+        <g data-s="1 2 4">
+          <rect class="box" x="24" y="160" width="160" height="64" rx="8"/>
+          ${icon('building-2', 40, 174)}
+          <text class="t-b" x="72" y="192">Branch</text>
+        </g>
+        <line class="flow" data-s="2" x1="186" y1="72" x2="258" y2="112" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="186" y1="192" x2="258" y2="160" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4 5">
+          <rect class="box" x="260" y="24" width="200" height="216" rx="8"/>
+          ${icon('cloud', 276, 38)}
+          <text class="t-b" x="308" y="56">Cloud edge</text>
+          <text class="t-sm t-mut" x="308" y="74">nearest point</text>
+          <text class="t-sm t-mut" x="308" y="90">of presence</text>
+        </g>
+        <g data-s="3">
+          ${[['SWG', 276, 112], ['CASB', 364, 112], ['FWaaS', 276, 164], ['ZTNA', 364, 164]].map(([t, x, y]) => `
+            <rect class="box" x="${x}" y="${y}" width="80" height="40" rx="4"/>
+            <text class="t-sm t-b" x="${x + 40}" y="${y + 24}" text-anchor="middle">${t}</text>`).join('')}
+        </g>
+        <line class="flow" data-s="5" x1="462" y1="132" x2="534" y2="132" marker-end="url(#ah-mut)"/>
+        <g data-s="5">
+          <rect class="box" x="536" y="96" width="160" height="72" rx="8"/>
+          ${icon('app-window', 552, 110)}
+          <text class="t-b" x="584" y="128">Apps</text>
+          <text class="t-sm t-mut" x="584" y="146">policy passed</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="536" y="208" width="160" height="56" rx="8"/>
+          ${icon('server', 552, 224)}
+          <text class="t-b" x="584" y="233">Central DC</text>
+          <text class="t-sm t-mut" x="584" y="251">not needed</text>
+        </g>
+        <path class="flow-bad" data-s="4" d="M104 226 V282 H616 V266" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="360" y="276" text-anchor="middle">no backhaul to the datacentre</text>
+
+        ${badge(1, 168, 54, '1')}
+        ${badge(2, 222, 92, '2')}
+        ${badge(3, 444, 38, '3')}
+        ${badge(4, 104, 254, '4')}
+        ${badge(5, 498, 132, '5')}
       </svg>`,
 
     sdwan: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A central controller steers branch traffic over the best of several transport links to HQ or cloud.">
-        <rect class="box" x="20" y="106" width="150" height="74" rx="12"/>
-        <text class="t-sm t-b" x="95" y="138" text-anchor="middle">Branch edge</text>
-        <text class="t-sm t-mut" x="95" y="158" text-anchor="middle">SD-WAN</text>
-        <rect class="box-accent" x="265" y="18" width="190" height="56" rx="12"/>
-        <text class="t-sm t-b" x="360" y="42" text-anchor="middle">SD-WAN controller</text>
-        <text class="t-sm t-mut" x="360" y="60" text-anchor="middle">steers by policy</text>
-        <rect class="box" x="550" y="106" width="150" height="74" rx="12"/>
-        <text class="t-sm t-b" x="625" y="138" text-anchor="middle">HQ / cloud</text>
-        <line class="flow-accent" x1="360" y1="74" x2="360" y2="106" marker-end="url(#ah-acc)" style="stroke-dasharray:4 4"/>
-        <line class="flow-accent" x1="170" y1="122" x2="550" y2="122" style="stroke-width:2.5"/>
-        <text class="t-sm t-b t-acc" x="360" y="116" text-anchor="middle">MPLS — selected path</text>
-        <line class="flow" x1="170" y1="148" x2="550" y2="148"/>
-        <text class="t-sm t-mut" x="360" y="142" text-anchor="middle">broadband</text>
-        <line class="flow" x1="170" y1="174" x2="550" y2="174"/>
-        <text class="t-sm t-mut" x="360" y="168" text-anchor="middle">LTE / 5G</text>
-        <text class="t-sm t-mut" x="360" y="216" text-anchor="middle">one overlay, many links — cost and resilience without rigid routing</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A central controller steers each app over the best of several transport links by policy.">
+        <g data-s="2 3">
+          <rect class="box" x="260" y="12" width="200" height="56" rx="8"/>
+          ${icon('cog', 276, 28)}
+          <text class="t-b" x="308" y="37">Controller</text>
+          <text class="t-sm t-mut" x="308" y="55">policy, link quality</text>
+        </g>
+        <line class="flow" data-s="2" x1="258" y1="40" x2="186" y2="92" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" x1="462" y1="40" x2="534" y2="92" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3">
+          <rect class="box" x="24" y="94" width="160" height="148" rx="8"/>
+          ${icon('building-2', 40, 108)}
+          <text class="t-b" x="72" y="126">Branch</text>
+        </g>
+        <g data-s="1 3">
+          <rect class="box" x="536" y="94" width="160" height="148" rx="8"/>
+          ${icon('cloud', 552, 108)}
+          <text class="t-b" x="584" y="126">HQ or cloud</text>
+        </g>
+        <line class="flow" data-s="1" x1="186" y1="144" x2="534" y2="144" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1 4" x="360" y="136" text-anchor="middle">MPLS: private, expensive</text>
+        <line class="flow" data-s="1 3" x1="186" y1="184" x2="534" y2="184" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1 4" x="360" y="176" text-anchor="middle">broadband: cheap internet</text>
+        <line class="flow" data-s="1" x1="186" y1="224" x2="534" y2="224" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1 4" x="360" y="216" text-anchor="middle">cellular</text>
+        <text class="t-sm" data-s="3" x="40" y="200">best path</text>
+        <text class="t-sm" data-s="3" x="40" y="216">for this app</text>
+
+        ${badge(1, 168, 108, '1')}
+        ${badge(2, 222, 66, '2')}
+        ${badge(3, 220, 184, '3')}
+        ${badge(4, 500, 176, '4')}
       </svg>`,
 
     siem: () => `
@@ -4199,25 +4324,61 @@
       </svg>`,
 
     waf: () => `
-      <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge.">
-        <rect class="box" x="24" y="80" width="150" height="92" rx="10"/>
-        <text class="t-b" x="99" y="120" text-anchor="middle">Clients</text>
-        <text class="t-sm t-mut" x="99" y="140" text-anchor="middle">legit + hostile</text>
-        <rect class="box-accent" x="286" y="40" width="150" height="176" rx="12"/>
-        <text class="t-b" x="361" y="116" text-anchor="middle">WAF</text>
-        <text class="t-sm t-mut" x="361" y="136" text-anchor="middle">layer-7 inspection</text>
-        <text class="t-sm t-mut" x="361" y="154" text-anchor="middle">SQLi · XSS · traversal</text>
-        <rect class="box" x="546" y="84" width="150" height="88" rx="10"/>
-        <text class="t-b" x="621" y="124" text-anchor="middle">App</text>
-        <text class="t-sm t-mut" x="621" y="144" text-anchor="middle">secure code</text>
-        <line class="flow-ok" x1="174" y1="98" x2="284" y2="98" marker-end="url(#ah-ok)"/>
-        <line class="flow-ok" x1="436" y1="110" x2="544" y2="110" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" x="490" y="100" text-anchor="middle" fill="var(--state-ok)">benign</text>
-        <line class="flow-bad" x1="174" y1="158" x2="278" y2="158" marker-end="url(#ah-bad)"/>
-        <line class="stroke-bad" x1="270" y1="150" x2="286" y2="166" style="stroke-width:2.5"/>
-        <line class="stroke-bad" x1="286" y1="150" x2="270" y2="166" style="stroke-width:2.5"/>
-        <text class="t-sm" x="200" y="184" text-anchor="middle" fill="var(--state-bad)">injection dropped</text>
-        <text class="t-sm t-mut" x="360" y="244" text-anchor="middle">A network firewall sees only ports; the WAF reads the HTTP itself.</text>
+      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Requests pass through layer-7 inspection; benign traffic reaches the app while injection and scripting payloads are dropped at the edge.">
+        <g data-s="2">
+          <rect class="box" x="24" y="40" width="160" height="56" rx="12"/>
+          ${icon('user', 40, 56)}
+          <text class="t-b" x="72" y="65">Benign</text>
+          <text class="t-sm t-mut" x="72" y="83">request</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="24" y="152" width="160" height="72" rx="12"/>
+          ${icon('skull', 40, 168)}
+          <text class="t-b" x="72" y="177">Exploit</text>
+          <text class="t-sm t-mut" x="40" y="204">SQLi, XSS, traversal</text>
+        </g>
+        <g data-s="3">
+          <rect class="box" x="224" y="24" width="112" height="216" rx="8"/>
+          ${icon('brick-wall', 240, 38)}
+          <text class="t-sm t-b" x="240" y="84">Network</text>
+          <text class="t-sm t-b" x="240" y="100">firewall</text>
+          <text class="t-sm t-mut" x="240" y="220">ports only</text>
+        </g>
+        <g data-s="1 2 3 4">
+          <rect class="box" x="376" y="24" width="168" height="216" rx="8"/>
+          ${icon('shield', 392, 38)}
+          <text class="t-b" x="424" y="56">WAF</text>
+          <text class="t-sm t-mut" x="424" y="74">layer 7</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="392" y="160" width="136" height="32" rx="4"/>
+          <text class="t-sm" x="460" y="180" text-anchor="middle">OWASP CRS</text>
+          <rect class="box" x="392" y="200" width="136" height="32" rx="4"/>
+          <text class="t-sm" x="460" y="220" text-anchor="middle">learned model</text>
+        </g>
+        <line class="flow-ok" data-s="2" x1="186" y1="68" x2="222" y2="68" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="2" x1="338" y1="68" x2="374" y2="68" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="2" x1="546" y1="68" x2="582" y2="68" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" data-s="3" x1="186" y1="176" x2="222" y2="176" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="3" x1="338" y1="176" x2="374" y2="176" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="3" x="392" y="140">dropped here</text>
+        <g data-s="1 2">
+          <rect class="box" x="584" y="40" width="112" height="56" rx="8"/>
+          ${icon('app-window', 596, 56)}
+          <text class="t-b" x="628" y="74">App</text>
+        </g>
+        <g data-s="5">
+          <rect class="box" x="584" y="136" width="112" height="84" rx="8"/>
+          ${icon('code', 596, 150)}
+          <text class="t-sm t-b" x="596" y="190">secure code</text>
+          <text class="t-sm t-mut" x="596" y="206">still needed</text>
+        </g>
+
+        ${badge(1, 528, 38, '1')}
+        ${badge(2, 564, 68, '2')}
+        ${badge(3, 356, 176, '3')}
+        ${badge(4, 512, 176, '4')}
+        ${badge(5, 680, 150, '5')}
       </svg>`,
 
     websec: () => `
