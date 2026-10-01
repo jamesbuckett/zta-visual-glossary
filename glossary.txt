@@ -16,7 +16,7 @@ Alpaca — Local HTTP Proxy for Command-Line Tools
     3. A CONNECT tunnel — For HTTPS it opens a CONNECT tunnel, so it sees only the host and port.
     4. It answers the 407 — When the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself: Negotiate, then NTLM, then Basic.
     5. Any process uses it — The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress.
-    Key fact: Alpaca is an honest compatibility shim for the perimeter model rather than a zero-trust component.
+    Key fact: Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component.
 
 AMPS — Advanced Message Processing System (60East Technologies)
     A low-latency publish/subscribe engine for trading systems that also keeps the latest state of every record.
@@ -48,13 +48,13 @@ BGP — Border Gateway Protocol
     Key fact: BGP is what makes the internet a network of networks.
 
 BlueField — NVIDIA Data Processing Unit (DPU)
-    NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data center's networking, storage, and zero-trust security on the card.
+    NVIDIA's DPU: a ConnectX NIC fused with Arm cores and accelerators that runs the data centre's networking, storage, and zero-trust security on the card.
     [Network Technology, Security Technology] · aka NVIDIA BlueField, BlueField-3, BlueField-2, BlueField-4, BF3, ConnectX, DPU
     1. A ConnectX NIC — Each BlueField chip starts with an NVIDIA ConnectX network ASIC.
     2. Arm cores and more — It pairs the NIC with a cluster of Arm cores running their own Linux, onboard memory, and accelerators for crypto, compression and storage. BlueField-3 delivers 400 Gb/s and 16 Arm cores.
     3. Isolated from the host — The Arm subsystem is isolated from the host across PCIe, so operators run infrastructure and security services directly on the card.
     4. A root of trust — A hardware root of trust with DICE-based measured boot and remote attestation proves the card and its software are unmodified.
-    5. Security on the card — Line-rate IPsec/TLS encrypts traffic with no host CPU cost, and DOCA Argus reads the host's processes and memory to catch malware the host would conceal.
+    5. Security on the card — Line-rate IPsec/TLS encrypts traffic with no host CPU cost, and DOCA Argus reads the host's processes and memory to catch malware hiding on the host.
     Key fact: BlueField is NVIDIA's DPU product line, programmed with the DOCA framework.
 
 BOLA — Broken Object Level Authorization
@@ -67,7 +67,7 @@ BOLA — Broken Object Level Authorization
     Key fact: Unpredictable IDs such as UUIDs raise the bar but are obscurity, not authorisation: the check is what counts.
 
 Calico — Project Calico — Kubernetes Networking & Network Policy
-    The Kubernetes CNI that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.
+    The Kubernetes network plugin (CNI) that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.
     [Network Technology, Security Technology] · aka Project Calico, CNI, Container Network Interface, calico-node, Felix, Typha, BIRD, confd, calicoctl, GlobalNetworkPolicy, HostEndpoint, policy tiers, IPIP, VXLAN, IPAM, BGP peering, eBPF data plane, default deny, Tigera
     1. Nodes own blocks — Each node owns a block of the pod address space, and a BGP daemon on that node advertises the block to the other nodes or to the physical fabric.
     2. Route, don't tunnel — A pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. Where the underlay will not carry pod routes, Calico falls back to a VXLAN or IP-in-IP overlay.
@@ -86,7 +86,7 @@ CASB — Cloud Access Security Broker
     Key fact: A CASB is one of the core components of a SASE / SSE stack, alongside secure web gateways and ZTNA.
 
 Cilium — eBPF-Based Kubernetes Networking, Observability & Security
-    The Kubernetes CNI that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.
+    The Kubernetes network plugin (CNI) that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.
     [Network Technology, Security Technology] · aka CNI, Container Network Interface, cilium-agent, CiliumNetworkPolicy, CiliumClusterwideNetworkPolicy, security identity, kube-proxy replacement, Hubble, Cluster Mesh, Tetragon, Gateway API, Maglev, direct server return, Isovalent
     1. Labels, not addresses — Pods are created and destroyed constantly, so an IP address identifies nothing durable. Cilium stops writing policy about addresses.
     2. A numeric identity — Its control plane collapses each pod's label set into a numeric security identity and distributes that mapping cluster-wide.
@@ -98,7 +98,7 @@ Cilium — eBPF-Based Kubernetes Networking, Observability & Security
 Cntlm — NTLM Authentication Proxy
     The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
     [Network Technology, Security Technology] · aka CNTLM, cntlm.conf, NTLM proxy, NTLMv2, NTLM2SR, LM hash, PassNTLMv2, PassNT, PassLM, magic dialect detection, parent proxy, gateway mode, NoProxy, SOCKS5 proxy, port tunnelling, ISA Server
-    1. Tools point at loopback — Cntlm listens on 127.0.0.1:3128, forwards to a parent proxy, and adds the NTLM handshake the application behind it cannot perform.
+    1. Tools point at loopback — Cntlm listens on 127.0.0.1:3128, forwards to a parent proxy, and adds the NTLM (NT LAN Manager) handshake the application behind it cannot perform.
     2. Find the dialect — The Auth setting selects the dialect, strongest to weakest: NTLMv2, NTLM2SR, NT, NTLM or LM. cntlm -M probes with the strongest hashes first and prints a working configuration.
     3. Hashes, not a password — cntlm.conf holds hashes printed by cntlm -H rather than a password. But they are exactly what the NTLM exchange consumes, so whoever can read that file can authenticate as you.
     4. Gateway mode — With -g, Cntlm listens on every interface and other machines can share it, gated only by -A and -D rules on IP and mask: authenticated egress granted by network position.
@@ -131,14 +131,14 @@ CSRF / XSS / CSP — Web App Attacks & Content Security Policy
     3. CSRF forges a request — Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where they are authenticated.
     4. Tokens and SameSite — CSRF is defended with anti-CSRF tokens and SameSite cookies.
     5. CSP limits the damage — Content Security Policy is a response header that whitelists which script, style and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through.
-    Key fact: None is sufficient alone: defence in depth is the point.
+    Key fact: No single defence is sufficient alone: defence in depth is the point.
 
 CVE / CVSS — Vulnerability IDs & Severity Scoring
     The shared ID and 0–10 score that let everyone talk about the same flaw.
     [Security Technology] · aka common vulnerabilities and exposures, CVSS, NVD, severity score, vulnerability
     1. A shared name — A disclosed vulnerability gets a CVE identifier, like CVE-2021-44228 for Log4Shell, under a programme coordinated by MITRE, so everyone points at the same flaw.
     2. Severity, 0 to 10 — CVSS rates its severity from 0 to 10 from characteristics like attack vector, complexity and impact. CVSS v4.0 was released in November 2023.
-    3. The NVD enriches it — NIST's National Vulnerability Database enriches CVE records with CVSS scores and affected-product data that feed automated scanners.
+    3. The NVD enriches some — NIST's National Vulnerability Database adds CVSS scores and affected-product data that feed automated scanners; since April 2026 it does so only for a prioritised subset of CVEs.
     4. Rank what to patch — Teams can rank what to patch first: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access.
     5. Context decides — The score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context.
     Key fact: A CVE id means vendors, scanners and defenders all point at the same flaw.
@@ -150,7 +150,7 @@ CyberArk PAM — Privileged Access Manager (now Idira, by Palo Alto Networks)
     2. Rotate on a schedule — The Central Policy Manager connects out to managed systems to rotate, verify and reconcile passwords on a schedule, so a leaked credential has a short useful life.
     3. Request in the portal — Password Vault Web Access is the portal where people request and check out access.
     4. PSM injects it — The Privileged Session Manager opens the RDP or SSH session from a hardened proxy, injects the credential there and streams a recording back to the Vault, so the human never learns the password.
-    5. Close the direct route — A session broker only controls what cannot be reached around it: direct network routes to the target quietly reinstate the risk.
+    5. Close the direct route — A session broker protects only the targets that cannot be reached without going through it: direct network routes to the target quietly reinstate the risk.
     Key fact: Gathering every privileged credential into one system makes it the most valuable target you own.
 
 DHCP — Dynamic Host Configuration Protocol
@@ -191,7 +191,7 @@ DNS — Domain Name System
     3. Top-level domain — Next it asks the server for the top-level domain.
     4. Authoritative server — Last it reaches the authoritative server for the domain itself.
     5. Answer and cache — The resolver returns the IP address the machine will route to, and caches the answer along the way to stay fast.
-    Key fact: DNS is also a powerful control point for security and filtering.
+    Key fact: DNS is also a control point for security and filtering.
 
 DOCA — NVIDIA DPU Software Framework
     The SDK for BlueField — 'what CUDA is to the GPU, DOCA is to the DPU' — with libraries and services to offload networking, storage, and zero-trust security.
@@ -200,7 +200,7 @@ DOCA — NVIDIA DPU Software Framework
     2. Three layers — It is layered: hardware drivers at the base, C/C++ libraries in the middle, and production-ready containerised microservices on top.
     3. Standard interfaces — It is exposed through industry-standard interfaces such as DPDK, SPDK and Netlink rather than a closed silo, which keeps software portable across BlueField generations.
     4. Argus watches the host — DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes: agentless intrusion detection that host malware cannot see or switch off.
-    5. Integrity and tunnels — App Shield adds process-integrity monitoring, and the IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed.
+    5. Encrypted tunnels — The IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed. Argus supersedes the older App Shield library, which NVIDIA drops after DOCA 3.5.
     Key fact: Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes running zero-trust enforcement.
 
 Docker — Docker containers
@@ -226,9 +226,9 @@ DPO — Direct Preference Optimization
     RLHF's outcome without RLHF's machinery — train straight on preferred/rejected answer pairs, with no reward model and no reinforcement-learning loop.
     [Method] · aka direct preference optimization, preference pairs, reference model, offline alignment, chosen rejected, IPO, KTO
     1. Preference pairs — DPO trains on the same preference data as RLHF: triples of prompt, chosen answer and rejected answer.
-    2. No reward model — The KL-constrained reward maximisation RLHF solves has a closed-form optimum, so DPO drops the separate reward model and the PPO loop.
+    2. No reward model — The problem RLHF solves — maximise reward while staying close to the reference model — has a closed-form optimum, so DPO drops the separate reward model and the PPO loop.
     3. Chosen up, rejected down — An ordinary classification loss raises the model's log-probability of the chosen answer and lowers it for the rejected one, in one training loop.
-    4. A frozen reference — Each is measured against a frozen reference copy of the model, which does the job RLHF gave to the KL penalty.
+    4. A frozen reference — Both log-probabilities are measured against a frozen reference copy of the model, which does the job RLHF gave to the KL penalty.
     5. Offline only — It learns only from pairs somebody already collected, so it cannot explore responses the dataset never contained.
     Key fact: DPO rewrites the reward in terms of the policy itself: the language model is secretly a reward model.
 
@@ -262,7 +262,7 @@ EDR / XDR — Endpoint / Extended Detection & Response
     Key fact: EDR is reactive detection; posture turns it into an access input.
 
 Envoy — Envoy Proxy — L7 Proxy & Universal Data Plane
-    The C++ L7 proxy underneath most modern meshes and gateways — a filter chain whose entire configuration arrives over a live gRPC stream rather than a file, which is what makes a control plane above it possible.
+    The programmable proxy underneath most service meshes and API gateways — configured live over an API rather than from a file, which is what lets a control plane drive it.
     [Network Technology, Security Technology] · aka Envoy Proxy, xDS, LDS, RDS, CDS, EDS, SDS, listener, cluster, filter chain, HTTP connection manager, ext_authz, external authorization, JWT authn filter, RBAC filter, WASM filter, Envoy Gateway, sidecar proxy, upstream, downstream, circuit breaking, outlier detection
     1. A listener — A downstream client connects to a listener, a named socket. Envoy runs out of process next to every workload rather than as a library.
     2. Filter chains — The connection passes through L3/L4 network filters, and for HTTP a second, L7 chain. There Envoy terminates mTLS, validates JWTs, matches RBAC and calls ext_authz for a per-request allow or deny.
@@ -277,11 +277,11 @@ FAPI 2.0 — Financial-grade API Security Profile
     1. Pushed request (PAR) — The client sends the full authorisation request to the authorisation server over a client-authenticated back channel, and gets back an opaque request_uri.
     2. Only a handle — The browser then carries only that handle, leaving nothing in the URL to tamper with or to leak through referrers, history and logs.
     3. PKCE and iss — PKCE with S256 is required, and the authorisation response carries the iss parameter, which closes the mix-up attack between authorisation servers.
-    4. Sender-constrained tokens — Access tokens are bound to an mTLS client certificate or a DPoP key, so an attacker who lifts a token cannot spend it without the matching private key.
+    4. Sender-constrained tokens — Access tokens are bound to an mTLS client certificate or a DPoP (proof-of-possession) key, so an attacker who lifts a token cannot spend it without the matching private key.
     Key fact: FAPI 2.0 retires the bearer token: a stolen token is useless without the client's private key.
 
 FIDO2 — WebAuthn + CTAP
-    WebAuthn plus CTAP — registration mints a key pair scoped to one site's origin, so there is no shared secret to steal and a look-alike domain has no credential to ask for.
+    Sign-in with a per-site key pair instead of a shared secret: the server holds nothing worth stealing, and a look-alike domain has no credential to ask for.
     [Protocol, Security Technology] · aka WebAuthn, CTAP, CTAP2, FIDO, FIDO Alliance, passkey, passwordless, security key, relying party ID, discoverable credential, resident key, user verification, attestation, YubiKey, cross-device authentication
     1. Register a key pair — At registration the authenticator generates a key pair scoped to the site's Relying Party ID. It keeps the private key, and the site stores only the public key and a credential ID.
     2. Sign a challenge — Every later sign-in is a challenge from the site and a signature over it.
@@ -352,13 +352,13 @@ IDS / IPS — Intrusion Detection / Prevention System
     1. Inspect the traffic — The engine inspects network traffic for known exploit signatures, protocol anomalies, or deviations from a learned baseline.
     2. IDS alerts on copies — An Intrusion Detection System works on a mirrored copy of the traffic and raises an alert when it sees an attack.
     3. IPS: drop it inline — An Intrusion Prevention System is the same engine placed inline, so it drops or resets the malicious connection rather than merely reporting it.
-    4. Feed the SIEM — Detections feed a SIEM for correlation and a SOC for response.
+    4. Feed the SIEM — Detections feed a SIEM for correlation and a security operations centre (SOC) for response.
     5. The classic weakness — Detection mode produces false positives, and prevention mode risks blocking legitimate traffic.
     Key fact: IDS / IPS complements endpoint EDR by watching the wire instead of the host.
 
 Immuta — Policy-Based Access Control for Data Platforms
-    Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point in front of many query engines.
-    [Security Technology] · aka data access control, data governance, attribute-based access control, ABAC, dynamic masking, row-level security, column masking, subscription policy, data policy, policy pushdown, k-anonymity, differential privacy, Snowflake, Databricks, Unity Catalog
+    Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point governing many query engines.
+    [Security Technology] · aka data access control, data governance, attribute-based access control, ABAC, dynamic masking, row-level security, column masking, subscription policy, data policy, policy pushdown, Snowflake, Databricks, Unity Catalog
     1. Role explosion — Expressing fine-grained rules through native grants alone means a role per combination, multiplied by every table, decaying the moment somebody changes team.
     2. Classify and tag — Instead, data sources are registered and classified, with sensitive columns tagged as personal or health data.
     3. Policy on attributes — Policy is written once against attributes rather than roles, using the requesting user's attributes pulled from Okta or Active Directory.
@@ -376,7 +376,7 @@ IPsec — Internet Protocol Security
     Key fact: IPsec protects any application's packets with no changes to the application.
 
 Istio — Istio Service Mesh
-    The most widely deployed service mesh — istiod issues every workload a SPIFFE identity and drives Envoy so that mTLS and per-request authorisation are the default, with an ambient mode that drops the sidecar entirely.
+    The most widely deployed service mesh — its control plane gives every workload a SPIFFE identity and configures Envoy to enforce mTLS and per-request authorisation, with an ambient mode that drops the sidecar entirely.
     [Network Technology, Security Technology] · aka istiod, ambient mode, ztunnel, waypoint proxy, HBONE, sidecar injection, PeerAuthentication, AuthorizationPolicy, RequestAuthentication, VirtualService, DestinationRule, ServiceEntry, trust domain, STRICT mTLS, PERMISSIVE, Gateway API, east-west
     1. One binary: istiod — Istio's control plane is a single binary, istiod: service discovery, translating intent into Envoy configuration, and the mesh's certificate authority.
     2. A SPIFFE identity — istiod issues every workload an X.509 certificate carrying a SPIFFE ID derived from its Kubernetes service account, and rotates it automatically.
@@ -402,7 +402,7 @@ KEDA — Kubernetes Event-driven Autoscaling
     3. Zero to one — KEDA drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning it to zero after a cooldown.
     4. One to many — A metrics API server publishes each scaler's reading through the external metrics API, and from one replica upward an ordinary HPA does the scaling.
     5. A credential per poll — Every scaler must authenticate to whatever it polls. TriggerAuthentication keeps those credentials out of the ScaledObject; a pod identity provider means nothing long-lived is stored.
-    Key fact: Scale-to-zero is the thing a plain HPA has never done.
+    Key fact: A plain HPA could not scale to zero at all until Kubernetes 1.37 enabled it by default, and still cannot on CPU or memory.
 
 Kerberos — Kerberos Authentication Protocol
     Ticket-based authentication that proves identity without sending passwords over the wire.
@@ -414,7 +414,7 @@ Kerberos — Kerberos Authentication Protocol
     Key fact: The password never crosses the network.
 
 Kubernetes — Kubernetes (K8s)
-    Automates deploying, scaling, and healing containerized apps across machines.
+    Automates deploying, scaling, and healing containerised apps across machines.
     [Development Framework, Network Technology] · aka K8s, orchestration, pod
     1. Declare desired state — You declare the desired state: how many replicas, which images, what networking.
     2. Reconcile continuously — The control plane continuously reconciles reality to match the desired state.
@@ -456,7 +456,7 @@ MFA / Passkeys — Multi-Factor Authentication (FIDO2 · WebAuthn)
     Proving identity with more than a password — and passkeys that cannot be phished.
     [Security Technology, Protocol] · aka MFA, 2FA, FIDO2, WebAuthn, passkey, passwordless, TOTP, phishing-resistant
     1. Independent factors — MFA requires two or more independent proofs: something you know, something you have, or something you are, so a stolen password alone is not enough.
-    2. Codes can be phished — Classic second factors like SMS codes and TOTP apps can still be phished: a user can be tricked into typing them into a fake site.
+    2. Codes can be phished — Classic second factors like SMS codes and time-based one-time password (TOTP) apps can still be phished: a user can be tricked into typing them into a fake site.
     3. Bound to the origin — With FIDO2 and WebAuthn, the browser and an authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere.
     4. Passkeys replace passwords — A passkey is a discoverable FIDO credential synced across your devices that replaces the password entirely.
     Key fact: For Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be.
@@ -550,12 +550,12 @@ OPA — Open Policy Agent
     1. Ask a question — A service asks OPA a question, can subject X perform action Y on resource Z, sending JSON context.
     2. Evaluate Rego — OPA evaluates rules written in its declarative Rego language.
     3. A structured decision — It returns a structured decision, such as allow or deny.
-    4. Many call sites — The same engine enforces policy across microservices, Kubernetes admission (as Gatekeeper), CI pipelines and API gateways.
+    4. Many call sites — The same engine makes policy decisions for microservices, Kubernetes admission (as Gatekeeper), CI pipelines and API gateways.
     5. Policy as code — Organisations express authorisation once, as version-controlled policy as code, rather than scattering if-statements through every app.
     Key fact: OPA is the canonical software implementation of a Zero Trust Policy Decision Point.
 
 Open Virtual Network — OVN — SDN control plane for OVS
-    An SDN control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.
+    A software-defined networking (SDN) control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.
     [Network Technology, Security Technology] · aka OVN, ovn-kubernetes, logical switch, logical router, Neutron OVN, northbound database, distributed firewall
     1. Declare the intent — Instead of writing raw flows, you declare logical switches, logical routers and Access Control Lists in OVN's northbound database.
     2. Compiled to flows — OVN's daemons translate that intent into OpenFlow.
@@ -615,7 +615,7 @@ PAM — Privileged Access Management
 PASETO — Platform-Agnostic Security Tokens
     A JWT alternative with no algorithm field — the version prefix pins the cryptography, so there is nothing for an attacker to downgrade.
     [Security Technology, Protocol] · aka v4.local, v4.public, PASERK, JWT alternative, versioned protocols, algorithm confusion, implicit assertion, footer
-    1. JWT's alg field — JWT negotiates its algorithm in-band through the header's alg field, which makes algorithm-confusion attacks possible: swap RS256 for HS256, or alg: none once skipped verification altogether.
+    1. JWT's alg field — JWT negotiates its algorithm in-band through the header's alg field, which makes algorithm-confusion attacks possible: swap RS256 for HS256 and a careless library verifies a forged signature, and alg: none once skipped verification altogether.
     2. Version fixes the suite — A PASETO token reads version.purpose.payload, and the version names the entire cipher suite before parsing begins. There is no field to tamper with.
     3. Local or public — The purpose is one of two: local means the payload is encrypted under a shared symmetric key; public means it is signed and readable by anyone holding the public key.
     4. The optional footer — An optional footer is authenticated but left in the clear, for things like key identifiers.
@@ -633,7 +633,7 @@ PEP / PDP — Policy Enforcement Point / Policy Decision Point
     Key fact: The PEP / PDP pattern is the control core of zero-trust architectures.
 
 PKCE — Proof Key for Code Exchange
-    Stops a stolen OAuth authorization code from being redeemed by anyone but the app that began the flow.
+    Stops a stolen OAuth authorisation code from being redeemed by anyone but the app that began the flow.
     [Security Technology, Protocol] · aka pixy, code_verifier, code_challenge, RFC 7636
     1. Invent a verifier — The client first invents a random secret, the code_verifier.
     2. Send only the hash — When it starts login it sends only the verifier's SHA-256 hash, the code_challenge.
@@ -681,7 +681,7 @@ QUIC — QUIC (a name, not an acronym — RFC 9000)
     Key fact: QUIC is the foundation of HTTP/3, with encryption built in rather than bolted on.
 
 RADIUS — Remote Authentication Dial-In User Service
-    A protocol for centralized authentication, authorization, and accounting.
+    A protocol for centralised authentication, authorisation, and accounting.
     [Protocol, Security Technology] · aka AAA, NAS, 802.1X
     1. You connect — You connect to an access device: Wi-Fi, a VPN or a switch port.
     2. Verify credentials — The access device asks a RADIUS server to verify your credentials.
@@ -724,7 +724,7 @@ RLHF — Reinforcement Learning from Human Feedback
     1. Supervised fine-tuning — Supervised fine-tuning first teaches the base model to imitate human-written demonstrations.
     2. Humans rank answers — Labellers are shown several candidate answers to the same prompt and rank them.
     3. Train a reward model — Those comparisons train a separate reward model to predict which output a human would prefer.
-    4. PPO with KL leash — Reinforcement learning, classically PPO, optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference.
+    4. PPO with KL leash — Reinforcement learning, classically Proximal Policy Optimization (PPO), optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference.
     5. Safety in the weights — Refusal behaviour and safety policy are installed here, at training time, so they are a property of the weights. The weakness is reward hacking: the reward model is only a proxy.
     Key fact: InstructGPT's 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3.
 
@@ -806,7 +806,7 @@ SentryWire — Full Packet Capture & Network Security Monitoring Platform
     Key fact: Full packet capture is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network.
 
 Service Mesh — Service Mesh (Istio · Linkerd · Envoy)
-    A networking layer that gives every service identity, mTLS, and traffic control for free.
+    A networking layer that gives every service identity, mTLS, and traffic control without changing application code.
     [Network Technology, Security Technology] · aka Istio, Linkerd, Envoy, sidecar, data plane, control plane
     1. Out of the app — A service mesh moves mutual TLS, retries, timeouts, load balancing and observability out of application code and into a dedicated infrastructure layer.
     2. A sidecar per workload — A proxy is deployed beside each workload as a sidecar. Together these proxies form the data plane that carries traffic.
@@ -877,7 +877,7 @@ SuperNIC — NVIDIA AI-Network Accelerator
     [Network Technology] · aka NVIDIA SuperNIC, BlueField-3 SuperNIC, ConnectX SuperNIC, Spectrum-X, RoCE, AI networking
     1. East-west, GPU to GPU — A SuperNIC is built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets.
     2. RoCE per GPU — It delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU.
-    3. Adaptive routing — Adaptive routing and congestion control let thousands of GPUs exchange gradients without the network becoming the bottleneck, as a pillar of Spectrum-X.
+    3. Adaptive routing — Adaptive routing and congestion control, part of NVIDIA's Spectrum-X platform, let thousands of GPUs exchange gradients without the network becoming the bottleneck.
     4. Two kinds — The BlueField-3 SuperNIC is a slimmed-down DPU with eight Arm cores; the ConnectX-8/9 SuperNICs are pure network adapters with no separate operating system.
     5. A thinner ZT story — SuperNICs still encrypt traffic in flight at line rate, but host-introspection services such as DOCA Argus run only on BlueField in DPU mode.
     Key fact: Where a DPU is an infrastructure computer, a SuperNIC is a throughput engine.
@@ -914,7 +914,7 @@ TPM & Secure Boot — Hardware Root of Trust
     A hardware chip that protects keys and proves a machine booted clean.
     [Security Technology] · aka trusted platform module, secure boot, measured boot, attestation, UEFI
     1. Secure Boot checks — Secure Boot has the firmware verify each stage of startup against trusted signatures, refusing to run a bootloader that has been tampered with.
-    2. Measured into PCRs — Measured boot records hashes of what actually loaded into the TPM's Platform Configuration Registers (PCRs).
+    2. Measured into PCRs — Measured boot records a hash of each component that actually loaded and stores it in the TPM's Platform Configuration Registers (PCRs).
     3. Keys stay in hardware — The TPM is a tamper-resistant chip that generates and stores cryptographic keys so they never leave the hardware.
     4. Remote attestation — A remote server can ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted.
     5. A root of trust — This hardware root of trust underpins disk-encryption key release, device identity and the device-posture checks Zero Trust relies on.
@@ -964,7 +964,7 @@ WebTransport — Multiplexed streams and datagrams over HTTP/3
     2. Reliable streams — Within one connection it offers reliable bidirectional and unidirectional streams.
     3. Unreliable datagrams — It also offers unreliable datagrams, so an app can mix guaranteed delivery with fire-and-forget packets for things like game state or live media.
     4. No head-of-line blocking — Because it inherits QUIC's independent streams, one lost packet stalls only its own stream, avoiding the head-of-line blocking WebSockets suffer over TCP.
-    Key fact: WebTransport is the emerging alternative to WebSockets, though its W3C and IETF specifications are still drafts.
+    Key fact: WebTransport is the emerging alternative to WebSockets, though neither its W3C nor its IETF specification is final.
 
 WireGuard — WireGuard VPN protocol
     A fast, modern, minimal VPN protocol built on current cryptography.
