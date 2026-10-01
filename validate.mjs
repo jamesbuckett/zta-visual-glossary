@@ -163,7 +163,7 @@ html.split('\n').forEach((line, i) => {
 const externals = [...html.matchAll(/<(?:script|link)[^>]+(?:src|href)\s*=\s*"([^"]+)"/gi)];
 const allowedHosts = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 for (const [, url] of externals) {
-  if (url.startsWith('#') || url.startsWith('/') || url.startsWith('./') || url.startsWith('mailto:')) continue;
+  if (url.startsWith('#') || url.startsWith('/') || url.startsWith('./') || url.startsWith('mailto:') || url.startsWith('data:')) continue;
   if (allowedHosts.some((h) => url.includes(h))) continue;
   // Specific named offenders get their own error message.
   if (/tailwindcss|tailwind\.css/i.test(url))           err('no-framework', `Tailwind CDN: ${url}`);
