@@ -57,7 +57,7 @@ const CASES = [
   ['one-word title rejected', withTour(base, GOOD_STEPS.replace('title: "Peer A"', 'title: "Peer"')), 'validate', 1, 'tour-data'],
   ['five-word title rejected', withTour(base, GOOD_STEPS.replace('title: "The tunnel"', 'title: "The tunnel between the peers"')), 'validate', 1, 'tour-data'],
   ['term without a tour rejected',
-    base.replace(/(id: "wireguard"[\s\S]*?)\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1'),
+    base.replace(/(id: "wireguard"[\s\S]*?),\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1'),
     'validate', 1, 'tour-data'],
   ['space-padded label rejected', withDiagram(withTour(base, GOOD_STEPS), svg().replace('>Peer B<', '>Peer    B<')), 'validate', 1, 'svg-whitespace'],
   // Enabled by the Task 4 checks (tour stepping and badge/icon geometry).
