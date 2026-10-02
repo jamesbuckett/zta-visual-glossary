@@ -2870,7 +2870,7 @@ The standing complaint is complexity: a mesh is another distributed system with 
         { title: "Identity, not IP", text: "Istio lets policy name a cryptographic service identity, not an IP another pod might inherit, by issuing each workload an auto-rotated X.509 certificate carrying a SPIFFE ID." },
         { title: "Default-deny is opt-in", text: "Istio's AuthorizationPolicy is evaluated CUSTOM, then DENY, then ALLOW, and a workload with no ALLOW policy at all permits requests, so default-deny must be configured." },
         { title: "Ambient mode's two layers", text: "Istio's ambient mode, generally available in 1.24, moves the proxies out of application pods: per-node ztunnels give a cheap, secure L4 overlay, with L7 waypoints only where asked." },
-        { title: "Complexity and blast radius", text: "Istio adds another distributed system; ambient mode's per-node ztunnel holds keys for every meshed pod on its node, so a node compromise reaches further, and app-to-proxy loopback is unencrypted." }
+        { title: "Complexity and blast radius", text: "Istio is another distributed system to run; ambient mode's per-node ztunnel holds its node's meshed-pod keys, so a node compromise reaches further than a sidecar's, and app-to-proxy loopback is unencrypted." }
       ]
     },
     {
