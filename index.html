@@ -895,8 +895,8 @@
       fact: "BGP makes the internet a network of networks.",
       takeaways: [
         { title: "Networks advertise reach", text: "Autonomous systems, large independently run networks, use BGP to advertise the IP ranges they can reach and to choose paths between one another." },
-        { title: "Policy before distance", text: "Path choice is policy-driven rather than purely shortest-path, reflecting commercial peering and transit relationships." },
-        { title: "One misconfiguration away", text: "It takes only one misconfiguration to reroute traffic, or black-hole it, globally." }
+        { title: "Policy before distance", text: "Commercial peering and transit relationships, not just the shortest path, decide which route a network prefers." },
+        { title: "One misconfiguration away", text: "One mistake in BGP configuration can reroute traffic worldwide, or make it vanish into a black hole." }
       ]
     },
     {
@@ -1240,9 +1240,9 @@
       fact: "mTLS is a cornerstone of zero-trust service-to-service communication and of service meshes.",
       takeaways: [
         { title: "Both sides prove identity", text: "Where ordinary TLS has only the server present a certificate, mutual TLS requires the client to present one as well." },
-        { title: "No passwords needed", text: "Each side verifies the other before any data flows: two-way authentication with no passwords." },
-        { title: "Zero-trust cornerstone", text: "It underpins service-to-service traffic in zero-trust networks and service meshes, where every workload carries its own identity." },
-        { title: "Identity, not permission", text: "mTLS proves which workload is at each end, not what it may do; authorisation is a separate check." }
+        { title: "Verified before data flows", text: "Neither side sends application data until each has verified the other, so authentication runs both ways and needs no passwords." },
+        { title: "Zero-trust cornerstone", text: "mTLS underpins zero-trust service-to-service traffic and service meshes, where every workload carries its own cryptographic identity." },
+        { title: "Identity, not permission", text: "mTLS proves which workload is at each end, not what it may do; authorisation is a separate check, and every certificate must be issued, rotated and revoked." }
       ]
     },
     {
@@ -2496,11 +2496,11 @@ Calico's WireGuard encryption is node-to-node rather than pod-to-pod: the host-t
       ],
       fact: "Calico resolves label selectors into IP sets, so a policy is only as trustworthy as the labels and the IPAM behind it.",
       takeaways: [
-        { title: "A Kubernetes network plugin", text: "Kubernetes delegates pod networking to a CNI plugin, and Calico, created and maintained by Tigera under Apache-2.0, is one of the two you are most likely to meet." },
-        { title: "Routes, not tunnels", text: "Pod packets cross the wire with their own addresses and no encapsulation, so routers, firewalls and flow collectors see real endpoints." },
-        { title: "Overlay when needed", text: "Where the underlay will not carry pod routes, as in most cloud VPCs, Calico falls back to a VXLAN or IP-in-IP overlay." },
+        { title: "A Kubernetes network plugin", text: "Kubernetes delegates pod networking to a Container Network Interface plugin; Calico, maintained by Tigera, is one of the two you are most likely to meet, Cilium being the other." },
+        { title: "Routes, not tunnels", text: "Each node advertises its block of pod addresses over BGP, and packets cross the wire unwrapped, so routers, firewalls and flow collectors see real endpoints." },
+        { title: "Overlay when needed", text: "Most cloud VPCs will not carry pod routes, so there Calico tunnels through a VXLAN or IP-in-IP overlay, optionally only across subnet boundaries." },
         { title: "Ordered, tiered policy", text: "Calico adds explicit deny, deterministic order and tiers: developers' NetworkPolicies land in the default tier, unable to override platform rules above, and per-tier RBAC enforces the boundary." },
-        { title: "Identity is an address", text: "Calico enforces on IP sets resolved from labels, a weaker claim than cryptographic workload identity, and its WireGuard encryption protects node-to-node hops only." }
+        { title: "Address identity, partial encryption", text: "Calico enforces on IP sets resolved from labels, which is a weaker claim than cryptographic workload identity, and its WireGuard encryption protects node-to-node hops only." }
       ]
     },
     {
@@ -2532,7 +2532,7 @@ The configuration surface is enormous: a hand-written bootstrap runs to thousand
         { title: "Proxy beside every workload", text: "Envoy is an L7 proxy that runs out of process next to every workload, so one deployment serves services written in any language." },
         { title: "Built from filters", text: "Nearly everything Envoy does is a filter in a chain between a listener, where connections arrive, and a cluster of upstream hosts." },
         { title: "Configured live over xDS", text: "A management server streams listeners, routes, clusters, endpoints and certificates over gRPC, so configuration changes under live traffic without a restart." },
-        { title: "A policy enforcement point", text: "Its filters terminate mTLS, validate JWTs, match RBAC rules and call an external decision point such as OPA for a per-request allow or deny." },
+        { title: "A policy enforcement point", text: "Envoy's filters terminate mTLS, validate JWTs, match RBAC rules and call an external decision point such as OPA for a per-request allow or deny." },
         { title: "Control plane is critical", text: "In practice, adopting Envoy means adopting a control plane, which becomes your most security-critical component: whoever can push xDS can silently reroute traffic across every proxy." }
       ]
     },
