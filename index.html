@@ -2499,7 +2499,7 @@ Calico's WireGuard encryption is node-to-node rather than pod-to-pod: the host-t
         { title: "A Kubernetes network plugin", text: "Kubernetes delegates pod networking to a Container Network Interface plugin; Calico, maintained by Tigera, is one of the two you are most likely to meet, Cilium being the other." },
         { title: "Routes, not tunnels", text: "Each node advertises its block of pod addresses over BGP, and packets cross the wire unwrapped, so routers, firewalls and flow collectors see real endpoints." },
         { title: "Overlay when needed", text: "Most cloud VPCs will not carry pod routes, so there Calico tunnels through a VXLAN or IP-in-IP overlay, optionally only across subnet boundaries." },
-        { title: "Ordered, tiered policy", text: "Calico adds explicit deny, deterministic order and tiers: developers' NetworkPolicies land in the default tier, unable to override platform rules above, and per-tier RBAC enforces the boundary." },
+        { title: "Ordered, tiered policy", text: "Calico adds explicit deny, deterministic order and tiers, so platform rules in a higher-precedence tier outrank developers' NetworkPolicies, a boundary that holds because Kubernetes RBAC applies per tier." },
         { title: "Address identity, partial encryption", text: "Calico enforces on IP sets resolved from labels, which is a weaker claim than cryptographic workload identity, and its WireGuard encryption protects node-to-node hops only." }
       ]
     },
@@ -2532,7 +2532,7 @@ The configuration surface is enormous: a hand-written bootstrap runs to thousand
         { title: "Proxy beside every workload", text: "Envoy is an L7 proxy that runs out of process next to every workload, so one deployment serves services written in any language." },
         { title: "Built from filters", text: "Nearly everything Envoy does is a filter in a chain between a listener, where connections arrive, and a cluster of upstream hosts." },
         { title: "Configured live over xDS", text: "A management server streams listeners, routes, clusters, endpoints and certificates over gRPC, so configuration changes under live traffic without a restart." },
-        { title: "A policy enforcement point", text: "Envoy's filters terminate mTLS, validate JWTs, match RBAC rules and call an external decision point such as OPA for a per-request allow or deny." },
+        { title: "A policy enforcement point", text: "With ext_authz calling an external decision point such as OPA per request, Envoy makes authorisation a property of the network path rather than something every service reimplements." },
         { title: "Control plane is critical", text: "In practice, adopting Envoy means adopting a control plane, which becomes your most security-critical component: whoever can push xDS can silently reroute traffic across every proxy." }
       ]
     },
@@ -2753,7 +2753,7 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "A log of traffic", text: "A HAR file is a JSON log of the HTTP traffic behind a page load, exported by browser developer tools and other HTTP monitoring tools." },
         { title: "One record per request", text: "Each entry records one request and its response: URL, method, headers, cookies, bodies and status, plus a timings breakdown." },
         { title: "Convention, not standard", text: "Version 1.2 is frozen and its W3C draft was abandoned, so HAR is a shared convention rather than a standard." },
-        { title: "Captures too much", text: "A HAR holds cookies and Authorization headers in the clear, so sharing one can hand over a live session; Chrome now strips them by default, but URLs and bodies remain." }
+        { title: "Captures too much", text: "Anyone given a HAR can lift a live session from its cookies and Authorization headers; Chrome's default export now omits those headers, but URLs and bodies remain." }
       ]
     }
   ];
