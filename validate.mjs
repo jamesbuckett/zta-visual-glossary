@@ -133,7 +133,7 @@ if (html.includes('const TERMS = [')) {
     const steps = Array.isArray(t.steps) ? t.steps : [];
     const tourCopy = new Set([...steps.map((s) => flat(s && s.text)), flat(t.fact)].filter(Boolean));
     t.takeaways.forEach((k, i) => {
-      if (!k || !String(k.title || '').trim() || !String(k.text || '').trim()) {
+      if (!k || typeof k.title !== 'string' || typeof k.text !== 'string' || !k.title.trim() || !k.text.trim()) {
         err('takeaways-data', `${where}: takeaway ${i + 1} needs a non-empty title and text`);
         return;
       }

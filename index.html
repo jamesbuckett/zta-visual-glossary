@@ -594,6 +594,7 @@
       .tour-print { display: block; margin: var(--space-4) 0 0; }
       .dg .dim { opacity: 1; }
       .dg .on { animation: none; }
+      .takeaway { break-inside: avoid; }
     }
 
     /* ==================================================================
@@ -1367,7 +1368,7 @@
       fact: "mTLS is a cornerstone of zero-trust service-to-service communication and of service meshes.",
       takeaways: [
         { title: "Both sides prove identity", text: "Where ordinary TLS has only the server present a certificate, mutual TLS requires the client to present one as well." },
-        { title: "Verified before data flows", text: "Neither side sends application data until each has verified the other, so authentication runs both ways and needs no passwords." },
+        { title: "Verified before data flows", text: "In mTLS, neither side sends application data until each has verified the other, so authentication runs both ways and needs no passwords." },
         { title: "Zero-trust cornerstone", text: "mTLS underpins zero-trust service-to-service traffic and service meshes, where every workload carries its own cryptographic identity." },
         { title: "Identity, not permission", text: "mTLS proves which workload is at each end, not what it may do; authorisation is a separate check, and every certificate must be issued, rotated and revoked." }
       ]
@@ -3332,7 +3333,7 @@ It is a specialist: the managed databases, identity services and compliance cata
       takeaways: [
         { title: "Bus, queue and database", text: "AMPS, 60East Technologies' commercial publish/subscribe engine for low-latency financial messaging, is described by its maker as a message bus, a queue and a database combined." },
         { title: "Content-based subscriptions", text: "AMPS subscribers can filter on what a message contains, not only its topic, and AMPS payloads can be JSON, FIX, XML, Protocol Buffers or raw binary." },
-        { title: "State, then updates", text: "Because AMPS's State of the World (SOW) holds each record's latest version, a subscriber can begin from current state and receive every later update exactly once." },
+        { title: "State, then updates", text: "Because AMPS's State of the World (SOW) holds each record's latest version, a subscriber can start from current state and then receive updates from that moment, none missed or doubled." },
         { title: "Permissive until configured", text: "AMPS passes no TLS identity to its checks, and until Kerberos, LDAP, OAuth or a custom module is plugged in, any credentials log on with every permission." }
       ]
     },
@@ -8843,19 +8844,18 @@ It is a specialist: the managed databases, identity services and compliance cata
 
   window.addEventListener("hashchange", route);
 
-  // Print the full explainer too: open the disclosure for printing, then put
-  // it back the way the reader left it.
-  let explainerWasOpen = null;
+  // Print the full explainer too: open the disclosure for printing, then
+  // close it again if printing was what opened it.
+  let openedForPrint = null;
   window.addEventListener("beforeprint", () => {
     const d = els.detailContent.querySelector(".explainer-more");
-    if (!d) return;
-    explainerWasOpen = d.open;
+    if (!d || d.open) return;
     d.open = true;
+    openedForPrint = d;
   });
   window.addEventListener("afterprint", () => {
-    const d = els.detailContent.querySelector(".explainer-more");
-    if (d && explainerWasOpen !== null) d.open = explainerWasOpen;
-    explainerWasOpen = null;
+    if (openedForPrint) openedForPrint.open = false;
+    openedForPrint = null;
   });
 
   /* ---- init ---- */

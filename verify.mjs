@@ -14,7 +14,7 @@
 //       something, no out-of-range or nested data-s, each click shows its own
 //       text and lit set, ArrowRight moves focus, no animation under reduced
 //       motion; badges must not cover a label
-//   (d) takeaway tiles — for a term with takeaways: tiles match the data and
+//   (d) takeaway tiles — for every term: tiles match the data and
 //       hold no stray markup, only the last is marked as the limitation, the
 //       full explainer sits in a closed disclosure that opens for print, and
 //       nothing overflows at 1440px or 375px
@@ -132,7 +132,7 @@ for (const d of DIAGRAM_IDS) {
 // Checked here rather than in the browser loop: without takeaways the detail
 // view cannot render at all, so the loop would only report a render failure.
 for (const t of TERMS) {
-  if (!Array.isArray(t.takeaways)) err('takeaways', `${t.id}: no takeaways — every term has tiles`);
+  if (!Array.isArray(t.takeaways) || t.takeaways.length === 0) err('takeaways', `${t.id}: no takeaways — every term has tiles`);
 }
 
 // -----------------------------------------------------------------------------
@@ -295,10 +295,13 @@ const TAKEAWAYS_PROBE = `(() => {
       overflow: li.scrollWidth > li.clientWidth + 1,
       full: Math.abs(li.getBoundingClientRect().width - width) < 2,
     })),
-    heading: !!root.querySelector('h2.detail-section-label + .takeaways'),
+    heading: (() => {
+      const h = list ? list.previousElementSibling : null;
+      return !!(h && h.matches('h2.detail-section-label') && h.textContent.trim() === 'Takeaways');
+    })(),
     more: !!more,
     open: more ? more.open : null,
-    paras: explainer ? explainer.querySelectorAll('p').length : 0,
+    paraTexts: explainer ? [...explainer.querySelectorAll('p')].map((p) => p.textContent) : [],
     inMore: !!(more && explainer && more.contains(explainer)),
   };
 })()`;
@@ -410,7 +413,7 @@ for (const t of targets) {
   }
 
   // Takeaway tiles. A term without them was reported by the static check.
-  const paras = t.explainer.split(/\n\s*\n/).length;
+  const wantParas = t.explainer.split(/\n\s*\n/).map((p) => p.trim());
   const tk = await page.evaluate(TAKEAWAYS_PROBE);
   if (t.takeaways) {
     const n = t.takeaways.length;
@@ -433,7 +436,10 @@ for (const t of targets) {
     if (!tk.more) err('takeaways', `${t.id}: no "Full explainer" disclosure`);
     else {
       if (tk.open) err('takeaways', `${t.id}: disclosure is open when the term opens`);
-      if (!tk.inMore || tk.paras !== paras) err('takeaways', `${t.id}: disclosure holds ${tk.paras} explainer paragraph(s), want ${paras}`);
+      if (!tk.inMore) err('takeaways', `${t.id}: the explainer is not inside the disclosure`);
+      else if (tk.paraTexts.length !== wantParas.length || tk.paraTexts.some((x, i) => x !== wantParas[i])) {
+        err('takeaways', `${t.id}: the disclosure's text does not match the explainer (${tk.paraTexts.length} paragraph(s), want ${wantParas.length})`);
+      }
 
       const pr = await page.evaluate(PRINT_PROBE);
       if (!pr.during || pr.after) err('takeaways', `${t.id}: printing does not open the disclosure and close it again (during ${pr.during}, after ${pr.after})`);

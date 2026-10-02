@@ -55,6 +55,7 @@ const CASES = [
   ['six takeaways rejected', () => withTakeaways(base, set(A, B, C, D, A, B)), 'validate', 1, 'takeaways-data', /array of 3–5/],
   ['takeaways not an array rejected', () => withTakeaways(base, 'takeaways: "none"'), 'validate', 1, 'takeaways-data', /array of 3–5/],
   ['empty text rejected', () => withTakeaways(base, set(A, B, card('Keys are manual', ' '))), 'validate', 1, 'takeaways-data', /non-empty title and text/],
+  ['non-string title rejected', () => withTakeaways(base, set(A, B, '{ title: 42, text: "It does not distribute keys for you." }')), 'validate', 1, 'takeaways-data', /non-empty title and text/],
   ['one-word title rejected', () => withTakeaways(base, set(A, B, card('Manual', 'It does not distribute keys for you.'))), 'validate', 1, 'takeaways-data', /has 1 words/],
   ['five-word title rejected', () => withTakeaways(base, set(A, B, card('Keys are yours to manage', 'It does not distribute keys for you.'))), 'validate', 1, 'takeaways-data', /has 5 words/],
   ['31-word text rejected', () => withTakeaways(base, set(A, B, card('Keys are manual', words(31)))), 'validate', 1, 'takeaways-data', /has 31 words/],
@@ -78,7 +79,17 @@ const CASES = [
     'verify', 1, 'takeaways', /marked as the limitation/],
   ['print does not open the disclosure caught',
     () => swap(withTakeaways(base, GOOD), 'd.open = true;', ''),
-    'verify', 1, 'takeaways', /printing/],
+    'verify', 1, 'takeaways', /does not open the disclosure/],
+  ['tile span rule removed caught',
+    () => swap(withTakeaways(base, GOOD), '.takeaway:last-child:nth-child(odd) { grid-column: 1 / -1; }', ''),
+    'verify', 1, 'takeaways', /both columns/],
+  ['disclosure starting open caught',
+    () => swap(withTakeaways(base, GOOD), '<details class="explainer-more">', '<details class="explainer-more" open>'),
+    'verify', 1, 'takeaways', /open when the term opens/],
+  ['explainer text altered caught',
+    () => swap(withTakeaways(base, GOOD), '<div class="explainer">${paras}</div>', '<div class="explainer"><p>x</p></div>'),
+    'verify', 1, 'takeaways', /does not match the explainer/],
+  ['empty takeaways caught by verify', () => withTakeaways(base, 'takeaways: []'), 'verify', 1, 'takeaways', /no takeaways/],
 ];
 
 let failed = 0;
