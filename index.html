@@ -8643,14 +8643,17 @@ It is a specialist: the managed databases, identity services and compliance cata
       <text class="t-sm t-mut" x="360" y="98" text-anchor="middle">diagram in progress</text></svg>`;
   }
 
-  // Takeaway tiles, with the full explainer collapsed beneath them.
+  // Takeaway tiles, with the full explainer collapsed beneath them. The last
+  // tile is the limitation: its heading carries the word for assistive
+  // technology, so a list of headings marks it, and its visible label is
+  // hidden from the accessibility tree so it is not announced twice.
   function takeawaysHtml(e) {
     const paras = e.explainer.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("");
     const last = e.takeaways.length - 1;
     const tiles = e.takeaways.map((k, i) => `
         <li class="takeaway${i === last ? " takeaway-limit" : ""}">
-          <span class="takeaway-eyebrow">${i === last ? "Limitation" : String(i + 1).padStart(2, "0")}</span>
-          <h3>${esc(k.title)}</h3>
+          <span class="takeaway-eyebrow"${i === last ? ' aria-hidden="true"' : ""}>${i === last ? "Limitation" : String(i + 1).padStart(2, "0")}</span>
+          <h3>${i === last ? '<span class="visually-hidden">Limitation: </span>' : ""}${esc(k.title)}</h3>
           <p>${esc(k.text)}</p>
         </li>`).join("");
     return `

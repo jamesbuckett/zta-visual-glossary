@@ -15,9 +15,10 @@
 //       text and lit set, ArrowRight moves focus, no animation under reduced
 //       motion; badges must not cover a label
 //   (d) takeaway tiles — for every term: tiles match the data and
-//       hold no stray markup, only the last is marked as the limitation, the
-//       full explainer sits in a closed disclosure that opens for print, and
-//       nothing overflows at 1440px or 375px
+//       hold no stray markup, only the last is marked as the limitation (and
+//       named so in the accessibility tree, once), the full explainer sits in
+//       a closed disclosure that opens for print, and nothing overflows at
+//       1440px or 375px
 //
 // Usage:
 //   node verify.mjs                  # every term
@@ -277,8 +278,10 @@ const TOUR_PROBE = `(() => {
 })()`;
 
 // Reads the takeaway tiles and the explainer disclosure as rendered. A tile
-// holds exactly three elements (eyebrow, title, text); more means the copy was
-// parsed as markup. `full` is whether a tile spans the whole grid.
+// holds exactly three elements (eyebrow, title, text), plus the hidden prefix
+// in the limitation tile's heading; more means the copy was parsed as markup.
+// `title` is the heading's own text, without that prefix. `full` is whether a
+// tile spans the whole grid.
 const TAKEAWAYS_PROBE = `(() => {
   const root = document.querySelector('#detail-content');
   const list = root.querySelector('.takeaways');
@@ -288,7 +291,7 @@ const TAKEAWAYS_PROBE = `(() => {
   return {
     tiles: [...root.querySelectorAll('.takeaways > .takeaway')].map((li) => ({
       eyebrow: (li.querySelector('.takeaway-eyebrow') || li).textContent.trim(),
-      title: (li.querySelector('h3') || li).textContent,
+      title: [...(li.querySelector('h3') || li).childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(''),
       text: (li.querySelector('p') || li).textContent,
       limit: li.classList.contains('takeaway-limit'),
       elements: li.querySelectorAll('*').length,
@@ -424,7 +427,8 @@ for (const t of targets) {
       if (!want) return;
       const last = i === n - 1;
       const eyebrow = last ? 'Limitation' : String(i + 1).padStart(2, '0');
-      if (tile.elements !== 3) err('takeaways', `${t.id}: tile ${i + 1} holds ${tile.elements} elements, want 3 — copy was parsed as markup`);
+      const elements = last ? 4 : 3;
+      if (tile.elements !== elements) err('takeaways', `${t.id}: tile ${i + 1} holds ${tile.elements} elements, want ${elements} — copy was parsed as markup`);
       if (tile.title !== want.title) err('takeaways', `${t.id}: tile ${i + 1} title does not match takeaways[${i}].title`);
       if (tile.text !== want.text) err('takeaways', `${t.id}: tile ${i + 1} text does not match takeaways[${i}].text`);
       if (tile.limit !== last) err('takeaways', `${t.id}: tile ${i + 1} ${tile.limit ? 'is' : 'is not'} marked as the limitation`);
@@ -432,6 +436,20 @@ for (const t of targets) {
       if (tile.overflow) err('takeaways', `${t.id}: tile ${i + 1} overflows at 1440px`);
       if (tile.full !== (last && n % 2 === 1)) err('takeaways', `${t.id}: tile ${i + 1} ${tile.full ? 'spans' : 'does not span'} both columns at 1440px`);
     });
+
+    // What assistive technology gets, read from the accessibility tree: a list
+    // of headings names only the last tile as the limitation, and that tile's
+    // visible label is not announced a second time.
+    if (n && tk.tiles.length === n) {
+      const list = page.locator('#detail-content .takeaways');
+      const lastTitle = t.takeaways[n - 1].title;
+      const named = await list.getByRole('heading', { level: 3, name: `Limitation: ${lastTitle}`, exact: true }).count();
+      const prefixed = await list.getByRole('heading', { level: 3, name: /^Limitation: / }).count();
+      if (named !== 1 || prefixed !== 1) err('takeaways', `${t.id}: a screen reader's headings should name only the last tile "Limitation: ${lastTitle}" (${named} so named, ${prefixed} with the prefix)`);
+      // The tile should expose a heading and a paragraph, and no loose text.
+      const exposed = await list.locator('> .takeaway').last().ariaSnapshot();
+      if (/\n\s+- text:/.test(exposed)) err('takeaways', `${t.id}: the limitation tile's visible label is announced as well as its heading`);
+    }
 
     if (!tk.more) err('takeaways', `${t.id}: no "Full explainer" disclosure`);
     else {

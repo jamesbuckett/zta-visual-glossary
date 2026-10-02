@@ -87,6 +87,10 @@ Worked example (mTLS):
    - The eyebrow is the tile's two-digit number (`01`, `02`, …).
    - The last tile's eyebrow reads `Limitation` instead, and the tile carries a
      `takeaway-limit` class.
+   - For assistive technology the last tile's `<h3>` also begins with a visually hidden
+     `Limitation: ` prefix, and its visible eyebrow is `aria-hidden`. A screen reader's
+     list of headings then marks the limitation, and reading in order announces it once.
+     (Added after the final review, 2 October 2026.)
 3. The disclosure: `<details class="explainer-more">` with `<summary>Full explainer</summary>`
    and the existing `.explainer` paragraphs inside. Closed when a term opens.
 
@@ -135,7 +139,8 @@ recognised by pattern. Both stay review rules, as the explainer's own limitation
 
 1. The number of rendered tiles equals `takeaways.length`.
 2. Each tile's title and text equal the data, in order.
-3. Only the last tile carries the limitation eyebrow and class.
+3. Only the last tile carries the limitation eyebrow and class, and in the accessibility
+   tree only its heading is named `Limitation: …`, with no separate label announced.
 4. The disclosure exists, is closed when the term opens, and holds the explainer paragraphs.
 5. No tile's content overflows its tile horizontally.
 

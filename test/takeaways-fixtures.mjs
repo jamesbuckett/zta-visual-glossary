@@ -90,6 +90,13 @@ const CASES = [
     () => swap(withTakeaways(base, GOOD), '<div class="explainer">${paras}</div>', '<div class="explainer"><p>x</p></div>'),
     'verify', 1, 'takeaways', /does not match the explainer/],
   ['empty takeaways caught by verify', () => withTakeaways(base, 'takeaways: []'), 'verify', 1, 'takeaways', /no takeaways/],
+  // What a screen reader gets: the heading names the limitation, once.
+  ['limitation missing from the heading caught',
+    () => swap(withTakeaways(base, GOOD), '<span class="visually-hidden">Limitation: </span>', ''),
+    'verify', 1, 'takeaways', /headings should name only the last tile/],
+  ['limitation label announced twice caught',
+    () => swap(withTakeaways(base, GOOD), `i === last ? ' aria-hidden="true"' : ""`, '""'),
+    'verify', 1, 'takeaways', /announced as well as its heading/],
 ];
 
 let failed = 0;
