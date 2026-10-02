@@ -826,7 +826,13 @@
         { title: "Internet: IP", text: "The internet layer adds the IP header. IP handles the addressing and routing of packets between hosts." },
         { title: "Link: last header", text: "The link layer adds the last header, wrapping everything above it. Because each layer adds only its own header, each concern is solved independently." }
       ],
-      fact: "TCP/IP is the foundational suite that lets dissimilar networks interconnect."
+      fact: "TCP/IP is the foundational suite that lets dissimilar networks interconnect.",
+      takeaways: [
+        { title: "IP moves packets", text: "In TCP/IP, IP is the protocol that addresses packets and routes them from one host to another." },
+        { title: "Reliable or fire-and-forget", text: "In the transport layer, TCP delivers data reliably and in order over a connection, whereas UDP sends it in a lightweight, fire-and-forget way." },
+        { title: "Layered by concern", text: "TCP/IP is split into link, internet, transport and application layers, so each concern can be solved independently of the others." },
+        { title: "No authentication or encryption", text: "Unless protocols layered around them, such as TLS or IPsec, step in, IP and TCP carry traffic with neither authentication nor encryption." }
+      ]
     },
     {
       id: "dns", term: "DNS", acronym: "Domain Name System", aliases: ["DNSSEC", "resolver"],
@@ -843,7 +849,12 @@
         { title: "Authoritative server", text: "Last it reaches the authoritative server for the domain itself." },
         { title: "Answer and cache", text: "The resolver returns the IP address the machine will route to, and caches the answer along the way to stay fast." }
       ],
-      fact: "DNS is also a control point for security and filtering."
+      fact: "DNS is also a control point for security and filtering.",
+      takeaways: [
+        { title: "Names to addresses", text: "The Domain Name System turns human-readable names such as example.com into the numeric IP addresses machines route to, so people need not memorise them." },
+        { title: "Walking the hierarchy", text: "A DNS resolver works down from the root servers to the top-level domain and then the domain's authoritative server, caching answers for speed." },
+        { title: "Spoofed or observed", text: "Without DNSSEC or an encrypted transport such as DNS over TLS or DNS over HTTPS, plain DNS answers are unauthenticated cleartext that can be spoofed or observed." }
+      ]
     },
     {
       id: "http", term: "HTTP / HTTPS", acronym: "HyperText Transfer Protocol (Secure)",
@@ -924,7 +935,12 @@
         { title: "No direct path", text: "Devices on different VLANs cannot talk directly, even when plugged into the same switch." },
         { title: "Through the router", text: "Traffic between VLANs must pass through a router." }
       ],
-      fact: "A VLAN improves security, performance and manageability without extra cabling."
+      fact: "A VLAN improves security, performance and manageability without extra cabling.",
+      takeaways: [
+        { title: "One network, split", text: "A Virtual LAN splits one physical network into several separate broadcast domains by marking Ethernet frames with 802.1Q tags." },
+        { title: "Crossing needs a router", text: "Devices on different VLANs can exchange traffic only by way of a router, even when they share one physical switch." },
+        { title: "Separation, not policy", text: "A VLAN only splits broadcast domains, so a router or firewall must still decide what crosses between VLANs, and misconfigured trunk ports allow VLAN-hopping attacks." }
+      ]
     },
     {
       id: "nat", term: "NAT", acronym: "Network Address Translation", aliases: ["PAT", "masquerade"],
@@ -940,7 +956,12 @@
         { title: "One public address", text: "Many internal private addresses are mapped onto a single public one, which conserves scarce IPv4 address space and hides internal network structure." },
         { title: "Replies find their host", text: "The router keeps a translation table, so replies are sent back to the correct internal host." }
       ],
-      fact: "NAT conserves scarce IPv4 address space and, as a side effect, hides internal network structure."
+      fact: "NAT conserves scarce IPv4 address space and, as a side effect, hides internal network structure.",
+      takeaways: [
+        { title: "Rewriting at the boundary", text: "Network Address Translation (NAT) rewrites the IP addresses and ports on packets crossing a boundary, typically letting many private addresses share one public address." },
+        { title: "A translation table", text: "Return traffic reaches the right internal machine because the NAT router looks it up in the translation table it keeps." },
+        { title: "Not a firewall", text: "NAT is no firewall, since hiding internal structure is incidental, and it breaks protocols such as SIP that carry addresses in payloads or need inbound connections." }
+      ]
     },
     {
       id: "oauth", term: "OAuth 2.0", acronym: "Open Authorization 2.0", aliases: ["OAuth", "OIDC", "access token"],
@@ -1062,7 +1083,12 @@
         { title: "Allow or block", text: "Traffic that the rules permit passes; the rest is blocked." },
         { title: "Stateful, next-gen", text: "Stateful firewalls track the state of connections; next-generation firewalls inspect deeper into the traffic itself." }
       ],
-      fact: "The firewall is the first line of network defence."
+      fact: "The firewall is the first line of network defence.",
+      takeaways: [
+        { title: "Rules between zones", text: "A firewall sits between trusted and untrusted zones, allowing or blocking traffic by rules that match addresses and ports, and increasingly identity and application." },
+        { title: "Tracking and deep inspection", text: "Stateful firewalls keep a record of each connection's state, and next-generation firewalls add deeper inspection of the traffic itself." },
+        { title: "Boundary traffic only", text: "Seeing only traffic that crosses its boundary, a firewall cannot stop an attacker already inside a zone, nor an attack riding in traffic its rules permit." }
+      ]
     },
     {
       id: "loadbalancer", term: "Load Balancer", acronym: "Load Balancer", aliases: ["LB", "reverse proxy", "HAProxy"],
@@ -1078,7 +1104,13 @@
         { title: "Drop the unhealthy", text: "It removes unhealthy backends from rotation automatically." },
         { title: "Layer 4 or 7", text: "It operates at layer 4 (connections) or layer 7 (HTTP), and is a natural place to terminate TLS." }
       ],
-      fact: "A load balancer improves both capacity and resilience."
+      fact: "A load balancer improves both capacity and resilience.",
+      takeaways: [
+        { title: "Sharing out requests", text: "A load balancer fronts a pool of servers, handing each client request to one of them so that none becomes overwhelmed." },
+        { title: "Choosing a backend", text: "Load balancers can choose a backend by health, load or request content, or by simple round-robin, and automatically take unhealthy backends out of rotation." },
+        { title: "Layers and TLS", text: "Terminating TLS fits naturally at a load balancer, which works either at layer 4 on connections or at layer 7 on HTTP." },
+        { title: "Single point of failure", text: "Unless deployed redundantly, a load balancer is itself a single point of failure, and its health checks catch only the failures they test for." }
+      ]
     },
     {
       id: "docker", term: "Docker", acronym: "Docker containers", aliases: ["container", "OCI image"],
@@ -1226,7 +1258,12 @@
         { title: "Server sends Acknowledge", text: "The server confirms with an Acknowledge. The device now has its IP address, subnet mask, default gateway and DNS servers, with no manual setup." },
         { title: "A limited lease", text: "The server leases each address for a limited time." }
       ],
-      fact: "DHCP is why a phone just works the moment it joins a new Wi-Fi network."
+      fact: "DHCP is why a phone just works the moment it joins a new Wi-Fi network.",
+      takeaways: [
+        { title: "Settings without setup", text: "The Dynamic Host Configuration Protocol sets up a newly connected device automatically, handing it an IP address and subnet mask plus its default gateway and DNS servers." },
+        { title: "Four messages, one lease", text: "A device gets its settings from a DHCP server in a short Discover, Offer, Request, Acknowledge exchange, holding the address on a time-limited lease." },
+        { title: "Open to rogue servers", text: "Unless switches enforce DHCP snooping, DHCP's lack of authentication lets a rogue server on the same segment hand out a malicious gateway or DNS server." }
+      ]
     },
     {
       id: "saml", term: "SAML", acronym: "Security Assertion Markup Language", aliases: ["SSO", "assertion", "federation"],
@@ -1418,7 +1455,12 @@
         { title: "No backhaul", text: "Instead of hauling all traffic back to a central datacentre for inspection, each request is checked and policy-enforced at the nearest edge." },
         { title: "On to the apps", text: "Traffic that passes policy continues from the edge to the applications." }
       ],
-      fact: "SASE is the cloud-delivered way most organisations now run Zero Trust."
+      fact: "SASE is the cloud-delivered way most organisations now run Zero Trust.",
+      takeaways: [
+        { title: "Networking meets security", text: "Secure Access Service Edge combines wide-area networking with security services, among them a secure web gateway and zero-trust network access, delivered from the cloud." },
+        { title: "Checked near the user", text: "SASE enforces policy on each request at the cloud point of presence nearest the user, so traffic need not be backhauled to a central datacentre." },
+        { title: "Dependence and decryption", text: "SASE makes every request depend on the provider's points of presence, and full inspection means decrypting TLS at the provider's edge, raising privacy and data-residency questions." }
+      ]
     },
     {
       id: "sdwan", term: "SD-WAN", acronym: "Software-Defined Wide Area Network", aliases: ["overlay", "WAN", "edge"],
@@ -1434,7 +1476,13 @@
         { title: "Best path per app", text: "The controller steers each application over the best available path, by policy and live link quality." },
         { title: "Cheaper links", text: "Using cheap internet links alongside or instead of expensive private lines cuts cost." }
       ],
-      fact: "SD-WAN is frequently paired with SASE for security."
+      fact: "SD-WAN is frequently paired with SASE for security.",
+      takeaways: [
+        { title: "An intelligent overlay", text: "A Software-Defined WAN builds an intelligent overlay spanning a branch's private Multiprotocol Label Switching (MPLS) circuits, broadband and cellular links." },
+        { title: "Paths chosen centrally", text: "Instead of rigid per-device configuration, SD-WAN's central controller picks each application's best available path using policy and live link quality." },
+        { title: "Lower-cost transports", text: "SD-WAN saves money because cheap internet links can sit alongside expensive private lines or take their place." },
+        { title: "Steering, not inspection", text: "On its own, SD-WAN steers traffic without inspecting it, and its broadband links carry no service guarantee comparable to MPLS." }
+      ]
     },
     {
       id: "siem", term: "SIEM", acronym: "Security Information and Event Management", aliases: ["SOC", "log management", "correlation"],
@@ -1792,7 +1840,13 @@
         { title: "Rules and models", text: "Traffic is matched against rule sets such as the OWASP Core Rule Set and, increasingly, learned models of normal behaviour." },
         { title: "Not instead of code", text: "A WAF is a control at the application edge: complementary to secure code, not a replacement for it." }
       ],
-      fact: "A WAF can virtually patch a known vulnerability by dropping the malicious pattern until the code is fixed."
+      fact: "A WAF can virtually patch a known vulnerability by dropping the malicious pattern until the code is fixed.",
+      takeaways: [
+        { title: "Sees inside HTTP", text: "Inspecting HTTP at layer 7, a Web Application Firewall blocks exploits such as SQL injection that a firewall seeing only ports and addresses would pass." },
+        { title: "Rule sets, learned norms", text: "WAF detection draws on rule sets, the OWASP Core Rule Set being one, and increasingly on models that learn what normal behaviour looks like." },
+        { title: "Deployment and extras", text: "Deployed as a reverse proxy, host module or cloud service, a WAF commonly adds rate limiting and bot mitigation too." },
+        { title: "Secure code still needed", text: "A WAF at the application edge adds a layer of defence, yet the application behind it still needs secure code of its own." }
+      ]
     },
     {
       id: "websec", term: "CSRF / XSS / CSP", acronym: "Web App Attacks & Content Security Policy",
@@ -1902,7 +1956,13 @@
         { title: "Route and shape", text: "It routes and versions requests and aggregates or transforms responses, so the services behind it stay small and focused on business logic." },
         { title: "Don't overload it", text: "Push too much logic into it, though, and it becomes a bottleneck and a single point of failure." }
       ],
-      fact: "By centralising authentication and throttling, an API gateway is a natural Zero Trust enforcement point at the application edge."
+      fact: "By centralising authentication and throttling, an API gateway is a natural Zero Trust enforcement point at the application edge.",
+      takeaways: [
+        { title: "Front door for services", text: "An API gateway is the standard front door for client-to-backend traffic in microservice and gRPC architectures, a reverse proxy handling concerns no single service should reimplement." },
+        { title: "Turning away bad traffic", text: "An API gateway checks OAuth tokens and API keys and applies rate limits and quotas, turning away unauthenticated or abusive traffic before any service sees it." },
+        { title: "Lean services behind", text: "With an API gateway routing and versioning requests and reshaping responses, the services behind it are left lean and free to focus on business logic." },
+        { title: "Bottleneck and failure point", text: "The more logic an API gateway takes on, the nearer it comes to being a single point of failure and a bottleneck." }
+      ]
     },
     {
       id: "idsips", term: "IDS / IPS", acronym: "Intrusion Detection / Prevention System",
@@ -2034,7 +2094,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Policy between identities", text: "Policy names label selectors and holds as pods churn. Beyond layer 4 it can admit particular HTTP methods and paths, gRPC calls or DNS names, via an Envoy per node rather than a sidecar per pod." },
         { title: "eBPF in the kernel", text: "The same eBPF data plane replaces kube-proxy, and Hubble reads those programs to produce per-flow records annotated with identity rather than IP." }
       ],
-      fact: "The identity is only as good as the labels behind it: whoever can set a pod's labels can choose which policies apply to it."
+      fact: "The identity is only as good as the labels behind it: whoever can set a pod's labels can choose which policies apply to it.",
+      takeaways: [
+        { title: "An eBPF network plugin", text: "Cilium, a Cloud Native Computing Foundation graduated project, is the eBPF-based Container Network Interface plugin you are likely to meet besides Calico." },
+        { title: "Labels become identities", text: "Cilium writes policy between numeric security identities derived from pod labels, not IP addresses, so enforcement survives constant pod churn." },
+        { title: "Past layer 4", text: "Where Kubernetes NetworkPolicy stops at layer 4, Cilium can also filter on layer-7 detail such as HTTP paths or gRPC calls, with no sidecar per pod." },
+        { title: "Visibility by identity", text: "Hubble, which usually sells Cilium, reads the eBPF programs that also replace kube-proxy to map services and log flows by identity rather than IP." },
+        { title: "Label identity, kernel reach", text: "Cilium's identity rests on labels, not a key; its agent can rewrite all pod traffic in each node's kernel, and its encryption leaves pod-to-node hops plaintext." }
+      ]
     },
     {
       id: "tailscale", term: "Tailscale", acronym: "WireGuard-Based Mesh VPN",
@@ -2076,7 +2143,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Enforce and protect", text: "It enforces access and data policies, detects risky configurations, and applies data-loss-prevention controls to information moving in and out." },
         { title: "Inline or API", text: "Inline proxying gives real-time control but can break apps; API integration with the SaaS provider is gentler but after the fact." }
       ],
-      fact: "A CASB is one of the core components of a SASE / SSE stack, alongside secure web gateways and ZTNA."
+      fact: "A CASB is one of the core components of a SASE / SSE stack, alongside secure web gateways and ZTNA.",
+      takeaways: [
+        { title: "Restoring the choke point", text: "A Cloud Access Security Broker (CASB) gives security teams back the choke point between users and cloud apps that moving work to SaaS took away." },
+        { title: "Exposing shadow IT", text: "Placed inline as a proxy or linked through a SaaS provider's API, a CASB uncovers the cloud services actually in use, shadow IT among them." },
+        { title: "Governance across clouds", text: "To keep governance consistent across dozens of third-party clouds, a CASB applies access, data and data-loss-prevention policy and flags risky configurations." },
+        { title: "Real-time or after-the-fact", text: "Each CASB mode has a catch: real-time control from an inline proxy risks breaking apps, and the gentler API route sees problems only after they have happened." }
+      ]
     },
     {
       id: "pac", term: "PAC File", acronym: "Proxy Auto-Configuration",
@@ -2286,7 +2359,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Security on the card", text: "Security policy executes out-of-band on the card: microsegmentation, line-rate encryption, intrusion detection and the keys all live on the DPU." },
         { title: "Host compromised, policy holds", text: "An attacker who takes over the host cannot reach the enforcement they would want to disable, because it sits on a separate processor." }
       ],
-      fact: "Even if the host OS is completely compromised, the enforcement on the DPU stays intact."
+      fact: "Even if the host OS is completely compromised, the enforcement on the DPU stays intact.",
+      takeaways: [
+        { title: "Offload to the card", text: "A Data Processing Unit takes infrastructure work such as encryption and firewalling off the host CPU, using its own cores and accelerators on the network card." },
+        { title: "Beyond a SmartNIC", text: "What sets a DPU apart from an ordinary SmartNIC is an operating system of its own, running where the host can neither see nor control it." },
+        { title: "Zero trust per server", text: "Because a DPU runs security out-of-band, it is the hardware foundation for putting a zero-trust enforcement point on every server." },
+        { title: "A new attack surface", text: "A DPU adds cost and vendor-specific tooling to every server, and its enforcement is only as trustworthy as its firmware and software, a new privileged attack surface." }
+      ]
     },
     {
       id: "bluefield", term: "BlueField", acronym: "NVIDIA Data Processing Unit (DPU)",
@@ -2304,7 +2383,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "A root of trust", text: "A hardware root of trust with DICE-based measured boot and remote attestation proves the card and its software are unmodified." },
         { title: "Security on the card", text: "Line-rate IPsec/TLS encrypts traffic with no host CPU cost, and DOCA Argus reads the host's processes and memory to catch malware hiding on the host." }
       ],
-      fact: "BlueField is NVIDIA's DPU product line, programmed with the DOCA framework."
+      fact: "BlueField is NVIDIA's DPU product line, programmed with the DOCA framework.",
+      takeaways: [
+        { title: "The DPU in silicon", text: "NVIDIA's BlueField puts the DPU concept into silicon: a ConnectX network ASIC plus Arm cores with their own Linux, isolated from the host across PCIe." },
+        { title: "Attested as unmodified", text: "Through remote attestation anchored in a hardware root of trust and DICE-based measured boot, a BlueField card proves that neither it nor its software has been altered." },
+        { title: "Encryption at wire speed", text: "BlueField takes IPsec and TLS encryption off the host, running it at wire speed on the card." },
+        { title: "Watching the host", text: "DOCA Argus inspects the host's processes and memory from the BlueField DPU without an agent, so host-resident malware can neither hide from it nor disable it." },
+        { title: "Single-vendor dependency", text: "BlueField's firmware, DOCA services and update path all come from NVIDIA alone, concentrating the dependency on one vendor." }
+      ]
     },
     {
       id: "supernic", term: "SuperNIC", acronym: "NVIDIA AI-Network Accelerator",
@@ -2322,7 +2408,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Two kinds", text: "The BlueField-3 SuperNIC is a slimmed-down DPU with eight Arm cores; the ConnectX-8/9 SuperNICs are pure network adapters with no separate operating system." },
         { title: "A thinner ZT story", text: "SuperNICs still encrypt traffic in flight at line rate, but host-introspection services such as DOCA Argus run only on BlueField in DPU mode." }
       ],
-      fact: "Where a DPU is an infrastructure computer, a SuperNIC is a throughput engine."
+      fact: "Where a DPU is an infrastructure computer, a SuperNIC is a throughput engine.",
+      takeaways: [
+        { title: "AI cluster accelerator", text: "NVIDIA's SuperNIC is a network accelerator and a pillar of its Spectrum-X Ethernet platform, aimed at GPU-to-GPU traffic inside large AI clusters." },
+        { title: "No network bottleneck", text: "SuperNICs pair per-GPU RoCE (remote direct memory access over Converged Ethernet) with adaptive routing and congestion control, keeping the network from bottlenecking thousands of GPUs." },
+        { title: "One name, two products", text: "Two structurally different products share the SuperNIC name, a common confusion: a BlueField-3 version that is a slimmed-down DPU, and ConnectX-8/9 adapters lacking a separate operating system." },
+        { title: "Performance over policy", text: "Putting performance before policy, a SuperNIC has a thinner zero-trust story than a full DPU: the agentless host-introspection service DOCA Argus runs only on BlueField in DPU mode." }
+      ]
     },
     {
       id: "doca", term: "DOCA", acronym: "NVIDIA DPU Software Framework",
@@ -2357,7 +2449,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Forwarding by policy", text: "Forwarding, tunnelling (VXLAN or Geneve) and filtering are driven by policy rather than hard-wired, unlike a plain Linux bridge that forwards by MAC address." },
         { title: "Offload to a DPU", text: "Because its data plane is just flow tables, a SmartNIC or DPU can execute the same OVS flows at line rate, freeing host CPU." }
       ],
-      fact: "OVS forwards packets on its own, but it needs a control plane to decide what those flows should be: that is where OVN comes in."
+      fact: "OVS forwards packets on its own, but it needs a control plane to decide what those flows should be: that is where OVN comes in.",
+      takeaways: [
+        { title: "A hypervisor switch", text: "Open vSwitch is a production-grade, multilayer virtual switch running in a hypervisor or host, and the default one under OpenStack and many Kubernetes networks." },
+        { title: "Programmable by policy", text: "Unlike a plain Linux bridge forwarding by MAC address, Open vSwitch takes OpenFlow rules from an external controller, so policy drives its forwarding, tunnelling and filtering." },
+        { title: "Line-rate offload", text: "Since Open vSwitch forwards purely from flow tables, those flows can move onto a SmartNIC or DPU and run at line rate, leaving host CPU free." },
+        { title: "Needs a control plane", text: "Open vSwitch carries out whatever flows it holds, but deciding what they should be is a control plane's job, the role OVN fills." }
+      ]
     },
     {
       id: "ovn", term: "Open Virtual Network", acronym: "OVN — SDN control plane for OVS",
@@ -2375,7 +2473,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Services on every node", text: "Routing, DHCP, DNS and a stateful distributed firewall run in the data plane on each node, rather than at a central choke point." },
         { title: "Isolate each workload", text: "Per-port ACLs isolate workloads from one another east-west, not just at the perimeter." }
       ],
-      fact: "If OVS is the distributed switch, OVN is the brain that turns thousands of them into one programmable, segmented virtual network."
+      fact: "If OVS is the distributed switch, OVN is the brain that turns thousands of them into one programmable, segmented virtual network.",
+      takeaways: [
+        { title: "Control plane for OVS", text: "Open Virtual Network, the networking layer behind OpenStack Neutron and ovn-kubernetes, is a software-defined networking control plane that gives Open vSwitch real network abstractions." },
+        { title: "From intent to OpenFlow", text: "OVN turns intent declared in its northbound database into OpenFlow on every Open vSwitch instance, so one logical network overlays many hosts." },
+        { title: "Distributed microsegmentation", text: "Running its firewall, routing, DHCP and DNS on each node instead of a central choke point makes OVN a microsegmentation engine that separates workloads port by port." },
+        { title: "Central databases, hard debugging", text: "OVN's northbound and southbound databases are central dependencies for every node, and debugging it means chasing logical flows through thousands of generated OpenFlow rules." }
+      ]
     },
     {
       id: "ndlp", term: "nDLP", acronym: "Network Data Loss Prevention",
@@ -2393,7 +2497,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Pass or block", text: "Clean transfers continue re-encrypted; a transfer that breaks policy is blocked, quarantined or encrypted, and the security team is alerted." },
         { title: "The blind spots", text: "USB drives, clipboard and printing never touch the network path, which is why network DLP pairs with endpoint DLP rather than replacing it." }
       ],
-      fact: "Network DLP cannot inspect the content of traffic it cannot decrypt."
+      fact: "Network DLP cannot inspect the content of traffic it cannot decrypt.",
+      takeaways: [
+        { title: "Data in motion", text: "Network Data Loss Prevention applies DLP to data in motion, inspecting traffic inline at the organisation's exits, such as a secure web gateway or email gateway." },
+        { title: "Classify and enforce", text: "nDLP matches outgoing email, uploads and file transfers to the organisation's data classifications, then blocks, quarantines or encrypts a breaching transfer and alerts the security team." },
+        { title: "TLS interception", text: "nDLP reads TLS-encrypted traffic by intercepting it at a proxy the fleet is configured to trust, at some cost to privacy and performance." },
+        { title: "Agentless coverage", text: "Network DLP's strength is that it needs no agent, so unmanaged devices on the monitored path are covered just like managed ones." },
+        { title: "Off-network blind spots", text: "nDLP cannot see data leaving by channels off the network path, such as USB drives, the clipboard or printing, so those stay unwatched without endpoint DLP." }
+      ]
     },
     {
       id: "sbc", term: "SBC", acronym: "Session Border Controller",
@@ -2411,7 +2522,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Police the edge", text: "It polices access against denial-of-service and toll fraud, maintains NAT bindings and enforces call-admission limits so voice quality holds." },
         { title: "Why not a firewall", text: "Ordinary firewalls handle VoIP poorly: SIP embeds addresses inside its messages and negotiates dynamic media ports per call." }
       ],
-      fact: "Microsoft Teams Direct Routing requires a certified SBC."
+      fact: "Microsoft Teams Direct Routing requires a certified SBC.",
+      takeaways: [
+        { title: "The VoIP border", text: "A Session Border Controller is VoIP's border element, at a carrier's peering edge or where a phone system meets its Session Initiation Protocol (SIP) trunk provider." },
+        { title: "Re-originated calls", text: "As a back-to-back user agent, an SBC keeps the networks on either side apart, ending each call's signalling, and usually its media, then originating them afresh." },
+        { title: "Border duties", text: "An SBC hides internal topology, encrypts signalling and media, polices denial-of-service and toll fraud, repairs vendors' differing SIP dialects and transcodes codecs." },
+        { title: "Why SBCs exist", text: "SBCs exist because SIP, which embeds addresses in its messages and negotiates fresh media ports for every call, is something ordinary firewalls handle poorly." },
+        { title: "Boundary-only protection", text: "Securing only the boundary it sits on, an SBC sees nothing wrong with calls placed using stolen credentials from a compromised internal phone or PBX." }
+      ]
     },
     {
       id: "obo", term: "OBO / Token Exchange", acronym: "On-Behalf-Of (OAuth 2.0 Token Exchange)",
