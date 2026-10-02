@@ -1479,7 +1479,7 @@
       fact: "SD-WAN is frequently paired with SASE for security.",
       takeaways: [
         { title: "An intelligent overlay", text: "A Software-Defined WAN builds an intelligent overlay spanning a branch's private Multiprotocol Label Switching (MPLS) circuits, broadband and cellular links." },
-        { title: "Paths chosen centrally", text: "Instead of rigid per-device configuration, SD-WAN's central controller picks each application's best available path using policy and live link quality." },
+        { title: "Paths chosen centrally", text: "Policy and live link quality pick the best available path for each application, and SD-WAN's central controller does the steering, not per-device configuration." },
         { title: "Lower-cost transports", text: "SD-WAN saves money because cheap internet links can sit alongside expensive private lines or take their place." },
         { title: "Steering, not inspection", text: "On its own, SD-WAN steers traffic without inspecting it, and its broadband links carry no service guarantee comparable to MPLS." }
       ]
@@ -1961,7 +1961,7 @@
         { title: "Front door for services", text: "An API gateway is the standard front door for client-to-backend traffic in microservice and gRPC architectures, a reverse proxy handling concerns no single service should reimplement." },
         { title: "Turning away bad traffic", text: "An API gateway checks OAuth tokens and API keys and applies rate limits and quotas, turning away unauthenticated or abusive traffic before any service sees it." },
         { title: "Lean services behind", text: "With an API gateway routing and versioning requests and reshaping responses, the services behind it are left lean and free to focus on business logic." },
-        { title: "Bottleneck and failure point", text: "The more logic an API gateway takes on, the nearer it comes to being a single point of failure and a bottleneck." }
+        { title: "Bottleneck and failure point", text: "Overloading an API gateway with logic turns it into a bottleneck and a single point of failure." }
       ]
     },
     {
@@ -2098,8 +2098,8 @@ The identity is only as good as the labels behind it: it is allocated by the con
       takeaways: [
         { title: "An eBPF network plugin", text: "Cilium, a Cloud Native Computing Foundation graduated project, is the eBPF-based Container Network Interface plugin you are likely to meet besides Calico." },
         { title: "Labels become identities", text: "Cilium writes policy between numeric security identities derived from pod labels, not IP addresses, so enforcement survives constant pod churn." },
-        { title: "Past layer 4", text: "Where Kubernetes NetworkPolicy stops at layer 4, Cilium can also filter on layer-7 detail such as HTTP paths or gRPC calls, with no sidecar per pod." },
-        { title: "Visibility by identity", text: "Hubble, which usually sells Cilium, reads the eBPF programs that also replace kube-proxy to map services and log flows by identity rather than IP." },
+        { title: "Past layer 4", text: "Where Kubernetes NetworkPolicy stops at layer 4, Cilium can filter on layer-7 detail such as HTTP paths, handing that work to one Envoy on each node." },
+        { title: "Visibility by identity", text: "Hubble, whose observability usually sells Cilium, reads the eBPF programs that replace kube-proxy, producing a service map and flow records labelled with identity, not IP." },
         { title: "Label identity, kernel reach", text: "Cilium's identity rests on labels, not a key; its agent can rewrite all pod traffic in each node's kernel, and its encryption leaves pod-to-node hops plaintext." }
       ]
     },
