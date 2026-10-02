@@ -118,6 +118,39 @@ if (html.includes('const TERMS = [')) {
     }
     if (!String(t.fact || '').trim()) err('tour-data', `${where}: a term with steps needs a non-empty fact`);
   }
+
+  // Takeaway tiles: a term with takeaways has 3–5 of them, each a title of two
+  // to four words and a text of at most 30 words that does not copy a tour
+  // step or the key fact word for word. "One sentence" and "the last one is
+  // the limitation" are review rules; neither can be recognised by pattern.
+  const flat = (s) => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  for (const t of terms) {
+    if (t.takeaways === undefined) continue;
+    const where = t.id || '(no id)';
+    if (!Array.isArray(t.takeaways) || t.takeaways.length < 3 || t.takeaways.length > 5) {
+      err('takeaways-data', `${where}: takeaways must be an array of 3–5 entries`);
+      continue;
+    }
+    const steps = Array.isArray(t.steps) ? t.steps : [];
+    const tourCopy = new Set([...steps.map((s) => flat(s && s.text)), flat(t.fact)].filter(Boolean));
+    t.takeaways.forEach((k, i) => {
+      if (!k || !String(k.title || '').trim() || !String(k.text || '').trim()) {
+        err('takeaways-data', `${where}: takeaway ${i + 1} needs a non-empty title and text`);
+        return;
+      }
+      const titleWords = k.title.trim().split(/\s+/).length;
+      if (titleWords < 2 || titleWords > 4) {
+        err('takeaways-data', `${where}: takeaway ${i + 1} title "${k.title}" has ${titleWords} words, want 2–4`);
+      }
+      const textWords = k.text.trim().split(/\s+/).length;
+      if (textWords > 30) {
+        err('takeaways-data', `${where}: takeaway ${i + 1} text has ${textWords} words, want at most 30`);
+      }
+      if (tourCopy.has(flat(k.text))) {
+        err('takeaways-data', `${where}: takeaway ${i + 1} text repeats a tour step or the key fact word for word`);
+      }
+    });
+  }
 }
 
 // ----- structural meta ------------------------------------------------------

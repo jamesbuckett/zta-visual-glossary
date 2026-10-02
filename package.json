@@ -7,6 +7,7 @@
     "glossary": "node glossary.mjs",
     "test": "node validate.mjs ./index.html",
     "test:tour": "node test/tour-fixtures.mjs",
+    "test:takeaways": "node test/takeaways-fixtures.mjs",
     "verify": "node verify.mjs"
   },
   "repository": {
