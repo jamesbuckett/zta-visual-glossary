@@ -33,12 +33,22 @@ Add an object to `const TERMS` in `index.html`:
     { title: "Two to four words", text: "One or two sentences, only what the explainer says." },
     …  // 3–5 steps
   ],
-  fact: "One sentence from the explainer worth remembering."
+  fact: "One sentence from the explainer worth remembering.",
+  takeaways: [
+    { title: "Two to four words", text: "One sentence, at most 30 words, only what the explainer says." },
+    …  // 3–5 takeaways; the last is the limitation
+  ]
 }
 ```
 
 `types`, `provenance` and `domains` draw only on the existing `TYPE_TAGS`, `PROV_TAGS` and
 `DOMAIN_TAGS` arrays. UK spelling. See CLAUDE.md for the source-verification rule.
+
+`takeaways` are the tiles under the infographic: the explainer compressed to three to
+five cards, the last always the limitation. They state only what the explainer says and
+never repeat a tour step or the key fact word for word. Keep `takeaways: [` and its
+closing `]` on their own lines at six spaces, as above: `test/takeaways-fixtures.mjs`
+finds the field by that shape.
 
 ## 2. Append the diagram and its tour
 
@@ -111,6 +121,9 @@ and runs the two geometry checks that have caught defects invisible at thumbnail
   check (a) could not see.
 - **(c) Diagram tour** — chips match `steps`, each step lights something, clicks and
   ArrowRight work, nothing animates under reduced motion, no badge covers a label.
+- **(d) Takeaway tiles** — tiles match `takeaways`, only the last is marked as the
+  limitation, the full explainer sits in a closed disclosure that opens for print, and
+  nothing overflows at 1440px or 375px.
 
 It also re-checks the step 4 counters, so a bare `npm run verify` catches drift you missed.
 

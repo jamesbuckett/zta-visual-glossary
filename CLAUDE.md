@@ -19,6 +19,10 @@ verification loop.
 - **UK spelling** throughout the prose ("organisation", "centralised").
 - **One candid limitation closes every `explainer`** — what the technology does not solve.
   An entry that only sells its subject is not finished.
+- **Takeaways compress the explainer.** Three to five tiles, each a title of two to four
+  words and one sentence of at most 30 words, stating only what the `explainer` says. The
+  last tile is always the limitation, and none repeats a tour step or the key fact word
+  for word.
 - **Sources must be verified live**, and authoritative: NIST / IETF / the standards body
   itself preferred, a vendor glossary acceptable. When WebFetch returns 404 or an empty
   body for a site that ought to be authoritative (`eur-lex.europa.eu`,
@@ -34,6 +38,7 @@ npm test              # validate.mjs against index.html — must exit clean befo
 npm run verify        # renders every term in a browser and checks its diagram geometry
 npm run glossary      # regenerates glossary.txt, prints the term count
 npm run test:tour     # proves validate/verify catch broken tours
+npm run test:takeaways  # proves validate/verify catch broken takeaway tiles
 ```
 
 `validate.mjs` is the style-guide linter — exactly one accent colour, no stray hex in
@@ -46,7 +51,9 @@ caught on the write rather than at `npm run glossary`. A project hook runs it af
 browser and asserts the diagram appears, the counters match the data, no label sits
 across a box border, and no connector runs through a label. For a term with `steps` it
 also drives the diagram tour: every chip, the panel text, keyboard stepping and reduced
-motion. Pass term ids to narrow it (`npm run verify calico`).
+motion. For a term with `takeaways` it checks the tiles against the data, the limitation
+marker, and the collapsed explainer and its print behaviour, at desktop and phone width.
+Pass term ids to narrow it (`npm run verify calico`).
 
 The term count printed by `npm run glossary` is a free cross-check on the counters in
 step 4 of the skill.
