@@ -7910,10 +7910,10 @@ It is a specialist: the managed databases, identity services and compliance cata
         <span class="tldr-label">TL;DR</span>
         <p>${esc(e.tldr)}</p>
       </div>
+      ${diagramHtml(e)}
       <div class="explainer">
         ${e.explainer.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("")}
       </div>
-      ${diagramHtml(e)}
       <div class="detail-tags">
         <h2 class="detail-section-label">Tags — click to browse</h2>
         <div class="chip-row">${typeChips}${provChips}${domainChips}</div>
