@@ -26,7 +26,9 @@ verification loop.
   opening with a bare "It" or "Its". A limitation that spans several sentences goes into
   that one last tile, ending on the residual risk, and a partial mitigation never gets a
   tile of its own. Qualifiers ("in practice", "can", "most") and the condition a guarantee
-  depends on survive the compression.
+  depends on survive the compression. `validate.mjs` checks only the count, the title
+  length, the 30-word cap and word-for-word copies; the rest are review rules, so re-read
+  each card against the explainer.
 - **Sources must be verified live**, and authoritative: NIST / IETF / the standards body
   itself preferred, a vendor glossary acceptable. When WebFetch returns 404 or an empty
   body for a site that ought to be authoritative (`eur-lex.europa.eu`,
@@ -55,7 +57,7 @@ caught on the write rather than at `npm run glossary`. A project hook runs it af
 browser and asserts the diagram appears, the counters match the data, no label sits
 across a box border, and no connector runs through a label. For a term with `steps` it
 also drives the diagram tour: every chip, the panel text, keyboard stepping and reduced
-motion. For a term with `takeaways` it checks the tiles against the data, the limitation
+motion. It also checks every term's takeaway tiles against the data, the limitation
 marker, and the collapsed explainer and its print behaviour, at desktop and phone width.
 Pass term ids to narrow it (`npm run verify calico`).
 

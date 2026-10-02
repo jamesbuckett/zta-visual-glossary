@@ -1,7 +1,7 @@
 # Flash-card takeaways — design
 
 Date: 2026-10-02
-Status: approved in brainstorming, awaiting spec review
+Status: implemented; takeaways became mandatory on 2 October 2026
 
 ## Goal
 
@@ -69,7 +69,7 @@ Worked example (mTLS):
 | Tile | Title | Text |
 |---|---|---|
 | 01 | Both sides prove identity | Where ordinary TLS has only the server present a certificate, mutual TLS requires the client to present one as well. |
-| 02 | Verified before data flows | Neither side sends application data until each has verified the other, so authentication runs both ways and needs no passwords. |
+| 02 | Verified before data flows | In mTLS, neither side sends application data until each has verified the other, so authentication runs both ways and needs no passwords. |
 | 03 | Zero-trust cornerstone | mTLS underpins zero-trust service-to-service traffic and service meshes, where every workload carries its own cryptographic identity. |
 | Limitation | Identity, not permission | mTLS proves which workload is at each end, not what it may do; authorisation is a separate check, and every certificate must be issued, rotated and revoked. |
 
@@ -90,7 +90,8 @@ Worked example (mTLS):
 3. The disclosure: `<details class="explainer-more">` with `<summary>Full explainer</summary>`
    and the existing `.explainer` paragraphs inside. Closed when a term opens.
 
-A term without `takeaways` renders its `.explainer` open, exactly as today (see §4).
+During the rollout a term without `takeaways` rendered its `.explainer` open (see §4); that
+fallback was removed at lock-in.
 
 ### Styling
 

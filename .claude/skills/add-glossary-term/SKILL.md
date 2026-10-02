@@ -51,10 +51,15 @@ changed. Every card names its subject rather than opening with a bare "It" or "I
 because tiles are read one at a time. A limitation that spans several sentences goes
 into the one last card, ending on the residual risk, and a partial mitigation never gets
 a card of its own. Qualifiers such as "in practice", "can" and "most", and the condition
-a guarantee depends on, survive the compression. Keep `takeaways: [` and its closing `]`
-on their own
-lines at six spaces in `index.html`: `test/takeaways-fixtures.mjs` finds the field by
-that shape.
+a guarantee depends on, survive the compression.
+
+`npm test` checks only the count, the title length, the 30-word cap and word-for-word
+copies. The rest are review rules: after writing the cards, re-read each one against the
+explainer and confirm it adds, sharpens or generalises nothing, that the last card is the
+explainer's closing limitation, and that no card is a step or the fact lightly reworded.
+
+Keep `takeaways: [` and its closing `]` on their own lines at six spaces in `index.html`:
+`test/takeaways-fixtures.mjs` finds the field by that shape.
 
 ## 2. Append the diagram and its tour
 

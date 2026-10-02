@@ -40,7 +40,7 @@ verify.mjs       # renders every term and checks its diagram geometry (npm run v
 validate.mjs     # static linter enforcing the style-guide design rules
 _terms.mjs       # shared reader for the TERMS / tag arrays in index.html
 _launch.mjs      # shared Chromium launcher used by the tooling
-test/            # fixtures proving validate/verify catch broken tours (npm run test:tour)
+test/            # fixtures proving validate/verify catch broken tours and takeaway tiles (npm run test:tour, npm run test:takeaways)
 docs/            # design specs and plans
 screenshots/     # generated preview images
 ```
