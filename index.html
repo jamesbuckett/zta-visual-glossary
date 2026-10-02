@@ -1239,7 +1239,7 @@
       ],
       fact: "mTLS is a cornerstone of zero-trust service-to-service communication and of service meshes.",
       takeaways: [
-        { title: "Both sides prove identity", text: "Mutual TLS extends ordinary TLS so the client must present a certificate too." },
+        { title: "Both sides prove identity", text: "Where ordinary TLS has only the server present a certificate, mutual TLS requires the client to present one as well." },
         { title: "No passwords needed", text: "Each side verifies the other before any data flows: two-way authentication with no passwords." },
         { title: "Zero-trust cornerstone", text: "It underpins service-to-service traffic in zero-trust networks and service meshes, where every workload carries its own identity." },
         { title: "Identity, not permission", text: "mTLS proves which workload is at each end, not what it may do; authorisation is a separate check." }
@@ -2499,7 +2499,7 @@ Calico's WireGuard encryption is node-to-node rather than pod-to-pod: the host-t
         { title: "A Kubernetes network plugin", text: "Kubernetes delegates pod networking to a CNI plugin, and Calico, created and maintained by Tigera under Apache-2.0, is one of the two you are most likely to meet." },
         { title: "Routes, not tunnels", text: "Pod packets cross the wire with their own addresses and no encapsulation, so routers, firewalls and flow collectors see real endpoints." },
         { title: "Overlay when needed", text: "Where the underlay will not carry pod routes, as in most cloud VPCs, Calico falls back to a VXLAN or IP-in-IP overlay." },
-        { title: "Ordered, tiered policy", text: "Calico adds explicit deny, a deterministic order and tiers, so a platform team's global rules sit above developers' NetworkPolicies and cannot be overridden." },
+        { title: "Ordered, tiered policy", text: "Calico adds explicit deny, deterministic order and tiers: developers' NetworkPolicies land in the default tier, unable to override platform rules above, and per-tier RBAC enforces the boundary." },
         { title: "Identity is an address", text: "Calico enforces on IP sets resolved from labels, a weaker claim than cryptographic workload identity, and its WireGuard encryption protects node-to-node hops only." }
       ]
     },
@@ -2533,7 +2533,7 @@ The configuration surface is enormous: a hand-written bootstrap runs to thousand
         { title: "Built from filters", text: "Nearly everything Envoy does is a filter in a chain between a listener, where connections arrive, and a cluster of upstream hosts." },
         { title: "Configured live over xDS", text: "A management server streams listeners, routes, clusters, endpoints and certificates over gRPC, so configuration changes under live traffic without a restart." },
         { title: "A policy enforcement point", text: "Its filters terminate mTLS, validate JWTs, match RBAC rules and call an external decision point such as OPA for a per-request allow or deny." },
-        { title: "Control plane required", text: "Almost nobody maintains its enormous configuration by hand, so adopting Envoy means adopting a control plane, and whoever can push xDS can reroute traffic across every proxy." }
+        { title: "Control plane is critical", text: "In practice, adopting Envoy means adopting a control plane, which becomes your most security-critical component: whoever can push xDS can silently reroute traffic across every proxy." }
       ]
     },
     {
@@ -2753,8 +2753,7 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "A log of traffic", text: "A HAR file is a JSON log of the HTTP traffic behind a page load, exported by browser developer tools and other HTTP monitoring tools." },
         { title: "One record per request", text: "Each entry records one request and its response: URL, method, headers, cookies, bodies and status, plus a timings breakdown." },
         { title: "Convention, not standard", text: "Version 1.2 is frozen and its W3C draft was abandoned, so HAR is a shared convention rather than a standard." },
-        { title: "Chrome sanitises exports", text: "Chrome's default export now leaves out the Cookie, Set-Cookie and Authorization headers; everything else, URLs and bodies included, stays in the file." },
-        { title: "Credentials in the file", text: "Cookies and Authorization headers are recorded in the clear, so a shared HAR can hand over a live session, as five Okta customers found in 2023." }
+        { title: "Captures too much", text: "A HAR holds cookies and Authorization headers in the clear, so sharing one can hand over a live session; Chrome now strips them by default, but URLs and bodies remain." }
       ]
     }
   ];
