@@ -61,6 +61,23 @@ const CASES = [
   // Upper-cased and double-spaced: the comparison must ignore case and spacing.
   ['text copied from a tour step rejected', () => withTakeaways(base, set(A, B, card('Copied from tour', wireguard.steps[0].text.toUpperCase().replace(/ /g, '  ')))), 'validate', 1, 'takeaways-data', /repeats a tour step/],
   ['text copied from the key fact rejected', () => withTakeaways(base, set(A, B, card('Copied from fact', wireguard.fact))), 'validate', 1, 'takeaways-data', /repeats a tour step/],
+
+  // Rendered checks. Three tiles: the last spans both columns. Four: none does.
+  ['good takeaways verify', () => withTakeaways(base, GOOD), 'verify', 0, null],
+  ['four takeaways verify', () => withTakeaways(base, set(A, B, D, C)), 'verify', 0, null],
+  ['fallback term verifies', () => withTakeaways(base, null), 'verify', 0, null],
+  ['overflowing tile caught',
+    () => swap(withTakeaways(base, set(A, B, card('Keys are manual', words(30)))), '</style>', '.takeaway p { white-space: nowrap; }</style>'),
+    'verify', 1, 'takeaways', /overflows/],
+  ['unescaped copy caught',
+    () => swap(withTakeaways(base, GOOD), '<p>${esc(k.text)}</p>', '<p>${k.text}</p>'),
+    'verify', 1, 'takeaways', /parsed as markup/],
+  ['limitation marker on the wrong tile caught',
+    () => swap(withTakeaways(base, GOOD), 'i === last ? " takeaway-limit" : ""', 'i === 0 ? " takeaway-limit" : ""'),
+    'verify', 1, 'takeaways', /marked as the limitation/],
+  ['print does not open the disclosure caught',
+    () => swap(withTakeaways(base, GOOD), 'd.open = true;', ''),
+    'verify', 1, 'takeaways', /printing/],
 ];
 
 let failed = 0;

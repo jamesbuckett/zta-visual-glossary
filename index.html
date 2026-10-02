@@ -417,6 +417,46 @@
     .explainer { max-width: 68ch; color: var(--text); }
     .explainer p { margin-bottom: var(--space-4); }
 
+    /* Takeaway tiles: the explainer compressed to three to five cards, the
+       last always the limitation. Static, so no hover or pointer styles. */
+    .takeaways {
+      list-style: none; margin: 0; padding: 0;
+      display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4);
+    }
+    @media (min-width: 560px) {
+      .takeaways { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .takeaway:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    }
+    .takeaway {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      overflow-wrap: anywhere;
+    }
+    .takeaway-limit { border-left: 4px solid var(--accent); }
+    .takeaway-eyebrow {
+      display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: var(--space-2);
+    }
+    .takeaway-limit .takeaway-eyebrow { color: var(--accent-text); }
+    .takeaway h3 { font-size: 1rem; line-height: 1.4; margin: 0 0 var(--space-2); }
+    .takeaway p { margin: 0; font-size: 0.95rem; line-height: 1.5; }
+
+    .explainer-more { margin-top: var(--space-5); }
+    .explainer-more summary {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      color: var(--text-muted); font-size: var(--fs-small); font-weight: 700;
+      cursor: pointer; list-style: none;
+    }
+    .explainer-more summary::-webkit-details-marker { display: none; }
+    .explainer-more summary:hover { color: var(--accent); }
+    .explainer-more summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius); }
+    .explainer-more summary svg { width: 16px; height: 16px; transition: transform var(--transition); }
+    .explainer-more[open] summary svg { transform: rotate(90deg); }
+    .explainer-more .explainer { margin-top: var(--space-4); }
+
     .detail-section-label {
       font-family: var(--font-mono); font-size: 11px; font-weight: 400; line-height: var(--leading-body);
       text-transform: uppercase; letter-spacing: .1em;
@@ -767,7 +807,8 @@
      skill lists the counters and cross-links that follow.
      Fields: id, term, acronym (expansion/full name), aliases[], tldr,
      explainer, types[], provenance[], domains[], related[] (ids),
-     source {label, url}, caption, steps[] {title, text}, fact.
+     source {label, url}, caption, steps[] {title, text}, fact,
+     takeaways[] {title, text} (the last is the limitation).
      ==================================================================== */
   const TERMS = [
     {
@@ -7966,6 +8007,30 @@ It is a specialist: the managed databases, identity services and compliance cata
       <text class="t-sm t-mut" x="360" y="98" text-anchor="middle">diagram in progress</text></svg>`;
   }
 
+  // Takeaway tiles, with the full explainer collapsed beneath them. A term
+  // without takeaways shows its explainer open instead.
+  function takeawaysHtml(e) {
+    const paras = e.explainer.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("");
+    if (!e.takeaways) return `<div class="explainer">${paras}</div>`;
+    const last = e.takeaways.length - 1;
+    const tiles = e.takeaways.map((k, i) => `
+        <li class="takeaway${i === last ? " takeaway-limit" : ""}">
+          <span class="takeaway-eyebrow">${i === last ? "Limitation" : String(i + 1).padStart(2, "0")}</span>
+          <h3>${esc(k.title)}</h3>
+          <p>${esc(k.text)}</p>
+        </li>`).join("");
+    return `
+      <h2 class="detail-section-label">Takeaways</h2>
+      <ul class="takeaways" role="list">${tiles}</ul>
+      <details class="explainer-more">
+        <summary>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          Full explainer
+        </summary>
+        <div class="explainer">${paras}</div>
+      </details>`;
+  }
+
   function detailHtml(e) {
     const aliasLine = (e.aliases && e.aliases.length)
       ? `<span> &middot; also: <span class="alias">${e.aliases.map(esc).join(", ")}</span></span>` : "";
@@ -8003,9 +8068,7 @@ It is a specialist: the managed databases, identity services and compliance cata
         <p>${esc(e.tldr)}</p>
       </div>
       ${diagramHtml(e)}
-      <div class="explainer">
-        ${e.explainer.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("")}
-      </div>
+      ${takeawaysHtml(e)}
       <div class="detail-tags">
         <h2 class="detail-section-label">Tags — click to browse</h2>
         <div class="chip-row">${typeChips}${provChips}${domainChips}</div>
@@ -8146,6 +8209,21 @@ It is a specialist: the managed databases, identity services and compliance cata
   });
 
   window.addEventListener("hashchange", route);
+
+  // Print the full explainer too: open the disclosure for printing, then put
+  // it back the way the reader left it.
+  let explainerWasOpen = null;
+  window.addEventListener("beforeprint", () => {
+    const d = els.detailContent.querySelector(".explainer-more");
+    if (!d) return;
+    explainerWasOpen = d.open;
+    d.open = true;
+  });
+  window.addEventListener("afterprint", () => {
+    const d = els.detailContent.querySelector(".explainer-more");
+    if (d && explainerWasOpen !== null) d.open = explainerWasOpen;
+    explainerWasOpen = null;
+  });
 
   /* ---- init ---- */
   (function init() {

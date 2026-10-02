@@ -14,6 +14,10 @@
 //       something, no out-of-range or nested data-s, each click shows its own
 //       text and lit set, ArrowRight moves focus, no animation under reduced
 //       motion; badges must not cover a label
+//   (d) takeaway tiles — for a term with takeaways: tiles match the data and
+//       hold no stray markup, only the last is marked as the limitation, the
+//       full explainer sits in a closed disclosure that opens for print, and
+//       nothing overflows at 1440px or 375px
 //
 // Usage:
 //   node verify.mjs                  # every term
@@ -267,6 +271,52 @@ const TOUR_PROBE = `(() => {
   };
 })()`;
 
+// Reads the takeaway tiles and the explainer disclosure as rendered. A tile
+// holds exactly three elements (eyebrow, title, text); more means the copy was
+// parsed as markup. `full` is whether a tile spans the whole grid.
+const TAKEAWAYS_PROBE = `(() => {
+  const root = document.querySelector('#detail-content');
+  const list = root.querySelector('.takeaways');
+  const more = root.querySelector('.explainer-more');
+  const explainer = root.querySelector('.explainer');
+  const width = list ? list.getBoundingClientRect().width : 0;
+  return {
+    tiles: [...root.querySelectorAll('.takeaways > .takeaway')].map((li) => ({
+      eyebrow: (li.querySelector('.takeaway-eyebrow') || li).textContent.trim(),
+      title: (li.querySelector('h3') || li).textContent,
+      text: (li.querySelector('p') || li).textContent,
+      limit: li.classList.contains('takeaway-limit'),
+      elements: li.querySelectorAll('*').length,
+      overflow: li.scrollWidth > li.clientWidth + 1,
+      full: Math.abs(li.getBoundingClientRect().width - width) < 2,
+    })),
+    heading: !!root.querySelector('h2.detail-section-label + .takeaways'),
+    more: !!more,
+    open: more ? more.open : null,
+    paras: explainer ? explainer.querySelectorAll('p').length : 0,
+    inMore: !!(more && explainer && more.contains(explainer)),
+  };
+})()`;
+
+// Fires the print events with the disclosure closed, then again after a real
+// click has opened it. Print must open it and then put it back either way.
+const PRINT_PROBE = `(() => {
+  const d = document.querySelector('#detail-content .explainer-more');
+  const fire = (name) => window.dispatchEvent(new Event(name));
+  fire('beforeprint'); const during = d.open;
+  fire('afterprint');  const after = d.open;
+  d.querySelector('summary').click(); const clicked = d.open;
+  fire('beforeprint'); fire('afterprint'); const kept = d.open;
+  return { during, after, clicked, kept };
+})()`;
+
+// Renders the current term again, as following a link to it would, and reports
+// whether the disclosure came back open.
+const REOPEN_PROBE = `(() => {
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
+  return document.querySelector('#detail-content .explainer-more').open;
+})()`;
+
 const tocIds = `(() => [...document.querySelectorAll('#toc [data-toc]')].map((e) => e.dataset.toc))()`;
 
 const FILE = pathToFileURL(source).href;
@@ -352,6 +402,54 @@ for (const t of targets) {
       if (running) err('tour', `${t.id}: ${running} animation(s) running under reduced motion`);
       await page.emulateMedia({ reducedMotion: 'no-preference' });
     }
+  }
+
+  // Takeaway tiles. Until phase 3 a term may still be on the fallback, which
+  // must show its explainer open and no tiles, heading or disclosure.
+  const paras = t.explainer.split(/\n\s*\n/).length;
+  const tk = await page.evaluate(TAKEAWAYS_PROBE);
+  if (!t.takeaways) {
+    if (tk.tiles.length || tk.heading || tk.more) err('takeaways', `${t.id}: no takeaways in the data, but tiles, a heading or a disclosure rendered`);
+    if (tk.paras !== paras) err('takeaways', `${t.id}: fallback shows ${tk.paras} explainer paragraph(s), want ${paras}`);
+  } else {
+    const n = t.takeaways.length;
+    if (tk.tiles.length !== n) err('takeaways', `${t.id}: ${tk.tiles.length} tiles for ${n} takeaways`);
+    if (!tk.heading) err('takeaways', `${t.id}: no "Takeaways" heading directly before the tiles`);
+    tk.tiles.forEach((tile, i) => {
+      const want = t.takeaways[i];
+      if (!want) return;
+      const last = i === n - 1;
+      const eyebrow = last ? 'Limitation' : String(i + 1).padStart(2, '0');
+      if (tile.elements !== 3) err('takeaways', `${t.id}: tile ${i + 1} holds ${tile.elements} elements, want 3 — copy was parsed as markup`);
+      if (tile.title !== want.title) err('takeaways', `${t.id}: tile ${i + 1} title does not match takeaways[${i}].title`);
+      if (tile.text !== want.text) err('takeaways', `${t.id}: tile ${i + 1} text does not match takeaways[${i}].text`);
+      if (tile.limit !== last) err('takeaways', `${t.id}: tile ${i + 1} ${tile.limit ? 'is' : 'is not'} marked as the limitation`);
+      if (tile.eyebrow !== eyebrow) err('takeaways', `${t.id}: tile ${i + 1} eyebrow is "${tile.eyebrow}", want "${eyebrow}"`);
+      if (tile.overflow) err('takeaways', `${t.id}: tile ${i + 1} overflows at 1440px`);
+      if (tile.full !== (last && n % 2 === 1)) err('takeaways', `${t.id}: tile ${i + 1} ${tile.full ? 'spans' : 'does not span'} both columns at 1440px`);
+    });
+
+    if (!tk.more) err('takeaways', `${t.id}: no "Full explainer" disclosure`);
+    else {
+      if (tk.open) err('takeaways', `${t.id}: disclosure is open when the term opens`);
+      if (!tk.inMore || tk.paras !== paras) err('takeaways', `${t.id}: disclosure holds ${tk.paras} explainer paragraph(s), want ${paras}`);
+
+      const pr = await page.evaluate(PRINT_PROBE);
+      if (!pr.during || pr.after) err('takeaways', `${t.id}: printing does not open the disclosure and close it again (during ${pr.during}, after ${pr.after})`);
+      if (!pr.clicked) err('takeaways', `${t.id}: clicking "Full explainer" does not open it`);
+      else if (!pr.kept) err('takeaways', `${t.id}: printing closed a disclosure the reader had opened`);
+
+      if (await page.evaluate(REOPEN_PROBE)) err('takeaways', `${t.id}: disclosure is still open after the term is opened again`);
+    }
+
+    // Phone width: one column, nothing overflowing.
+    await page.setViewportSize({ width: 375, height: 812 });
+    const phone = await page.evaluate(TAKEAWAYS_PROBE);
+    phone.tiles.forEach((tile, i) => {
+      if (tile.overflow) err('takeaways', `${t.id}: tile ${i + 1} overflows at 375px`);
+      if (!tile.full) err('takeaways', `${t.id}: tile ${i + 1} is not full width at 375px`);
+    });
+    await page.setViewportSize({ width: 1440, height: 1200 });
   }
 
   for (const c of consoleErrors)    err('console',   `${t.id}: ${c}`);
