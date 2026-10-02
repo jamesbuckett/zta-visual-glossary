@@ -1022,8 +1022,8 @@
       ],
       fact: "Zero Trust leans on strong identity, least-privilege access and continuous verification.",
       takeaways: [
-        { title: "Every request verified", text: "Zero Trust is a security model with no safe internal network: it authenticates, authorises and encrypts every request based on identity and context, wherever the request originates." },
-        { title: "Identity over perimeter", text: "Instead of a perimeter shell around a trusted interior, Zero Trust rests on strong identity, least-privilege access and continuous verification." },
+        { title: "Every request verified", text: "Zero Trust is a security model with no safe internal network, requiring identity- and context-based authentication, authorisation and encryption for every request, wherever it originates." },
+        { title: "Identity over perimeter", text: "Zero Trust's three supports are strong identity, least-privilege access and continuous checking, where perimeter security relied on a hard shell around a trusted interior." },
         { title: "Journey, not product", text: "Zero Trust is not a product to install: NIST calls the move a journey, and most enterprises run a hybrid zero-trust and perimeter mode while legacy systems catch up." }
       ]
     },
@@ -1337,7 +1337,6 @@
       takeaways: [
         { title: "Enforce here, decide there", text: "In policy-based access control, a Policy Enforcement Point intercepts each attempt in the request path while a Policy Decision Point evaluates the rules and answers allow or deny." },
         { title: "One central decision point", text: "One central Policy Decision Point, kept apart from enforcement, can govern many enforcement points and hold them all to the same policy." },
-        { title: "Zero-trust control core", text: "Zero-trust architectures put the split between enforcement and decision at their control core." },
         { title: "On the critical path", text: "Splitting the roles puts the Policy Decision Point on every request's critical path, so it must be fast and highly available, and enforcement points must fail closed without it." }
       ]
     },
@@ -1486,10 +1485,10 @@
       ],
       fact: "OIDC is the JSON-based successor to SAML for single sign-on.",
       takeaways: [
-        { title: "Authentication for OAuth", text: "OpenID Connect, the JSON-based successor to SAML for single sign-on, adds authentication to OAuth 2.0, which on its own handles only authorisation." },
+        { title: "Authentication for OAuth", text: "OpenID Connect adds authentication to OAuth 2.0, which on its own handles only authorisation; for single sign-on, OIDC is SAML's JSON-based successor." },
         { title: "The openid scope", text: "An app opts into OIDC by including the openid scope in what is otherwise a plain OAuth request." },
         { title: "A signed ID Token", text: "The ID Token an OpenID Provider issues alongside the access token is a signed JWT, with claims such as the user (sub), issuer (iss) and audience (aud)." },
-        { title: "UserInfo for profiles", text: "Profile details such as name and email are available from the OIDC UserInfo endpoint, which apps can call as well." },
+        { title: "UserInfo for profiles", text: "Beyond the ID Token, an OIDC app can request profile details such as name and email by calling the UserInfo endpoint." },
         { title: "Unchecked tokens prove nothing", text: "An OIDC client that skips checking the ID Token's signature, issuer, audience and expiry gets none of the guarantees the token is meant to give." }
       ]
     },
@@ -1594,8 +1593,8 @@
       takeaways: [
         { title: "Two or more proofs", text: "A stolen password alone cannot pass multi-factor authentication, which demands two or more independent proofs: something you know, something you have or something you are." },
         { title: "Closing the phishing gap", text: "SMS and time-based one-time password codes can still be phished on a fake site, but FIDO2 and WebAuthn bind their public-key challenge to the real site's origin, so replay fails." },
-        { title: "Passkeys replace passwords", text: "Passkeys bring FIDO to consumers as discoverable credentials, usually synced across your devices, that take the place of the password entirely." },
-        { title: "Strongest identity signal", text: "When Zero Trust asks whether a human really is who they claim to be, phishing-resistant MFA is the strongest signal it has." },
+        { title: "Consumer-friendly passkeys", text: "The consumer-friendly face of FIDO is the passkey, a credential usually synced across your devices that removes the need for a password at all." },
+        { title: "Strongest identity signal", text: "Zero Trust counts phishing-resistant MFA as its best evidence that a person is genuinely who they say they are." },
         { title: "Recovery, the weak point", text: "Phishing-resistant MFA moves the weak point to recovery: a synced passkey is only as secure as its cloud account, and an SMS or email fallback reopens the phishing gap." }
       ]
     },
@@ -1780,7 +1779,7 @@
       fact: "NIST SP 800-207 is the spec the PEP / PDP terms in this glossary come from.",
       takeaways: [
         { title: "From slogan to model", text: "Published in 2020, NIST Special Publication 800-207 is the vendor-neutral reference architecture that made Zero Trust a defined model rather than a slogan." },
-        { title: "Seven tenets", text: "NIST SP 800-207 sets out seven tenets, such as authenticating and authorising every resource access dynamically and trusting no asset by network location." },
+        { title: "Seven zero-trust tenets", text: "NIST SP 800-207 sets out seven tenets, such as authenticating and authorising every resource access dynamically and trusting no asset by network location." },
         { title: "Three logical components", text: "A Policy Engine running the trust algorithm and a Policy Administrator executing its decision form SP 800-207's Policy Decision Point; the Policy Enforcement Point passes traffic only when told." },
         { title: "CISA's five pillars", text: "CISA's Zero Trust Maturity Model builds on SP 800-207 with five pillars: identity, devices, networks, applications and workloads, and data." },
         { title: "Architecture, not implementation", text: "NIST SP 800-207 describes an architecture but not an implementation, leaving products, protocols and migration order for each organisation to decide." }
@@ -1882,7 +1881,7 @@
       ],
       fact: "The password never crosses the network.",
       takeaways: [
-        { title: "Tickets, not passwords", text: "Kerberos lets a client prove its identity to many services with time-limited, encrypted tickets rather than sending its password each time." },
+        { title: "Tickets, not passwords", text: "Kerberos lets a client prove its identity to many services with time-limited, encrypted tickets instead of a password." },
         { title: "One login, many tickets", text: "After one login to a trusted Key Distribution Center, the client holds a Ticket-Granting Ticket, which it presents to get a service ticket that the target can verify." },
         { title: "Behind Windows sign-on", text: "Single sign-on across a Windows domain rests on Kerberos tickets, and Kerberos is the authentication half of Active Directory." },
         { title: "Drift and ticket attacks", text: "Kerberos is sensitive to time drift because its short-lived tickets rely on synchronised clocks, and attacks such as pass-the-ticket and Kerberoasting target weaknesses in ticket and service-key handling." }
@@ -2493,10 +2492,10 @@ The obvious objection is concentration: you have gathered every privileged crede
       fact: "Gathering every privileged credential into one system makes it the most valuable target you own.",
       takeaways: [
         { title: "CyberArk, now Idira", text: "CyberArk is the product most people mean by PAM, though since Palo Alto Networks bought it in 2026 it is now Idira Privileged Access Manager." },
-        { title: "A hardened vault", text: "Every privileged credential sits in CyberArk's Digital Vault, a hardened, isolated server reached only over its own protocol on TCP 1858 and closed even to the host's operating-system administrators." },
+        { title: "A hardened vault", text: "CyberArk's Digital Vault holds every privileged credential on a hardened, isolated server that other components reach only on TCP 1858, and ordinary host administration cannot open its contents." },
         { title: "Scheduled rotation", text: "Scheduled rotation, verification and reconciliation of passwords by CyberArk's Central Policy Manager leave a leaked credential with only a short useful life." },
         { title: "The session proxy", text: "CyberArk's core, the Privileged Session Manager, injects the credential into an RDP or SSH session opened from a hardened proxy, so admins never learn it and every keystroke is auditable." },
-        { title: "Concentration and coverage", text: "Pooling every privileged credential makes CyberArk both the prize target and a dependency admins cannot work without, while never-onboarded accounts and direct routes to hosts reinstate the risk." }
+        { title: "Concentration and coverage", text: "Pooling every privileged credential makes CyberArk the prize target and an indispensable dependency, while never-onboarded accounts and direct routes to hosts reinstate the risk it was bought to remove." }
       ]
     },
     {
@@ -2546,7 +2545,7 @@ The cost is operational: mTLS or DPoP means real key management in the client, a
       ],
       fact: "FAPI 2.0 retires the bearer token: a stolen token is useless without the client's private key.",
       takeaways: [
-        { title: "Profile, not protocol", text: "FAPI 2.0, the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, adds no new protocol but closes the options OAuth deliberately leaves open." },
+        { title: "Profile for high-value APIs", text: "FAPI 2.0, the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, is written for any API exposing high-value data and closes the options OAuth leaves open." },
         { title: "Nothing in the URL", text: "Under FAPI 2.0, Pushed Authorization Requests send the full request over a client-authenticated back channel, so the browser carries only an opaque request_uri with nothing to tamper with or leak." },
         { title: "PKCE and mix-up defence", text: "FAPI 2.0 requires PKCE with S256 and the RFC 9207 iss parameter, which closes the mix-up attack that appears once a client talks to more than one authorisation server." },
         { title: "Tokens bound to keys", text: "FAPI 2.0 binds access tokens to an mTLS client certificate or a Demonstrating Proof-of-Possession key, ending bearer tokens: whoever lifts one needs the private key to spend it." },
@@ -2608,8 +2607,8 @@ Enforcement fidelity is bounded by the target: Immuta can only express what the 
       takeaways: [
         { title: "Answer to role explosion", text: "Immuta is a commercial control plane for who may read what in a data platform, addressing role explosion: a native-grant role per combination, multiplied by every table." },
         { title: "Attributes, not roles", text: "Subscription policies decide who sees an Immuta-governed table at all and data policies mask columns or filter rows, both written once against attributes rather than roles." },
-        { title: "Compiled into the warehouse", text: "Rather than sitting in the query path, Immuta compiles policy into Snowflake's or Databricks' own row and column controls, so the policy applies however a query arrives." },
-        { title: "Decision point, audit trail", text: "In this glossary's terms Immuta decides and the warehouse enforces, and logging each query with the policy that shaped it produces the audit artefact regulators ask for." },
+        { title: "Compiled into the warehouse", text: "Immuta stays out of the query path, compiling policy into each platform's own controls, such as Snowflake masking policies, so it applies to BI tools, notebooks and service accounts alike." },
+        { title: "Decision point, audit trail", text: "Immuta decides while the warehouse enforces, and recording every query beside the policy that shaped it gives regulators the audit artefact they actually ask for." },
         { title: "Bounded by the target", text: "With native catalogues covering the straightforward cases, Immuta's case rests on cross-platform breadth plus authoring and audit, and it can express only what each platform enforces, so the abstraction leaks." }
       ]
     },
@@ -2749,7 +2748,7 @@ The standing complaint is complexity: a mesh is another distributed system with 
         { title: "Reference mesh, one binary", text: "Istio, the reference service mesh launched in 2017 by Google, IBM and Lyft, runs its control plane as one binary, istiod, handling discovery, Envoy configuration and certificates." },
         { title: "Identity, not IP", text: "Istio lets policy name a cryptographic service identity, not an IP another pod might inherit, by issuing each workload an auto-rotated X.509 certificate carrying a SPIFFE ID." },
         { title: "Default-deny is opt-in", text: "Istio's AuthorizationPolicy is evaluated CUSTOM, then DENY, then ALLOW, and a workload with no ALLOW policy at all permits requests, so default-deny must be configured." },
-        { title: "Ambient mode's two layers", text: "Ambient mode, generally available in Istio 1.24, lets a cluster get a cheap, secure L4 overlay from per-node ztunnels and pay for L7 waypoint proxies only where it asks." },
+        { title: "Ambient mode's two layers", text: "Istio's ambient mode, generally available in 1.24, moves the proxies out of application pods: per-node ztunnels give a cheap, secure L4 overlay, with L7 waypoints only where asked." },
         { title: "Complexity and blast radius", text: "Istio is another distributed system to run, ambient moves the blast radius rather than removing it as each node's ztunnel holds every local pod's keys, and loopback hops stay unencrypted." }
       ]
     },
