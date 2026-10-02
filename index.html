@@ -1849,10 +1849,9 @@
       ],
       fact: "EDR is reactive detection; posture turns it into an access input.",
       takeaways: [
-        { title: "Agent on the endpoint", text: "Endpoint Detection and Response (EDR) puts a lightweight agent on laptops, servers and workstations to keep a continuous record of their activity." },
-        { title: "Detect and contain", text: "EDR flags behaviour that fits known attack patterns and gives responders the means to isolate a compromised host or roll it back." },
+        { title: "Record, detect, contain", text: "Endpoint Detection and Response (EDR) records endpoint activity, flags behaviour matching known attack patterns, and lets responders isolate or roll back a compromised host." },
         { title: "One incident, not many", text: "A multi-stage attack shows up as one incident rather than scattered alerts when Extended Detection and Response (XDR) correlates endpoint, email, identity and cloud signals." },
-        { title: "Posture over credentials", text: "Under Zero Trust's Devices pillar, an EDR agent's live health verdict feeds a posture check that can deny a device access despite valid user credentials." },
+        { title: "Posture over credentials", text: "Under CISA's Zero Trust Devices pillar, an EDR agent's live health verdict feeds a posture check that can deny a device access despite valid user credentials." },
         { title: "Reactive and evadable", text: "EDR catches attacks already under way rather than preventing them, and an attacker who disables or evades its agent silences the posture signal." }
       ]
     },
@@ -2095,7 +2094,7 @@
         { title: "Automation above the SIEM", text: "In a security operations centre (SOC), SOAR is the automation-and-response layer on top of SIEM detection, taking over the repetitive triage most alerts need." },
         { title: "Playbooks across tools", text: "SOAR playbooks reach into tools such as SIEM, EDR, ticketing and firewalls to enrich an alert, decide if it is real and act on it." },
         { title: "Minutes, not hours", text: "Orchestrating across systems lets SOAR respond to routine alerts in minutes or less instead of hours of manual work." },
-        { title: "Mistakes at machine speed", text: "SOAR can carry out a mistaken decision at machine speed, which is why playbooks hold destructive actions until a human approves them." }
+        { title: "Mistakes at machine speed", text: "SOAR playbooks hold destructive actions for a human's approval because SOAR's risk is executing a wrong decision at machine speed." }
       ]
     },
     {
@@ -2149,7 +2148,7 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "An eBPF network plugin", text: "Cilium, a Cloud Native Computing Foundation graduated project, is the eBPF-based Container Network Interface plugin you are likely to meet besides Calico." },
         { title: "Labels become identities", text: "Cilium writes policy between numeric security identities derived from pod labels, not IP addresses, so enforcement survives constant pod churn." },
         { title: "Past layer 4", text: "Where Kubernetes NetworkPolicy stops at layer 4, Cilium can filter on layer-7 detail such as HTTP paths, handing that work to one Envoy on each node." },
-        { title: "Visibility by identity", text: "Hubble, whose observability usually sells Cilium, reads the eBPF programs that replace kube-proxy, producing a service map and flow records labelled with identity, not IP." },
+        { title: "Visibility by identity", text: "Hubble, whose observability usually sells Cilium, reads the eBPF programs that replace kube-proxy, producing a service map and flow records annotated with identity, not IP." },
         { title: "Label identity, kernel reach", text: "Cilium's identity rests on labels, not a key; its agent can rewrite all pod traffic in each node's kernel, and its encryption leaves pod-to-node hops plaintext." }
       ]
     },
@@ -2294,7 +2293,7 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "One name per flaw", text: "A CVE (Common Vulnerabilities and Exposures) identifier, such as CVE-2021-44228 for Log4Shell, gives a disclosed flaw one agreed name, under a CISA-sponsored programme run by MITRE." },
         { title: "Scoring the severity", text: "Attack vector, complexity and impact are among the characteristics the Common Vulnerability Scoring System (CVSS) weighs to rate a flaw's severity from 0 to 10." },
         { title: "Enrichment for a subset", text: "Automated scanners draw on NIST's National Vulnerability Database for CVSS scores and affected-product data, which since April 2026 it supplies only for a prioritised subset of flaws." },
-        { title: "Score is not risk", text: "A CVSS score only guides, since the real risk turns on whether the flaw can actually be exploited in your environment." }
+        { title: "Score is not risk", text: "Real risk turns on whether a flaw can actually be exploited in your environment, so a CVSS score serves only as a guide." }
       ]
     },
     {
@@ -2510,9 +2509,9 @@ The identity is only as good as the labels behind it: it is allocated by the con
       fact: "Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes a working zero-trust enforcement point.",
       takeaways: [
         { title: "NVIDIA's DPU framework", text: "NVIDIA positions DOCA, its software framework for programming BlueField DPUs and SuperNICs, as doing for the DPU what CUDA does for the GPU." },
-        { title: "Portable across generations", text: "Building on industry-standard interfaces such as DPDK, SPDK and Netlink, not a closed silo, DOCA keeps software portable from one BlueField generation to the next." },
+        { title: "Portable across generations", text: "Security and networking software written for DOCA stays portable across BlueField generations, because DOCA exposes a standard interface through DPDK, SPDK, Netlink and similar industry standards." },
         { title: "Agentless host detection", text: "DOCA Argus detects reverse shells, injected code and hidden processes on the host from the DPU's isolated cores, where host malware cannot see or switch it off." },
-        { title: "Tunnels at wire speed", text: "Encryption is part of DOCA's zero-trust tooling: its IPsec and TLS gateways and crypto libraries handle tunnel termination at wire speed." },
+        { title: "Tunnels at wire speed", text: "Wire-speed termination of encrypted tunnels is among DOCA's zero-trust jobs, handled by its IPsec and TLS gateways and crypto libraries." },
         { title: "Tied to NVIDIA", text: "Software written against DOCA's libraries runs only on NVIDIA hardware, so the price of DOCA is lock-in to one vendor." }
       ]
     },
@@ -2661,7 +2660,6 @@ Its weakness is reward hacking — the policy optimises the reward model, which 
       takeaways: [
         { title: "From raw to useful", text: "RLHF takes a raw language model and makes it follow instructions usefully while declining requests it should refuse." },
         { title: "Three training stages", text: "RLHF runs in three stages: supervised fine-tuning on human demonstrations, a reward model trained on labellers' rankings, then reinforcement learning against that reward." },
-        { title: "Penalty against drift", text: "In RLHF's final stage, a KL-divergence penalty measuring drift from the fine-tuned reference keeps the model from wandering into degenerate text that happens to score well." },
         { title: "Policy baked into weights", text: "RLHF sets refusals and safety policy in the weights at training time, so they are not a runtime control anything downstream can inspect, audit or enforce." },
         { title: "Proxy reward, fragile pipeline", text: "RLHF's weak spots are reward hacking, as the policy chases a reward model that only approximates human judgement, and a costly three-model pipeline notoriously fiddly to keep stable." }
       ]
@@ -3143,7 +3141,7 @@ The verifier proves memory safety and termination, not benignity — loading a p
         { title: "Proved before loading", text: "No eBPF program is accepted until the verifier proves it terminates, reads no uninitialised memory, stays in bounds and is simple enough to analyse." },
         { title: "Somewhere to keep data", text: "Hash tables, arrays, ring buffers and other eBPF maps give stateless programs somewhere to keep data that a user-space agent can also read and write." },
         { title: "Widely built upon", text: "Cilium's data plane, Calico's eBPF mode, runtime security tooling and most newer profilers and tracers all run on eBPF." },
-        { title: "Safe is not harmless", text: "eBPF support varies by kernel version, and a program can pass the verifier yet be malicious, so an attacker reaching CAP_BPF or CAP_SYS_ADMIN gains a hard-to-see kernel foothold." }
+        { title: "Safe is not harmless", text: "eBPF's hooks and verifier rules vary by kernel version, and the verifier cannot rule out malice, so an attacker reaching CAP_BPF or CAP_SYS_ADMIN gains a hard-to-see kernel foothold." }
       ]
     },
     {
@@ -3171,9 +3169,9 @@ The limitation is capacity: a low-rank update steers what the model already know
       fact: "On GPT-3 175B, LoRA cut trainable parameters by a factor of 10,000 and GPU memory to a third.",
       takeaways: [
         { title: "Frozen weights, thin matrices", text: "LoRA freezes a model's pretrained weights and learns fine-tuning's change as the product of two thin matrices, because that change has a low intrinsic rank." },
-        { title: "Two ways to serve", text: "Merged, a LoRA update adds no inference latency, unlike earlier adapter layers; kept apart, it is a megabyte file one base model can hot-swap per tenant." },
+        { title: "Two ways to serve", text: "Merged, a LoRA update adds no inference latency; kept separate, it ships as megabytes that one base model can swap per task or tenant." },
         { title: "Base safety not guaranteed", text: "Research shows an aligned chat model losing its safety training to a cheap LoRA run, so a safety-tuned base promises nothing once third-party adapters load on top." },
-        { title: "Steers, not teaches", text: "LoRA's limit is capacity: a low-rank update can steer existing knowledge but struggles to add much that is new, measurably trailing full fine-tuning on code and mathematics." }
+        { title: "Steers, not teaches", text: "LoRA's limit is capacity: a low-rank update steers existing knowledge but struggles to add much that is new, measurably trailing full fine-tuning in demanding domains like code and mathematics." }
       ]
     },
     {
@@ -3233,8 +3231,8 @@ Encryption hollows out the word "full": with TLS nearly everywhere, the stored p
         { title: "Replay, not inference", text: "SentryWire, a commercial full packet capture platform, keeps every header and payload byte, so investigators can replay a conversation instead of inferring it from logs." },
         { title: "Capture, store, search", text: "SentryWire scales capture, storage and search independently, adding cluster nodes for retention and running searches in parallel across the store." },
         { title: "Retrospective detection", text: "With IDS Search Back, SentryWire tests an indicator published today against months of stored packets, answering questions about an intrusion that logs cannot." },
-        { title: "From alert to packet", text: "Enrichment such as JA3 fingerprints and GeoIP, plus Splunk and Elastic integrations, lets an analyst pivot from a SIEM alert to the SentryWire packets behind it." },
-        { title: "Ciphertext, blind spots, liability", text: "With TLS nearly everywhere, SentryWire stores mostly ciphertext, sees only traffic crossing its tap, and holds cleartext credentials and personal records in an archive that is itself a liability." }
+        { title: "From alert to packet", text: "Enrichment such as GeoIP and file hashes, plus Splunk and Elastic integrations, lets an analyst pivot from a SIEM alert to the SentryWire packets behind it." },
+        { title: "Ciphertext, blind spots, liability", text: "SentryWire sees only traffic crossing its tap, mostly ciphertext now TLS is nearly everywhere, and its archive of unencrypted credentials and personal records is itself a liability." }
       ]
     },
     {
@@ -3333,7 +3331,7 @@ It is a specialist: the managed databases, identity services and compliance cata
       fact: "Out of the box, AMPS accepts any username and password and grants every permission to any user.",
       takeaways: [
         { title: "Bus, queue and database", text: "AMPS, 60East Technologies' commercial publish/subscribe engine for low-latency financial messaging, is described by its maker as a message bus, a queue and a database combined." },
-        { title: "Content-based subscriptions", text: "AMPS subscribers can select messages by their content, not just their topic, across payloads such as JSON, FIX, XML, Protocol Buffers or raw binary." },
+        { title: "Content-based subscriptions", text: "AMPS subscribers can filter on what a message contains, not only its topic, and AMPS payloads can be JSON, FIX, XML, Protocol Buffers or raw binary." },
         { title: "State, then updates", text: "Because AMPS's State of the World (SOW) holds each record's latest version, a subscriber can begin from current state and receive every later update exactly once." },
         { title: "Permissive until configured", text: "AMPS passes no TLS identity to its checks, and until Kerberos, LDAP, OAuth or a custom module is plugged in, any credentials log on with every permission." }
       ]
