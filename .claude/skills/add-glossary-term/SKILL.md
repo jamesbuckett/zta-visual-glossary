@@ -46,7 +46,9 @@ Add an object to `const TERMS` in `index.html`:
 
 `takeaways` are the tiles under the infographic: the explainer compressed to three to
 five cards, the last always the limitation. They state only what the explainer says and
-never repeat a tour step or the key fact word for word. Keep `takeaways: [` and its
+never repeat a tour step or the key fact word for word, or with only a word or two
+changed. Every card names its subject rather than opening with a bare "It" or "Its",
+because tiles are read one at a time. Keep `takeaways: [` and its
 closing `]` on their own lines at six spaces, as above: `test/takeaways-fixtures.mjs`
 finds the field by that shape.
 
