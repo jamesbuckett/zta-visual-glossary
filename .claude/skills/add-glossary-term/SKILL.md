@@ -48,9 +48,11 @@ Add an object to `const TERMS` in `index.html`:
 five cards, the last always the limitation. They state only what the explainer says and
 never repeat a tour step or the key fact word for word, or with only a word or two
 changed. Every card names its subject rather than opening with a bare "It" or "Its",
-because tiles are read one at a time. Keep `takeaways: [` and its
-closing `]` on their own lines at six spaces, as above: `test/takeaways-fixtures.mjs`
-finds the field by that shape.
+because tiles are read one at a time. A limitation that spans several sentences goes
+into the one last card, ending on the residual risk, and qualifiers such as "in practice"
+or "can" survive the compression. Keep `takeaways: [` and its closing `]` on their own
+lines at six spaces in `index.html`: `test/takeaways-fixtures.mjs` finds the field by
+that shape.
 
 ## 2. Append the diagram and its tour
 

@@ -51,13 +51,18 @@ takeaways: [
 - Takeaways state only what the entry's verified `explainer` says. No new factual claim
   enters through a takeaway. UK spelling and the no-emoji rule apply.
 - No takeaway `text` repeats a tour step's `text` or the `fact` word for word. The tiles
-  compress the explainer; they do not copy the tour. A step sentence with only a word or
-  two inserted, dropped or swapped counts as a repeat.
+  compress the explainer; they do not copy the tour. A step sentence or the fact with only
+  a word or two inserted, dropped or swapped counts as a repeat.
 - Every card names its subject. None opens with a bare "It" or "Its", because tiles are
   read one at a time.
+- A limitation that spans several sentences is compressed into the one last card, ending
+  on the residual risk. A partial mitigation is never a tile of its own with a title that
+  reads as a fix.
+- Qualifiers survive compression: "in practice", "can", "most" and the condition a
+  guarantee depends on stay in the card.
 
-The last two rules were sharpened at the pilot's second-pass review (2 October 2026), and
-the worked example below was rewritten to meet them.
+The last four rules were added or sharpened at the pilot's second-pass review (2 October
+2026), and the worked example below was rewritten to meet them.
 
 Worked example (mTLS):
 
