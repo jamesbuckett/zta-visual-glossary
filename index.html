@@ -860,7 +860,13 @@
         { title: "Each request stands alone", text: "Each request stands alone. Cookies or tokens carry context from one request to the next." },
         { title: "HTTPS adds TLS", text: "HTTPS is the very same protocol running inside a TLS-encrypted channel, so the traffic is private and tamper-evident." }
       ],
-      fact: "HTTPS is now the default transport for nearly all web traffic."
+      fact: "HTTPS is now the default transport for nearly all web traffic.",
+      takeaways: [
+        { title: "Fetch and submit resources", text: "HTTP is the application protocol that browsers and APIs use to fetch and submit resources, with methods such as GET and POST." },
+        { title: "Stateless requests", text: "HTTP is stateless, treating each request in isolation, so whatever context links one request to another travels in cookies or tokens." },
+        { title: "Same protocol, encrypted", text: "HTTPS carries the same HTTP inside a TLS-encrypted channel, keeping traffic private and making any tampering with it evident." },
+        { title: "Transit, not trust", text: "HTTPS protects traffic in transit and authenticates the server, yet it cannot tell you whether that server, or what it serves, deserves your trust." }
+      ]
     },
     {
       id: "tls", term: "TLS", acronym: "Transport Layer Security", aliases: ["SSL"],
@@ -876,7 +882,12 @@
         { title: "Agree session keys", text: "The certificate plus public-key cryptography are used to agree on session keys." },
         { title: "Encrypted traffic", text: "From then on, traffic is encrypted with fast symmetric crypto, giving the connection confidentiality and integrity." }
       ],
-      fact: "TLS underpins HTTPS, secure email and many VPNs."
+      fact: "TLS underpins HTTPS, secure email and many VPNs.",
+      takeaways: [
+        { title: "Securing any TCP connection", text: "Transport Layer Security, which replaced SSL, adds confidentiality, integrity and server authentication to any TCP connection." },
+        { title: "Handshake sets the keys", text: "A TLS handshake settles the ciphers and uses the server's certificate with public-key cryptography to agree session keys, after which fast symmetric crypto encrypts the traffic." },
+        { title: "In transit, server only", text: "TLS guards data only in transit and, in ordinary use, authenticates just the server, so the client stays unauthenticated at this layer unless mTLS adds client certificates." }
+      ]
     },
     {
       id: "bgp", term: "BGP", acronym: "Border Gateway Protocol", aliases: ["autonomous system", "peering"],
@@ -988,7 +999,12 @@
         { title: "Into the network", text: "At the far end the traffic reaches the private network: remote access to corporate resources, and a shield on hostile networks." },
         { title: "The protocol decides", text: "Underneath sits a specific protocol: IPsec, WireGuard or a TLS-based design." }
       ],
-      fact: "A VPN's security and topology depend entirely on the underlying protocol."
+      fact: "A VPN's security and topology depend entirely on the underlying protocol.",
+      takeaways: [
+        { title: "Tunnelling across the internet", text: "A Virtual Private Network tunnels encrypted traffic between a device, or a whole site, and a network, so the untrusted internet carries it like a private link." },
+        { title: "What VPNs are for", text: "People use a VPN to reach corporate resources remotely and to shield their traffic on hostile networks." },
+        { title: "Broad reach once connected", text: "A traditional VPN gives a connected device broad network reach, the gap ZTNA was designed to close, so a stolen credential or compromised laptop inherits that access." }
+      ]
     },
     {
       id: "wireguard", term: "WireGuard", acronym: "WireGuard VPN protocol", aliases: ["wg"],
@@ -1004,7 +1020,12 @@
         { title: "Low-overhead tunnel", text: "The tunnel itself runs with very low overhead." },
         { title: "Small, in the kernel", text: "WireGuard is designed for simplicity and speed, with a codebase small enough to audit by hand, and it ships inside the Linux kernel." }
       ],
-      fact: "WireGuard has become a common alternative to heavier IPsec and OpenVPN stacks."
+      fact: "WireGuard has become a common alternative to heavier IPsec and OpenVPN stacks.",
+      takeaways: [
+        { title: "Minimal by design", text: "WireGuard is a minimal VPN protocol, shipped inside the Linux kernel, that puts simplicity and speed first and keeps its code compact enough to audit by hand." },
+        { title: "Public-key peers, fast tunnels", text: "With public keys as peer identities, configured WireGuard peers set up encrypted tunnels through quick handshakes and run them with very low overhead." },
+        { title: "Peer management left out", text: "WireGuard deliberately leaves key distribution and configuration out of scope, so unless another layer such as Tailscale's coordination server steps in, nothing manages its peers at scale." }
+      ]
     },
     {
       id: "zerotrust", term: "Zero Trust", acronym: "Zero Trust Architecture", aliases: ["ZTA", "ZTNA", "BeyondCorp"],
@@ -1140,7 +1161,12 @@
         { title: "Call like a function", text: "Services call one another as if invoking local functions." },
         { title: "Binary over HTTP/2", text: "Data is serialised with compact binary Protocol Buffers and rides HTTP/2, enabling multiplexing and streaming with low latency." }
       ],
-      fact: "gRPC is a common choice for internal microservice communication where REST and JSON prove too chatty."
+      fact: "gRPC is a common choice for internal microservice communication where REST and JSON prove too chatty.",
+      takeaways: [
+        { title: "Contract-first remote calls", text: "gRPC lets services call each other like local functions, against a contract in a .proto file from which both client and server code are generated." },
+        { title: "Protocol Buffers on HTTP/2", text: "Compact binary Protocol Buffers on top of HTTP/2 give gRPC multiplexing and streaming at low latency." },
+        { title: "Browser and inspection gaps", text: "Browsers cannot speak native gRPC, so web clients need gRPC-Web and a translating proxy, and gRPC's binary messages are harder than JSON to inspect by hand." }
+      ]
     },
     {
       id: "mqtt", term: "MQTT", acronym: "MQTT (historically 'MQ Telemetry Transport' — no longer an acronym)", aliases: ["pub/sub", "broker", "IoT"],
@@ -1156,7 +1182,12 @@
         { title: "Broker fans out", text: "The broker passes each message to the topic's subscribers, which decouples senders from receivers." },
         { title: "Built for weak networks", text: "MQTT is built for low-bandwidth, high-latency or unreliable networks, with a tiny footprint and tiered quality-of-service levels." }
       ],
-      fact: "MQTT's tiny footprint and tiered quality-of-service levels make it the default for sensors, telemetry and large IoT fleets."
+      fact: "MQTT's tiny footprint and tiered quality-of-service levels make it the default for sensors, telemetry and large IoT fleets.",
+      takeaways: [
+        { title: "Messaging for weak links", text: "MQTT is a messaging protocol designed for networks where bandwidth is scarce, latency is high or connections are unreliable." },
+        { title: "Publish, subscribe, decouple", text: "MQTT publishers and subscribers meet at named topics on a central broker, which keeps senders decoupled from receivers." },
+        { title: "No encryption, broker-only control", text: "MQTT has no encryption of its own, so it must run over TLS, and only the broker's access control decides who may publish or subscribe to each topic." }
+      ]
     },
     {
       id: "ssh", term: "SSH", acronym: "Secure Shell", aliases: ["OpenSSH", "SCP", "key pair"],
@@ -1172,7 +1203,13 @@
         { title: "Shells, files, ports", text: "The channel carries interactive shells, file transfer and port forwarding." },
         { title: "Replaces cleartext", text: "It is a safe replacement for the cleartext remote-access tools of the past." }
       ],
-      fact: "SSH is the everyday tool for administering servers securely."
+      fact: "SSH is the everyday tool for administering servers securely.",
+      takeaways: [
+        { title: "Safe remote access", text: "Secure Shell gives an authenticated, encrypted connection to a remote machine, safely replacing the cleartext remote-access tools that came before it." },
+        { title: "Encrypt, then authenticate", text: "Logging in happens inside the encrypted channel that SSH's key exchange builds first, with public-key pairs preferred over passwords." },
+        { title: "More than a shell", text: "An SSH connection carries more than an interactive shell, with file transfer and port forwarding travelling through the same encrypted channel." },
+        { title: "Key management risks", text: "SSH is only as safe as its key management: unmanaged keys pile up in authorized_keys files, and accepting an unverified host key on first connection leaves room for a man-in-the-middle." }
+      ]
     },
     {
       id: "dhcp", term: "DHCP", acronym: "Dynamic Host Configuration Protocol", aliases: ["DORA", "lease"],
@@ -1249,7 +1286,12 @@
         { title: "Gateway to gateway", text: "Tunnel mode between gateways is the basis of many site-to-site VPNs." },
         { title: "IKE negotiates", text: "Key exchange and negotiation are handled by the Internet Key Exchange (IKE) protocol." }
       ],
-      fact: "IPsec protects any application's packets with no changes to the application."
+      fact: "IPsec protects any application's packets with no changes to the application.",
+      takeaways: [
+        { title: "IP-layer protection", text: "IPsec is a protocol suite working at the IP layer that can encrypt and integrity-protect packets, with keys negotiated through the Internet Key Exchange (IKE) protocol." },
+        { title: "Transport or tunnel", text: "IPsec offers two modes: transport, which guards payloads between hosts, and tunnel, which wraps whole packets between gateways, the basis of many site-to-site VPNs." },
+        { title: "Complex to configure", text: "Flexibility makes IPsec complex to configure, and one common reason its tunnels fail to establish is mismatched Internet Key Exchange proposals between vendors." }
+      ]
     },
     {
       id: "mtls", term: "mTLS", acronym: "Mutual TLS", aliases: ["client certificate"],
@@ -1425,7 +1467,13 @@
         { title: "Independent streams", text: "Encrypted streams are multiplexed over the one connection, independently of each other." },
         { title: "No head-of-line blocking", text: "One lost packet stalls only its own stream, rather than holding up everything queued behind it as it does for HTTP/2 over TCP." }
       ],
-      fact: "QUIC is the foundation of HTTP/3, with encryption built in rather than bolted on."
+      fact: "QUIC is the foundation of HTTP/3, with encryption built in rather than bolted on.",
+      takeaways: [
+        { title: "One design over UDP", text: "Shipping in every major browser, QUIC is a single UDP-based transport that sets up connections, encrypts with TLS 1.3 and multiplexes streams." },
+        { title: "Fewer round trips", text: "Where TCP followed by TLS needs several round trips, QUIC's combined handshake usually has a new connection ready in one, and a resumed one in zero." },
+        { title: "Streams stall alone", text: "QUIC removes the head-of-line blocking that slows HTTP/2 over TCP, because its streams are independent and a lost packet holds up only its own stream." },
+        { title: "Less visibility, UDP fallback", text: "QUIC encrypts most of its transport headers, so network operators see far less than with TCP, and wherever a network blocks UDP, connections must fall back to TCP." }
+      ]
     },
     {
       id: "cors", term: "CORS", acronym: "Cross-Origin Resource Sharing",
@@ -1442,7 +1490,13 @@
         { title: "Preflight first", text: "Requests that are not simple, with custom headers or methods like PUT, trigger a preflight OPTIONS check first." },
         { title: "Browsers only", text: "CORS is enforced only by browsers: it governs in-browser JavaScript, not server-to-server calls." }
       ],
-      fact: "CORS is no substitute for real authorisation."
+      fact: "CORS is no substitute for real authorisation.",
+      takeaways: [
+        { title: "Relaxing the same-origin policy", text: "Cross-Origin Resource Sharing is the way a server loosens the browser's same-origin policy, naming the foreign origins allowed to read its responses." },
+        { title: "Matching origin headers", text: "A CORS response reaches the calling script only when the server's Access-Control-Allow-Origin matches the Origin header the browser attached to the request." },
+        { title: "Preflight for non-simple requests", text: "Under CORS, a request that is not simple, such as one with custom headers or a PUT, is preceded by a preflight OPTIONS check." },
+        { title: "Browser-enforced only", text: "Only browsers enforce CORS, which constrains script running in the page but not server-to-server calls, so a server still needs real authorisation of its own." }
+      ]
     },
     {
       id: "pkce", term: "PKCE", acronym: "Proof Key for Code Exchange",
@@ -1507,7 +1561,12 @@
         { title: "Frames both ways", text: "The same TCP socket then carries lightweight binary frames in both directions, so client and server can push messages at any time." },
         { title: "wss:// adds TLS", text: "Production deployments use wss://, which wraps the connection in TLS." }
       ],
-      fact: "WebSocket removes the request/response turn-taking of plain HTTP, which is why it powers chat, collaborative editing, live dashboards and trading feeds."
+      fact: "WebSocket removes the request/response turn-taking of plain HTTP, which is why it powers chat, collaborative editing, live dashboards and trading feeds.",
+      takeaways: [
+        { title: "A persistent two-way channel", text: "WebSocket turns an ordinary HTTP request into a long-lived, full-duplex connection on which client and server can each push messages whenever they choose." },
+        { title: "The upgrade handshake", text: "A WebSocket opens as an HTTP/1.1 GET carrying Upgrade: websocket; after the server's 101 Switching Protocols, lightweight binary frames flow both ways over that same TCP socket." },
+        { title: "Server must check Origin", text: "The same-origin policy does not block a WebSocket handshake, so unless the server checks the browser's Origin header, a malicious page can open a socket with the user's cookies." }
+      ]
     },
     {
       id: "webtransport", term: "WebTransport", acronym: "Multiplexed streams and datagrams over HTTP/3",
@@ -1524,7 +1583,13 @@
         { title: "Unreliable datagrams", text: "It also offers unreliable datagrams, so an app can mix guaranteed delivery with fire-and-forget packets for things like game state or live media." },
         { title: "No head-of-line blocking", text: "Because it inherits QUIC's independent streams, one lost packet stalls only its own stream, avoiding the head-of-line blocking WebSockets suffer over TCP." }
       ],
-      fact: "WebTransport is the emerging alternative to WebSockets, though neither its W3C nor its IETF specification is final."
+      fact: "WebTransport is the emerging alternative to WebSockets, though neither its W3C nor its IETF specification is final.",
+      takeaways: [
+        { title: "Low-latency browser sessions", text: "Browser code gets a low-latency session from WebTransport, which runs on HTTP/3 and therefore, underneath, on QUIC and UDP." },
+        { title: "Streams plus datagrams", text: "WebTransport pairs reliable one-way and two-way streams with unreliable datagrams in one connection, so an app can send fire-and-forget packets, such as game state, alongside data whose delivery is guaranteed." },
+        { title: "Streams stall independently", text: "Unlike WebSockets over TCP, WebTransport escapes head-of-line blocking, where one stalled packet holds up everything behind it, because each QUIC stream stalls independently." },
+        { title: "Specifications not final", text: "WebTransport's API reached cross-browser support in 2026, yet its W3C API is still a Candidate Recommendation and its IETF protocol still an Internet-Draft." }
+      ]
     },
     {
       id: "openziti", term: "OpenZiti", acronym: "Open-source zero-trust networking overlay",
@@ -1613,7 +1678,13 @@
         { title: "Server certificate", text: "The intermediate CA in turn signs the server's certificate, binding the server's public key to its name." },
         { title: "Walk the chain", text: "The client verifies each signature and walks the chain up to the root it already trusts. Every padlock in a browser is a PKI trust decision." }
       ],
-      fact: "Get the root of trust wrong and everything built on it is compromised."
+      fact: "Get the root of trust wrong and everything built on it is compromised.",
+      takeaways: [
+        { title: "Binding keys to identities", text: "Public Key Infrastructure ties a public key to an identity so a relying party can trust the pairing without prior contact, underpinning TLS, mTLS, code signing and SPIFFE." },
+        { title: "Certificate authorities vouch", text: "A Certificate Authority's signature on an X.509 certificate vouches that a key belongs to a name, and verifiers check it by following the chain to a trusted root." },
+        { title: "Expiry, revocation, automation", text: "PKI certificates expire and can be revoked, and protocols such as ACME (Automatic Certificate Management Environment), which Let's Encrypt uses, automate issuance and renewal at scale." },
+        { title: "Root of trust risk", text: "If a PKI's root of trust is wrong, no certificate chaining up to it can be relied on, nor can anything built on those certificates." }
+      ]
     },
     {
       id: "rbac", term: "RBAC & ABAC", acronym: "Role- / Attribute-Based Access Control",
@@ -1740,7 +1811,13 @@
         { title: "Tokens and SameSite", text: "CSRF is defended with anti-CSRF tokens and SameSite cookies." },
         { title: "CSP limits the damage", text: "Content Security Policy is a response header that whitelists which script, style and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through." }
       ],
-      fact: "No single defence is sufficient alone: defence in depth is the point."
+      fact: "No single defence is sufficient alone: defence in depth is the point.",
+      takeaways: [
+        { title: "Injected script, escaped output", text: "Cross-Site Scripting gets attacker-controlled script running in a page under the victim's session, where it can steal tokens or impersonate the user; escaping output and validating input defeat it." },
+        { title: "Forged cross-site requests", text: "Anti-CSRF tokens and SameSite cookies defend against Cross-Site Request Forgery, which tricks a user's browser into making an unwanted state-changing request on a site where they are signed in." },
+        { title: "Permitted sources only", text: "A Content Security Policy response header names the permitted sources for a page's script, style and connections, sharply limiting injected code even if Cross-Site Scripting gets through." },
+        { title: "Layered defence needed", text: "Output escaping, anti-CSRF tokens, SameSite cookies and Content Security Policy each fall short on their own, so browser-side security has to layer them." }
+      ]
     },
     {
       id: "vault", term: "Secrets Management", acronym: "Secrets Management (HashiCorp Vault)",
@@ -1758,7 +1835,14 @@
         { title: "A dynamic secret", text: "Rather than a long-lived shared password, the vault generates a short-lived credential on demand and revokes it automatically." },
         { title: "Every access logged", text: "Every access is authenticated, authorised and logged, giving an audit trail and fast rotation when something is exposed." }
       ],
-      fact: "Dynamic secrets shrink the window in which a leaked secret is useful."
+      fact: "Dynamic secrets shrink the window in which a leaked secret is useful.",
+      takeaways: [
+        { title: "Central, encrypted, policy-gated", text: "Rather than hard-coding passwords, API keys and certificates, applications draw them from a secrets manager, HashiCorp Vault for example, that keeps them encrypted and centralised behind authentication and fine-grained policy." },
+        { title: "Short-lived, on-demand credentials", text: "Vault's strongest pattern is the dynamic secret: a credential minted on demand, short-lived and automatically revoked, in place of a long-lived shared password." },
+        { title: "Audited, quickly rotated", text: "Vault's log of every authenticated, authorised access gives an audit trail, and when a secret is exposed it can be rotated fast." },
+        { title: "Source-available, now IBM", text: "HashiCorp Vault has been source-available under the Business Source License since 2023 and is now an IBM product, with OpenBao as its open-source fork." },
+        { title: "Target and dependency", text: "Centralising secrets makes the vault a high-value target, and every service that needs a secret then depends on it to start." }
+      ]
     },
     {
       id: "nist207", term: "NIST SP 800-207", acronym: "Zero Trust Architecture (NIST)",
@@ -1921,7 +2005,13 @@
         { title: "New standards", text: "Post-Quantum Cryptography uses hard problems, chiefly structured lattices. In August 2024 NIST finalised FIPS 203 (ML-KEM), FIPS 204 (ML-DSA) and FIPS 205 (SLH-DSA)." },
         { title: "A hybrid rollout", text: "PQC key exchange is being layered alongside classical algorithms in TLS, rather than replacing them overnight." }
       ],
-      fact: "The urgency is harvest now, decrypt later: long-lived secrets need protecting now."
+      fact: "The urgency is harvest now, decrypt later: long-lived secrets need protecting now.",
+      takeaways: [
+        { title: "Quantum-resistant replacements", text: "Post-Quantum Cryptography replaces RSA and elliptic-curve cryptography, which Shor's algorithm on a sufficiently large quantum computer could break, with algorithms built on problems both classical and quantum computers find hard." },
+        { title: "NIST's first standards", text: "NIST's first post-quantum standards, finalised in August 2024, are FIPS 203 (ML-KEM) for key encapsulation and, for signatures, FIPS 204 (ML-DSA) plus FIPS 205 (SLH-DSA)." },
+        { title: "Hybrid, not overnight", text: "Post-Quantum Cryptography is arriving in hybrid form, its key exchange added to TLS next to classical algorithms instead of replacing them overnight." },
+        { title: "Bigger and less proven", text: "Post-Quantum Cryptography costs more, as larger keys and signatures add handshake data, and its algorithms have far less cryptanalytic history behind them than RSA and elliptic curves." }
+      ]
     },
     {
       id: "cilium", term: "Cilium", acronym: "eBPF-Based Kubernetes Networking, Observability & Security",
@@ -1963,7 +2053,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Relay if blocked", text: "NAT traversal, with relay fallback (Tailscale's DERP relay servers), makes peer-to-peer connectivity work even behind firewalls." },
         { title: "Identity-based ACLs", text: "In the resulting tailnet, access is governed by identity and access-control lists rather than network location." }
       ],
-      fact: "A tailnet is a practical on-ramp to Zero Trust networking for small teams."
+      fact: "A tailnet is a practical on-ramp to Zero Trust networking for small teams.",
+      takeaways: [
+        { title: "Peer-to-peer over WireGuard", text: "Tailscale, a commercial product built on open-source WireGuard, links your devices directly in a flat mesh of encrypted tunnels instead of backhauling them through a central gateway." },
+        { title: "Coordination, not transit", text: "Tailscale's coordination server handles sign-in through your existing identity provider and hands out keys, but traffic between devices never flows through it." },
+        { title: "Through NAT, or relayed", text: "Even behind firewalls, Tailscale gets devices talking peer to peer through NAT traversal, and falls back to its DERP relay servers when that fails." },
+        { title: "Identity, not location", text: "Inside a tailnet, the private network Tailscale builds, who may reach what depends on identity and access-control lists, not on where a device sits on the network." },
+        { title: "Vendor dependency, device-level control", text: "Tailscale's coordination server is a vendor dependency unless self-hosted with the community Headscale project, and its access-control lists govern which devices connect, not what happens inside each application." }
+      ]
     },
     {
       id: "casb", term: "CASB", acronym: "Cloud Access Security Broker",
@@ -1998,7 +2095,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Rest via the gateway", text: "Everything else is steered through a forward proxy or Secure Web Gateway for inspection and policy, with no per-application setup." },
         { title: "WPAD can be poisoned", text: "WPAD discovery has been repeatedly abused: a poisoned response can route all of a victim's traffic through an attacker's proxy." }
       ],
-      fact: "A PAC file is the agentless way to funnel web traffic through a Secure Web Gateway."
+      fact: "A PAC file is the agentless way to funnel web traffic through a Secure Web Gateway.",
+      takeaways: [
+        { title: "JavaScript that picks routes", text: "A Proxy Auto-Configuration file is a small piece of JavaScript whose single function, FindProxyForURL(url, host), the browser or OS runs on every request to choose its route." },
+        { title: "Direct or proxied", text: "A PAC file can send internal traffic direct and steer the rest through a proxy, using helpers such as isInNet() that test a request's hostname, domain or IP range." },
+        { title: "Discovery or manual URL", text: "Web Proxy Auto-Discovery can locate a PAC file, as wpad.dat, through DHCP option 252 or DNS, though a browser can instead be pointed at a manually configured URL." },
+        { title: "An attack surface", text: "PAC files are an attack surface: poisoned Web Proxy Auto-Discovery can steer all of a victim's traffic to an attacker's proxy, and a malicious script is consulted on every request." }
+      ]
     },
     {
       id: "dlp", term: "DLP", acronym: "Data Loss Prevention",
@@ -2118,7 +2221,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Remote attestation", text: "A remote server can ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted." },
         { title: "A root of trust", text: "This hardware root of trust underpins disk-encryption key release, device identity and the device-posture checks Zero Trust relies on." }
       ],
-      fact: "A TPM moves the foundation of trust from software, which malware can subvert, down into silicon."
+      fact: "A TPM moves the foundation of trust from software, which malware can subvert, down into silicon.",
+      takeaways: [
+        { title: "A tamper-resistant chip", text: "Cryptographic keys generated inside a Trusted Platform Module, a tamper-resistant motherboard chip, never leave its hardware, and the same chip measures the software loaded at boot." },
+        { title: "Signature-checked startup", text: "A tampered bootloader is refused under Secure Boot, since the firmware verifies every startup stage against trusted signatures." },
+        { title: "Measured, then attested", text: "Measured boot records in the TPM a hash of whatever really loaded, and a remote server can have the TPM attest that record as proof of a known-good boot." },
+        { title: "Anchor for device trust", text: "Disk-encryption key release, device identity and Zero Trust's device-posture checks all rest on the TPM as a hardware root of trust." },
+        { title: "Attested is not secure", text: "A TPM can attest what booted but not whether that software is free of vulnerabilities, and a skilled attacker with physical access can still bypass a TPM-only setup." }
+      ]
     },
     {
       id: "sigstore", term: "Sigstore", acronym: "Keyless Artifact Signing (Cosign)",
@@ -2634,7 +2744,13 @@ Credential forwarding is permissive by default, because Alpaca treats the PAC as
         { title: "It answers the 407", text: "When the upstream answers 407 it parses the Proxy-Authenticate header and runs the handshake itself: Negotiate, then NTLM, then Basic." },
         { title: "Any process uses it", text: "The listener has no authentication of its own, so any process that can reach that loopback port borrows your authenticated egress." }
       ],
-      fact: "Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component."
+      fact: "Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component.",
+      takeaways: [
+        { title: "Proxy for command-line tools", text: "Alpaca is a Go binary whose loopback HTTP proxy evaluates proxy auto-configuration and answers NTLM or Kerberos challenges on behalf of tools such as curl and git." },
+        { title: "PAC routing, CONNECT tunnels", text: "Alpaca lets the PAC file's FindProxyForURL choose between DIRECT and an upstream proxy on every request, carrying HTTPS through a CONNECT tunnel that shows it only the host and port." },
+        { title: "Authenticates on your behalf", text: "Alpaca answers a 407 Proxy Authentication Required challenge itself, using credentials such as a cached Kerberos ticket and trying advertised schemes in Chrome's order: Negotiate, NTLM, Basic." },
+        { title: "PAC trust, open listener", text: "By default Alpaca authenticates wherever its PAC points, so an insecurely obtained PAC can expose hashes or tickets, and its unauthenticated listener lends your authenticated egress to any local process." }
+      ]
     },
     {
       id: "cntlm", term: "Cntlm", acronym: "NTLM Authentication Proxy",
@@ -2655,7 +2771,13 @@ Storing hashes instead of a password is usually described as the safe option, an
         { title: "Hashes, not a password", text: "cntlm.conf holds hashes printed by cntlm -H rather than a password. But they are exactly what the NTLM exchange consumes, so whoever can read that file can authenticate as you." },
         { title: "Gateway mode", text: "With -g, Cntlm listens on every interface and other machines can share it, gated only by -A and -D rules on IP and mask: authenticated egress granted by network position." }
       ],
-      fact: "Cntlm is best understood as a prosthesis for a proxy you do not control rather than a design to carry forward."
+      fact: "Cntlm is best understood as a prosthesis for a proxy you do not control rather than a design to carry forward.",
+      takeaways: [
+        { title: "An NTLM helper daemon", text: "Cntlm is a small C daemon on 127.0.0.1:3128 that performs the NT LAN Manager (NTLM) handshake with a corporate parent proxy for applications that cannot." },
+        { title: "Dialect detection", text: "Because an older proxy accepts exactly one NT LAN Manager dialect, Cntlm's Auth setting chooses among NTLMv2, NTLM2SR, NT, NTLM and LM, and cntlm -M probes for a working one." },
+        { title: "Stalled original, live fork", text: "The original Cntlm stalled at 0.92.3 in 2012, and an actively maintained fork is now where PAC file support, Kerberos via GSS, IPv6 and SSPI on Windows live." },
+        { title: "Hashes, gateway, deprecation", text: "Cntlm's hashes let anyone who can read cntlm.conf authenticate as you, its gateway mode grants authenticated egress by network position, and Microsoft is phasing NT LAN Manager out of Windows." }
+      ]
     },
     {
       id: "calico", term: "Calico", acronym: "Project Calico — Kubernetes Networking & Network Policy",
@@ -2886,7 +3008,13 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "HPACK compresses headers", text: "Headers are compressed with HPACK, so fields repeated from earlier requests, such as cookies, shrink to a short index." },
         { title: "TCP head-of-line blocking", text: "Every stream shares one ordered TCP byte stream, so a single lost packet stalls all of them. HTTP/3 over QUIC was built to remove this." }
       ],
-      fact: "A single lost packet stalls every HTTP/2 stream on the connection, which is the head-of-line blocking HTTP/3 over QUIC was built to remove."
+      fact: "A single lost packet stalls every HTTP/2 stream on the connection, which is the head-of-line blocking HTTP/3 over QUIC was built to remove.",
+      takeaways: [
+        { title: "Rewired, not redefined", text: "HTTP/2, standardised in 2015 out of Google's SPDY experiment, leaves HTTP/1.1's methods, status codes and headers intact and reworks how they cross the wire." },
+        { title: "Multiplexed binary frames", text: "Binary frames tagged with stream IDs let HTTP/2 interleave many requests and responses at once, so one TCP connection does the work HTTP/1.1 spread across several." },
+        { title: "Headers shrink to indexes", text: "HPACK compression lets HTTP/2 send a repeated header field, a cookie for instance, as a short index instead of the full value again." },
+        { title: "Still blocked by TCP", text: "Underneath, HTTP/2 still has TCP's head-of-line blocking: one ordered byte stream carries all its streams, so a single dropped packet holds every one of them up." }
+      ]
     },
     {
       id: "fix", term: "FIX", acronym: "Financial Information eXchange",
@@ -2904,7 +3032,13 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "A numbered session", text: "A session opens with a Logon, stays alive on heartbeats and numbers every message, so a gap in the sequence triggers a resend request rather than a silently lost order." },
         { title: "Trust in the network", text: "FIX leaves security to the network beneath it. The SenderCompID, matched to a known IP address, is the basic check, and encryption is often skipped on leased lines; FIXS runs FIX over TLS." }
       ],
-      fact: "FIX leaves security to the network beneath it, so a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS."
+      fact: "FIX leaves security to the network beneath it, so a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS.",
+      takeaways: [
+        { title: "Trading's open standard", text: "Created in 1992 between Fidelity Investments and Salomon Brothers, FIX is now an open standard, maintained by the non-profit FIX Trading Community, for trading firms' real-time orders and confirmations." },
+        { title: "Numbered fields, named firms", text: "Numbered tag=value fields make up every FIX message: 35=D, for example, marks a new order, while tags 49 and 56 identify the two firms by SenderCompID and TargetCompID." },
+        { title: "Gaps trigger resends", text: "Every message in a FIX session is numbered, so a gap prompts a resend request instead of letting an order vanish unnoticed." },
+        { title: "Security left to network", text: "FIX defers to the underlying network: a SenderCompID from a known IP is the basic check, leased lines often go unencrypted, and only FIX over TLS (FIXS) authenticates cryptographically." }
+      ]
     },
     {
       id: "amps", term: "AMPS", acronym: "Advanced Message Processing System (60East Technologies)",
