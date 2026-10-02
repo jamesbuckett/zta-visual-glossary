@@ -1126,7 +1126,12 @@
         { title: "Share the kernel", text: "Containers share the host's kernel instead of booting a whole virtual machine." },
         { title: "Same on any host", text: "The same image runs identically on any host, which makes works-on-my-machine reproducible." }
       ],
-      fact: "The container is the unit that most deployment platforms, including Kubernetes, build upon."
+      fact: "The container is the unit that most deployment platforms, including Kubernetes, build upon.",
+      takeaways: [
+        { title: "Popularised the container", text: "Docker popularised containers, isolated processes that bundle an application with everything it needs and run on the host's kernel, with no virtual machine to boot." },
+        { title: "Layered, portable images", text: "Docker builds images from stacked, cacheable layers, and an image behaves identically on every host, turning \"works on my machine\" into something reproducible." },
+        { title: "Shared kernel, weaker isolation", text: "Docker containers are less isolated than virtual machines because they share the host's kernel, so a kernel vulnerability or a privileged container can expose the host." }
+      ]
     },
     {
       id: "kubernetes", term: "Kubernetes", acronym: "Kubernetes (K8s)", aliases: ["K8s", "orchestration", "pod"],
@@ -1143,7 +1148,12 @@
         { title: "Reschedule failures", text: "When a workload fails, the control plane reschedules it." },
         { title: "Scale on demand", text: "It also scales on demand, adding pods as they are needed." }
       ],
-      fact: "Kubernetes turns a fleet of machines into one programmable platform."
+      fact: "Kubernetes turns a fleet of machines into one programmable platform.",
+      takeaways: [
+        { title: "A container orchestrator", text: "Kubernetes is an orchestrator that runs containers across a cluster of machines, with the pod as its smallest deployable unit." },
+        { title: "Desired state, reconciled", text: "You declare a desired state, and the Kubernetes control plane keeps reconciling reality to match it, rescheduling failed workloads and scaling on demand." },
+        { title: "Open defaults, heavy upkeep", text: "Kubernetes defaults are permissive, letting every pod reach every other pod until a NetworkPolicy says otherwise, and running it well takes substantial operational effort." }
+      ]
     },
     {
       id: "react", term: "React", acronym: "React (UI library)", aliases: ["ReactJS", "JSX", "component"],
@@ -1160,7 +1170,12 @@
         { title: "Diff the virtual DOM", text: "It re-renders efficiently by diffing a lightweight virtual representation of the DOM." },
         { title: "Patch what changed", text: "Only what changed is patched." }
       ],
-      fact: "React's declarative model describes what the UI should look like, not the steps to mutate it."
+      fact: "React's declarative model describes what the UI should look like, not the steps to mutate it.",
+      takeaways: [
+        { title: "Reusable UI components", text: "React, the dominant front-end approach, composes a user interface as a tree of reusable components whose output derives from their state and props." },
+        { title: "Efficient re-rendering", text: "React makes re-rendering efficient: after a state change it diffs a lightweight virtual representation of the DOM and patches only the parts that changed." },
+        { title: "View layer only", text: "React covers only the view layer, leaving routing and data fetching to a framework or other libraries that you must choose." }
+      ]
     },
     {
       id: "django", term: "Django", acronym: "Django (Python web framework)", aliases: ["MTV", "ORM"],
@@ -1177,7 +1192,12 @@
         { title: "Return the response", text: "The rendered template becomes the response." },
         { title: "Out of the box", text: "Django ships with an ORM, an auto-generated admin interface, authentication and routing out of the box." }
       ],
-      fact: "Django's philosophy is to handle the plumbing so you can focus on the application."
+      fact: "Django's philosophy is to handle the plumbing so you can focus on the application.",
+      takeaways: [
+        { title: "Batteries included", text: "Django is a high-level Python framework whose built-in parts include an object-relational mapper (ORM) for database access, an auto-generated admin interface, authentication and routing." },
+        { title: "The MTV pattern", text: "In Django's MTV (model, template, view) pattern, each request is routed to a view that fetches data through models and renders a template." },
+        { title: "Opinionated batteries", text: "Django's built-in parts are opinionated, so a project that sits poorly with its ORM and conventions ends up working around the framework." }
+      ]
     },
     {
       id: "grpc", term: "gRPC", acronym: "gRPC Remote Procedure Call", aliases: ["protobuf", "Protocol Buffers", "RPC"],
@@ -1498,7 +1518,12 @@
         { title: "Correlate the events", text: "It correlates them to surface suspicious patterns." },
         { title: "Prioritised alerts", text: "The result is prioritised alerts, giving a security operations centre one place to detect, investigate and report on threats, and to satisfy audit requirements." }
       ],
-      fact: "Modern SIEM platforms layer analytics and automated response on top of detection."
+      fact: "Modern SIEM platforms layer analytics and automated response on top of detection.",
+      takeaways: [
+        { title: "Logs in, alerts out", text: "A SIEM pulls in logs and events from across the estate, normalising, storing and correlating them so that suspicious patterns surface as prioritised alerts." },
+        { title: "Detect, investigate, report", text: "A SIEM serves a security operations centre (SOC) as a single place for threat detection, investigation and reporting, and for meeting audit requirements." },
+        { title: "Blind spots, false alarms", text: "A SIEM sees nothing beyond the logs it is sent, and correlation rules left untuned bury analysts in false positives." }
+      ]
     },
     {
       id: "quic", term: "QUIC", acronym: "QUIC (a name, not an acronym — RFC 9000)",
@@ -1822,7 +1847,14 @@
         { title: "XDR widens the lens", text: "Extended Detection and Response correlates endpoint telemetry with email, identity and cloud signals, so a multi-stage attack is seen as one incident." },
         { title: "Posture gates access", text: "The agent's live health verdict becomes a device-posture signal the policy engine weighs: a device that fails can be denied even with valid user credentials." }
       ],
-      fact: "EDR is reactive detection; posture turns it into an access input."
+      fact: "EDR is reactive detection; posture turns it into an access input.",
+      takeaways: [
+        { title: "Agent on the endpoint", text: "Endpoint Detection and Response (EDR) puts a lightweight agent on laptops, servers and workstations to keep a continuous record of their activity." },
+        { title: "Detect and contain", text: "EDR flags behaviour that fits known attack patterns and gives responders the means to isolate a compromised host or roll it back." },
+        { title: "One incident, not many", text: "A multi-stage attack shows up as one incident rather than scattered alerts when Extended Detection and Response (XDR) correlates endpoint, email, identity and cloud signals." },
+        { title: "Posture over credentials", text: "Under Zero Trust's Devices pillar, an EDR agent's live health verdict feeds a posture check that can deny a device access despite valid user credentials." },
+        { title: "Reactive and evadable", text: "EDR catches attacks already under way rather than preventing them, and an attacker who disables or evades its agent silences the posture signal." }
+      ]
     },
     {
       id: "waf", term: "WAF", acronym: "Web Application Firewall",
@@ -1938,7 +1970,13 @@
         { title: "SLSA provenance", text: "SLSA's Build Track levels 1 to 3 raise how tamper-resistant the pipeline is, producing signed provenance that says exactly how and where an artefact was built." },
         { title: "Consumers verify", text: "Together, SBOM and provenance make the supply chain auditable and verifiable." }
       ],
-      fact: "Software Supply Chain Failures is now a category in the OWASP Top 10:2025."
+      fact: "Software Supply Chain Failures is now a category in the OWASP Top 10:2025.",
+      takeaways: [
+        { title: "Supply chain as target", text: "SBOM and SLSA respond to attackers who now go after a modern application's hundreds of open-source dependencies instead of the app itself." },
+        { title: "Every component listed", text: "A Software Bill of Materials (SBOM) records every component and version in a build, so exposure to the next Log4Shell can be checked in seconds, not weeks." },
+        { title: "Signed build provenance", text: "SLSA (Supply-chain Levels for Software Artifacts) defines levels of pipeline tamper-resistance, and meeting them yields signed provenance showing how and where an artefact was built." },
+        { title: "Not a safety verdict", text: "An SBOM does not say whether a listed vulnerability is actually exploitable, and SLSA provenance shows how an artefact was built but cannot vouch for its code." }
+      ]
     },
     {
       id: "apigateway", term: "API Gateway", acronym: "API Gateway",
@@ -1980,7 +2018,13 @@
         { title: "Feed the SIEM", text: "Detections feed a SIEM for correlation and a security operations centre (SOC) for response." },
         { title: "The weakness", text: "Detection mode produces false positives, and prevention mode risks blocking legitimate traffic." }
       ],
-      fact: "IDS / IPS complements endpoint EDR by watching the wire instead of the host."
+      fact: "IDS / IPS complements endpoint EDR by watching the wire instead of the host.",
+      takeaways: [
+        { title: "Detection on a copy", text: "An Intrusion Detection System (IDS) alerts on signs of attack, such as known exploit signatures, in a mirrored copy of network traffic or in host activity." },
+        { title: "Inline means prevention", text: "Placing an IDS engine inline turns it into an Intrusion Prevention System (IPS), able to drop or reset a malicious connection, not just report it." },
+        { title: "Community rule sets", text: "Open-source IDS and IPS engines such as Snort and Suricata pioneered signature matching, checking packets against community rule sets updated as new threats emerge." },
+        { title: "Errors in both modes", text: "An IDS is prone to false positives, and an IPS, acting inline on what it detects, risks blocking legitimate traffic." }
+      ]
     },
     {
       id: "ldap", term: "LDAP / Active Directory", acronym: "Lightweight Directory Access Protocol",
@@ -2046,7 +2090,13 @@
         { title: "Act across tools", text: "Then it acts: isolate a host, disable an account, block an IP, open a case, cutting response time for routine alerts from hours to minutes or less." },
         { title: "Humans gate the risky", text: "Its risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval." }
       ],
-      fact: "SOAR frees analysts for the judgement calls machines cannot make."
+      fact: "SOAR frees analysts for the judgement calls machines cannot make.",
+      takeaways: [
+        { title: "Automation above the SIEM", text: "In a security operations centre (SOC), SOAR is the automation-and-response layer on top of SIEM detection, taking over the repetitive triage most alerts need." },
+        { title: "Playbooks across tools", text: "SOAR playbooks reach into tools such as SIEM, EDR, ticketing and firewalls to enrich an alert, decide if it is real and act on it." },
+        { title: "Minutes, not hours", text: "Orchestrating across systems lets SOAR respond to routine alerts in minutes or less instead of hours of manual work." },
+        { title: "Mistakes at machine speed", text: "SOAR can carry out a mistaken decision at machine speed, which is why playbooks hold destructive actions until a human approves them." }
+      ]
     },
     {
       id: "pqc", term: "Post-Quantum Cryptography", acronym: "Post-Quantum Cryptography (PQC)",
@@ -2191,7 +2241,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Wherever data moves", text: "It operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration: the Data pillar of Zero Trust." },
         { title: "Labels come first", text: "Good DLP depends on good data classification; overly blunt rules generate noise and tempt users to route around the control." }
       ],
-      fact: "You can only protect what you have labelled."
+      fact: "You can only protect what you have labelled.",
+      takeaways: [
+        { title: "Keeping data inside", text: "Data Loss Prevention (DLP) is the set of controls that stop sensitive information escaping the organisation by routes such as email, uploads, USB drives and chat." },
+        { title: "Inspect, then respond", text: "A DLP system matches outgoing content against patterns and classifications, and a transfer that breaks policy draws a warning, a block or encryption." },
+        { title: "The Data pillar", text: "DLP covers the Data pillar of CISA's Zero Trust model, which network and identity controls leave untouched." },
+        { title: "Gaps and workarounds", text: "Unlabelled data goes unprotected by DLP, and rules drawn too bluntly produce noise and tempt users to work around the control." }
+      ]
     },
     {
       id: "pam", term: "PAM", acronym: "Privileged Access Management",
@@ -2233,7 +2289,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Rank what to patch", text: "Teams can rank what to patch first: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access." },
         { title: "Context decides", text: "The score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context." }
       ],
-      fact: "A CVE id means vendors, scanners and defenders all point at the same flaw."
+      fact: "A CVE id means vendors, scanners and defenders all point at the same flaw.",
+      takeaways: [
+        { title: "One name per flaw", text: "A CVE (Common Vulnerabilities and Exposures) identifier, such as CVE-2021-44228 for Log4Shell, gives a disclosed flaw one agreed name, under a CISA-sponsored programme run by MITRE." },
+        { title: "Scoring the severity", text: "Attack vector, complexity and impact are among the characteristics the Common Vulnerability Scoring System (CVSS) weighs to rate a flaw's severity from 0 to 10." },
+        { title: "Enrichment for a subset", text: "Automated scanners draw on NIST's National Vulnerability Database for CVSS scores and affected-product data, which since April 2026 it supplies only for a prioritised subset of flaws." },
+        { title: "Score is not risk", text: "A CVSS score only guides, since the real risk turns on whether the flaw can actually be exploited in your environment." }
+      ]
     },
     {
       id: "owasp", term: "OWASP Top 10", acronym: "Open Worldwide Application Security Project",
@@ -2251,7 +2313,13 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "A shared baseline", text: "Developers code against it, WAFs ship rule sets named after it, and auditors check for it." },
         { title: "Only a floor", text: "The Top 10 is a floor for awareness; OWASP maintains deeper resources like the ASVS and the Cheat Sheet Series." }
       ],
-      fact: "The Top 10 is a floor for awareness, not a complete security programme."
+      fact: "The Top 10 is a floor for awareness, not a complete security programme.",
+      takeaways: [
+        { title: "Best-known awareness document", text: "The OWASP Top 10 is application security's best-known awareness document, a ranking of the most critical web application risks drawn from real-world data and practitioner input." },
+        { title: "Used everywhere", text: "The OWASP Top 10 is a baseline used everywhere, from developers' code to WAF rule sets named after it and auditors' checks." },
+        { title: "The 2025 edition", text: "Broken Access Control holds the top spot in OWASP Top 10:2025, and Software Supply Chain Failures, grown out of 2021's Vulnerable and Outdated Components, debuts at third." },
+        { title: "Minimum, not complete", text: "Treating the OWASP Top 10 as a whole security programme mistakes a minimum level of awareness for complete coverage." }
+      ]
     },
     {
       id: "bola", term: "BOLA", acronym: "Broken Object Level Authorization",
@@ -2318,7 +2386,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Logged in Rekor", text: "Every signature is recorded in Rekor, a public, append-only transparency log." },
         { title: "Anyone can verify", text: "Anyone can verify that an artefact was signed by a given identity, and detect tampering after the fact." }
       ],
-      fact: "Sigstore makes verifiable provenance practical at ecosystem scale."
+      fact: "Sigstore makes verifiable provenance practical at ecosystem scale.",
+      takeaways: [
+        { title: "No key to hoard", text: "Sigstore does away with the long-lived private key, whose leak would let anyone forge a trusted signature." },
+        { title: "Short-lived certificates", text: "Sigstore's Cosign signs an artefact with a short-lived certificate that Fulcio issues against the developer's OIDC login, such as Google, GitHub or a corporate account." },
+        { title: "A public record", text: "Rekor, Sigstore's public append-only transparency log, records every signature, letting anyone check that a given identity signed an artefact and spot tampering after the fact." },
+        { title: "Widely adopted", text: "Sigstore, an open-source OpenSSF project that pairs naturally with SBOMs and SLSA, now signs a large share of container images and packages." },
+        { title: "Trust moves, contents unchecked", text: "A Sigstore signature proves who signed an artefact, not whether its contents are safe, and keyless signing moves trust onto the OIDC provider and Sigstore's public infrastructure." }
+      ]
     },
     {
       id: "ztna", term: "ZTNA", acronym: "Zero Trust Network Access",
@@ -2432,7 +2507,14 @@ The identity is only as good as the labels behind it: it is allocated by the con
         { title: "Argus watches the host", text: "DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes: agentless intrusion detection that host malware cannot see or switch off." },
         { title: "Encrypted tunnels", text: "The IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed. Argus supersedes the older App Shield library, which NVIDIA drops after DOCA 3.5." }
       ],
-      fact: "Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes a working zero-trust enforcement point."
+      fact: "Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes a working zero-trust enforcement point.",
+      takeaways: [
+        { title: "NVIDIA's DPU framework", text: "NVIDIA positions DOCA, its software framework for programming BlueField DPUs and SuperNICs, as doing for the DPU what CUDA does for the GPU." },
+        { title: "Portable across generations", text: "Building on industry-standard interfaces such as DPDK, SPDK and Netlink, not a closed silo, DOCA keeps software portable from one BlueField generation to the next." },
+        { title: "Agentless host detection", text: "DOCA Argus detects reverse shells, injected code and hidden processes on the host from the DPU's isolated cores, where host malware cannot see or switch it off." },
+        { title: "Tunnels at wire speed", text: "Encryption is part of DOCA's zero-trust tooling: its IPsec and TLS gateways and crypto libraries handle tunnel termination at wire speed." },
+        { title: "Tied to NVIDIA", text: "Software written against DOCA's libraries runs only on NVIDIA hardware, so the price of DOCA is lock-in to one vendor." }
+      ]
     },
     {
       id: "ovs", term: "Open vSwitch", acronym: "OVS — multilayer virtual switch",
@@ -2575,7 +2657,14 @@ Its weakness is reward hacking — the policy optimises the reward model, which 
         { title: "PPO with KL leash", text: "Reinforcement learning, classically Proximal Policy Optimization (PPO), optimises the model against that learned reward, with a KL-divergence penalty pinning it to the fine-tuned reference." },
         { title: "Safety in the weights", text: "Refusal behaviour and safety policy are installed here, at training time, so they are a property of the weights. The weakness is reward hacking: the reward model is only a proxy." }
       ],
-      fact: "InstructGPT's 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3."
+      fact: "InstructGPT's 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3.",
+      takeaways: [
+        { title: "From raw to useful", text: "RLHF takes a raw language model and makes it follow instructions usefully while declining requests it should refuse." },
+        { title: "Three training stages", text: "RLHF runs in three stages: supervised fine-tuning on human demonstrations, a reward model trained on labellers' rankings, then reinforcement learning against that reward." },
+        { title: "Penalty against drift", text: "In RLHF's final stage, a KL-divergence penalty measuring drift from the fine-tuned reference keeps the model from wandering into degenerate text that happens to score well." },
+        { title: "Policy baked into weights", text: "RLHF sets refusals and safety policy in the weights at training time, so they are not a runtime control anything downstream can inspect, audit or enforce." },
+        { title: "Proxy reward, fragile pipeline", text: "RLHF's weak spots are reward hacking, as the policy chases a reward model that only approximates human judgement, and a costly three-model pipeline notoriously fiddly to keep stable." }
+      ]
     },
     {
       id: "dpo", term: "DPO", acronym: "Direct Preference Optimization",
@@ -2593,7 +2682,14 @@ Its weakness is reward hacking — the policy optimises the reward model, which 
         { title: "A frozen reference", text: "Both log-probabilities are measured against a frozen reference copy of the model, which does the job RLHF gave to the KL penalty." },
         { title: "Offline only", text: "It learns only from pairs somebody already collected, so it cannot explore responses the dataset never contained." }
       ],
-      fact: "DPO rewrites the reward in terms of the policy itself: the language model is secretly a reward model."
+      fact: "DPO rewrites the reward in terms of the policy itself: the language model is secretly a reward model.",
+      takeaways: [
+        { title: "Same goal, shorter route", text: "Because the KL-constrained reward problem RLHF solves has a closed-form optimum, DPO reaches the same objective by a much shorter route." },
+        { title: "A classification loss", text: "DPO trains on prompt, chosen and rejected triples with an ordinary classification loss that lifts the chosen answer's log-probability and lowers the rejected one's." },
+        { title: "Reference does KL's job", text: "A frozen reference copy of the model anchors DPO's log-probability comparisons, standing in for the KL penalty that RLHF uses." },
+        { title: "The open-weight default", text: "With one training loop, no mid-run sampling and no reward model to babysit, DPO and its descendants became the default for open-weight instruction tuning." },
+        { title: "Bound to its data", text: "DPO learns offline from pairs already collected, so it cannot explore responses outside that data, and it can over-optimise on prompts far from the reference model's distribution." }
+      ]
     },
     {
       id: "paseto", term: "PASETO", acronym: "Platform-Agnostic Security Tokens",
@@ -2646,7 +2742,14 @@ Authorisation is the security question. Retrieval must run as the asking user. O
         { title: "Answer from the text", text: "The passages are pasted into the prompt, so the model answers from text placed in front of it, with citations a reader can check." },
         { title: "Untrusted input", text: "Retrieved text is untrusted input, the indirect prompt-injection path, and grounding lowers hallucination without removing it." }
       ],
-      fact: "Instructing the model to keep a secret is not access control: filter at retrieval time."
+      fact: "Instructing the model to keep a secret is not access control: filter at retrieval time.",
+      takeaways: [
+        { title: "Look it up first", text: "RAG embeds a question, pulls the nearest chunks from a vector index built in advance and pastes them into the prompt for the model to answer from." },
+        { title: "What weights cannot give", text: "RAG supplies what model weights cannot: knowledge newer than the training cut-off, private corpora never trained on and citations a reader can check." },
+        { title: "Retrieval sets quality", text: "Retrieval decides RAG's quality far more than the model does, so serious systems pair keyword with vector search and rerank the top results before prompting." },
+        { title: "Retrieval needs authorisation", text: "Unless RAG retrieval runs as the asking user, an index built by an all-seeing ingestion account becomes a confused deputy, laundering documents into answers for unauthorised people." },
+        { title: "Untrusted and fallible", text: "A RAG system can still hallucinate, if less than an ungrounded model, and every passage it retrieves is untrusted input through which indirect prompt injection can arrive." }
+      ]
     },
     {
       id: "keda", term: "KEDA", acronym: "Kubernetes Event-driven Autoscaling",
@@ -2670,7 +2773,14 @@ KEDA scales pods, not machines. Scaling to zero saves nothing until Cluster Auto
         { title: "One to many", text: "A metrics API server publishes each scaler's reading through the external metrics API, and from one replica upward an ordinary HPA does the scaling." },
         { title: "A credential per poll", text: "Every scaler must authenticate to whatever it polls. TriggerAuthentication keeps those credentials out of the ScaledObject; a pod identity provider means nothing long-lived is stored." }
       ],
-      fact: "A plain HPA could not scale to zero at all until Kubernetes 1.37 enabled it by default, and still cannot on CPU or memory."
+      fact: "A plain HPA could not scale to zero at all until Kubernetes 1.37 enabled it by default, and still cannot on CPU or memory.",
+      takeaways: [
+        { title: "Fixing the signal", text: "Where Kubernetes' Horizontal Pod Autoscaler (HPA) watches CPU and memory and misses a queue backlog, KEDA fixes the signal without replacing the scaling mechanism." },
+        { title: "Around eighty scalers", text: "A KEDA ScaledObject ties an existing Deployment to triggers, such as a Prometheus query or a cron window, from some eighty built-in scalers." },
+        { title: "Close to serverless", text: "Driving the zero-to-one transition from the event source makes KEDA feel close to serverless for queue consumers, while an ordinary HPA still handles scaling above one replica." },
+        { title: "Credentials pile up", text: "Because every KEDA scaler must authenticate to what it polls, the operator becomes the one place where every tenant's credentials pile up." },
+        { title: "Idle nodes, cold starts", text: "Scaling to zero with KEDA saves nothing until Cluster Autoscaler or Karpenter drains the nodes, and the first event after idling pays a cold start unfit for synchronous requests." }
+      ]
     },
     {
       id: "spinnaker", term: "Spinnaker", acronym: "Multi-Cloud Continuous Delivery",
@@ -2694,7 +2804,14 @@ Spinnaker's advantage is breadth: many clouds, VMs and containers alike, with th
         { title: "Kayenta judges", text: "Kayenta automates the canary judgement, comparing the canary's metrics against a baseline and passing or failing the stage on the statistics." },
         { title: "Fiat guards access", text: "Spinnaker holds credentials for every cloud account it manages. Fiat resolves a user's roles from the identity provider into permissions on specific applications and accounts." }
       ],
-      fact: "Whoever controls Spinnaker's pipelines controls production, so pipeline definitions deserve the same care as production code."
+      fact: "Whoever controls Spinnaker's pipelines controls production, so pipeline definitions deserve the same care as production code.",
+      takeaways: [
+        { title: "Post-build, multi-cloud delivery", text: "Spinnaker, a continuous delivery platform, takes over from CI once an artefact is built and rolls it out across many clouds, to VMs and containers alike." },
+        { title: "Deployments by configuration", text: "Spinnaker offers blue/green and canary rollouts as configuration, not team-maintained scripts, and Kayenta passes or fails a canary on statistics rather than someone watching a dashboard." },
+        { title: "Replace, don't mutate", text: "Spinnaker's Rosco bakes immutable images, so deployments replace a server group instead of mutating a running one, and what was tested is what runs." },
+        { title: "Among the most privileged", text: "Holding credentials for every cloud account it manages makes Spinnaker among the most privileged systems in an estate." },
+        { title: "Heavy to operate", text: "Many Kubernetes-only teams moved to lighter GitOps tooling, because running, securing and upgrading Spinnaker's eleven services is a great deal of platform for them." }
+      ]
     },
     {
       id: "cyberark", term: "CyberArk PAM", acronym: "Privileged Access Manager (now Idira, by Palo Alto Networks)",
@@ -2747,7 +2864,14 @@ DORA specifies process rather than controls: it tells you to manage ICT risk wit
         { title: "Critical provider designated", text: "The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud and core-banking platforms." },
         { title: "Overseer reaches provider", text: "Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. No European financial regulator had ever supervised a hyperscaler directly before." }
       ],
-      fact: "Oversight gives supervisors visibility into a critical provider without reducing firms' dependence on it."
+      fact: "Oversight gives supervisors visibility into a critical provider without reducing firms' dependence on it.",
+      takeaways: [
+        { title: "A supervisory question", text: "Since 17 January 2025, the EU's DORA has made a financial firm's ability to keep running through an information and communication technology (ICT) failure a supervisory question." },
+        { title: "Five pillars", text: "DORA's five pillars run from ICT risk management, whose accountability the management body cannot delegate, to incident management, resilience testing, third-party risk and information sharing." },
+        { title: "Third-party risk bites", text: "DORA's third-party pillar has the most operational bite, requiring a register of every ICT dependency, contracts with audit and exit rights, and reasoning about concentration." },
+        { title: "Overseeing the hyperscalers", text: "Under DORA's Oversight Framework, European financial regulators supervise hyperscalers directly for the first time, assigning each designated critical provider a Lead Overseer." },
+        { title: "Process, not controls", text: "DORA prescribes process rather than controls, so compliant firms can differ widely in security, and designating a provider critical leaves firms no less dependent on it." }
+      ]
     },
     {
       id: "fapi", term: "FAPI 2.0", acronym: "Financial-grade API Security Profile",
@@ -3013,7 +3137,14 @@ The verifier proves memory safety and termination, not benignity — loading a p
         { title: "Attach at a hook", text: "The kernel runs it at a defined hook: a packet at the driver (XDP), traffic control, a kprobe, a tracepoint, a socket operation or a security hook (BPF LSM)." },
         { title: "Maps share state", text: "Programs hold no state of their own. Maps, readable and writable from both the program and a user-space agent, carry counters, policy tables and event streams across the boundary." }
       ],
-      fact: "The verifier proves memory safety and termination, not benignity."
+      fact: "The verifier proves memory safety and termination, not benignity.",
+      takeaways: [
+        { title: "A third option", text: "With eBPF, instead of patching the Linux kernel or shipping a module, you hand the kernel a small bytecode program to run at a defined hook." },
+        { title: "Proved before loading", text: "No eBPF program is accepted until the verifier proves it terminates, reads no uninitialised memory, stays in bounds and is simple enough to analyse." },
+        { title: "Somewhere to keep data", text: "Hash tables, arrays, ring buffers and other eBPF maps give stateless programs somewhere to keep data that a user-space agent can also read and write." },
+        { title: "Widely built upon", text: "Cilium's data plane, Calico's eBPF mode, runtime security tooling and most newer profilers and tracers all run on eBPF." },
+        { title: "Safe is not harmless", text: "eBPF support varies by kernel version, and a program can pass the verifier yet be malicious, so an attacker reaching CAP_BPF or CAP_SYS_ADMIN gains a hard-to-see kernel foothold." }
+      ]
     },
     {
       id: "lora", term: "LoRA", acronym: "Low-Rank Adaptation",
@@ -3037,7 +3168,13 @@ The limitation is capacity: a low-rank update steers what the model already know
         { title: "Merge or ship", text: "Merge BA into W and the served model keeps its size and speed; or keep the adapter as a file of megabytes that one base model can hot-swap per task or tenant." },
         { title: "Guard the adapter", text: "A cheap LoRA run has been shown to strip safety training, so an adapter deserves the same provenance and signing controls as the weights it modifies." }
       ],
-      fact: "On GPT-3 175B, LoRA cut trainable parameters by a factor of 10,000 and GPU memory to a third."
+      fact: "On GPT-3 175B, LoRA cut trainable parameters by a factor of 10,000 and GPU memory to a third.",
+      takeaways: [
+        { title: "Frozen weights, thin matrices", text: "LoRA freezes a model's pretrained weights and learns fine-tuning's change as the product of two thin matrices, because that change has a low intrinsic rank." },
+        { title: "Two ways to serve", text: "Merged, a LoRA update adds no inference latency, unlike earlier adapter layers; kept apart, it is a megabyte file one base model can hot-swap per tenant." },
+        { title: "Base safety not guaranteed", text: "Research shows an aligned chat model losing its safety training to a cheap LoRA run, so a safety-tuned base promises nothing once third-party adapters load on top." },
+        { title: "Steers, not teaches", text: "LoRA's limit is capacity: a low-rank update can steer existing knowledge but struggles to add much that is new, measurably trailing full fine-tuning on code and mathematics." }
+      ]
     },
     {
       id: "qlora", term: "QLoRA", acronym: "Quantized LoRA",
@@ -3061,7 +3198,13 @@ The memory saving is bought with time and precision — dequantising every layer
         { title: "Paged optimisers", text: "Paged optimisers spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash." },
         { title: "One GPU, slower", text: "Fine-tuning a 65B model drops from more than 780 GB of GPU memory to under 48 GB, but training is slower than plain LoRA." }
       ],
-      fact: "QLoRA made customising, or de-aligning, a large open-weight model affordable for an individual."
+      fact: "QLoRA made customising, or de-aligning, a large open-weight model affordable for an individual.",
+      takeaways: [
+        { title: "Shrinking the frozen base", text: "LoRA still needs the frozen base in GPU memory at 16 bits, some 130 GB for 65 billion parameters, so QLoRA quantises that base to 4 bits." },
+        { title: "Quality-preserving techniques", text: "QLoRA preserves quality with 4-bit NormalFloat (NF4), double quantisation of the scaling constants, and paged optimisers that spill to CPU RAM instead of crashing the run." },
+        { title: "One card for 65B", text: "QLoRA lets one data-centre card fine-tune a 65B model while preserving full 16-bit fine-tuning performance on the paper's benchmarks." },
+        { title: "Time and precision cost", text: "Dequantising every layer on every step makes QLoRA training slower than plain LoRA, and an adapter trained against quantised weights drifts when merged into a 16-bit base or re-quantised." }
+      ]
     },
     {
       id: "sentrywire", term: "SentryWire", acronym: "Full Packet Capture & Network Security Monitoring Platform",
@@ -3085,7 +3228,14 @@ Encryption hollows out the word "full": with TLS nearly everywhere, the stored p
         { title: "Return the sessions", text: "Searches stream back only the matching sessions, as PCAP or reconstructed files, answering when an intruder arrived, how, and what left." },
         { title: "Three honest limits", text: "Encrypted payloads stay ciphertext, capture sees only what crosses the tap, and the archive is itself a liability that needs protecting." }
       ],
-      fact: "Full packet capture is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network."
+      fact: "Full packet capture is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network.",
+      takeaways: [
+        { title: "Replay, not inference", text: "SentryWire, a commercial full packet capture platform, keeps every header and payload byte, so investigators can replay a conversation instead of inferring it from logs." },
+        { title: "Capture, store, search", text: "SentryWire scales capture, storage and search independently, adding cluster nodes for retention and running searches in parallel across the store." },
+        { title: "Retrospective detection", text: "With IDS Search Back, SentryWire tests an indicator published today against months of stored packets, answering questions about an intrusion that logs cannot." },
+        { title: "From alert to packet", text: "Enrichment such as JA3 fingerprints and GeoIP, plus Splunk and Elastic integrations, lets an analyst pivot from a SIEM alert to the SentryWire packets behind it." },
+        { title: "Ciphertext, blind spots, liability", text: "With TLS nearly everywhere, SentryWire stores mostly ciphertext, sees only traffic crossing its tap, and holds cleartext credentials and personal records in an archive that is itself a liability." }
+      ]
     },
     {
       id: "coreweave", term: "CoreWeave", acronym: "GPU Cloud Platform for AI",
@@ -3107,7 +3257,14 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "An InfiniBand fabric", text: "GPU-to-GPU traffic travels a separate non-blocking InfiniBand fabric with in-network reduction (SHARP)." },
         { title: "A specialist", text: "Managed databases, identity services and compliance are thinner than a hyperscaler's, so most organisations run it alongside another cloud." }
       ],
-      fact: "Enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls."
+      fact: "Enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls.",
+      takeaways: [
+        { title: "GPU-first neocloud", text: "Once Atlantic Crypto, an Ethereum miner, CoreWeave is now a GPU-first neocloud built for training and serving AI models rather than general enterprise workloads." },
+        { title: "The whole machine", text: "A job on CoreWeave gets a whole bare-metal machine rather than a virtual slice, because CoreWeave Kubernetes Service runs with no hypervisor." },
+        { title: "DPU in every server", text: "CoreWeave's per-server BlueField DPU runs networking and host security on its own Arm cores, taking over part of the isolation a hypervisor would otherwise provide." },
+        { title: "A fabric for gradients", text: "How fast gradients cross the network limits a large training run as much as its GPUs do, so CoreWeave gives GPU-to-GPU traffic a separate InfiniBand fabric." },
+        { title: "Narrow and concentrated", text: "Most organisations run CoreWeave beside another cloud to cover its far thinner managed services, and a customer's training capacity rides on that one provider's balance sheet." }
+      ]
     },
     {
       id: "http2", term: "HTTP/2", acronym: "HyperText Transfer Protocol version 2 (RFC 9113)",
@@ -3173,7 +3330,13 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "A transaction log", text: "A transaction log records messages for replay and underpins queues and replication." },
         { title: "Open by default", text: "Out of the box AMPS accepts any username and password and grants every permission to any user, and TLS passes no identity to either check. Real access control means plugging in a module." }
       ],
-      fact: "Out of the box, AMPS accepts any username and password and grants every permission to any user."
+      fact: "Out of the box, AMPS accepts any username and password and grants every permission to any user.",
+      takeaways: [
+        { title: "Bus, queue and database", text: "AMPS, 60East Technologies' commercial publish/subscribe engine for low-latency financial messaging, is described by its maker as a message bus, a queue and a database combined." },
+        { title: "Content-based subscriptions", text: "AMPS subscribers can select messages by their content, not just their topic, across payloads such as JSON, FIX, XML, Protocol Buffers or raw binary." },
+        { title: "State, then updates", text: "Because AMPS's State of the World (SOW) holds each record's latest version, a subscriber can begin from current state and receive every later update exactly once." },
+        { title: "Permissive until configured", text: "AMPS passes no TLS identity to its checks, and until Kerberos, LDAP, OAuth or a custom module is plugged in, any credentials log on with every permission." }
+      ]
     },
     {
       id: "har", term: "HAR", acronym: "HTTP Archive (file format)",
