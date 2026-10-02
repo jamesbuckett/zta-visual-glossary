@@ -119,13 +119,12 @@ if (html.includes('const TERMS = [')) {
     if (!String(t.fact || '').trim()) err('tour-data', `${where}: a term with steps needs a non-empty fact`);
   }
 
-  // Takeaway tiles: a term with takeaways has 3–5 of them, each a title of two
+  // Takeaway tiles: every term has 3–5 takeaways, each a title of two
   // to four words and a text of at most 30 words that does not copy a tour
   // step or the key fact word for word. "One sentence" and "the last one is
   // the limitation" are review rules; neither can be recognised by pattern.
   const flat = (s) => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
   for (const t of terms) {
-    if (t.takeaways === undefined) continue;
     const where = t.id || '(no id)';
     if (!Array.isArray(t.takeaways) || t.takeaways.length < 3 || t.takeaways.length > 5) {
       err('takeaways-data', `${where}: takeaways must be an array of 3–5 entries`);

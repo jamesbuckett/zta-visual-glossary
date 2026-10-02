@@ -9,7 +9,7 @@
 
 ## About
 
-Explains 104 IT, networking, and zero-trust terms on one self-contained HTML page. Each entry pairs a one-line TL;DR, an explainer, and a custom inline-SVG diagram you can step through, part by part — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar (on wide screens), filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
+Explains 104 IT, networking, and zero-trust terms on one self-contained HTML page. Each entry pairs a one-line TL;DR, a custom inline-SVG diagram you can step through part by part, and flash-card takeaways with the full explainer one click away — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar (on wide screens), filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
 
 ## Usage
 
@@ -21,7 +21,7 @@ xdg-open index.html      # Linux
 open index.html          # macOS
 ```
 
-Use the search box to filter terms, the sticky A–Z sidebar (shown on wide screens) to jump around, and click any entry to expand its explainer and diagram. Prefer not to download it? Visit the [live page](https://zta-visual-glossary.vercel.app).
+Use the search box to filter terms, the sticky A–Z sidebar (shown on wide screens) to jump around, and click any entry to open its diagram, takeaways and full explainer. Prefer not to download it? Visit the [live page](https://zta-visual-glossary.vercel.app).
 
 For grepping or quick reference, [glossary.txt](glossary.txt) lists every term in plain text — expansion, TL;DR, type tags, aliases, the diagram tour steps, and the key fact. Regenerate it after editing a term:
 

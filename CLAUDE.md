@@ -23,7 +23,10 @@ verification loop.
   words and one sentence of at most 30 words, stating only what the `explainer` says. The
   last tile is always the limitation. None repeats a tour step or the key fact word for
   word, or with only a word or two changed, and every tile names its subject rather than
-  opening with a bare "It" or "Its".
+  opening with a bare "It" or "Its". A limitation that spans several sentences goes into
+  that one last tile, ending on the residual risk, and a partial mitigation never gets a
+  tile of its own. Qualifiers ("in practice", "can", "most") and the condition a guarantee
+  depends on survive the compression.
 - **Sources must be verified live**, and authoritative: NIST / IETF / the standards body
   itself preferred, a vendor glossary acceptable. When WebFetch returns 404 or an empty
   body for a site that ought to be authoritative (`eur-lex.europa.eu`,

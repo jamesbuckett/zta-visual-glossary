@@ -129,6 +129,11 @@ for (const t of TERMS) {
 for (const d of DIAGRAM_IDS) {
   if (!ids.has(d)) warn('coverage', `DIAGRAMS.${d} has no matching term`);
 }
+// Checked here rather than in the browser loop: without takeaways the detail
+// view cannot render at all, so the loop would only report a render failure.
+for (const t of TERMS) {
+  if (!Array.isArray(t.takeaways)) err('takeaways', `${t.id}: no takeaways — every term has tiles`);
+}
 
 // -----------------------------------------------------------------------------
 // Which terms to render
@@ -404,14 +409,10 @@ for (const t of targets) {
     }
   }
 
-  // Takeaway tiles. Until phase 3 a term may still be on the fallback, which
-  // must show its explainer open and no tiles, heading or disclosure.
+  // Takeaway tiles. A term without them was reported by the static check.
   const paras = t.explainer.split(/\n\s*\n/).length;
   const tk = await page.evaluate(TAKEAWAYS_PROBE);
-  if (!t.takeaways) {
-    if (tk.tiles.length || tk.heading || tk.more) err('takeaways', `${t.id}: no takeaways in the data, but tiles, a heading or a disclosure rendered`);
-    if (tk.paras !== paras) err('takeaways', `${t.id}: fallback shows ${tk.paras} explainer paragraph(s), want ${paras}`);
-  } else {
+  if (t.takeaways) {
     const n = t.takeaways.length;
     if (tk.tiles.length !== n) err('takeaways', `${t.id}: ${tk.tiles.length} tiles for ${n} takeaways`);
     if (!tk.heading) err('takeaways', `${t.id}: no "Takeaways" heading directly before the tiles`);

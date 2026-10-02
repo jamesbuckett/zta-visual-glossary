@@ -65,7 +65,8 @@ const CASES = [
   // Rendered checks. Three tiles: the last spans both columns. Four: none does.
   ['good takeaways verify', () => withTakeaways(base, GOOD), 'verify', 0, null],
   ['four takeaways verify', () => withTakeaways(base, set(A, B, D, C)), 'verify', 0, null],
-  ['fallback term verifies', () => withTakeaways(base, null), 'verify', 0, null],
+  ['term without takeaways rejected', () => withTakeaways(base, null), 'validate', 1, 'takeaways-data', /array of 3–5/],
+  ['term without takeaways caught by verify', () => withTakeaways(base, null), 'verify', 1, 'takeaways', /no takeaways/],
   ['overflowing tile caught',
     () => swap(withTakeaways(base, set(A, B, card('Keys are manual', words(30)))), '</style>', '.takeaway p { white-space: nowrap; }</style>'),
     'verify', 1, 'takeaways', /overflows/],
