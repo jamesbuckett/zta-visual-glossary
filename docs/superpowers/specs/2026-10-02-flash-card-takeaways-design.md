@@ -38,7 +38,7 @@ Each `TERMS` entry gains:
 
 ```js
 takeaways: [
-  { title: "Both sides prove identity", text: "Mutual TLS extends ordinary TLS so the client must present a certificate too." },
+  { title: "Both sides prove identity", text: "Where ordinary TLS has only the server present a certificate, mutual TLS requires the client to present one as well." },
   …                                       // 3–5 entries; the last is the limitation
 ]
 ```
@@ -51,16 +51,22 @@ takeaways: [
 - Takeaways state only what the entry's verified `explainer` says. No new factual claim
   enters through a takeaway. UK spelling and the no-emoji rule apply.
 - No takeaway `text` repeats a tour step's `text` or the `fact` word for word. The tiles
-  compress the explainer; they do not copy the tour.
+  compress the explainer; they do not copy the tour. A step sentence with only a word or
+  two inserted, dropped or swapped counts as a repeat.
+- Every card names its subject. None opens with a bare "It" or "Its", because tiles are
+  read one at a time.
+
+The last two rules were sharpened at the pilot's second-pass review (2 October 2026), and
+the worked example below was rewritten to meet them.
 
 Worked example (mTLS):
 
 | Tile | Title | Text |
 |---|---|---|
-| 01 | Both sides prove identity | Mutual TLS extends ordinary TLS so the client must present a certificate too. |
-| 02 | No passwords needed | Each side verifies the other before any data flows: two-way authentication with no passwords. |
-| 03 | Zero-trust cornerstone | It underpins service-to-service traffic in zero-trust networks and service meshes, where every workload carries its own identity. |
-| Limitation | Identity, not permission | mTLS proves which workload is at each end, not what it may do; authorisation is a separate check. |
+| 01 | Both sides prove identity | Where ordinary TLS has only the server present a certificate, mutual TLS requires the client to present one as well. |
+| 02 | Verified before data flows | Neither side sends application data until each has verified the other, so authentication runs both ways and needs no passwords. |
+| 03 | Zero-trust cornerstone | mTLS underpins zero-trust service-to-service traffic and service meshes, where every workload carries its own cryptographic identity. |
+| Limitation | Identity, not permission | mTLS proves which workload is at each end, not what it may do; authorisation is a separate check, and every certificate must be issued, rotated and revoked. |
 
 ## 2. Page
 

@@ -19,7 +19,11 @@
 - Three to five takeaways per term. `title` is two to four words (a hyphenated word counts as one). `text` is one sentence of at most 30 words.
 - The last takeaway is always the limitation: what the technology does not solve, drawn from the limitation that closes the explainer.
 - Takeaways state only what the entry's `explainer` already says. No new factual claims.
-- No takeaway `text` repeats a tour step's `text` or the `fact` word for word.
+- No takeaway `text` repeats a tour step's `text` or the `fact` word for word. A step sentence with only a word or two inserted, dropped or swapped counts as a repeat: say the point in a new sentence.
+- Every card names its subject. None opens with a bare "It" or "Its", because tiles are read one at a time.
+- A limitation that spans several sentences is compressed into the one last card, ending on the residual risk. A partial mitigation is never a tile of its own with a title that reads as a fix.
+- Qualifiers survive compression: "in practice", "can", "most" and the condition a guarantee depends on stay in the card.
+- The pilot entries in `index.html` (`bgp`, `calico`, `envoy`, `mtls`, `har`) are the style model; where they differ from the copy printed in Task 4 below, `index.html` is right (the copy was revised at the pilot's review).
 - Existing `explainer`, `steps` and `fact` copy is not edited. `glossary.txt` is not changed.
 - Authoring format: `takeaways: [` opens on its own line at six spaces after the `fact` line, one card per line at eight spaces, and the closing `]` sits alone at six spaces. `test/takeaways-fixtures.mjs` finds the field by that shape.
 - A project hook runs `validate.mjs` after every `index.html` write. It is a convenience, not the gate.
