@@ -1539,7 +1539,7 @@
       ],
       fact: "OIDC is the JSON-based successor to SAML for single sign-on.",
       takeaways: [
-        { title: "Authentication for OAuth", text: "OpenID Connect adds authentication to OAuth 2.0, which on its own handles only authorisation; for single sign-on, OIDC is SAML's JSON-based successor." },
+        { title: "Authentication for OAuth", text: "OpenID Connect adds authentication to OAuth 2.0, which on its own handles only authorisation." },
         { title: "The openid scope", text: "An app opts into OIDC by including the openid scope in what is otherwise a plain OAuth request." },
         { title: "A signed ID Token", text: "The ID Token an OpenID Provider issues alongside the access token is a signed JWT, with claims such as the user (sub), issuer (iss) and audience (aud)." },
         { title: "UserInfo for profiles", text: "Beyond the ID Token, an OIDC app can request profile details such as name and email by calling the UserInfo endpoint." },
@@ -1659,7 +1659,6 @@
         { title: "Two or more proofs", text: "A stolen password alone cannot pass multi-factor authentication, which demands two or more independent proofs: something you know, something you have or something you are." },
         { title: "Closing the phishing gap", text: "SMS and time-based one-time password codes can still be phished on a fake site, but FIDO2 and WebAuthn bind their public-key challenge to the real site's origin, so replay fails." },
         { title: "Consumer-friendly passkeys", text: "The consumer-friendly face of FIDO is the passkey, a credential usually synced across your devices that removes the need for a password at all." },
-        { title: "Strongest identity signal", text: "Zero Trust counts phishing-resistant MFA as its best evidence that a person is genuinely who they say they are." },
         { title: "Recovery, the weak point", text: "Phishing-resistant MFA moves the weak point to recovery: a synced passkey is only as secure as its cloud account, and an SMS or email fallback reopens the phishing gap." }
       ]
     },
@@ -1813,9 +1812,9 @@
       ],
       fact: "No single defence is sufficient alone: defence in depth is the point.",
       takeaways: [
-        { title: "Injected script, escaped output", text: "Cross-Site Scripting gets attacker-controlled script running in a page under the victim's session, where it can steal tokens or impersonate the user; escaping output and validating input defeat it." },
+        { title: "Injected script, escaped output", text: "Cross-Site Scripting (XSS) gets attacker-controlled script running in a page under the victim's session, where it can steal tokens or impersonate the user; escaping output and validating input defeat it." },
         { title: "Forged cross-site requests", text: "Anti-CSRF tokens and SameSite cookies defend against Cross-Site Request Forgery, which tricks a user's browser into making an unwanted state-changing request on a site where they are signed in." },
-        { title: "Permitted sources only", text: "A Content Security Policy response header names the permitted sources for a page's script, style and connections, sharply limiting injected code even if Cross-Site Scripting gets through." },
+        { title: "Permitted sources only", text: "A Content Security Policy (CSP) response header names the permitted sources for a page's script, style and connections, sharply limiting injected code even if XSS gets through." },
         { title: "Layered defence needed", text: "Output escaping, anti-CSRF tokens, SameSite cookies and Content Security Policy each fall short on their own, so browser-side security has to layer them." }
       ]
     },
@@ -1965,7 +1964,7 @@
       ],
       fact: "The password never crosses the network.",
       takeaways: [
-        { title: "Tickets, not passwords", text: "Kerberos lets a client prove its identity to many services with time-limited, encrypted tickets instead of a password." },
+        { title: "Tickets, not passwords", text: "Kerberos lets a client prove its identity to many services with time-limited, encrypted tickets instead of presenting its password to each one." },
         { title: "One login, many tickets", text: "After one login to a trusted Key Distribution Center, the client holds a Ticket-Granting Ticket, which it presents to get a service ticket that the target can verify." },
         { title: "Behind Windows sign-on", text: "Single sign-on across a Windows domain rests on Kerberos tickets, and Kerberos is the authentication half of Active Directory." },
         { title: "Drift and ticket attacks", text: "Kerberos is sensitive to time drift because its short-lived tickets rely on synchronised clocks, and attacks such as pass-the-ticket and Kerberoasting target weaknesses in ticket and service-key handling." }
@@ -2009,7 +2008,7 @@
       takeaways: [
         { title: "Quantum-resistant replacements", text: "Post-Quantum Cryptography replaces RSA and elliptic-curve cryptography, which Shor's algorithm on a sufficiently large quantum computer could break, with algorithms built on problems both classical and quantum computers find hard." },
         { title: "NIST's first standards", text: "NIST's first post-quantum standards, finalised in August 2024, are FIPS 203 (ML-KEM) for key encapsulation and, for signatures, FIPS 204 (ML-DSA) plus FIPS 205 (SLH-DSA)." },
-        { title: "Hybrid, not overnight", text: "Post-Quantum Cryptography is arriving in hybrid form, its key exchange added to TLS next to classical algorithms instead of replacing them overnight." },
+        { title: "Hybrid, not overnight", text: "TLS deployments are pairing post-quantum key exchange with classical algorithms, so Post-Quantum Cryptography arrives as a hybrid rather than an overnight swap." },
         { title: "Bigger and less proven", text: "Post-Quantum Cryptography costs more, as larger keys and signatures add handshake data, and its algorithms have far less cryptanalytic history behind them than RSA and elliptic curves." }
       ]
     },
@@ -2746,9 +2745,9 @@ Credential forwarding is permissive by default, because Alpaca treats the PAC as
       ],
       fact: "Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component.",
       takeaways: [
-        { title: "Proxy for command-line tools", text: "Alpaca is a Go binary whose loopback HTTP proxy evaluates proxy auto-configuration and answers NTLM or Kerberos challenges on behalf of tools such as curl and git." },
+        { title: "Proxy for command-line tools", text: "Alpaca is a Go binary whose loopback HTTP proxy evaluates the proxy auto-configuration (PAC) file and answers NTLM or Kerberos challenges on behalf of tools such as curl and git." },
         { title: "PAC routing, CONNECT tunnels", text: "Alpaca lets the PAC file's FindProxyForURL choose between DIRECT and an upstream proxy on every request, carrying HTTPS through a CONNECT tunnel that shows it only the host and port." },
-        { title: "Authenticates on your behalf", text: "Alpaca answers a 407 Proxy Authentication Required challenge itself, using credentials such as a cached Kerberos ticket and trying advertised schemes in Chrome's order: Negotiate, NTLM, Basic." },
+        { title: "Authenticates on your behalf", text: "Alpaca answers a 407 Proxy Authentication Required challenge itself, using credentials such as a cached Kerberos ticket on macOS, and tries advertised schemes in Chrome's order: Negotiate, NTLM, Basic." },
         { title: "PAC trust, open listener", text: "By default Alpaca authenticates wherever its PAC points, so an insecurely obtained PAC can expose hashes or tickets, and its unauthenticated listener lends your authenticated egress to any local process." }
       ]
     },
@@ -2871,7 +2870,7 @@ The standing complaint is complexity: a mesh is another distributed system with 
         { title: "Identity, not IP", text: "Istio lets policy name a cryptographic service identity, not an IP another pod might inherit, by issuing each workload an auto-rotated X.509 certificate carrying a SPIFFE ID." },
         { title: "Default-deny is opt-in", text: "Istio's AuthorizationPolicy is evaluated CUSTOM, then DENY, then ALLOW, and a workload with no ALLOW policy at all permits requests, so default-deny must be configured." },
         { title: "Ambient mode's two layers", text: "Istio's ambient mode, generally available in 1.24, moves the proxies out of application pods: per-node ztunnels give a cheap, secure L4 overlay, with L7 waypoints only where asked." },
-        { title: "Complexity and blast radius", text: "Istio is another distributed system to run, ambient moves the blast radius rather than removing it as each node's ztunnel holds every local pod's keys, and loopback hops stay unencrypted." }
+        { title: "Complexity and blast radius", text: "Istio adds another distributed system; ambient mode's per-node ztunnel holds keys for every meshed pod on its node, so a node compromise reaches further, and app-to-proxy loopback is unencrypted." }
       ]
     },
     {
@@ -3037,7 +3036,7 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "Trading's open standard", text: "Created in 1992 between Fidelity Investments and Salomon Brothers, FIX is now an open standard, maintained by the non-profit FIX Trading Community, for trading firms' real-time orders and confirmations." },
         { title: "Numbered fields, named firms", text: "Numbered tag=value fields make up every FIX message: 35=D, for example, marks a new order, while tags 49 and 56 identify the two firms by SenderCompID and TargetCompID." },
         { title: "Gaps trigger resends", text: "Every message in a FIX session is numbered, so a gap prompts a resend request instead of letting an order vanish unnoticed." },
-        { title: "Security left to network", text: "FIX defers to the underlying network: a SenderCompID from a known IP is the basic check, leased lines often go unencrypted, and only FIX over TLS (FIXS) authenticates cryptographically." }
+        { title: "Security left to network", text: "FIX relies on the network for security: a SenderCompID from a known IP is the basic check, leased lines often go unencrypted, and only FIX over TLS (FIXS) authenticates cryptographically." }
       ]
     },
     {
