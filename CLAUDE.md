@@ -61,6 +61,10 @@ motion. It also checks every term's takeaway tiles against the data, the limitat
 marker, and the collapsed explainer and its print behaviour, at desktop and phone width.
 Pass term ids to narrow it (`npm run verify calico`).
 
+The two fixture suites run `verify.mjs` with `--offline`, which answers every network
+request with an empty response, so they never wait on Google Fonts. Do not use the flag
+for a real run: the geometry checks measure text in the page's own fonts.
+
 The term count printed by `npm run glossary` is a free cross-check on the counters in
 step 4 of the skill.
 

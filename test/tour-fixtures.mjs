@@ -8,6 +8,7 @@
 // Usage: npm run test:tour
 
 import fs from 'fs';
+import net from 'net';
 import os from 'os';
 import path from 'path';
 import { spawnSync } from 'child_process';
@@ -15,6 +16,13 @@ import { fileURLToPath } from 'url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const base = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+
+// A local server that accepts connections and never answers. One case points
+// the page's font stylesheet at it to prove the suites, which run verify with
+// --offline, cannot be held up by the network.
+const silent = net.createServer(() => {});
+await new Promise((resolve) => silent.listen(0, '127.0.0.1', resolve));
+const SILENT_HOST = `http://127.0.0.1:${silent.address().port}/css2`;
 
 const GOOD_STEPS = `steps: [
         { title: "Peer A", text: "Peer A is identified by its public key." },
@@ -65,6 +73,11 @@ const CASES = [
   ['space-padded label rejected', withDiagram(withTour(base, GOOD_STEPS), svg().replace('>Peer B<', '>Peer    B<')), 'validate', 1, 'svg-whitespace'],
   // Enabled by the Task 4 checks (tour stepping and badge/icon geometry).
   ['good tour verifies', withDiagram(withTour(base, GOOD_STEPS), svg()), 'verify', 0, null],
+  // If --offline stopped intercepting requests, this page's load event would
+  // never fire and verify would time out after 30 seconds.
+  ['offline verify does not wait on a font host that never answers',
+    withDiagram(withTour(base, GOOD_STEPS), svg()).replace('https://fonts.googleapis.com/css2', SILENT_HOST),
+    'verify', 0, null],
   ['step that lights nothing', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '1' })), 'verify', 1, 'tour'],
   ['step number out of range', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '2 4' })), 'verify', 1, 'tour'],
   ['nested data-s', withDiagram(withTour(base, GOOD_STEPS), svg({ nestBadge: true })), 'verify', 1, 'tour'],
@@ -86,7 +99,7 @@ for (const [name, html, checker, wantCode, wantRule] of CASES) {
   fs.writeFileSync(file, html);
   const args = checker === 'validate'
     ? [path.join(root, 'validate.mjs'), file, '--json']
-    : [path.join(root, 'verify.mjs'), 'wireguard', `--target=${file}`, '--json'];
+    : [path.join(root, 'verify.mjs'), 'wireguard', `--target=${file}`, '--json', '--offline'];
   const r = spawnSync('node', args, { encoding: 'utf8' });
   fs.rmSync(dir, { recursive: true, force: true });
 

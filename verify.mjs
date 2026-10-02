@@ -24,6 +24,7 @@
 //   node verify.mjs                  # every term
 //   node verify.mjs calico istio     # just these, while adding an entry
 //   node verify.mjs --json           # machine-readable
+//   node verify.mjs --offline        # no network; for the fixture suites only
 //   npm run verify
 
 import fs from 'fs';
@@ -43,15 +44,17 @@ const flags = {
   json:  args.includes('--json'),
   quiet: args.includes('--quiet') || args.includes('-q'),
   help:  args.includes('--help')  || args.includes('-h'),
+  offline: args.includes('--offline'),
 };
 
 if (flags.help) {
-  console.log('Usage: node verify.mjs [term-id ...] [--target=<path>] [--json] [--quiet]');
+  console.log('Usage: node verify.mjs [term-id ...] [--target=<path>] [--json] [--quiet] [--offline]');
   console.log('       with no term-id, every term is checked');
+  console.log('       --offline answers every network request with an empty response (fixture suites only)');
   process.exit(0);
 }
 
-const KNOWN_FLAGS = ['--json', '--quiet', '-q', '--help', '-h'];
+const KNOWN_FLAGS = ['--json', '--quiet', '-q', '--help', '-h', '--offline'];
 const unknownFlag = args.find(
   (a) => a.startsWith('-') && !KNOWN_FLAGS.includes(a) && !a.startsWith('--target=')
 );
@@ -333,6 +336,19 @@ const tocIds = `(() => [...document.querySelectorAll('#toc [data-toc]')].map((e)
 const FILE = pathToFileURL(source).href;
 const { browser, label } = await launchBrowser();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
+
+// --offline: answer every request that is not a local file with an empty
+// response, so the run cannot wait on the network. The fixture suites use it.
+// The page then renders in its fallback fonts, which is why a real run must
+// not: the geometry checks measure text in the page's own fonts. An empty
+// reply rather than an abort, because an aborted request logs a console error.
+if (flags.offline) {
+  await page.route((url) => url.protocol !== 'file:', (route) => route.fulfill({
+    status: 200,
+    contentType: route.request().resourceType() === 'stylesheet' ? 'text/css' : 'text/plain',
+    body: '',
+  }));
+}
 
 let consoleErrors = [];
 page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });

@@ -109,7 +109,7 @@ for (const [name, build, checker, wantCode, wantRule, wantMsg] of CASES) {
   fs.writeFileSync(file, html);
   const args = checker === 'validate'
     ? [path.join(root, 'validate.mjs'), file, '--json']
-    : [path.join(root, 'verify.mjs'), 'wireguard', `--target=${file}`, '--json'];
+    : [path.join(root, 'verify.mjs'), 'wireguard', `--target=${file}`, '--json', '--offline'];
   const r = spawnSync('node', args, { encoding: 'utf8' });
   fs.rmSync(dir, { recursive: true, force: true });
 
