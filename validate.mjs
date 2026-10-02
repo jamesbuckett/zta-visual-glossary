@@ -106,7 +106,7 @@ if (html.includes('const TERMS = [')) {
       err('tour-data', `${where}: steps must be an array of 3–5 entries`);
     } else {
       t.steps.forEach((s, i) => {
-        if (!s || !String(s.title || '').trim() || !String(s.text || '').trim()) {
+        if (!s || typeof s.title !== 'string' || typeof s.text !== 'string' || !s.title.trim() || !s.text.trim()) {
           err('tour-data', `${where}: step ${i + 1} needs a non-empty title and text`);
           return;
         }
@@ -116,7 +116,7 @@ if (html.includes('const TERMS = [')) {
         }
       });
     }
-    if (!String(t.fact || '').trim()) err('tour-data', `${where}: a term with steps needs a non-empty fact`);
+    if (typeof t.fact !== 'string' || !t.fact.trim()) err('tour-data', `${where}: a term with steps needs a non-empty fact`);
   }
 
   // Takeaway tiles: every term has 3–5 takeaways, each a title of two
