@@ -2509,7 +2509,7 @@ The identity is only as good as the labels behind it: it is allocated by the con
       fact: "Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes a working zero-trust enforcement point.",
       takeaways: [
         { title: "NVIDIA's DPU framework", text: "NVIDIA positions DOCA, its software framework for programming BlueField DPUs and SuperNICs, as doing for the DPU what CUDA does for the GPU." },
-        { title: "Portable across generations", text: "Security and networking software written for DOCA stays portable across BlueField generations, because DOCA exposes a standard interface through DPDK, SPDK, Netlink and similar industry standards." },
+        { title: "Portable across generations", text: "Security and networking software written for DOCA stays portable across BlueField generations, because DOCA is exposed through industry-standard interfaces such as DPDK, SPDK and Netlink." },
         { title: "Agentless host detection", text: "DOCA Argus detects reverse shells, injected code and hidden processes on the host from the DPU's isolated cores, where host malware cannot see or switch it off." },
         { title: "Tunnels at wire speed", text: "Wire-speed termination of encrypted tunnels is among DOCA's zero-trust jobs, handled by its IPsec and TLS gateways and crypto libraries." },
         { title: "Tied to NVIDIA", text: "Software written against DOCA's libraries runs only on NVIDIA hardware, so the price of DOCA is lock-in to one vendor." }
