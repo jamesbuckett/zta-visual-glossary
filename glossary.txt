@@ -1,5 +1,5 @@
 ZTA VISUAL GLOSSARY — TERM REFERENCE
-103 terms, alphabetical. Generated from index.html by glossary.mjs.
+104 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -317,6 +317,16 @@ gRPC — gRPC Remote Procedure Call
     3. Call like a function — Services call one another as if invoking local functions.
     4. Binary over HTTP/2 — Data is serialised with compact binary Protocol Buffers and rides HTTP/2, enabling multiplexing and streaming with low latency.
     Key fact: gRPC is a common choice for internal microservice communication where REST and JSON prove too chatty.
+
+HAR — HTTP Archive (file format)
+    A JSON file of every HTTP request and response behind a page load, exported for debugging, credentials included.
+    [Network Technology] · aka HAR file, .har, HTTP Archive, HAR 1.2, network log, DevTools export, session token
+    1. Export the traffic — Browser developer tools and other HTTP monitoring tools export a HAR, a JSON log of the HTTP traffic behind a page load, so a slow or failing page can be examined later or handed to someone else.
+    2. One entry per request — The entries array holds one record per request: the URL, method, headers, cookies and any posted body, then the response's status, headers and content.
+    3. Timings per request — Each entry has a timings breakdown covering time blocked, DNS lookup, connecting, sending, waiting and receiving.
+    4. Credentials in the clear — A HAR records cookies and Authorization headers in the clear, so a file shared with a support desk can hand over a live session. In 2023 an intruder in Okta's support system used session tokens from customers' HAR files to hijack the sessions of five of them.
+    5. Sanitised by default — Chrome now leaves the Cookie, Set-Cookie and Authorization headers out of an export by default, but everything else, URLs and bodies included, is still in the file.
+    Key fact: A HAR records cookies and Authorization headers in the clear, so a file shared with a support desk can hand over a live session.
 
 HTTP / HTTPS — HyperText Transfer Protocol (Secure)
     The request/response protocol of the web; HTTPS is HTTP wrapped in TLS.

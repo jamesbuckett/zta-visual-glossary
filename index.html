@@ -680,7 +680,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">103</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">104</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -691,11 +691,11 @@
           <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
           <p class="lede">Every term gets a one-line TL;DR, an explainer, and a custom diagram that does the explaining. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of Zero Trust.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">103</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">104</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">103</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">104</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -810,7 +810,7 @@
       tldr: "The request/response protocol of the web; HTTPS is HTTP wrapped in TLS.",
       explainer: `HTTP is the application protocol browsers and APIs use to fetch and submit resources via methods such as GET and POST. It is stateless: each request stands alone, with cookies or tokens carrying context between them. HTTPS is the very same protocol running inside a TLS-encrypted channel, so traffic is private and tamper-evident. It is now the default transport for nearly all web traffic. HTTPS protects traffic in transit and authenticates the server, but it says nothing about whether that server or its content deserves trust.`,
       types: ["Protocol"], provenance: [], domains: ["Transport & Web"],
-      related: ["tls", "tcpip", "grpc", "http2"],
+      related: ["tls", "tcpip", "grpc", "http2", "har"],
       source: { label: "RFC 9110 — HTTP Semantics", url: "https://www.rfc-editor.org/info/rfc9110" },
       caption: "Request/response — the client asks, the server answers; HTTPS wraps the exchange in TLS.",
       steps: [
@@ -2665,6 +2665,24 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "Open by default", text: "Out of the box AMPS accepts any username and password and grants every permission to any user, and TLS passes no identity to either check. Real access control means plugging in a module." }
       ],
       fact: "Out of the box, AMPS accepts any username and password and grants every permission to any user."
+    },
+    {
+      id: "har", term: "HAR", acronym: "HTTP Archive (file format)",
+      aliases: ["HAR file", ".har", "HTTP Archive", "HAR 1.2", "network log", "DevTools export", "session token"],
+      tldr: "A JSON file of every HTTP request and response behind a page load, exported for debugging, credentials included.",
+      explainer: `A HAR file is a JSON log of the HTTP traffic behind a page load. Browser developer tools and other HTTP monitoring tools export one so that a slow or failing page can be examined later or handed to someone else. Its entries array holds one record per request: the URL, method, headers, cookies and any posted body, then the response's status, headers and content, plus a timings breakdown covering time blocked, DNS lookup, connecting, sending, waiting and receiving. The current version, 1.2, was written by Jan Odvarko and is frozen; a W3C draft of it was never published and is marked abandoned, so HAR is a shared convention rather than a standard. The limitation is how much it captures. A HAR records cookies and Authorization headers in the clear, so a file shared with a support desk can hand over a live session: in 2023 an intruder in Okta's support system used session tokens from customers' HAR files to hijack the sessions of five of them. Chrome now leaves the Cookie, Set-Cookie and Authorization headers out of an export by default, but everything else, URLs and bodies included, is still in the file.`,
+      types: ["Network Technology"], provenance: [], domains: ["Transport & Web"],
+      related: ["http", "http2", "jwt", "idp"],
+      source: { label: "W3C Web Performance WG — HTTP Archive (HAR) format (abandoned draft)", url: "https://w3c.github.io/web-performance/specs/HAR/Overview.html" },
+      caption: "A browser exports the traffic behind a page as a JSON HAR file, one timed entry per request; cookies and tokens travel with it, so a shared file can hand over a session.",
+      steps: [
+        { title: "Export the traffic", text: "Browser developer tools and other HTTP monitoring tools export a HAR, a JSON log of the HTTP traffic behind a page load, so a slow or failing page can be examined later or handed to someone else." },
+        { title: "One entry per request", text: "The entries array holds one record per request: the URL, method, headers, cookies and any posted body, then the response's status, headers and content." },
+        { title: "Timings per request", text: "Each entry has a timings breakdown covering time blocked, DNS lookup, connecting, sending, waiting and receiving." },
+        { title: "Credentials in the clear", text: "A HAR records cookies and Authorization headers in the clear, so a file shared with a support desk can hand over a live session. In 2023 an intruder in Okta's support system used session tokens from customers' HAR files to hijack the sessions of five of them." },
+        { title: "Sanitised by default", text: "Chrome now leaves the Cookie, Set-Cookie and Authorization headers out of an export by default, but everything else, URLs and bodies included, is still in the file." }
+      ],
+      fact: "A HAR records cookies and Authorization headers in the clear, so a file shared with a support desk can hand over a live session."
     }
   ];
 
@@ -7685,6 +7703,80 @@ It is a specialist: the managed databases, identity services and compliance cata
         ${badge(3, 480, 194, '3')}
         ${badge(4, 416, 72, '4')}
         ${badge(5, 680, 270, '5')}
+      </svg>`,
+
+    har: () => `
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A browser exports the traffic behind a page as a JSON HAR file, one timed entry per request; cookies and tokens travel with it, so a shared file can hand over a session.">
+        <g data-s="1">
+          <rect class="box" x="24" y="16" width="144" height="48" rx="12"/>
+          ${icon('app-window', 40, 28)}
+          <text class="t-b" x="72" y="38">Browser</text>
+          <text class="t-sm t-mut" x="72" y="55">dev tools</text>
+        </g>
+        <g data-s="1">
+          <rect class="box" x="24" y="200" width="144" height="48" rx="8"/>
+          ${icon('server', 40, 212)}
+          <text class="t-b" x="72" y="229">Web server</text>
+        </g>
+        <line class="flow" data-s="1" x1="56" y1="66" x2="56" y2="198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="1" x="64" y="120">requests</text>
+        <line class="flow" data-s="1" x1="136" y1="198" x2="136" y2="66" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="1" x="128" y="150" text-anchor="end">responses</text>
+        <line class="flow" data-s="1" x1="170" y1="40" x2="214" y2="40" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="192" y="33" text-anchor="middle">export</text>
+
+        <g data-s="1">
+          <rect class="box" x="216" y="16" width="276" height="232" rx="8"/>
+          ${icon('file-code', 232, 28)}
+          <text class="t-b" x="264" y="38">page.har</text>
+          <text class="t-sm t-mut" x="264" y="55">a JSON log</text>
+        </g>
+        <text class="t-sm t-mut" data-s="2" x="242" y="78">entries: one per request</text>
+        ${[['GET /', '200', 86], ['POST /login', '302', 114], ['GET /app.js', '200', 142]].map(([req, status, y]) => `
+          <g data-s="2">
+            <rect class="box" x="232" y="${y}" width="244" height="24" rx="4"/>
+            <text class="t-sm" x="242" y="${y + 16}">${req}</text>
+            <text class="t-sm t-mut" x="328" y="${y + 16}">${status}</text>
+          </g>`).join('')}
+        <g data-s="3">
+          ${[[364, 12, 93], [376, 20, 93], [396, 40, 93], [436, 16, 93], [372, 40, 121], [412, 12, 121], [388, 16, 149], [404, 60, 149]].map(([x, w, y]) => `
+          <rect class="box-soft" x="${x}" y="${y}" width="${w}" height="10" rx="2"/>`).join('')}
+          <text class="t-sm t-mut" x="242" y="184">timings: dns connect wait receive</text>
+        </g>
+        <g data-s="4">
+          <rect class="box" x="232" y="196" width="244" height="40" rx="4"/>
+          <text class="t-sm bad" x="242" y="212">Cookie: sid=8f3a…</text>
+          <text class="t-sm bad" x="242" y="228">Authorization: Bearer eyJ…</text>
+        </g>
+
+        <line class="flow" data-s="1" x1="494" y1="40" x2="542" y2="40" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="518" y="33" text-anchor="middle">share</text>
+        <g data-s="1 4">
+          <rect class="box" x="544" y="16" width="152" height="48" rx="12"/>
+          ${icon('users', 560, 28)}
+          <text class="t-b" x="592" y="38">Support desk</text>
+          <text class="t-sm t-mut" x="592" y="55">for debugging</text>
+        </g>
+        <line class="flow-bad" data-s="4" x1="620" y1="66" x2="620" y2="198" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="610" y="136" text-anchor="end">session tokens</text>
+        <g data-s="4">
+          <rect class="box" x="544" y="200" width="152" height="48" rx="12"/>
+          ${icon('skull', 560, 212)}
+          <text class="t-b" x="592" y="222">Intruder</text>
+          <text class="t-sm t-mut" x="592" y="239">session hijack</text>
+        </g>
+
+        <g data-s="5">
+          <rect class="box" x="24" y="264" width="672" height="36" rx="6"/>
+          <text class="t-sm ok" x="40" y="287">Chrome's default export drops Cookie, Set-Cookie, Authorization</text>
+          <text class="t-sm bad" x="472" y="287">URLs and bodies stay</text>
+        </g>
+
+        ${badge(1, 150, 40, '1')}
+        ${badge(2, 458, 74, '2')}
+        ${badge(3, 458, 126, '3')}
+        ${badge(4, 458, 216, '4')}
+        ${badge(5, 680, 282, '5')}
       </svg>`,
   };
 
