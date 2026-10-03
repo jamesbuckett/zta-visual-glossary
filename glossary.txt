@@ -9,7 +9,7 @@ Format: TERM — expansion / full name
 ========================================================================
 
 Alpaca — Local HTTP Proxy for Command-Line Tools
-    A proxy you run on your own machine so curl, git, and npm can get out through the corporate one — it reads the PAC file and answers the NTLM or Kerberos challenge that command-line tools cannot.
+    A local proxy that gets command-line tools through the corporate one, answering the NTLM or Kerberos challenge they cannot.
     [Network Technology, Security Technology] · aka samuong/alpaca, local HTTP proxy, NTLM proxy, proxy authentication, 407 Proxy Authentication Required, Proxy-Authenticate, Negotiate, SPNEGO, http_proxy, https_proxy, corporate proxy, NTLM_CREDENTIALS, ALPACA_PROXY_AUTH_ALLOWLIST, localhost:3128
     1. Tools know one proxy — curl, git, npm, pip and docker mostly understand one thing: an http_proxy variable naming a single host and port. Alpaca is that host and port, on loopback.
     2. PAC picks the route — For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use.
@@ -60,14 +60,14 @@ BlueField — NVIDIA Data Processing Unit (DPU)
 BOLA — Broken Object Level Authorization
     Swap the ID in an API request and read another user's object — because the server never checked it was yours.
     [Security Technology] · aka IDOR, insecure direct object reference, API1:2023, object-level authorization, broken access control
-    1. An authenticated caller — The API authenticates the caller, answering 'who are you?'
+    1. An authenticated caller — The API authenticates the caller, answering "who are you?"
     2. Their own object — An endpoint exposes objects by identifier, such as GET /orders/1001.
-    3. Change the ID — The attacker changes the ID to 1002, and the API hands back another user's record, because no one answered 'is this yours?'
+    3. Change the ID — The attacker changes the ID to 1002, and the API hands back another user's record, because no one answered "is this yours?"
     4. Check every request — The fix is a server-side ownership or policy check on every request that takes a client-supplied identifier, ideally in the data-access layer.
     Key fact: Unpredictable IDs such as UUIDs make guessing harder, but only the server-side ownership check prevents the attack.
 
 Calico — Project Calico — Kubernetes Networking & Network Policy
-    The Kubernetes network plugin (CNI) that routes pod traffic with BGP instead of tunnelling it, and layers an ordered, tiered policy engine over what Kubernetes NetworkPolicy can express.
+    A Kubernetes network plugin (CNI) that routes pod traffic with BGP instead of tunnelling it, and adds ordered, tiered network policy.
     [Network Technology, Security Technology] · aka Project Calico, CNI, Container Network Interface, calico-node, Felix, Typha, BIRD, confd, calicoctl, GlobalNetworkPolicy, HostEndpoint, policy tiers, IPIP, VXLAN, IPAM, BGP peering, eBPF data plane, default deny, Tigera
     1. Nodes own blocks — Each node owns a block of the pod address space, and a BGP daemon on that node advertises the block to the other nodes or to the physical fabric.
     2. Route, don't tunnel — A pod's packet crosses the wire carrying the pod's own source and destination address with nothing wrapped around it. Where the underlay will not carry pod routes, Calico falls back to a VXLAN or IP-in-IP overlay.
@@ -86,17 +86,17 @@ CASB — Cloud Access Security Broker
     Key fact: A CASB is one of the core components of a SASE / SSE stack, alongside secure web gateways and ZTNA.
 
 Cilium — eBPF-Based Kubernetes Networking, Observability & Security
-    The Kubernetes network plugin (CNI) that compiles identity-aware policy into eBPF programs in the kernel, so enforcement, load balancing, and flow visibility happen without a sidecar.
+    A Kubernetes network plugin (CNI) that enforces identity-aware policy in the kernel with eBPF, no sidecar needed.
     [Network Technology, Security Technology] · aka CNI, Container Network Interface, cilium-agent, CiliumNetworkPolicy, CiliumClusterwideNetworkPolicy, security identity, kube-proxy replacement, Hubble, Cluster Mesh, Tetragon, Gateway API, Maglev, direct server return, Isovalent
-    1. Labels, not addresses — Pods are created and destroyed constantly, so an IP address identifies nothing durable. Cilium stops writing policy about addresses.
+    1. Addresses identify nothing — Pods are created and destroyed constantly, so an IP address identifies nothing durable. Cilium stops writing policy about addresses.
     2. A numeric identity — Its control plane collapses each pod's label set into a numeric security identity and distributes that mapping cluster-wide.
     3. Identity travels — The identity is carried with the packet, so the receiving node can decide without a second lookup.
-    4. Policy between identities — Policy names label selectors and holds as pods churn. Beyond layer 4 it can admit particular HTTP methods and paths, gRPC calls or DNS names, via an Envoy per node rather than a sidecar per pod.
+    4. Policy between identities — Policy names label selectors and holds as pods churn. Beyond layer 4 it can admit particular HTTP methods and paths, gRPC calls or DNS names, via a per-node Envoy, or the agent's DNS proxy, rather than a sidecar per pod.
     5. eBPF in the kernel — The same eBPF data plane replaces kube-proxy, and Hubble reads those programs to produce per-flow records annotated with identity rather than IP.
     Key fact: The identity is only as good as the labels behind it: whoever can set a pod's labels can choose which policies apply to it.
 
 Cntlm — NTLM Authentication Proxy
-    The long-standing C daemon that speaks NTLM to a corporate parent proxy on your behalf — it probes to find the dialect the proxy will accept, and holds a password hash rather than a password.
+    A long-standing local daemon that performs the NTLM handshake with a corporate proxy for tools that cannot.
     [Network Technology, Security Technology] · aka cntlm.conf, NTLM proxy, NTLMv2, NTLM2SR, LM hash, PassNTLMv2, PassNT, PassLM, magic dialect detection, parent proxy, gateway mode, NoProxy, SOCKS5 proxy, port tunnelling, ISA Server
     1. Tools point at loopback — Cntlm listens on 127.0.0.1:3128, forwards to a parent proxy, and adds the NTLM (NT LAN Manager) handshake the application behind it cannot perform.
     2. Find the dialect — The Auth setting selects the dialect, strongest to weakest: NTLMv2, NTLM2SR, NT, NTLM or LM. cntlm -M probes with the strongest hashes first and prints a working configuration.
@@ -110,7 +110,7 @@ CoreWeave — GPU Cloud Platform for AI
     1. Bare metal — CoreWeave Kubernetes Service runs Kubernetes directly on bare-metal nodes with no hypervisor, so a job gets the whole machine.
     2. A managed control plane — CoreWeave runs the control plane, manages the GPU drivers and validates each node before it joins; nodes boot a clean OS image every time.
     3. Isolation on the DPU — Isolation moves into single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server that runs networking and host security out of the workload's reach.
-    4. An InfiniBand fabric — GPU-to-GPU traffic travels a separate non-blocking InfiniBand fabric with in-network reduction (SHARP).
+    4. An InfiniBand fabric — GPU-to-GPU traffic travels a separate non-blocking InfiniBand fabric, with SHARP in-network reduction available but off by default.
     5. A specialist — Managed databases, identity services and compliance are thinner than a hyperscaler's, so most organisations run it alongside another cloud.
     Key fact: Enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls.
 
@@ -124,13 +124,13 @@ CORS — Cross-Origin Resource Sharing
     Key fact: CORS is no substitute for real authorisation.
 
 CSRF / XSS / CSP — Web App Attacks & Content Security Policy
-    The two classic browser attacks — and the header that helps shut them down.
+    The two classic browser attacks — and the header that limits what injected script can do.
     [Security Technology, Protocol] · aka cross-site request forgery, cross-site scripting, content security policy, same-origin, SameSite, injection
     1. XSS injects script — Cross-Site Scripting injects attacker-controlled script into a page so it runs with the victim's session, stealing tokens or acting as the user.
     2. Escape and validate — XSS is defeated by escaping output and validating input.
     3. CSRF forges a request — Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where they are authenticated.
     4. Tokens and SameSite — CSRF is defended with anti-CSRF tokens and SameSite cookies.
-    5. CSP limits the damage — Content Security Policy is a response header that whitelists which script, style and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through.
+    5. CSP limits the damage — Content Security Policy is a response header that lists which script, style and connection sources a page may load, sharply limiting what injected code can do even if XSS slips through.
     Key fact: No single defence is sufficient alone: defence in depth is the point.
 
 CVE / CVSS — Vulnerability IDs & Severity Scoring
@@ -144,7 +144,7 @@ CVE / CVSS — Vulnerability IDs & Severity Scoring
     Key fact: A CVE id means vendors, scanners and defenders all point at the same flaw.
 
 CyberArk PAM — Privileged Access Manager (now Idira, by Palo Alto Networks)
-    The commercial PAM deployment most enterprises actually run — a hardened credential vault, scheduled rotation, and a proxy that opens privileged sessions so the administrator never learns the password.
+    The product most people mean by PAM: a hardened credential vault, scheduled rotation, and a session proxy that hides the password from administrators.
     [Security Technology] · aka CyberArk, Idira, Idira PAM, Privileged Access Manager, Digital Vault, Enterprise Password Vault, CPM, PVWA, PSM, Privileged Session Manager, Privileged Threat Analytics, Privilege Cloud, Conjur, credential injection
     1. The Digital Vault — The Digital Vault is a deliberately isolated, hardened server holding every privileged credential, reached by other components only over its own protocol.
     2. Rotate on a schedule — The Central Policy Manager connects out to managed systems to rotate, verify and reconcile passwords on a schedule, so a leaked credential has a short useful life.
@@ -194,13 +194,13 @@ DNS — Domain Name System
     Key fact: DNS is also a control point for security and filtering.
 
 DOCA — NVIDIA DPU Software Framework
-    The SDK for BlueField — 'what CUDA is to the GPU, DOCA is to the DPU' — with libraries and services to offload networking, storage, and zero-trust security.
+    The SDK for BlueField — "what CUDA is to the GPU, DOCA is to the DPU" — with libraries and services to offload networking, storage, and zero-trust security.
     [Development Framework, Security Technology] · aka NVIDIA DOCA, DOCA SDK, DOCA Argus, App Shield, DOCA Flow
     1. CUDA for the DPU — DOCA is NVIDIA's software framework for programming BlueField DPUs and SuperNICs, positioned as the DPU's equivalent of CUDA for the GPU.
     2. Three layers — It is layered: hardware drivers at the base, C/C++ libraries in the middle, and production-ready containerised microservices on top.
     3. Standard interfaces — It is exposed through industry-standard interfaces such as DPDK, SPDK and Netlink rather than a closed silo, which keeps software portable across BlueField generations.
-    4. Argus watches the host — DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes: agentless intrusion detection that host malware cannot see or switch off.
-    5. Encrypted tunnels — The IPsec/TLS gateways and crypto libraries terminate encrypted tunnels at wire speed. Argus supersedes the older App Shield library, which NVIDIA drops after DOCA 3.5.
+    4. Argus watches the host — DOCA Argus runs on the DPU's isolated cores and inspects the host's live memory and processes: agentless intrusion detection that host malware cannot see and, once the card is in zero-trust (restricted) mode, cannot switch off.
+    5. Encrypted tunnels — The IPsec gateway and crypto libraries terminate encrypted tunnels at wire speed. Argus supersedes the older App Shield library, which NVIDIA drops after DOCA 3.5.
     Key fact: Without DOCA a BlueField card is an uninitialised accelerator; with it, the silicon becomes a working zero-trust enforcement point.
 
 Docker — Docker containers
@@ -213,13 +213,13 @@ Docker — Docker containers
     Key fact: The container is the unit that most deployment platforms, including Kubernetes, build upon.
 
 DORA — Digital Operational Resilience Act
-    The EU regulation that makes surviving an IT failure a supervisory matter for financial firms — and, for the first time, lets European regulators oversee the cloud providers those firms depend on.
+    The EU regulation that makes IT resilience a supervisory matter for financial firms and puts their critical ICT providers under direct oversight.
     [Security Technology] · aka Regulation (EU) 2022/2554, 2022/2554, operational resilience, ICT risk management, TLPT, threat-led penetration testing, TIBER-EU, register of information, CTPP, critical ICT third-party provider, Lead Overseer, ESAs
     1. Financial entity — DORA binds around twenty categories of regulated firm — banks, insurers, investment firms, trading venues — and, unusually, reaches their suppliers as well.
     2. Register of information — Each firm maintains a register of information describing every ICT service dependency and where it runs.
     3. Supervisor sees the register — The register makes each ICT dependency, and where it runs, visible to the supervisor.
-    4. Critical provider designated — The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud and core-banking platforms.
-    5. Overseer reaches provider — Each is assigned a Lead Overseer able to inspect it directly and to recommend that firms stop using it. No European financial regulator had ever supervised a hyperscaler directly before.
+    4. Critical provider designated — The European Supervisory Authorities designate Critical ICT Third-Party Providers — in practice the large cloud platforms plus major software, data, telecoms and IT-services suppliers.
+    5. Overseer reaches provider — Each is assigned a Lead Overseer able to inspect it directly and to issue it recommendations; as a last resort, firms' own supervisors can order firms to stop using it. No European financial regulator had ever supervised a hyperscaler directly before.
     Key fact: Oversight gives supervisors visibility into a critical provider without reducing firms' dependence on it.
 
 DPO — Direct Preference Optimization
@@ -241,7 +241,7 @@ DPU — Data Processing Unit
     4. Host compromised, policy holds — An attacker who takes over the host cannot reach the enforcement they would want to disable, because it sits on a separate processor.
     Key fact: Even if the host OS is completely compromised, the enforcement on the DPU stays intact.
 
-eBPF — extended Berkeley Packet Filter
+eBPF — eBPF (historically 'extended Berkeley Packet Filter' — no longer an acronym)
     Sandboxed programs that run inside the Linux kernel at defined hook points, extending what it does without patching it or loading a module.
     [Network Technology, Development Framework] · aka BPF, bpf(), verifier, JIT, eBPF maps, XDP, kprobe, uprobe, tracepoint, BPF LSM, libbpf, CO-RE, BTF, bpftrace, kernel
     1. Load via bpf() — You compile a small program to a bytecode and hand it to the kernel through the bpf() system call.
@@ -271,8 +271,8 @@ Envoy — Envoy Proxy — L7 Proxy & Universal Data Plane
     5. Guard the control plane — Whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once.
     Key fact: For Zero Trust, Envoy is the textbook Policy Enforcement Point, because the filter chain is exactly where enforcement belongs.
 
-FAPI 2.0 — Financial-grade API Security Profile
-    The OpenID Foundation's hardening profile for OAuth and OpenID Connect — it pushes the request off the browser and binds every access token to a key, so a stolen token is useless.
+FAPI 2.0 — FAPI 2.0 Security Profile (formerly Financial-grade API)
+    The OpenID Foundation's hardening profile for OAuth: the request moves off the browser, and every access token is bound to a key.
     [Protocol, Security Technology] · aka FAPI, Financial-grade API, FAPI 2.0 Security Profile, PAR, pushed authorization requests, DPoP, sender-constrained tokens, RFC 9126, RFC 9449, RFC 8705, attacker model, open banking, JARM, private_key_jwt
     1. Pushed request (PAR) — The client sends the full authorisation request to the authorisation server over a client-authenticated back channel, and gets back an opaque request_uri.
     2. Only a handle — The browser then carries only that handle, leaving nothing in the URL to tamper with or to leak through referrers, history and logs.
@@ -309,7 +309,7 @@ FIX — Financial Information eXchange
     5. Trust in the network — FIX leaves security to the network beneath it. The SenderCompID, matched to a known IP address, is the basic check, and encryption is often skipped on leased lines; FIXS runs FIX over TLS.
     Key fact: FIX leaves security to the network beneath it, so a session is only cryptographically authenticated when firms run it as FIXS, FIX over TLS.
 
-gRPC — gRPC Remote Procedure Call
+gRPC — gRPC Remote Procedure Calls
     A fast, contract-first RPC framework using Protocol Buffers over HTTP/2.
     [Protocol, Development Framework] · aka protobuf, Protocol Buffers, RPC
     1. One .proto contract — The contract between services is defined in a .proto file.
@@ -367,13 +367,13 @@ IDS / IPS — Intrusion Detection / Prevention System
     Key fact: IDS / IPS complements endpoint EDR by watching the wire instead of the host.
 
 Immuta — Policy-Based Access Control for Data Platforms
-    Author data access policy once against user attributes, and it is compiled down into Snowflake's or Databricks' own row and column controls — one decision point governing many query engines.
+    Write data access policy once against user attributes; Immuta compiles it into each data platform's own row and column controls.
     [Security Technology] · aka data access control, data governance, attribute-based access control, ABAC, dynamic masking, row-level security, column masking, subscription policy, data policy, policy pushdown, Snowflake, Databricks, Unity Catalog
     1. Role explosion — Expressing fine-grained rules through native grants alone means a role per combination, multiplied by every table — and the whole set goes stale the moment somebody changes team.
     2. Classify and tag — Instead, data sources are registered and classified, with sensitive columns tagged as personal or health data.
     3. Policy on attributes — Policy is written once against attributes rather than roles, using the requesting user's attributes pulled from Okta or Active Directory.
-    4. Compiled, not proxied — Immuta does not sit in the query path: it compiles policy into the platform's own row access and column masking policies, so users query natively at full engine speed.
-    5. Every query logged — Every query is logged alongside the policy that shaped it, the audit artefact regulators actually ask for.
+    4. Policy pushed down — Immuta does not sit in the query path: it compiles policy into the platform's own row access and column masking policies, so users query natively at full engine speed.
+    5. Every query logged — On platforms with query audit, every query is logged with its user, its text and the tables it touched, the audit artefact regulators actually ask for.
     Key fact: Immuta is a Policy Decision Point for data, and the warehouse is the Policy Enforcement Point.
 
 IPsec — Internet Protocol Security
@@ -386,7 +386,7 @@ IPsec — Internet Protocol Security
     Key fact: IPsec protects any application's packets with no changes to the application.
 
 Istio — Istio Service Mesh
-    The most widely deployed service mesh — its control plane gives every workload a SPIFFE identity and configures Envoy to enforce mTLS and per-request authorisation, with an ambient mode that drops the sidecar entirely.
+    The most widely deployed service mesh: it gives every workload a SPIFFE identity and enforces mTLS and per-request authorisation.
     [Network Technology, Security Technology] · aka istiod, ambient mode, ztunnel, waypoint proxy, HBONE, sidecar injection, PeerAuthentication, AuthorizationPolicy, RequestAuthentication, VirtualService, DestinationRule, ServiceEntry, trust domain, STRICT mTLS, PERMISSIVE, Gateway API, east-west
     1. One binary: istiod — Istio's control plane is a single binary, istiod: service discovery, translating intent into Envoy configuration, and the mesh's certificate authority.
     2. A SPIFFE identity — istiod issues every workload an X.509 certificate carrying a SPIFFE ID derived from its Kubernetes service account, and rotates it automatically.
@@ -400,19 +400,19 @@ JWT — JSON Web Token
     [Security Technology, Protocol] · aka bearer token, claims
     1. The header — A JSON Web Token has three base64url-encoded parts. The header comes first.
     2. A payload of claims — The payload packs claims: who you are, what you may do, when it expires.
-    3. The signature — The signature lets any holder verify the token has not been tampered with, without a database lookup, which makes JWTs popular for stateless sessions and API access.
-    4. Readable, not encrypted — Anyone holding the token can read the payload, because a JWT is encoded, not encrypted.
-    Key fact: JWTs are readable, not encrypted, so secrets never belong in the payload.
+    3. The signature — The signature lets anyone with the verification key confirm the token has not been tampered with, without a database lookup, which makes JWTs popular for stateless sessions and API access.
+    4. Readable, not encrypted — Anyone holding the token can read the payload, because base64url encoding hides nothing.
+    Key fact: Signed JWTs are readable, not encrypted, so secrets never belong in the payload.
 
 KEDA — Kubernetes Event-driven Autoscaling
-    Scales Kubernetes workloads on the event source itself — queue depth, consumer lag, a Prometheus query — and all the way down to zero, which CPU-based autoscaling cannot do.
+    Scales Kubernetes workloads on the event source itself, such as queue depth, and all the way down to zero.
     [Development Framework] · aka ScaledObject, ScaledJob, TriggerAuthentication, scale to zero, scaler, external metrics, HPA, Horizontal Pod Autoscaler, consumer lag
     1. The wrong signal — A worker blocked on a queue read burns almost no CPU while messages pile up, so an HPA scaling on CPU and memory sees an idle deployment and does nothing.
     2. Declare triggers — You write a ScaledObject pointing at an existing Deployment and declare triggers, such as Kafka consumer lag or SQS queue depth. The operator watches ScaledObjects.
     3. Zero to one — KEDA drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning it to zero after a cooldown.
     4. One to many — A metrics API server publishes each scaler's reading through the external metrics API, and from one replica upward an ordinary HPA does the scaling.
     5. A credential per poll — Every scaler must authenticate to whatever it polls. TriggerAuthentication keeps those credentials out of the ScaledObject; a pod identity provider means nothing long-lived is stored.
-    Key fact: A plain HPA could not scale to zero at all until Kubernetes 1.37 enabled it by default, and still cannot on CPU or memory.
+    Key fact: A plain HPA could not scale to zero without an alpha feature gate until Kubernetes 1.37 enabled it by default, and still cannot on CPU or memory.
 
 Kerberos — Kerberos Authentication Protocol
     Ticket-based authentication that proves identity without sending passwords over the wire.
@@ -494,8 +494,8 @@ mTLS — Mutual TLS
     [Protocol, Security Technology] · aka client certificate
     1. Server certificate — In ordinary TLS only the server presents a certificate.
     2. Client certificate too — Mutual TLS extends it so the client must present a certificate too.
-    3. Each side verifies — Each side verifies the other before any application data flows, giving strong two-way authentication without passwords.
-    4. Then data flows — Only then does application data flow, between two workloads that each carry their own cryptographic identity.
+    3. Each side verifies — Each side verifies the other during the handshake, giving strong two-way authentication without passwords.
+    4. Then data flows — Application data then flows between two workloads that each carry their own cryptographic identity.
     Key fact: mTLS is a cornerstone of zero-trust service-to-service communication and of service meshes.
 
 NAT — Network Address Translation
@@ -510,7 +510,7 @@ NAT — Network Address Translation
 nDLP — Network Data Loss Prevention
     DLP for data in motion — traffic is inspected inline at the network edge and sensitive content is stopped before it leaves.
     [Security Technology] · aka network DLP, data in motion, egress inspection, TLS inspection, inline DLP
-    1. Inline at the edge — Network DLP sits inline where traffic leaves the organisation: a secure web gateway, email gateway, next-generation firewall or SASE edge. Any device on that path is covered, managed or not.
+    1. Inline at the edge — Network DLP sits inline where traffic leaves the organisation: a secure web gateway, email gateway, next-generation firewall or SASE edge. Any device on that path is covered, managed or not, though TLS traffic from a device that does not trust the proxy can be blocked but not inspected.
     2. Decrypt to inspect — Because most traffic is TLS-encrypted, inspection depends on TLS interception: decrypt, inspect, re-encrypt at a proxy the fleet trusts, with privacy and performance trade-offs.
     3. Inspect the content — Email, web uploads and file transfers are checked against data classifications with pattern matching, exact data matching and machine-learning classifiers.
     4. Pass or block — Clean transfers continue re-encrypted; a transfer that breaks policy is blocked, quarantined or encrypted, and the security team is alerted.
@@ -552,7 +552,7 @@ OIDC — OpenID Connect
     2. Add the openid scope — Requesting the openid scope turns a plain OAuth exchange into an OIDC one.
     3. An ID Token — Alongside the access token, the OpenID Provider issues an ID Token: a signed JWT with claims such as who the user is (sub), who issued it (iss) and who it is for (aud).
     4. The UserInfo endpoint — Apps can also call the UserInfo endpoint for profile details like name and email.
-    Key fact: OIDC is the JSON-based successor to SAML for single sign-on.
+    Key fact: OIDC is the newer, JSON-based alternative to SAML for single sign-on.
 
 OPA — Open Policy Agent
     A general-purpose policy engine that answers allow / deny questions from policies written in Rego.
@@ -565,7 +565,7 @@ OPA — Open Policy Agent
     Key fact: OPA is the canonical software implementation of a Zero Trust Policy Decision Point.
 
 Open Virtual Network — OVN — SDN control plane for OVS
-    A software-defined networking (SDN) control plane on top of Open vSwitch that compiles logical switches, routers, and ACLs into the flows each host runs — the virtual network behind OpenStack and Kubernetes.
+    The control plane for Open vSwitch: it compiles logical switches, routers, and ACLs into the flows each host runs.
     [Network Technology, Security Technology] · aka OVN, ovn-kubernetes, logical switch, logical router, Neutron OVN, northbound database, distributed firewall
     1. Declare the intent — Instead of writing raw flows, you declare logical switches, logical routers and Access Control Lists in OVN's northbound database.
     2. Compiled to flows — OVN's daemons translate that intent into OpenFlow.
@@ -620,14 +620,14 @@ PAM — Privileged Access Management
     2. Check out the credential — PAM vaults their credentials, so admins check them out rather than knowing them.
     3. A recorded gateway — Sessions are brokered through a gateway that records keystrokes for audit, the accountability trail regulators expect.
     4. Just-in-time elevation — Privileges are elevated for a specific task and a short window, then automatically revoked.
-    Key fact: Just-in-time access removes most standing privilege.
+    Key fact: Just-in-time access shrinks the standing attack surface.
 
 PASETO — Platform-Agnostic Security Tokens
     A JWT alternative with no algorithm field — the version prefix pins the cryptography, so there is nothing for an attacker to downgrade.
     [Security Technology, Protocol] · aka v4.local, v4.public, PASERK, JWT alternative, versioned protocols, algorithm confusion, implicit assertion, footer
     1. JWT's alg field — JWT negotiates its algorithm in-band through the header's alg field, which makes algorithm-confusion attacks possible: swap RS256 for HS256 and a careless library verifies a forged signature, and alg: none once skipped verification altogether.
     2. Version fixes the suite — A PASETO token reads version.purpose.payload, and the version names the entire cipher suite before parsing begins. There is no field to tamper with.
-    3. Local or public — The purpose is one of two: local means the payload is encrypted under a shared symmetric key; public means it is signed and readable by anyone holding the public key.
+    3. Local or public — The purpose is one of two: local means the payload is encrypted under a shared symmetric key; public means it is signed but not encrypted, so anyone can read it and anyone holding the public key can verify it.
     4. The optional footer — An optional footer is authenticated but left in the clear, for things like key identifiers.
     5. The adoption caveat — The IETF draft expired, PASETO never became an RFC, and usage trails JWT by orders of magnitude.
     Key fact: PASETO's claim is that it should not have been possible to get wrong in the first place.
@@ -753,9 +753,9 @@ SASE — Secure Access Service Edge
     1. Users anywhere — Users and branches connect from wherever they are.
     2. The nearest edge — Each request goes to a cloud point of presence close to the user.
     3. A converged stack — There, wide-area networking converges with a stack of security services: secure web gateway, cloud access security broker, firewall-as-a-service and zero-trust network access.
-    4. No backhaul — Instead of hauling all traffic back to a central datacentre for inspection, each request is checked and policy-enforced at the nearest edge.
+    4. No backhaul — Instead of hauling all traffic back to a central data centre for inspection, each request is checked and policy-enforced at the nearest edge.
     5. On to the apps — Traffic that passes policy continues from the edge to the applications.
-    Key fact: SASE is the cloud-delivered way most organisations now run Zero Trust.
+    Key fact: SASE is a common cloud-delivered way to run Zero Trust.
 
 SBC — Session Border Controller
     The border guard for VoIP — calls terminate on it, are policed and normalised, then re-originated towards the far side.
@@ -772,8 +772,8 @@ SBOM & SLSA — Software Supply-Chain Integrity
     [Security Technology] · aka software bill of materials, SLSA, provenance, CycloneDX, SPDX, supply chain
     1. Built from dependencies — Modern applications are assembled from hundreds of open-source dependencies, and attackers have learned to compromise that supply chain rather than the app itself.
     2. An SBOM inventory — A Software Bill of Materials is a machine-readable inventory, in formats like CycloneDX or SPDX, of every component and version in a build.
-    3. Are we affected? — When the next Log4Shell lands, the SBOM lets you answer 'are we affected?' in seconds instead of weeks.
-    4. SLSA provenance — SLSA's Build Track levels 1 to 3 raise how tamper-resistant the pipeline is, producing signed provenance that says exactly how and where an artefact was built.
+    3. Are we affected? — When the next Log4Shell lands, the SBOM lets you answer "are we affected?" in seconds instead of weeks.
+    4. SLSA provenance — SLSA's Build Track levels 1 to 3 raise how tamper-resistant the pipeline is, producing provenance, signed from level 2 up, that says exactly how and where an artefact was built.
     5. Consumers verify — Together, SBOM and provenance make the supply chain auditable and verifiable.
     Key fact: Software Supply Chain Failures is now a category in the OWASP Top 10:2025.
 
@@ -787,7 +787,7 @@ SCIM — System for Cross-domain Identity Management
     Key fact: Where SAML and OIDC handle the login itself, SCIM handles the account lifecycle around it.
 
 SD-WAN — Software-Defined Wide Area Network
-    Software steers branch traffic across multiple links by policy, not fixed routing.
+    Software steers branch traffic across multiple links by policy and live link quality.
     [Network Technology] · aka overlay, WAN, edge
     1. Several transports — A branch has several transports: private MPLS circuits, broadband and cellular. SD-WAN lays an intelligent overlay across them.
     2. A central controller — A central controller replaces rigid, device-by-device WAN configuration with centralised management.
@@ -834,7 +834,7 @@ SIEM — Security Information and Event Management
     4. Prioritised alerts — The result is prioritised alerts, giving a security operations centre one place to detect, investigate and report on threats, and to satisfy audit requirements.
     Key fact: Modern SIEM platforms layer analytics and automated response on top of detection.
 
-Sigstore — Keyless Artifact Signing (Cosign)
+Sigstore — Keyless Artefact Signing (Cosign)
     Easy, keyless signing of software artefacts backed by a public transparency log.
     [Security Technology] · aka Cosign, Fulcio, Rekor, keyless signing, transparency log
     1. The key problem — Signing has meant guarding long-lived private keys that, once leaked, let anyone forge a trusted signature. Sigstore removes the long-lived key.
@@ -860,11 +860,11 @@ SPIFFE / SPIRE — Secure Production Identity Framework For Everyone
     1. Attest the workload — SPIRE, the reference implementation, attests each workload.
     2. A SPIFFE ID — SPIFFE defines a universal identity for workloads: the SPIFFE ID.
     3. A short-lived SVID — SPIRE issues the document that proves it, the SVID (SPIFFE Verifiable Identity Document), typically an X.509 certificate or a JWT. It is short-lived and issued automatically.
-    4. mTLS, not shared secrets — Services authenticate one another with mTLS instead of shared secrets.
+    4. mTLS replaces shared secrets — Services authenticate one another with mTLS instead of shared secrets.
     Key fact: Together SPIFFE and SPIRE are foundational plumbing for Zero Trust.
 
 Spinnaker — Multi-Cloud Continuous Delivery
-    The deployment half of the pipeline — takes a built artefact and rolls it out across clouds, with blue/green and canary as configurable strategies rather than hand-written scripts.
+    The deployment half of the pipeline: rolls a built artefact out across clouds, with blue/green and canary strategies built in.
     [Development Framework] · aka continuous delivery, CD, deployment pipeline, blue/green, red/black, canary deployment, Kayenta, Fiat, Clouddriver, server group, immutable infrastructure
     1. After CI — Spinnaker owns the pipeline once CI has produced an artefact. A pipeline is a sequence of stages triggered by a build, a new image, a schedule or a person.
     2. App, cluster, group — An application is a set of clusters, a cluster is a set of server groups, and a server group is the deployable thing with its configuration.
@@ -883,10 +883,10 @@ SSH — Secure Shell
     Key fact: SSH is the everyday tool for administering servers securely.
 
 SuperNIC — NVIDIA AI-Network Accelerator
-    A network accelerator tuned for AI: line-rate GPU-to-GPU Ethernet (RoCE) with the congestion control huge training clusters need — the DPU's performance-focused sibling.
+    NVIDIA's network accelerator for AI clusters: line-rate GPU-to-GPU Ethernet (RoCE) — the DPU's performance-focused sibling.
     [Network Technology] · aka NVIDIA SuperNIC, BlueField-3 SuperNIC, ConnectX SuperNIC, Spectrum-X, RoCE, AI networking
     1. East-west, GPU to GPU — A SuperNIC is built for the east-west, GPU-to-GPU traffic of large AI clusters, rather than the broad infrastructure offload a DPU targets.
-    2. RoCE per GPU — It delivers up to 400 Gb/s (and beyond) of RDMA over Converged Ethernet (RoCE) per GPU.
+    2. RoCE per GPU — It delivers 400 Gb/s to 1.6 Tb/s of RDMA over Converged Ethernet (RoCE) per GPU.
     3. Adaptive routing — Adaptive routing and congestion control, part of NVIDIA's Spectrum-X platform, let thousands of GPUs exchange gradients without the network becoming the bottleneck.
     4. Two kinds — The BlueField-3 SuperNIC is a slimmed-down DPU with eight Arm cores; the ConnectX-8/9 SuperNICs are pure network adapters with no separate operating system.
     5. A thinner ZT story — SuperNICs still encrypt traffic in flight at line rate, but host-introspection services such as DOCA Argus run only on BlueField in DPU mode.
@@ -923,7 +923,7 @@ TLS — Transport Layer Security
 TPM & Secure Boot — Hardware Root of Trust
     A hardware chip that protects keys and proves a machine booted clean.
     [Security Technology] · aka trusted platform module, secure boot, measured boot, attestation, UEFI
-    1. Secure Boot checks — Secure Boot has the firmware verify each stage of startup against trusted signatures, refusing to run a bootloader that has been tampered with.
+    1. Secure Boot checks — Secure Boot has each stage of startup verified against trusted signatures, refusing to run a bootloader that has been tampered with.
     2. Measured into PCRs — Measured boot records a hash of each component that actually loaded and stores it in the TPM's Platform Configuration Registers (PCRs).
     3. Keys stay in hardware — The TPM is a tamper-resistant chip that generates and stores cryptographic keys so they never leave the hardware.
     4. Remote attestation — A remote server can ask the TPM to attest to that record, getting cryptographic proof the device booted into a known-good state before it is trusted.
@@ -963,7 +963,7 @@ WebSockets — WebSocket Protocol (RFC 6455)
     [Protocol, Network Technology] · aka ws, wss, RFC 6455, Sec-WebSocket-Key
     1. Ask to upgrade — The connection starts as an HTTP/1.1 GET carrying an Upgrade: websocket header.
     2. 101 Switching Protocols — The server answers 101 Switching Protocols.
-    3. Frames both ways — The same TCP socket then carries lightweight binary frames in both directions, so client and server can push messages at any time.
+    3. Frames both ways — The same TCP socket then carries lightweight frames in both directions, so client and server can push messages at any time.
     4. wss:// adds TLS — Production deployments use wss://, which wraps the connection in TLS.
     Key fact: WebSocket removes the request/response turn-taking of plain HTTP, which is why it powers chat, collaborative editing, live dashboards and trading feeds.
 
