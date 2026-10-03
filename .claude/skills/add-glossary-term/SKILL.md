@@ -68,7 +68,9 @@ Add a matching `DIAGRAMS.<id>` function returning inline SVG, `viewBox` 720 wide
 chips, and each diagram element that belongs to a step carries `data-s="1 3"`.
 
 - shapes — `box`, `box-accent`, `zone-accent`
-- flows — `flow`, `flow-accent`, `flow-ok`, `flow-bad`
+- flows — `flow`, `flow-accent`, `flow-ok`, `flow-bad`. Every flow animates in drawing
+  order, so draw each line from source to destination, arrowhead or not. A two-way
+  arrow (both markers) sways; `flow-bad` lurches and stalls.
 - boundaries — `divider`, `zone`, `zone-accent` light up too (accent stroke, no moving
   dash), so a boundary or region can be a step's focus: tag it, or its group
 - arrowheads — `ah-acc`, `ah-ok`, `ah-bad`, `ah-mut`

@@ -588,14 +588,17 @@
     .dg .flow.on[marker-start] { marker-start: url(#ah-acc); }
     .dg .on:is(.flow, .flow-accent, .flow-ok, .flow-bad) { stroke-width: 2.5; stroke-dasharray: 7 5; animation: tour-dash 900ms linear infinite; }
     @keyframes tour-dash { to { stroke-dashoffset: -24; } }
-    /* Ambient flow: one-way arrows drift toward their arrowhead. :where() keeps
-       this below the lit-step rule, which is faster and thicker. Blocked, two-way
-       and markerless lines stay still, as does a line drawn with its own dash
-       pattern, because that pattern carries meaning. */
+    @keyframes flow-halt { 0% { stroke-dashoffset: 0; } 40%, 100% { stroke-dashoffset: -8; } }
+    /* Ambient flow: every line moves, and the motion says what the line is.
+       A flow drifts in drawing order, toward its arrowhead; a two-way arrow
+       sways; a blocked line lurches one dash forward and stalls. A line drawn
+       with its own dash pattern keeps it. :where() keeps all of this below the
+       lit-step rule, which is faster and thicker. */
     @media screen and (prefers-reduced-motion: no-preference) {
-      .dg :where(.flow, .flow-accent, .flow-ok):where([marker-end]:not([marker-start], [stroke-dasharray])) {
-        stroke-dasharray: 8 4; animation: tour-dash 2400ms linear infinite;
-      }
+      .dg :where(.flow, .flow-accent, .flow-ok) { animation: tour-dash 2400ms linear infinite; }
+      .dg :where(.flow, .flow-accent, .flow-ok):where(:not([stroke-dasharray])) { stroke-dasharray: 8 4; }
+      .dg :where(.flow, .flow-accent, .flow-ok):where([marker-start]) { animation-direction: alternate; animation-timing-function: ease-in-out; }
+      .dg :where(.flow-bad) { animation: flow-halt 1600ms ease-out infinite; }
     }
     .dg .ico { fill: none; stroke: var(--text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .dg .on .ico { stroke: var(--accent-text); }
