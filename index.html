@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ZTA Visual Glossary — IT, Networking &amp; Zero-Trust Terms, Explained Visually</title>
   <meta name="description" content="A browsable, searchable visual glossary of IT, networking, and zero-trust terms. Every entry has a TL;DR, a custom inline-SVG diagram, and flash-card takeaways.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563EB'/%3E%3Cg transform='translate(7 7) scale(.75)' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23AD1FFF'/%3E%3Cg transform='translate(7 7) scale(.75)' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/g%3E%3C/svg%3E">
   <script>
     /* Set the theme before first paint, so dark-mode readers get no light flash. Storage may be blocked. */
     (() => {
@@ -33,8 +33,9 @@
       --border: #E5E7EB;
       --border-strong: #D1D5DB;
 
-      /* Exactly ONE brand accent (restrained blue). */
-      --accent: #2563EB;
+      /* Exactly ONE brand accent (electric violet): the brightest that still
+         clears 4.5:1 on --bg, so one hue reads on white and glows on black. */
+      --accent: #AD1FFF;
       --accent-hover: color-mix(in srgb, var(--accent) 88%, black);
       --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--bg));
       --accent-text: color-mix(in srgb, var(--accent) 85%, black);
@@ -45,8 +46,7 @@
       --state-warn: #CA8A04;
 
       /* Categorical (data-viz / taxonomy) palette. Used only for diagram
-         category fills and the provenance-dimension tag colour. cat-5
-         intentionally equals --accent so charts harmonise with the brand. */
+         category fills and the provenance- and domain-dimension tag colours. */
       --cat-1: #DC2626;
       --cat-2: #EA580C;
       --cat-3: #CA8A04;
@@ -64,7 +64,7 @@
       --tag-type: var(--accent);
       --tag-prov: var(--cat-4);
       --tag-prov-text: color-mix(in srgb, var(--cat-4) 65%, black);
-      --tag-domain: var(--cat-7);
+      --tag-domain: var(--cat-5);
 
       /* Spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 */
       --space-1: 4px;
@@ -95,33 +95,37 @@
       --radius-lg: 12px;
       --shadow-sm: 0 1px 2px rgba(10, 10, 10, 0.04);
       --shadow: 0 1px 3px rgba(10, 10, 10, 0.06), 0 1px 2px rgba(10, 10, 10, 0.04);
+      /* Neon halo. Empty here; the dark theme switches it on. */
+      --glow: 0 0 0 0 transparent;
       --max-width: 1200px;
       --transition: 180ms ease;
     }
 
     [data-theme="dark"] {
-      --bg: #0B0B0C;
-      --surface: #161618;
+      /* Neon on near-black: cool-tinted darks, fully saturated signal colours. */
+      --bg: #050508;
+      --surface: #0D0D14;
       --text: #F5F5F5;
       --text-muted: #9CA3AF;
-      --border: #27272A;
-      --border-strong: #3F3F46;
+      --border: #22222E;
+      --border-strong: #3A3A4D;
       --accent-soft: color-mix(in srgb, var(--accent) 18%, var(--bg));
       --accent-text: color-mix(in srgb, var(--accent) 70%, white);
-      --state-ok: #4ADE80;
-      --state-bad: #F87171;
-      --state-warn: #FACC15;
-      --cat-1: #F87171;
-      --cat-2: #FB923C;
-      --cat-3: #FACC15;
-      --cat-4: #4ADE80;
-      --cat-5: #60A5FA;
-      --cat-6: #818CF8;
-      --cat-7: #A78BFA;
+      --state-ok: #39FF14;
+      --state-bad: #FF3355;
+      --state-warn: #FFE600;
+      --cat-1: #FF3355;
+      --cat-2: #FF8A1F;
+      --cat-3: #FFE600;
+      --cat-4: #39FF14;
+      --cat-5: #00E5FF;
+      --cat-6: #5C7CFF;
+      --cat-7: #D24DFF;
       --tag-prov-text: var(--cat-4);
       --on-cat: #0B0B0C;
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
       --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+      --glow: 0 0 18px color-mix(in srgb, var(--accent) 55%, transparent);
     }
 
     /* ==================================================================
@@ -204,6 +208,7 @@
       border-radius: 8px;
       background: var(--accent);
       color: var(--on-accent);
+      box-shadow: var(--glow);
       flex: none;
     }
     .brand-mark svg { width: 18px; height: 18px; }
@@ -284,7 +289,7 @@
       transition: border-color var(--transition), box-shadow var(--transition);
     }
     .search input::placeholder { color: var(--text-muted); }
-    .search input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .search input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft), var(--glow); }
     .search-clear {
       position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
       width: 28px; height: 28px; display: none; place-items: center;
@@ -370,8 +375,8 @@
       cursor: pointer;
       transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
     }
-    .term-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow); }
-    .term-card:focus-within { border-color: var(--accent); }
+    .term-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow), var(--glow); }
+    .term-card:focus-within { border-color: var(--accent); box-shadow: var(--glow); }
     .term-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
     .term-name { font-size: 1.15rem; font-weight: 700; letter-spacing: var(--tracking-tight); color: var(--text); min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
     .term-name::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-lg); }
@@ -474,7 +479,7 @@
       color: var(--text); font-size: var(--fs-small); font-weight: 700; cursor: pointer;
       transition: color var(--transition), border-color var(--transition), background-color var(--transition);
     }
-    .related-pill:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    .related-pill:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); box-shadow: var(--glow); }
     .related-pill svg { width: 14px; height: 14px; color: var(--text-muted); }
     .related-pill:hover svg { color: var(--accent); }
 
@@ -555,7 +560,7 @@
     }
     .tour-chip b { font-size: 20px; line-height: 1; }
     .tour-chip:hover { border-color: var(--accent); color: var(--text); }
-    .tour-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+    .tour-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--text); box-shadow: var(--glow); }
     .tour-chip[aria-pressed="true"] b { color: var(--accent-text); }
     .tour-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .tour-panel {
@@ -589,6 +594,16 @@
     .dg .badge text { fill: var(--text-muted); font-size: 11px; font-weight: 700; }
     .dg .badge.on circle { fill: var(--accent); stroke: var(--accent); }
     .dg .badge.on text { fill: var(--on-accent); }
+    /* Neon, dark theme only: each signal stroke glows in its own colour.
+       Screen only, so a filter never rasterises a printed diagram. */
+    @media screen {
+      [data-theme="dark"] h1 { text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 55%, transparent); }
+      [data-theme="dark"] .dg :is(.box-accent, .zone-accent, .flow-accent, .flow.on, .badge.on circle),
+      [data-theme="dark"] .dg .on > :is(.box, .box-soft, .zone, .zone-accent),
+      [data-theme="dark"] .dg :is(.box, .box-soft, .zone).on { filter: drop-shadow(0 0 4px var(--accent)); }
+      [data-theme="dark"] .dg .flow-ok { filter: drop-shadow(0 0 4px var(--state-ok)); }
+      [data-theme="dark"] .dg .flow-bad { filter: drop-shadow(0 0 4px var(--state-bad)); }
+    }
     @media print {
       .tour-chips, .tour-panel { display: none; }
       .tour-print { display: block; margin: var(--space-4) 0 0; }
