@@ -1,7 +1,7 @@
 ---
 name: add-glossary-term
 description: >-
-  Use when adding a term to the ZTA visual glossary or editing an existing entry's data or
+  Use when adding a term to the Visual Tech Glossary or editing an existing entry's data or
   diagram — triggers on "add <X> to the glossary", "add <X>", "new entry for <X>", "add a
   term", "add a domain/type tag". Covers the TERMS entry, the inline-SVG diagram, reverse
   cross-links, the six counters, glossary.txt, the browser verification loop, and the

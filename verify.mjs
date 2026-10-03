@@ -408,7 +408,7 @@ for (const t of targets) {
     // measure it. showDetail() sets document.title from the term name in the
     // same synchronous block as the innerHTML, so the title is proof that the
     // rendered diagram is this term's.
-    const wantTitle = `${t.term} — ZTA Visual Glossary`;
+    const wantTitle = `${t.term} — Visual Tech Glossary`;
     await page.waitForFunction(`document.title === ${JSON.stringify(wantTitle)}`, null, { timeout: 5000 });
     await page.waitForSelector('#detail-content svg.dg', { timeout: 5000 });
     // This term's text may need a face that nothing before it did.

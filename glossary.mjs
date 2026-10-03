@@ -24,7 +24,7 @@ const { TERMS } = readTerms(source);
 
 const entries = [...TERMS].sort((a, b) => a.term.localeCompare(b.term));
 const lines = [
-  'ZTA VISUAL GLOSSARY — TERM REFERENCE',
+  'VISUAL TECH GLOSSARY — TERM REFERENCE',
   `${entries.length} terms, alphabetical. Generated from index.html by glossary.mjs.`,
   'Format: TERM — expansion / full name',
   '         TL;DR',

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-A browsable visual glossary of IT, networking and zero-trust terms. Everything ships in
+A browsable visual glossary of IT, AI, networking and security terms. Everything ships in
 one self-contained `index.html` — markup, styles, the `TERMS` data array, and
 hand-authored inline SVG diagrams. No build step and no runtime dependencies; the
 `.mjs` files at the root are tooling, not part of the page.

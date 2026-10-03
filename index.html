@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZTA Visual Glossary — IT, Networking &amp; Zero-Trust Terms, Explained Visually</title>
-  <meta name="description" content="A browsable, searchable visual glossary of IT, networking, and zero-trust terms. Every entry has a TL;DR, a custom inline-SVG diagram, and flash-card takeaways.">
+  <title>Visual Tech Glossary — IT, AI, Networking &amp; Security Terms, Explained Visually</title>
+  <meta name="description" content="A browsable, searchable visual glossary of IT, AI, networking, and security terms. Every entry has a TL;DR, a custom inline-SVG diagram, and flash-card takeaways.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23AD1FFF'/%3E%3Cg transform='translate(7 7) scale(.75)' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/g%3E%3C/svg%3E">
   <script>
     /* Set the theme before first paint, so dark-mode readers get no light flash. Storage may be blocked. */
@@ -717,12 +717,12 @@
 
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="#" aria-label="ZTA Visual Glossary home">
+      <a class="brand" href="#" aria-label="Visual Tech Glossary home">
         <span class="brand-mark" aria-hidden="true">
           <!-- Lucide: book-open -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
         </span>
-        <span class="brand-text"><span>ZTA Visual Glossary</span><small>IT, networking &amp; zero-trust terms</small></span>
+        <span class="brand-text"><span>Visual Tech Glossary</span><small>IT, AI, networking &amp; security terms</small></span>
       </a>
       <div class="header-tools">
         <ul class="branding" aria-label="Personal links">
@@ -756,8 +756,8 @@
     <div id="browse-view">
       <section class="intro">
         <div class="container">
-          <h1>The visual glossary of how the internet keeps its&nbsp;secrets.</h1>
-          <p class="lede">Every term gets a one-line TL;DR, a custom diagram that does the explaining, and flash-card takeaways to remember it by. Built for scanning, searching, and filtering across protocols, networks, security, and the building blocks of Zero Trust.</p>
+          <h1>The visual glossary of how modern&nbsp;tech actually&nbsp;works.</h1>
+          <p class="lede">Every term gets a one-line TL;DR, a custom diagram that does the explaining, and flash-card takeaways to remember it by. Built for scanning, searching, and filtering across IT, AI, networking, and security.</p>
           <div class="stats">
             <span class="stat"><b id="stat-total">104</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
@@ -823,7 +823,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <span>&copy; <span id="year"></span> James Buckett — ZTA Visual Glossary</span>
+      <span>&copy; <span id="year"></span> James Buckett — Visual Tech Glossary</span>
       <span>Built with <code>skill-style-guide</code> + <code>skill-build-educational-site</code></span>
     </div>
   </footer>
@@ -8778,7 +8778,7 @@ It is a specialist: the managed databases, identity services and compliance cata
   function showBrowse() {
     els.detailView.hidden = true;
     els.browseView.hidden = false;
-    document.title = "ZTA Visual Glossary — IT, Networking & Zero-Trust Terms, Explained Visually";
+    document.title = "Visual Tech Glossary — IT, AI, Networking & Security Terms, Explained Visually";
     setActiveToc(null);
     if (lastDetailId) {
       window.scrollTo({ top: browseScroll, behavior: "instant" });
@@ -8793,7 +8793,7 @@ It is a specialist: the managed databases, identity services and compliance cata
     if (els.detailView.hidden) browseScroll = window.scrollY;
     els.browseView.hidden = true;
     els.detailView.hidden = false;
-    document.title = `${e.term} — ZTA Visual Glossary`;
+    document.title = `${e.term} — Visual Tech Glossary`;
     window.scrollTo({ top: 0, behavior: "instant" });
     setActiveToc(e.id);
     els.detailContent.querySelector(".detail-title").focus({ preventScroll: true });
