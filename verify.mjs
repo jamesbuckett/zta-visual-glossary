@@ -20,6 +20,11 @@
 //       a closed disclosure that opens for print, and nothing overflows at
 //       1440px or 375px
 //
+// A real run waits for the page's web fonts before it measures anything, and
+// reports a `fonts` error if they never load: geometry in fallback fonts is not
+// the geometry a reader sees (envoy's badge 3 passed in one and failed in the
+// other).
+//
 // Usage:
 //   node verify.mjs                  # every term
 //   node verify.mjs calico istio     # just these, while adding an entry
@@ -51,6 +56,7 @@ if (flags.help) {
   console.log('Usage: node verify.mjs [term-id ...] [--target=<path>] [--json] [--quiet] [--offline]');
   console.log('       with no term-id, every term is checked');
   console.log('       --offline answers every network request with an empty response (fixture suites only)');
+  console.log('       without it, the run waits for the web fonts and reports a fonts error if they do not load');
   process.exit(0);
 }
 
@@ -333,6 +339,19 @@ const REOPEN_PROBE = `(() => {
 
 const tocIds = `(() => [...document.querySelectorAll('#toc [data-toc]')].map((e) => e.dataset.toc))()`;
 
+// Lays the page out so every face its text needs is requested, waits for font
+// loading to settle, then returns the families the page's font stylesheet names
+// (its family= parameters, so nothing is hard-coded here) that have no loaded
+// face. The wait is capped: a font request that hangs must not hang the run.
+const FONTS_PROBE = `(async () => {
+  document.body.getBoundingClientRect();
+  await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 10000))]);
+  const want = [...document.querySelectorAll('link[rel="stylesheet"]')]
+    .flatMap((l) => new URL(l.href).searchParams.getAll('family')).map((f) => f.split(':')[0]);
+  const loaded = new Set([...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family.replace(/["']/g, '')));
+  return want.filter((f) => !loaded.has(f));
+})()`;
+
 const FILE = pathToFileURL(source).href;
 const { browser, label } = await launchBrowser();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
@@ -366,6 +385,18 @@ for (const t of targets) {
   if (inToc.size && !inToc.has(t.id)) err('toc', `${t.id}: no TOC entry`);
 }
 
+// A real run measures the page's own fonts: wait for them, and say so if they
+// never arrive rather than pass on fallback metrics. --offline renders fallback
+// fonts by design, so it is exempt.
+let waitForFonts = !flags.offline;
+if (waitForFonts) {
+  const missing = await page.evaluate(FONTS_PROBE);
+  if (missing.length) {
+    err('fonts', `web fonts did not load (${missing.join(', ')}) — geometry was measured in fallback fonts`);
+    waitForFonts = false;   // one capped wait for the run, not one per term
+  }
+}
+
 for (const t of targets) {
   consoleErrors = [];
   await page.goto(`${FILE}#${t.id}`, { waitUntil: 'load' });
@@ -380,6 +411,8 @@ for (const t of targets) {
     const wantTitle = `${t.term} — ZTA Visual Glossary`;
     await page.waitForFunction(`document.title === ${JSON.stringify(wantTitle)}`, null, { timeout: 5000 });
     await page.waitForSelector('#detail-content svg.dg', { timeout: 5000 });
+    // This term's text may need a face that nothing before it did.
+    if (waitForFonts) await page.evaluate(FONTS_PROBE);
     found = await page.evaluate(PROBE);
   } catch {
     err('render', `${t.id}: detail view did not render (title never became "${t.term}")`);

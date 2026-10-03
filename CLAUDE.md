@@ -63,7 +63,9 @@ Pass term ids to narrow it (`npm run verify calico`).
 
 The two fixture suites run `verify.mjs` with `--offline`, which answers every network
 request with an empty response, so they never wait on Google Fonts. Do not use the flag
-for a real run: the geometry checks measure text in the page's own fonts.
+for a real run: the geometry checks measure text in the page's own fonts. A real run
+waits for those fonts before measuring and reports a `fonts` error if they do not load,
+so it cannot pass without access to Google Fonts.
 
 The term count printed by `npm run glossary` is a free cross-check on the counters in
 step 4 of the skill.

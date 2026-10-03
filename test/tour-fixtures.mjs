@@ -78,6 +78,11 @@ const CASES = [
   ['offline verify does not wait on a font host that never answers',
     withDiagram(withTour(base, GOOD_STEPS), svg()).replace('https://fonts.googleapis.com/css2', SILENT_HOST),
     'verify', 0, null],
+  // A real run measures the page's own fonts, so it must say when they never
+  // arrive. A closed local port refuses at once: no network, no waiting.
+  ['real verify reports web fonts that never load',
+    withDiagram(withTour(base, GOOD_STEPS), svg()).replace('https://fonts.googleapis.com/css2', 'http://127.0.0.1:1/css2'),
+    'verify-online', 1, 'fonts'],
   ['step that lights nothing', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '1' })), 'verify', 1, 'tour'],
   ['step number out of range', withDiagram(withTour(base, GOOD_STEPS), svg({ b: '2 4' })), 'verify', 1, 'tour'],
   ['nested data-s', withDiagram(withTour(base, GOOD_STEPS), svg({ nestBadge: true })), 'verify', 1, 'tour'],
@@ -99,7 +104,7 @@ for (const [name, html, checker, wantCode, wantRule] of CASES) {
   fs.writeFileSync(file, html);
   const args = checker === 'validate'
     ? [path.join(root, 'validate.mjs'), file, '--json']
-    : [path.join(root, 'verify.mjs'), 'wireguard', `--target=${file}`, '--json', '--offline'];
+    : [path.join(root, 'verify.mjs'), 'wireguard', `--target=${file}`, '--json', ...(checker === 'verify' ? ['--offline'] : [])];
   const r = spawnSync('node', args, { encoding: 'utf8' });
   fs.rmSync(dir, { recursive: true, force: true });
 
