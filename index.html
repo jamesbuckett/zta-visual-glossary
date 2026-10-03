@@ -588,6 +588,15 @@
     .dg .flow.on[marker-start] { marker-start: url(#ah-acc); }
     .dg .on:is(.flow, .flow-accent, .flow-ok, .flow-bad) { stroke-width: 2.5; stroke-dasharray: 7 5; animation: tour-dash 900ms linear infinite; }
     @keyframes tour-dash { to { stroke-dashoffset: -24; } }
+    /* Ambient flow: one-way arrows drift toward their arrowhead. :where() keeps
+       this below the lit-step rule, which is faster and thicker. Blocked, two-way
+       and markerless lines stay still, as does a line drawn with its own dash
+       pattern, because that pattern carries meaning. */
+    @media screen and (prefers-reduced-motion: no-preference) {
+      .dg :where(.flow, .flow-accent, .flow-ok):where([marker-end]:not([marker-start], [stroke-dasharray])) {
+        stroke-dasharray: 8 4; animation: tour-dash 2400ms linear infinite;
+      }
+    }
     .dg .ico { fill: none; stroke: var(--text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .dg .on .ico { stroke: var(--accent-text); }
     .dg .badge circle { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; }
