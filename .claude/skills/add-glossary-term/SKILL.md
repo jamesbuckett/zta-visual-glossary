@@ -152,8 +152,13 @@ checks do not judge whether the diagram is *right*, only that nothing collides.
 ## 7. Refresh the committed screenshots
 
 ```bash
-node screenshot.mjs ./index.html
+node screenshot.mjs ./index.html               # desktop.png, tablet.png, mobile.png
+node screenshot.mjs ./index.html --mode=dark   # dark-desktop.png, dark-tablet.png, dark-mobile.png
 ```
+
+Run both: the default mode writes only the three light files, and the dark set is a
+separate pass. `git status` should show all six files in `screenshots/` modified before
+the screenshots commit.
 
 No env prefix needed: `_launch.mjs` falls through to `/snap/bin/chromium`, and `verify.mjs`
 sets the override itself. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` only if that fallback
