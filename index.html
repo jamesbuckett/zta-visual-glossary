@@ -748,7 +748,7 @@
 
   <main>
     <nav class="toc" id="toc" aria-label="Glossary terms">
-      <span class="toc-label">All terms <span class="toc-count" id="toc-count">104</span></span>
+      <span class="toc-label">All terms <span class="toc-count" id="toc-count">105</span></span>
       <div class="toc-scroll"><ul id="toc-list"></ul></div>
     </nav>
 
@@ -759,11 +759,11 @@
           <h1>The visual glossary of how modern&nbsp;tech actually&nbsp;works.</h1>
           <p class="lede">Every term gets a short TL;DR, a custom diagram that does the explaining, and flash-card takeaways to remember it by. Built for scanning, searching, and filtering across IT, AI, networking, and security.</p>
           <div class="stats">
-            <span class="stat"><b id="stat-total">104</b><span>Terms</span></span>
+            <span class="stat"><b id="stat-total">105</b><span>Terms</span></span>
             <span class="stat"><b id="stat-types">6</b><span>Type tags</span></span>
             <span class="stat"><b id="stat-prov">2</b><span>Provenance flags</span></span>
             <span class="stat"><b id="stat-domains">11</b><span>Domains</span></span>
-            <span class="stat"><b id="stat-diagrams">104</b><span>Diagrams</span></span>
+            <span class="stat"><b id="stat-diagrams">105</b><span>Diagrams</span></span>
           </div>
         </div>
       </section>
@@ -2758,7 +2758,7 @@ That buys three things the weights cannot: knowledge that changed after the trai
 
 Authorisation is the security question. Retrieval must run as the asking user. Otherwise an index built by an ingestion account that could read everything becomes a confused deputy, laundering documents into answers for people who were never allowed to open them. Filter at retrieval time, because instructing the model to keep a secret is not access control. Retrieved text is untrusted input as well, which is the indirect prompt-injection path, and grounding lowers hallucination without removing it.`,
       types: ["Method"], provenance: [], domains: ["AI & Models"],
-      related: ["rlhf", "dpo", "rbac", "peppdp"],
+      related: ["rlhf", "dpo", "rbac", "peppdp", "jev"],
       source: { label: "Lewis et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", url: "https://arxiv.org/abs/2005.11401" },
       caption: "Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.",
       steps: [
@@ -3386,6 +3386,35 @@ It is a specialist: the managed databases, identity services and compliance cata
         { title: "One record per request", text: "Each entry records one request and its response: URL, method, headers, cookies, bodies and status, plus a timings breakdown." },
         { title: "Convention, not standard", text: "Version 1.2 is frozen, and its W3C draft was never published and is marked abandoned, so HAR is a shared convention rather than a standard." },
         { title: "Captures too much", text: "Anyone given a HAR can lift a live session from its cookies and Authorization headers; Chrome's default export now omits those headers, but URLs and bodies remain." }
+      ]
+    },
+    {
+      id: "jev", term: "Jev", acronym: "TypeSafe AI's System One Decision Model (a name, not an acronym)",
+      aliases: ["System One", "System One model", "TypeSafe AI", "decision model", "Choice", "Score", "Noul", "calibrated probabilities", "confidence", "guardrails", "intent routing"],
+      tldr: "A model that decides instead of writing: send it a state and typed questions, and it returns choices, scores and yes-or-no probabilities that code can act on directly.",
+      explainer: `Jev is a decision model from TypeSafe AI, and the first of what the company calls System One models: models built to make fast, structured decisions that software can use directly. It generates no text. An application sends a state, the text or JSON a decision depends on, together with one or more typed questions, and every question is answered in a single request. There are three question types. Choice picks one option from a list, Score places the state on a rubric of ordered levels, and Noul returns the probability that the answer to a yes-or-no question is yes. Because the possible answers are defined in advance, there is no reply to parse. Choice and Score answers also carry a confidence figure from 0 to 1, computed from how concentrated the probabilities are, and code is expected to threshold on it: act automatically when confidence is high, route to a person when it is low.
+
+Speed is the selling point, and the figures are the vendor's own. TypeSafe reports end-to-end responses in 70 to 500 milliseconds, which it puts at 40 to 200 times faster than frontier language models on the same kind of query, and its documentation applies Jev to intent routing, classification and screening the messages going into and out of an LLM app. It is offered as a hosted API, in early access since September 2026.
+
+The limitation is that a well-typed answer is not a correct one. TypeSafe's documentation says calibration does not guarantee that an individual answer is correct, and that Jev produces no explanation of its reasoning. Its list of known weaknesses for the current release, 1.13, adds that in some cases the model leans towards the option listed first, and that it does not treat adversarial content as hostile by default, so an instruction injected into the state can move the answer.`,
+      types: ["Cloud Platform"], provenance: ["Vendor"], domains: ["AI & Models"],
+      related: ["rag", "rlhf", "peppdp", "opa"],
+      source: { label: "TypeSafe AI — Introducing System One Models & Jev", url: "https://typesafe.ai/blog/introducing-system-one-models-and-jev" },
+      caption: "An application sends a state and typed questions in one request; Jev returns typed answers with no text, and code thresholds on confidence before acting or handing over to a person.",
+      steps: [
+        { title: "State and typed questions", text: "An application sends a state, the text or JSON a decision depends on, together with one or more typed questions." },
+        { title: "One request, no text", text: "Every question is answered in a single request, and Jev generates no text, so there is no reply to parse." },
+        { title: "Three question types", text: "Choice picks one option from a list, Score places the state on a rubric of ordered levels, and Noul returns the probability that the answer to a yes-or-no question is yes." },
+        { title: "Threshold on confidence", text: "Choice and Score answers carry a confidence figure from 0 to 1, and code is expected to threshold on it: act automatically when confidence is high, route to a person when it is low." },
+        { title: "Typed, not correct", text: "A well-typed answer is not a correct one: calibration does not guarantee that an individual answer is correct, and an instruction injected into the state can move the answer." }
+      ],
+      fact: "Jev generates no text, and because its possible answers are defined in advance there is no reply to parse.",
+      takeaways: [
+        { title: "Decisions, not text", text: "Jev, from TypeSafe AI, is the first of what the company calls System One models: it generates no text, only fast, structured decisions that software can use directly." },
+        { title: "Three typed questions", text: "Jev answers three types of question about a state: Choice returns an option from a list, Score a level on a rubric, and Noul the probability of a yes." },
+        { title: "Confidence gates action", text: "Jev attaches a 0-to-1 confidence figure to Choice and Score answers, so code can act automatically on a high one and route a low one to a person." },
+        { title: "Speed, as reported", text: "TypeSafe reports Jev responding end to end in 70 to 500 milliseconds, 40 to 200 times faster than frontier language models on the same kind of query." },
+        { title: "Typed is not correct", text: "Jev's calibration guarantees no individual answer and Jev explains none; in release 1.13 it sometimes favours the first option, and an instruction injected into the state can move the answer." }
       ]
     }
   ];
@@ -8481,6 +8510,74 @@ It is a specialist: the managed databases, identity services and compliance cata
         ${badge(3, 458, 126, '3')}
         ${badge(4, 458, 216, '4')}
         ${badge(5, 680, 282, '5')}
+      </svg>`,
+
+    jev: () => `
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An application sends a state and typed questions in one request; Jev returns typed answers with no text, and code thresholds on confidence before acting or handing over to a person.">
+        <g data-s="1">
+          <rect class="box" x="24" y="30" width="152" height="80" rx="12"/>
+          ${icon('app-window', 36, 42)}
+          <text class="t-b" x="68" y="59">Your app</text>
+          <text class="t-sm t-mut" x="36" y="84">state: the ticket</text>
+          <text class="t-sm t-mut" x="36" y="100">3 typed questions</text>
+        </g>
+        <line class="flow" data-s="1" x1="178" y1="70" x2="250" y2="70" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="214" y="62" text-anchor="middle">request</text>
+        <g data-s="2">
+          <rect class="box-accent" x="252" y="30" width="152" height="80" rx="8"/>
+          ${icon('cpu', 264, 42)}
+          <text class="t-b" x="296" y="59">Jev</text>
+          <text class="t-sm t-mut" x="264" y="84">System One model</text>
+          <text class="t-sm t-mut" x="264" y="100">no generated text</text>
+        </g>
+        <line class="flow" data-s="2" x1="406" y1="70" x2="478" y2="70" marker-end="url(#ah-mut)"/>
+
+        <g data-s="2 3">
+          <rect class="box" x="480" y="16" width="216" height="108" rx="8"/>
+          <text class="t-sm t-b" x="492" y="36">typed answers</text>
+        </g>
+        ${[['Choice', 'which team?', 'billing', 46], ['Score', 'how frustrated?', '1.4', 70], ['Noul', 'refund asked?', '0.95', 94]].map(([type, q, v, y]) => `
+          <g data-s="3">
+            <rect class="box" x="488" y="${y}" width="200" height="22" rx="4"/>
+            <text class="t-sm" x="496" y="${y + 15}">${type}</text>
+            <text class="t-sm t-mut" x="544" y="${y + 15}">${q}</text>
+            <text class="t-sm t-acc" x="680" y="${y + 15}" text-anchor="end">${v}</text>
+          </g>`).join('')}
+
+        <line class="flow" data-s="4" x1="588" y1="126" x2="588" y2="150" marker-end="url(#ah-mut)"/>
+        <g data-s="4">
+          <rect class="box" x="480" y="152" width="216" height="84" rx="8"/>
+          ${icon('gauge', 492, 164)}
+          <text class="t-b" x="524" y="182">Confidence</text>
+          <text class="t-sm t-mut" x="492" y="206">0 to 1, on Choice and Score</text>
+          <text class="t-sm t-mut" x="492" y="222">thresholded in your code</text>
+        </g>
+        <line class="flow-ok" data-s="4" x1="478" y1="172" x2="406" y2="172" marker-end="url(#ah-ok)"/>
+        <text class="t-sm ok" data-s="4" x="442" y="164" text-anchor="middle">high</text>
+        <g data-s="4">
+          <rect class="box" x="252" y="152" width="152" height="40" rx="8"/>
+          <text class="t-b" x="328" y="177" text-anchor="middle">Act automatically</text>
+        </g>
+        <line class="flow" data-s="4" x1="478" y1="216" x2="178" y2="216" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="4" x="442" y="208" text-anchor="middle">low</text>
+        <g data-s="4">
+          <rect class="box" x="24" y="192" width="152" height="48" rx="12"/>
+          ${icon('user', 36, 204)}
+          <text class="t-b" x="68" y="221">Human review</text>
+        </g>
+
+        <g data-s="5">
+          <rect class="box" x="24" y="260" width="672" height="40" rx="8"/>
+          ${icon('skull', 40, 268)}
+          <text class="t-sm bad" x="76" y="285">an instruction injected into the state can move the answer</text>
+          <text class="t-sm bad" x="484" y="285">no answer is guaranteed</text>
+        </g>
+
+        ${badge(1, 160, 46, '1')}
+        ${badge(2, 388, 46, '2')}
+        ${badge(3, 676, 34, '3')}
+        ${badge(4, 676, 170, '4')}
+        ${badge(5, 676, 280, '5')}
       </svg>`,
   };
 

@@ -1,5 +1,5 @@
 VISUAL TECH GLOSSARY — TERM REFERENCE
-104 terms, alphabetical. Generated from index.html by glossary.mjs.
+105 terms, alphabetical. Generated from index.html by glossary.mjs.
 Format: TERM — expansion / full name
          TL;DR
          [type tags] · aliases
@@ -394,6 +394,16 @@ Istio — Istio Service Mesh
     4. Sidecar mode — In sidecar mode an Envoy proxy runs beside each workload, which taxes every pod with a proxy's memory and every call with an extra hop.
     5. Ambient mode — In ambient mode a per-node ztunnel handles only L3 and L4, carrying traffic in HBONE, and a waypoint proxy runs only where L7 rules are wanted.
     Key fact: If no ALLOW policy exists for a workload the request is permitted, so default-deny is something you configure rather than inherit.
+
+Jev — TypeSafe AI's System One Decision Model (a name, not an acronym)
+    A model that decides instead of writing: send it a state and typed questions, and it returns choices, scores and yes-or-no probabilities that code can act on directly.
+    [Cloud Platform] · aka System One, System One model, TypeSafe AI, decision model, Choice, Score, Noul, calibrated probabilities, confidence, guardrails, intent routing
+    1. State and typed questions — An application sends a state, the text or JSON a decision depends on, together with one or more typed questions.
+    2. One request, no text — Every question is answered in a single request, and Jev generates no text, so there is no reply to parse.
+    3. Three question types — Choice picks one option from a list, Score places the state on a rubric of ordered levels, and Noul returns the probability that the answer to a yes-or-no question is yes.
+    4. Threshold on confidence — Choice and Score answers carry a confidence figure from 0 to 1, and code is expected to threshold on it: act automatically when confidence is high, route to a person when it is low.
+    5. Typed, not correct — A well-typed answer is not a correct one: calibration does not guarantee that an individual answer is correct, and an instruction injected into the state can move the answer.
+    Key fact: Jev generates no text, and because its possible answers are defined in advance there is no reply to parse.
 
 JWT — JSON Web Token
     A signed, self-contained token that carries identity claims.

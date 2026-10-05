@@ -9,7 +9,7 @@
 
 ## About
 
-Explains 104 IT, AI, networking, and security terms on one self-contained HTML page. Each entry pairs a short TL;DR, a custom inline-SVG diagram you can step through part by part, and flash-card takeaways with the full explainer one click away — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar (on wide screens), filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
+Explains 105 IT, AI, networking, and security terms on one self-contained HTML page. Each entry pairs a short TL;DR, a custom inline-SVG diagram you can step through part by part, and flash-card takeaways with the full explainer one click away — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar (on wide screens), filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
 
 ## Usage
 
