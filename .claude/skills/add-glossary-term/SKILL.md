@@ -120,16 +120,24 @@ kebabid: {
 ```
 
 **Nodes.** `name` is the title drawn in the shape, word for word, in one `<text>`.
-`description` is one sentence that says only what the explainer says, and that still
-makes sense read on its own in the downloaded JSON: name the thing, never "it". Pick the
+`description` is one sentence that says only what the term's own copy says: its
+explainer first, and its caption and tour steps where the explainer is silent. It must
+still make sense read on its own in the downloaded JSON: name the thing, never "it". Pick the
 built-in `node-type` that honestly fits; otherwise use a custom kebab-case type such as
-`layer`. Two rules settle the common cases:
+`layer`. Three rules settle the common cases:
 
 - `actor` is for people and organisations only. A client machine or program is a
   `system`, or a `webclient` if it is a browser or an app's user interface.
 - When a built-in name collides with the term's own vocabulary, use a custom type. A
   Kubernetes pod is a `pod`, not a `service`, because a Service is a different
   Kubernetes object.
+- Something a component reads and writes as it runs (a cache, a lookup table, an index,
+  a log) is a `database`. Something made once and then handed on or kept (a token, a
+  certificate, a manifest, a policy file) is a `data-asset`.
+
+You may add a node for something the old drawing only labelled, when the term's copy
+names it: a "private network" label becomes a zone around its hosts. Do not invent a node
+the copy does not name.
 
 The type sets the outline:
 
@@ -148,16 +156,19 @@ The type sets the outline:
 runs inside another, `composed-of` for a node that is a part of another. A request and
 its reply are one relationship. Set `protocol` only if it is one of CALM's twelve (HTTP,
 HTTPS, FTP, SFTP, JDBC, WebSocket, SocketIO, LDAP, AMQP, TLS, mTLS, TCP); otherwise name
-the protocol in the description. Every node must appear in at least one relationship. A
+the protocol in the description, unless the term is itself that protocol. Every node must appear in at least one relationship. A
 node is a container through one of the two kinds, never both. Write each description so
 it makes sense on its own, as for nodes.
 
-**Flow.** Write one flow if any tour step lights a connector, none otherwise. List the
-transitions in the order the tour lights their connectors, numbered 1 to N. Every arrow the tour lights is a transition; an arrow that is not part of the flow carries no `data-s`. A reply is a
-transition with `"direction": "destination-to-source"`. Each transition needs a
-connector of its own drawn in its direction. A two-way
-arrow stands for a request and its reply, so it must have one transition each way; draw a
-link with no reply in the model one-way.
+**Flow.** Write one flow when the tour narrates traffic: if it lights any arrow, the
+model has a flow. List the transitions in the order the tour lights their connectors,
+numbered 1 to N. A reply, or any traffic going back over the same link, is a transition
+with `"direction": "destination-to-source"`. Each transition needs a lit connector of its
+own, drawn in its direction; a connector lit at several steps can serve a transition at
+any of them. A two-way arrow stands for traffic each way, so it must have one transition
+each way; draw a link with no return traffic in the model one-way. The tour may also
+light a connector that is not a transition, to show structure: "every device plugs into
+the switch" lights three links and adds nothing to the flow.
 
 **Tagging.**
 

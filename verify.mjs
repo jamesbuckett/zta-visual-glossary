@@ -371,7 +371,7 @@ const CALM_PROBE = `(() => {
     if (c.contains('box-soft')) return 'solid container';
     return Number(el.getAttribute('rx')) >= 16 ? 'rounded box' : 'square box';
   };
-  const step = (el) => { const s = el.closest('[data-s]'); return s ? Math.min(...s.dataset.s.trim().split(/\\s+/).map(Number)) : null; };
+  const steps = (el) => { const s = el.closest('[data-s]'); return s ? s.dataset.s.trim().split(/\\s+/).map(Number).sort((a, b) => a - b) : []; };
   const point = (el, at) => { const p = el.getPointAtLength(at); const q = new DOMPoint(p.x, p.y).matrixTransform(el.getScreenCTM()); return { x: q.x, y: q.y }; };
   const where = (el) => (el.getAttribute('class') || el.tagName) + ' at ' +
     ['x', 'y', 'x1', 'y1', 'd'].map((a) => el.getAttribute(a)).filter(Boolean).join(',').slice(0, 40);
@@ -384,7 +384,7 @@ const CALM_PROBE = `(() => {
       const head = el.hasAttribute('marker-end'), tail = el.hasAttribute('marker-start');
       // Read tail to head. A lone marker-start means the line was drawn backwards.
       const back = tail && !head;
-      connectors.push({ id, from: back ? b : a, to: back ? a : b, twoWay: head && tail, step: step(el) });
+      connectors.push({ id, from: back ? b : a, to: back ? a : b, twoWay: head && tail, arrow: head || tail, steps: steps(el) });
     } else {
       const outline = el.matches(SHAPES) ? el : [...el.querySelectorAll(SHAPES)].find((s) => !s.closest('.ico'));
       nodes.push({
@@ -485,34 +485,61 @@ function checkDrawing(id, model, d) {
       c.dir = c.twoWay ? 'both' : forward ? 'forward' : 'reverse';
     }
     if (lines.every((c) => c.dir)) for (const n of s.to) if (!reached.has(n)) bad(`relationship "${rid}" has no connector reaching "${n}"`);
-    pool.set(rid, lines.filter((c) => c.dir).sort((a, b) => (a.step ?? Infinity) - (b.step ?? Infinity)));
+    pool.set(rid, lines.filter((c) => c.dir).sort((a, b) => (a.steps[0] ?? Infinity) - (b.steps[0] ?? Infinity)));
   }
 
-  // The flow: each transition has a connector of its own in its direction,
-  // and the tour lights them in the flow's order. A two-way arrow must have one
-  // transition each way.
+  // The flow is a sub-story of the tour. Each transition needs a lit connector
+  // of its own, drawn in its direction, and the transitions follow the tour: a
+  // connector lit at several steps can serve a transition at any of them. A
+  // two-way arrow needs a transition each way, and a connector drawn against
+  // its relationship's direction needs a destination-to-source one. The tour
+  // may also light a connector that is no transition, to show structure.
   const flow = (model.flows || [])[0];
-  const lit = d.connectors.filter((c) => c.step !== null && rels.has(c.id));
-  if (!flow && lit.length) bad(`the tour lights ${lit.length} connector(s) but the model has no flow`);
-  let prev = 0;
-  for (const t of flow ? flow.transitions : []) {
-    const rid = t['relationship-unique-id'];
-    const want = t.direction === 'destination-to-source' ? 'reverse' : 'forward';
-    const n = t['sequence-number'];
-    const c = (pool.get(rid) || []).find((x) => !x[want] && (x.dir === want || x.dir === 'both'));
-    if (!c) { bad(`transition ${n} over "${rid}" has no ${want} connector of its own`); continue; }
-    c[want] = true;
-    if (c.step === null) bad(`transition ${n}'s connector is never lit by the tour`);
-    else if (c.step < prev) bad(`flow order contradicts the tour: transition ${n} is first lit at step ${c.step}, after one lit at step ${prev}`);
-    else prev = c.step;
-  }
-  for (const [rid, lines] of pool) for (const c of lines) {
-    if (c.dir === 'reverse' && !c.reverse) bad(`a "${rid}" connector is drawn against the relationship's direction with no destination-to-source transition`);
-    if (c.dir === 'both' && !(c.forward && c.reverse)) {
-      bad(`a two-way "${rid}" connector needs a transition in each direction; draw it one-way if the model has no reply`);
+  const arrowsLit = d.connectors.filter((c) => c.arrow && c.steps.length && rels.has(c.id));
+  if (!flow && arrowsLit.length) bad(`the tour lights ${arrowsLit.length} arrow(s) but the model has no flow`);
+
+  const wants = (flow ? flow.transitions : []).map((t) => ({
+    n: t['sequence-number'], rid: t['relationship-unique-id'],
+    dir: t.direction === 'destination-to-source' ? 'reverse' : 'forward',
+  }));
+  const allLines = [...pool.values()].flat();
+  // The directions that must be claimed by a transition.
+  const owed = (c) => (c.dir === 'both' ? ['forward', 'reverse'] : c.dir === 'reverse' ? ['reverse'] : []);
+
+  // True if every transition from the i-th on can take a connector, with the
+  // steps never going backwards and every owed direction claimed. Claims are
+  // left in place on success and undone on failure.
+  const fits = (i, prev) => {
+    if (i === wants.length) return allLines.every((c) => owed(c).every((dir) => c[dir]));
+    const w = wants[i];
+    for (const c of pool.get(w.rid) || []) {
+      if (c[w.dir] || !(c.dir === w.dir || c.dir === 'both')) continue;
+      const at = c.steps.find((s) => s >= prev);
+      if (at === undefined) continue;
+      c[w.dir] = true;
+      if (fits(i + 1, at)) return true;
+      c[w.dir] = false;
     }
-    if (flow && c.dir === 'forward' && c.step !== null && !c.forward) {
-      bad(`a "${rid}" connector lit at step ${c.step} has no transition; every arrow the tour lights is a step in the flow`);
+    return false;
+  };
+
+  if (fits(0, 0)) return;
+
+  // No pairing works. Walk the transitions first-fit to say why.
+  let prev = 0;
+  for (const w of wants) {
+    const c = (pool.get(w.rid) || []).find((x) => !x[w.dir] && (x.dir === w.dir || x.dir === 'both'));
+    if (!c) { bad(`transition ${w.n} over "${w.rid}" has no ${w.dir} connector of its own`); continue; }
+    c[w.dir] = true;
+    const at = c.steps.find((s) => s >= prev);
+    if (!c.steps.length) bad(`transition ${w.n}'s connector is never lit by the tour`);
+    else if (at === undefined) bad(`flow order contradicts the tour: transition ${w.n} is lit no later than step ${c.steps[c.steps.length - 1]}, after one lit at step ${prev}`);
+    else prev = at;
+  }
+  for (const c of allLines) {
+    if (c.dir === 'reverse' && !c.reverse) bad(`a "${c.id}" connector is drawn against the relationship's direction with no destination-to-source transition`);
+    if (c.dir === 'both' && !(c.forward && c.reverse)) {
+      bad(`a two-way "${c.id}" connector needs a transition in each direction; draw it one-way if the model has no return traffic`);
     }
   }
 }

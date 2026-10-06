@@ -31,6 +31,7 @@ SVG; what changes is that each one is drawn from, and checked against, a model.
 | Pilots | DNS, Kubernetes, OAuth, JWT, OWASP, reviewed before the other 100 |
 | Branching | Commits go to `main`, as with the tours and takeaways work. Nothing is pushed until James asks |
 | Pilot review, 6 October 2026 | Actors at `rx="20"`; `actor` for people and organisations only; a custom type where a built-in name collides; a transition each way for a two-way arrow; six `data-note` values; thin models stay |
+| Batch 1 review, 6 October 2026 | The flow is a sub-story of the tour: a lit connector need not be a transition. Caption and steps are valid sources where the explainer is silent. A run-time store is a `database`, a made-once artefact a `data-asset`. A drawn label the copy names may become a node. |
 
 Facts about the 1.2 schema that shape the design, read from
 `calm/release/1.2/meta/core.json` and `flow.json` in `finos/architecture-as-code`:
@@ -101,7 +102,12 @@ entry, so nothing is stored twice:
 - When a built-in name collides with the term's own vocabulary, use a custom type: a Kubernetes pod is a `pod`, not a `service`.
 - `name`: the title drawn in the node's shape, word for word. It fits one `<text>`
   element; a title that wraps today is shortened or its box widened.
-- `description`: one sentence, stating only what the term's `explainer` says. UK spelling.
+- `description`: one sentence, stating only what the term's own copy says: its
+  `explainer` first, and its caption and tour steps where the explainer is silent. UK
+  spelling.
+- Something a component reads and writes as it runs (a cache, a lookup table, an index, a
+  log) is a `database`; something made once and handed on or kept (a token, a
+  certificate, a manifest) is a `data-asset`.
 
 ### Relationships
 
@@ -124,11 +130,13 @@ entry, so nothing is stored twice:
 
 ### Flows
 
-A model has one flow when at least one tour step lights a connector, and none otherwise
-(JWT's anatomy tour lights parts, not connectors). The flow mirrors the tour:
+A model has one flow when the tour narrates traffic: if the tour lights any arrow, the
+model has a flow (JWT's anatomy tour lights parts, not connectors). The flow mirrors the tour:
 
 - Transitions appear in the order the tour lights their connectors.
-- Every connector the tour lights has a transition of its own; a two-way arrow has two.
+- Each transition has a lit connector of its own; a connector lit at several steps can
+  serve a transition at any of them.
+- The tour may light a connector that is not a transition, to show structure.
 - `sequence-number` runs 1 to N with no gaps or repeats.
 - Each transition has its own drawn connector, drawn in the transition's direction. A
   two-way arrow, with a marker at both ends, stands for a request and its reply and must have one transition in each direction; a link with no reply in the model is drawn one-way.
@@ -219,7 +227,7 @@ full-explainer disclosure.
      release 1.2.</p>
   <p class="calm-counts">6 nodes · 5 relationships · 5 flow steps</p>
   <p class="calm-key">Rounded box: actor or web client. Square box: service, system
-     or other component. Cylinder: data store. Folded document: data asset. Dashed zone: deployed in.
+     or other component. Cylinder: data store. Folded document: data asset. Dashed zone: network, or deployed in.
      Solid container: composed of.</p>
   <div class="calm-actions">
     <button type="button" data-calm-copy>Copy</button>
@@ -297,17 +305,18 @@ Model against drawing, measured in screen space like the existing checks:
   every listed node is reached.
 - A connector drawn against its relationship's direction has a
   `destination-to-source` transition on that relationship. A two-way arrow has a transition in each direction.
-- If the tour lights any connector, the model has a flow.
 - Every child of a `deployed-in` or `composed-of` relationship sits inside its container,
   and the container's border is dashed or solid to match.
 - Walking the flow's transitions in sequence order, each has its own connector in the
-  transition's direction, and the tour step that first lights those connectors never
-  decreases.
+  transition's direction, lit at a tour step no earlier than the one chosen for the
+  previous transition. A connector lit at several steps can serve a transition at any of
+  them.
 - Every `box*` and `zone*` element is inside a node's group or covered by a `data-note`,
   and every `flow*` element carries `data-calm` or `data-note`. Every `data-calm` value
   names a node or relationship in the model.
 - Every `data-note` value is one of the six.
-- Every connector the tour lights is a transition in the flow.
+- If the tour lights any arrow, the model has a flow. A lit connector need not be a
+  transition.
 
 The disclosure, at 1440px. At 375px, with it open, the checks that can differ by width run again: it is present, its JSON is unchanged, Copy, Download and the JSON block are rendered, the keyboard attributes hold, and nothing overflows:
 

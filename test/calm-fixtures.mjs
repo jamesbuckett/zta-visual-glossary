@@ -168,9 +168,17 @@ const CASES = [
   ['two-way arrow with no reply transition caught',
     () => page({}, model((m) => { const t = m.flows[0].transitions; t.splice(2, 1); t.forEach((x, i) => { x['sequence-number'] = i + 1; }); })),
     'verify', 1, 'calm', /two-way/],
-  ['lit arrow with no transition caught',
+  ['lit arrow that is not a transition accepted',
     () => page({}, model((m) => { const t = m.flows[0].transitions; t.splice(3, 1); t.forEach((x, i) => { x['sequence-number'] = i + 1; }); })),
-    'verify', 1, 'calm', /has no transition/],
+    'verify', 0, null],
+  // Lit at step 1 to show structure and at step 3 as traffic: its transition
+  // comes after ones lit at step 2, so only step 3 fits.
+  ['arrow lit at two steps serves a later transition', () => page({ agentAppStep: '1 3' }), 'verify', 0, null],
+  // A one-way arrow lit early and a two-way arrow on one relationship. Pairing
+  // first-fit gives the request to the one-way arrow and rejects the two-way.
+  ['one-way and two-way arrows on one relationship accepted',
+    () => page({ extra: '<line class="flow" data-s="1" data-calm="app-store" x1="422" y1="44" x2="538" y2="44" marker-end="url(#ah-mut)"/>' }),
+    'verify', 0, null],
   ['nested data-calm caught', () => page({ nest: true }), 'verify', 1, 'calm', /nested/],
   ['flow order that contradicts the tour caught', () => page({ agentAppStep: '1' }), 'verify', 1, 'calm', /flow order contradicts the tour/],
   ['reverse connector with no reverse transition caught',
