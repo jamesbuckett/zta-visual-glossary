@@ -6441,14 +6441,17 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="40" y="192" width="368" height="24" rx="4"/>
           <text class="t-sm t-mut" x="52" y="208">4 to 10 · …</text>
         </g>
-        ${[['developers', 'developers-top10', 'code', 'Developers', 'code against it', 16, 12], ['waf-rules', 'waf-top10', 'shield', 'WAF rule sets', 'named after it', 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', 'check for it', 176, 12]].map(([id, rel, ico, name, sub, y, rx]) => `
+        ${[['developers', 'developers-top10', 'code', 'Developers', ['code against it'], 16, 12], ['wafs', 'waf-top10', 'shield', 'WAFs', ['ship rule sets', 'named after it'], 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', ['check for it'], 176, 12]].map(([id, rel, ico, name, subs, y, rx]) => {
+          const t = y + 37 - 8 * subs.length;   // title baseline: the title and sub-labels sit centred in the box
+          return `
           <g data-s="4" data-calm="${id}">
             <rect class="box" x="488" y="${y}" width="208" height="64" rx="${rx}"/>
-            ${icon(ico, 504, y + 18)}
-            <text class="t-b" x="536" y="${y + 29}">${name}</text>
-            <text class="t-sm t-mut" x="536" y="${y + 47}">${sub}</text>
+            ${icon(ico, 504, t - 11)}
+            <text class="t-b" x="536" y="${t}">${name}</text>
+            ${subs.map((s, i) => `<text class="t-sm t-mut" x="536" y="${t + 18 + 15 * i}">${s}</text>`).join('')}
           </g>
-          <line class="flow" data-s="4" data-calm="${rel}" x1="486" y1="${y + 32}" x2="426" y2="${y + 32}" marker-end="url(#ah-mut)"/>`).join('')}
+          <line class="flow" data-s="4" data-calm="${rel}" x1="486" y1="${y + 32}" x2="426" y2="${y + 32}" marker-end="url(#ah-mut)"/>`;
+        }).join('')}
         <g data-s="5" data-note="limitation">
           <rect class="box" x="24" y="260" width="672" height="32" rx="6"/>
           <text class="t-sm" x="40" y="281">a floor for awareness; go deeper with ASVS and the Cheat Sheet Series</text>
@@ -8737,26 +8740,26 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "risk-1", "node-type": "risk", "name": "1 · Broken Access Control", "description": "Kept at number one in the 2025 edition." },
         { "unique-id": "risk-3", "node-type": "risk", "name": "3 · Software Supply Chain Failures", "description": "Enters at number three, expanded from 2021's Vulnerable and Outdated Components." },
         { "unique-id": "developers", "node-type": "actor", "name": "Developers", "description": "Code against the list." },
-        { "unique-id": "waf-rules", "node-type": "service", "name": "WAF rule sets", "description": "WAFs ship rule sets named after the list." },
-        { "unique-id": "auditors", "node-type": "actor", "name": "Auditors", "description": "Check for it." }
+        { "unique-id": "wafs", "node-type": "service", "name": "WAFs", "description": "Ship rule sets named after the list." },
+        { "unique-id": "auditors", "node-type": "actor", "name": "Auditors", "description": "Check for the risks on the list." }
       ],
       "relationships": [
-        { "unique-id": "top10-risks", "description": "The list ranks the risks.",
+        { "unique-id": "top10-risks", "description": "The list ranks ten risks; the first and third are shown here.",
           "relationship-type": { "composed-of": { "container": "top10", "nodes": ["risk-1", "risk-3"] } } },
         { "unique-id": "developers-top10", "description": "Developers code against the list.",
           "relationship-type": { "interacts": { "actor": "developers", "nodes": ["top10"] } } },
-        { "unique-id": "waf-top10", "description": "WAF rule sets are named after the list.",
-          "relationship-type": { "connects": { "source": { "node": "waf-rules" }, "destination": { "node": "top10" } } } },
-        { "unique-id": "auditors-top10", "description": "Auditors check for it.",
+        { "unique-id": "waf-top10", "description": "WAFs ship rule sets named after the list.",
+          "relationship-type": { "connects": { "source": { "node": "wafs" }, "destination": { "node": "top10" } } } },
+        { "unique-id": "auditors-top10", "description": "Auditors check for the risks on the list.",
           "relationship-type": { "interacts": { "actor": "auditors", "nodes": ["top10"] } } }
       ],
       "flows": [
         { "unique-id": "baseline", "name": "A shared baseline",
           "description": "The list is used everywhere as a baseline.",
           "transitions": [
-            { "relationship-unique-id": "developers-top10", "sequence-number": 1, "description": "Developers code against it." },
-            { "relationship-unique-id": "waf-top10", "sequence-number": 2, "description": "WAFs ship rule sets named after it." },
-            { "relationship-unique-id": "auditors-top10", "sequence-number": 3, "description": "Auditors check for it." }
+            { "relationship-unique-id": "developers-top10", "sequence-number": 1, "description": "Developers code against the list." },
+            { "relationship-unique-id": "waf-top10", "sequence-number": 2, "description": "WAFs ship rule sets named after the list." },
+            { "relationship-unique-id": "auditors-top10", "sequence-number": 3, "description": "Auditors check for the risks on the list." }
           ] }
       ]
     },
