@@ -45,12 +45,14 @@ npm run verify        # renders every term in a browser and checks its diagram g
 npm run glossary      # regenerates glossary.txt, prints the term count
 npm run test:tour     # proves validate/verify catch broken tours
 npm run test:takeaways  # proves validate/verify catch broken takeaway tiles
+npm run test:calm     # proves validate/verify catch broken CALM models and drawings
 ```
 
 `validate.mjs` is the style-guide linter — exactly one accent colour, no stray hex in
 component CSS, on-scale spacing values, no emoji — and it also checks that the `TERMS`,
 tag-array and `DIAGRAMS` declarations still parse, so an edit that breaks the array is
-caught on the write rather than at `npm run glossary`. A project hook runs it after every
+caught on the write rather than at `npm run glossary`. It validates every model in `CALM` against the vendored CALM 1.2 schema
+(`test/calm-schema/1.2/`, through `ajv`) and checks its references. A project hook runs it after every
 `index.html` write, but it is still the gate before committing.
 
 `verify.mjs` is the rendered check: it opens each term's detail view in a headless
@@ -59,9 +61,11 @@ across a box border, and no connector runs through a label. For a term with `ste
 also drives the diagram tour: every chip, the panel text, keyboard stepping and reduced
 motion. It also checks every term's takeaway tiles against the data, the limitation
 marker, and the collapsed explainer and its print behaviour, at desktop and phone width.
+For a term with a CALM model it compares the drawing with the model (shapes, connectors,
+containment, flow order) and checks the model disclosure.
 Pass term ids to narrow it (`npm run verify calico`).
 
-The two fixture suites run `verify.mjs` with `--offline`, which answers every network
+The three fixture suites run `verify.mjs` with `--offline`, which answers every network
 request with an empty response, so they never wait on Google Fonts. Do not use the flag
 for a real run: the geometry checks measure text in the page's own fonts. A real run
 waits for those fonts before measuring and reports a `fonts` error if they do not load,

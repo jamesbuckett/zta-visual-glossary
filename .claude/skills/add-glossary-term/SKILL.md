@@ -67,7 +67,10 @@ Add a matching `DIAGRAMS.<id>` function returning inline SVG, `viewBox` 720 wide
 ~240–320 tall. Every diagram is a step-through tour: the term's `steps` drive numbered
 chips, and each diagram element that belongs to a step carries `data-s="1 3"`.
 
-- shapes — `box`, `box-accent`, `zone-accent`
+- shapes — `box`, `box-accent`, `box-soft`, `zone`, `zone-accent`, and two outlines that
+  are not a rect: `${cyl(x, y, w, h)}` for a data store and `${doc(x, y, w, h)}` for a
+  data asset. Both take `'box-accent'` as a fifth argument. Which one a node gets is set
+  by its CALM node type: see step 2b.
 - flows — `flow`, `flow-accent`, `flow-ok`, `flow-bad`. Every flow animates in drawing
   order, so draw each line from source to destination, arrowhead or not. A two-way
   arrow (both markers) sways; `flow-bad` lurches and stalls.
@@ -91,6 +94,78 @@ group and its children (no nested `data-s`); a flow may run under its badge, but
 badge must not cover a label; no icon repeated within one diagram unless the things are
 the same kind; the drawing must read correctly fully lit (print).
 Tour copy states only what the explainer says.
+
+## 2b. Write the CALM model and tag the drawing
+
+Every diagram has a model in `const CALM`, keyed by term id, in the FINOS CALM 1.2
+format. Write the model from the explainer, then make the drawing match it. The page
+adds `$schema` and `metadata` itself; store only `nodes`, `relationships` and `flows`.
+
+```js
+kebabid: {
+  "nodes": [
+    { "unique-id": "client", "node-type": "actor", "name": "Client", "description": "One sentence from the explainer." }
+  ],
+  "relationships": [
+    { "unique-id": "client-resolver", "description": "What passes between them.",
+      "relationship-type": { "interacts": { "actor": "client", "nodes": ["resolver"] } } }
+  ],
+  "flows": [
+    { "unique-id": "resolve", "name": "Recursive resolution", "description": "The caption, or a sentence from the explainer.",
+      "transitions": [
+        { "relationship-unique-id": "client-resolver", "sequence-number": 1, "description": "The client asks." }
+      ] }
+  ]
+}
+```
+
+**Nodes.** `name` is the title drawn in the shape, word for word, in one `<text>`.
+`description` is one sentence that says only what the explainer says. Pick the built-in
+`node-type` that honestly fits; otherwise use a custom kebab-case type such as `layer`.
+The type sets the outline:
+
+| Node type | Outline |
+|---|---|
+| `actor`, `webclient` | `<rect class="box" … rx="12"/>` |
+| `service`, `system`, any custom type | `<rect class="box" … rx="8"/>` |
+| `database`, `ldap` | `${cyl(x, y, w, h)}` |
+| `data-asset` | `${doc(x, y, w, h)}` |
+| `network`, `ecosystem` | `<rect class="zone" …/>` |
+| a container through `deployed-in` | `<rect class="zone" …/>`, whatever its type |
+| a container through `composed-of` | `<rect class="box-soft" …/>`, whatever its type |
+
+**Relationships.** Use `connects` (source to destination) between two nodes,
+`interacts` (actor to node) for an actor and what it uses, `deployed-in` for a node that
+runs inside another, `composed-of` for a node that is a part of another. A request and
+its reply are one relationship. Set `protocol` only if it is one of CALM's twelve (HTTP,
+HTTPS, FTP, SFTP, JDBC, WebSocket, SocketIO, LDAP, AMQP, TLS, mTLS, TCP); otherwise name
+the protocol in the description. Every node must appear in at least one relationship. A
+node is a container through one of the two kinds, never both.
+
+**Flow.** Write one flow if any tour step lights a connector, none otherwise. List the
+transitions in the order the tour lights their connectors, numbered 1 to N. A reply is a
+transition with `"direction": "destination-to-source"`. Each transition needs a
+connector of its own drawn in its direction; a two-way arrow serves one transition each
+way.
+
+**Tagging.**
+
+- Each node is one `<g data-calm="<node id>">` holding its outline, icon and labels. A
+  sequence diagram's lifeline goes in its node's group. The first outline in the group
+  is the one the shape rule checks.
+- A container's group holds its outline and its own label only. Its children are sibling
+  groups drawn inside it. Never nest one `data-calm` in another.
+- Each connector is one `<line>` or `<path>` carrying `data-calm="<relationship id>"`,
+  drawn from one node's edge to the other's. Redraw a shared trunk as separate
+  full-length lines.
+- `data-calm` and `data-s` go on the same element.
+- Anything else drawn with a `box`, `zone` or `flow` class is not part of the
+  architecture and says so: `data-note="call-out"` on it or its group. Use it for
+  call-out boxes, footer strips, elided rows, self-loops and the struck-through X.
+  Free text, dividers and badges need no tag.
+
+If the drawing disagrees with the explainer, the drawing changes. If the model shows
+the explainer itself may be wrong, report it; do not edit the explainer here.
 
 ## 3. Cross-link
 
@@ -137,8 +212,22 @@ and runs the two geometry checks that have caught defects invisible at thumbnail
 - **(d) Takeaway tiles** — tiles match `takeaways`, only the last is marked as the
   limitation, the full explainer sits in a closed disclosure that opens for print, and
   nothing overflows at 1440px or 375px.
+- **(e) CALM model** — every node drawn once under its name, in the outline its type
+  calls for; every `connects` and `interacts` relationship drawn as a connector between
+  the right two nodes; contained nodes inside their container; the flow in the tour's
+  order; nothing with a `box`, `zone` or `flow` class left untagged. It also checks the
+  "CALM model" disclosure: its JSON, Copy, Download and print.
 
 It also re-checks the step 4 counters, so a bare `npm run verify` catches drift you missed.
+
+`npm test` checks the model itself: it validates against the vendored CALM 1.2 schema,
+and its ids and references hold. To check a model with FINOS's own tool, save the
+downloads and run the CLI over one:
+
+```bash
+node verify.mjs <id> --calm-out=/path/outside/the/repo
+npx --yes @finos/calm-cli@1.60.1 validate -a /path/outside/the/repo/<id>.calm.json
+```
 
 Two things worth knowing if you extend it: measure in **screen space**
 (`getBoundingClientRect`, and map `getPointAtLength` results through `getScreenCTM`) —
