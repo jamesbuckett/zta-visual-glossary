@@ -96,12 +96,12 @@ function withDiagram(html, drawing) {
 const svg = (o = {}) => {
   const p = {
     storeTag: ' data-calm="store"', storeName: 'Store', storeShape: '${cyl(540, 28, 140, 72)}',
-    agentAppTag: 'agent-app', agentAppStep: '3', askEnd: '278', hostWidth: '240', extra: '', nest: false, ...o,
+    agentAppTag: 'agent-app', agentAppStep: '3', askEnd: '278', hostWidth: '240', userRx: '20', extra: '', nest: false, ...o,
   };
   const agent = '<g data-s="3" data-calm="agent"><rect class="box" x="300" y="180" width="120" height="56" rx="8"/><text class="t-b" x="320" y="214">Agent</text></g>';
   return `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="fixture">
-        <g data-s="1 3" data-calm="user"><rect class="box" x="24" y="32" width="140" height="64" rx="12"/><text class="t-b" x="44" y="70">User</text></g>
+        <g data-s="1 3" data-calm="user"><rect class="box" x="24" y="32" width="140" height="64" rx="${p.userRx}"/><text class="t-b" x="44" y="70">User</text></g>
         <g data-s="1 2 3" data-calm="app"><rect class="box" x="280" y="32" width="140" height="64" rx="8"/><text class="t-b" x="300" y="70">App</text></g>
         <g data-s="2"${p.storeTag}>${p.storeShape}<text class="t-b" x="566" y="72">${p.storeName}</text></g>
         <g data-calm="host"><rect class="zone" x="260" y="150" width="${p.hostWidth}" height="110" rx="10"/><text class="t-sm t-mut" x="272" y="168">Host</text>${p.nest ? agent : ''}</g>
@@ -139,6 +139,8 @@ const CASES = [
   ['unreferenced node rejected',
     () => withModel(base, model((m) => { m.nodes.push(node('spare', 'service', 'Spare', 'Named by nothing.')); })), 'validate', 1, 'calm-data', /is in no relationship/],
   ['sequence gap rejected', () => withModel(base, model((m) => { m.flows[0].transitions[1]['sequence-number'] = 7; })), 'validate', 1, 'calm-data', /sequence-number 7/],
+  ['interacts from a node that is not an actor rejected',
+    () => withModel(base, model((m) => { m.nodes[0]['node-type'] = 'system'; })), 'validate', 1, 'calm-data', /not actor/],
   ['node containing itself rejected',
     () => withModel(base, model((m) => { relType(m, 'host-agent')['deployed-in'].nodes.push('host'); })), 'validate', 1, 'calm-data', /contains itself/],
   ['container of both kinds rejected',
@@ -160,6 +162,12 @@ const CASES = [
   ['untagged flow caught', () => page({ extra: '<line class="flow" x1="620" y1="150" x2="620" y2="250"/>' }), 'verify', 1, 'calm', /untagged/],
   ['box marked data-note accepted',
     () => page({ extra: '<g data-note="call-out"><rect class="box" x="560" y="180" width="120" height="56" rx="8"/></g>' }), 'verify', 0, null],
+  ['actor drawn with a slight corner radius caught', () => page({ userRx: '12' }), 'verify', 1, 'calm', /drawn as a square box, want a rounded box/],
+  ['data-note outside the vocabulary caught',
+    () => page({ extra: '<g data-note="decoration"><rect class="box" x="560" y="180" width="120" height="56" rx="8"/></g>' }), 'verify', 1, 'calm', /is not one of/],
+  ['two-way arrow with no reply transition caught',
+    () => page({}, model((m) => { const t = m.flows[0].transitions; t.splice(2, 1); t.forEach((x, i) => { x['sequence-number'] = i + 1; }); })),
+    'verify', 1, 'calm', /two-way/],
   ['nested data-calm caught', () => page({ nest: true }), 'verify', 1, 'calm', /nested/],
   ['flow order that contradicts the tour caught', () => page({ agentAppStep: '1' }), 'verify', 1, 'calm', /flow order contradicts the tour/],
   ['reverse connector with no reverse transition caught',
@@ -168,6 +176,7 @@ const CASES = [
 
   // The disclosure: what it shows, and what Copy, Download and print do.
   ['missing disclosure caught', () => swap(page(), '${calmHtml(e)}', ''), 'verify', 1, 'calm', /no "CALM model" disclosure/],
+  ['wrong counts line caught', () => swap(page(), 'count(m.nodes.length, "node")', 'count(0, "node")'), 'verify', 1, 'calm', /counts line/],
   ['disclosure starting open caught', () => swap(page(), '<details class="calm-more"', '<details open class="calm-more"'), 'verify', 1, 'calm', /open when the term opens/],
   ['disclosure JSON that differs from the model caught', () => swap(page(), '...CALM[e.id],', ''), 'verify', 1, 'calm', /does not match the model/],
   ['unescaped JSON caught',

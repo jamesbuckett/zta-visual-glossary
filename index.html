@@ -3569,7 +3569,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     dns: () => `
       <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Recursive resolution — the resolver walks root, TLD, then authoritative, and caches the answer.">
         <g data-s="1 5" data-calm="client">
-          <rect class="box" x="24" y="96" width="160" height="92" rx="12"/>
+          <rect class="box" x="24" y="96" width="160" height="92" rx="8"/>
           ${icon('laptop', 40, 110)}
           <text class="t-b" x="72" y="128">Client</text>
           <text class="t-sm t-mut" x="72" y="146">wants the IP</text>
@@ -3745,13 +3745,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <line class="flow" data-s="3" data-note="call-out" x1="592" y1="114" x2="592" y2="142" marker-end="url(#ah-mut)"/>
         <g data-s="3" data-note="call-out">
-          <rect class="box" x="504" y="144" width="176" height="84" rx="8"/>
+          <rect class="box" x="504" y="144" width="192" height="84" rx="8"/>
           ${icon('shield-check', 520, 158)}
           <text class="t-b" x="552" y="176">Verify</text>
           <text class="t-sm t-mut" x="552" y="194">not tampered,</text>
           <text class="t-sm t-mut" x="552" y="210">no database lookup</text>
         </g>
-        <g data-s="4" data-note="call-out">
+        <g data-s="4" data-note="footer">
           <rect class="box" x="24" y="248" width="672" height="40" rx="8"/>
           ${icon('eye', 40, 256)}
           <text class="t-sm" x="72" y="273">readable, not encrypted: no secrets in the payload</text>
@@ -3863,7 +3863,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     oauth: () => `
       <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Authorisation-code flow — the user consents and the app receives a scoped access token.">
         <g data-s="1 2" data-calm="user">
-          <rect class="box" x="24" y="24" width="160" height="68" rx="12"/>
+          <rect class="box" x="24" y="24" width="160" height="68" rx="20"/>
           ${icon('user', 40, 38)}
           <text class="t-b" x="72" y="56">You</text>
           <text class="t-sm t-mut" x="72" y="74">log in, consent</text>
@@ -4164,7 +4164,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="72" y="202">reconciles reality</text>
           <text class="t-sm t-mut" x="72" y="218">to match</text>
         </g>
-        <path class="flow" data-s="2" data-note="reconcile loop" d="M70 252 C70 284, 174 284, 174 252" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="2" data-note="self-loop" d="M70 252 C70 284, 174 284, 174 252" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" data-s="2" x="186" y="284">continuously</text>
 
         ${[['worker-1', 'worker node 1', 16], ['worker-2', 'worker node 2', 150]].map(([id, t, y]) => `
@@ -4181,7 +4181,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           </g>`).join('')}
         <line class="flow" data-s="3" data-calm="schedule-1" x1="222" y1="180" x2="298" y2="76" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="3" data-calm="schedule-2" x1="222" y1="214" x2="298" y2="210" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" data-note="rescheduled as" x1="500" y1="110" x2="500" y2="176" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-note="becomes" x1="500" y1="110" x2="500" y2="176" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 122, 131, '1')}
         ${badge(2, 122, 276, '2')}
@@ -6428,7 +6428,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="40" y="60" width="368" height="36" rx="4"/>
           <text class="t-sm t-b" x="52" y="83">1 · Broken Access Control</text>
         </g>
-        <g data-s="1" data-note="elided rows">
+        <g data-s="1" data-note="elided">
           <rect class="box" x="40" y="104" width="368" height="24" rx="4"/>
           <text class="t-sm t-mut" x="52" y="120">2 · …</text>
         </g>
@@ -6437,11 +6437,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-b" x="52" y="156">3 · Software Supply Chain Failures</text>
           <text class="t-sm t-mut" x="52" y="173">new: was Vulnerable and Outdated</text>
         </g>
-        <g data-s="1" data-note="elided rows">
+        <g data-s="1" data-note="elided">
           <rect class="box" x="40" y="192" width="368" height="24" rx="4"/>
           <text class="t-sm t-mut" x="52" y="208">4 to 10 · …</text>
         </g>
-        ${[['developers', 'developers-top10', 'code', 'Developers', ['code against it'], 16, 12], ['wafs', 'waf-top10', 'shield', 'WAFs', ['ship rule sets', 'named after it'], 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', ['check for it'], 176, 12]].map(([id, rel, ico, name, subs, y, rx]) => {
+        ${[['developers', 'developers-top10', 'code', 'Developers', ['code against it'], 16, 20], ['wafs', 'waf-top10', 'shield', 'WAFs', ['ship rule sets', 'named after it'], 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', ['check for it'], 176, 20]].map(([id, rel, ico, name, subs, y, rx]) => {
           const t = y + 37 - 8 * subs.length;   // title baseline: the title and sub-labels sit centred in the box
           return `
           <g data-s="4" data-calm="${id}">
@@ -6452,7 +6452,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           </g>
           <line class="flow" data-s="4" data-calm="${rel}" x1="486" y1="${y + 32}" x2="426" y2="${y + 32}" marker-end="url(#ah-mut)"/>`;
         }).join('')}
-        <g data-s="5" data-note="limitation">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="260" width="672" height="32" rx="6"/>
           <text class="t-sm" x="40" y="281">a floor for awareness; go deeper with ASVS and the Cheat Sheet Series</text>
         </g>
@@ -8627,7 +8627,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
   const CALM = {
     dns: {
       "nodes": [
-        { "unique-id": "client", "node-type": "actor", "name": "Client", "description": "Needs the IP address behind a human-readable name such as example.com." },
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "Needs the IP address behind a human-readable name such as example.com." },
         { "unique-id": "resolver", "node-type": "service", "name": "Resolver", "description": "Walks the hierarchy and caches answers along the way to stay fast." },
         { "unique-id": "root", "node-type": "service", "name": "Root servers", "description": "The first level of the hierarchy the resolver walks." },
         { "unique-id": "tld", "node-type": "service", "name": "TLD", "description": "The server for the top-level domain, the second level of the hierarchy." },
@@ -8636,7 +8636,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       ],
       "relationships": [
         { "unique-id": "client-resolver", "description": "The client asks the resolver to resolve a name into an IP address.",
-          "relationship-type": { "interacts": { "actor": "client", "nodes": ["resolver"] } } },
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "resolver" } } } },
         { "unique-id": "resolver-root", "description": "The resolver asks the root servers.",
           "relationship-type": { "connects": { "source": { "node": "resolver" }, "destination": { "node": "root" } } } },
         { "unique-id": "resolver-tld", "description": "The resolver asks the server for the top-level domain.",
@@ -8652,10 +8652,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "transitions": [
             { "relationship-unique-id": "client-resolver", "sequence-number": 1, "description": "The client asks the resolver for the IP address behind a name." },
             { "relationship-unique-id": "resolver-root", "sequence-number": 2, "description": "The resolver starts with the root servers." },
-            { "relationship-unique-id": "resolver-tld", "sequence-number": 3, "description": "Next it asks the server for the top-level domain." },
-            { "relationship-unique-id": "resolver-authoritative", "sequence-number": 4, "description": "Last it reaches the authoritative server for the domain." },
-            { "relationship-unique-id": "resolver-cache", "sequence-number": 5, "description": "The resolver caches the answer." },
-            { "relationship-unique-id": "client-resolver", "sequence-number": 6, "description": "The resolver returns the IP address to the client.", "direction": "destination-to-source" }
+            { "relationship-unique-id": "resolver-root", "sequence-number": 3, "description": "The root servers answer.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "resolver-tld", "sequence-number": 4, "description": "Next it asks the server for the top-level domain." },
+            { "relationship-unique-id": "resolver-tld", "sequence-number": 5, "description": "The top-level domain server answers.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "resolver-authoritative", "sequence-number": 6, "description": "Last it reaches the authoritative server for the domain." },
+            { "relationship-unique-id": "resolver-authoritative", "sequence-number": 7, "description": "The authoritative server answers.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "resolver-cache", "sequence-number": 8, "description": "The resolver caches the answer." },
+            { "relationship-unique-id": "client-resolver", "sequence-number": 9, "description": "The resolver returns the IP address to the client.", "direction": "destination-to-source" }
           ] }
       ]
     },
@@ -8665,11 +8668,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "control-plane", "node-type": "service", "name": "Control plane", "description": "Continuously reconciles reality to match the desired state." },
         { "unique-id": "worker-1", "node-type": "system", "name": "worker node 1", "description": "A machine in the cluster that runs pods." },
         { "unique-id": "worker-2", "node-type": "system", "name": "worker node 2", "description": "A machine in the cluster that runs pods." },
-        { "unique-id": "pod-scheduled-1", "node-type": "service", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 1." },
-        { "unique-id": "pod-failed", "node-type": "service", "name": "Pod", "description": "A pod whose workload has failed." },
-        { "unique-id": "pod-on-demand", "node-type": "service", "name": "Pod", "description": "A pod added when the control plane scales on demand." },
-        { "unique-id": "pod-scheduled-2", "node-type": "service", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 2." },
-        { "unique-id": "pod-rescheduled", "node-type": "service", "name": "Pod", "description": "The failed workload, rescheduled by the control plane." }
+        { "unique-id": "pod-scheduled-1", "node-type": "pod", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 1." },
+        { "unique-id": "pod-failed", "node-type": "pod", "name": "Pod", "description": "A pod whose workload has failed." },
+        { "unique-id": "pod-on-demand", "node-type": "pod", "name": "Pod", "description": "A pod added when the control plane scales on demand." },
+        { "unique-id": "pod-scheduled-2", "node-type": "pod", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 2." },
+        { "unique-id": "pod-rescheduled", "node-type": "pod", "name": "Pod", "description": "The failed workload, rescheduled by the control plane." }
       ],
       "relationships": [
         { "unique-id": "declare", "description": "The desired state is declared to the control plane.",
@@ -8687,7 +8690,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "reconcile", "name": "Declare and schedule",
           "description": "The control plane reconciles desired state, scheduling pods onto worker nodes.",
           "transitions": [
-            { "relationship-unique-id": "declare", "sequence-number": 1, "description": "You declare the desired state." },
+            { "relationship-unique-id": "declare", "sequence-number": 1, "description": "The desired state is declared to the control plane." },
             { "relationship-unique-id": "schedule-1", "sequence-number": 2, "description": "The control plane schedules pods onto worker node 1." },
             { "relationship-unique-id": "schedule-2", "sequence-number": 3, "description": "The control plane schedules pods onto worker node 2." }
           ] }
@@ -9000,8 +9003,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </summary>
         <div class="calm-body">
           <p>This diagram as architecture as code: a model in the FINOS <a href="https://calm.finos.org/" target="_blank" rel="noopener noreferrer">Common Architecture Language Model</a> (CALM), release 1.2.</p>
-          <p class="calm-counts">${count(m.nodes.length, "node")} · ${count(m.relationships.length, "relationship")} · ${count(steps, "flow step")}</p>
-          <p class="calm-key">Rounded box: actor or client. Square box: service or system. Cylinder: data store. Folded document: data asset. Dashed zone: deployed in. Solid container: composed of.</p>
+          <p class="calm-counts">${count(m.nodes.length, "node")} · ${count(m.relationships.length, "relationship")}${steps ? ` · ${count(steps, "flow step")}` : ""}</p>
+          <p class="calm-key">Rounded box: actor or web client. Square box: service, system or other component. Cylinder: data store. Folded document: data asset. Dashed zone: deployed in. Solid container: composed of.</p>
           <div class="calm-actions">
             <button class="related-pill" type="button" data-calm-copy>Copy</button>
             <button class="related-pill" type="button" data-calm-download>Download</button>

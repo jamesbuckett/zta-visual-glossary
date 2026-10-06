@@ -120,14 +120,23 @@ kebabid: {
 ```
 
 **Nodes.** `name` is the title drawn in the shape, word for word, in one `<text>`.
-`description` is one sentence that says only what the explainer says. Pick the built-in
-`node-type` that honestly fits; otherwise use a custom kebab-case type such as `layer`.
+`description` is one sentence that says only what the explainer says, and that still
+makes sense read on its own in the downloaded JSON: name the thing, never "it". Pick the
+built-in `node-type` that honestly fits; otherwise use a custom kebab-case type such as
+`layer`. Two rules settle the common cases:
+
+- `actor` is for people and organisations only. A client machine or program is a
+  `system`, or a `webclient` if it is a browser or an app's user interface.
+- When a built-in name collides with the term's own vocabulary, use a custom type. A
+  Kubernetes pod is a `pod`, not a `service`, because a Service is a different
+  Kubernetes object.
+
 The type sets the outline:
 
 | Node type | Outline |
 |---|---|
-| `actor`, `webclient` | `<rect class="box" … rx="12"/>` |
-| `service`, `system`, any custom type | `<rect class="box" … rx="8"/>` |
+| `actor`, `webclient` | `<rect class="box" … rx="20"/>` |
+| `service`, `system`, any custom type | `<rect class="box" … rx="8"/>` (any `rx` under 16 counts as square) |
 | `database`, `ldap` | `${cyl(x, y, w, h)}` |
 | `data-asset` | `${doc(x, y, w, h)}` |
 | `network`, `ecosystem` | `<rect class="zone" …/>` |
@@ -135,18 +144,20 @@ The type sets the outline:
 | a container through `composed-of` | `<rect class="box-soft" …/>`, whatever its type |
 
 **Relationships.** Use `connects` (source to destination) between two nodes,
-`interacts` (actor to node) for an actor and what it uses, `deployed-in` for a node that
+`interacts` (actor to node) for a node typed `actor` and what it uses, `deployed-in` for a node that
 runs inside another, `composed-of` for a node that is a part of another. A request and
 its reply are one relationship. Set `protocol` only if it is one of CALM's twelve (HTTP,
 HTTPS, FTP, SFTP, JDBC, WebSocket, SocketIO, LDAP, AMQP, TLS, mTLS, TCP); otherwise name
 the protocol in the description. Every node must appear in at least one relationship. A
-node is a container through one of the two kinds, never both.
+node is a container through one of the two kinds, never both. Write each description so
+it makes sense on its own, as for nodes.
 
 **Flow.** Write one flow if any tour step lights a connector, none otherwise. List the
 transitions in the order the tour lights their connectors, numbered 1 to N. A reply is a
 transition with `"direction": "destination-to-source"`. Each transition needs a
-connector of its own drawn in its direction; a two-way arrow serves one transition each
-way.
+connector of its own drawn in its direction. A two-way
+arrow stands for a request and its reply, so it must have one transition each way; draw a
+link with no reply in the model one-way.
 
 **Tagging.**
 
@@ -160,9 +171,16 @@ way.
   full-length lines.
 - `data-calm` and `data-s` go on the same element.
 - Anything else drawn with a `box`, `zone` or `flow` class is not part of the
-  architecture and says so: `data-note="call-out"` on it or its group. Use it for
-  call-out boxes, footer strips, elided rows, self-loops and the struck-through X.
-  Free text, dividers and badges need no tag.
+  architecture and says so with `data-note` on it or its group. The value is one of six,
+  and `verify.mjs` rejects any other:
+  - `call-out`: a box or arrow that explains a part of the drawing
+  - `footer`: a strip of text under the drawing, usually the limitation
+  - `elided`: a row or box standing for things the explainer does not name
+  - `self-loop`: a line from a component back to itself
+  - `struck-through`: the X struck over a broken primitive
+  - `becomes`: an arrow joining the same thing at two moments, or a thing and what it
+    turns into
+- Free text, dividers and badges need no tag.
 
 If the drawing disagrees with the explainer, the drawing changes. If the model shows
 the explainer itself may be wrong, report it; do not edit the explainer here.

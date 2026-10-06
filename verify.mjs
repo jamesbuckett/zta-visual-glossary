@@ -44,7 +44,7 @@ import os from 'os';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { readTerms } from './_terms.mjs';
-import { relationshipShape, CALM_SCHEMA } from './_calm.mjs';
+import { relationshipShape, CALM_SCHEMA, NOTE_KINDS } from './_calm.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
@@ -369,7 +369,7 @@ const CALM_PROBE = `(() => {
     if (c.contains('shape-doc')) return 'document';
     if (c.contains('zone') || c.contains('zone-accent')) return 'dashed zone';
     if (c.contains('box-soft')) return 'solid container';
-    return Number(el.getAttribute('rx')) >= 12 ? 'rounded box' : 'square box';
+    return Number(el.getAttribute('rx')) >= 16 ? 'rounded box' : 'square box';
   };
   const step = (el) => { const s = el.closest('[data-s]'); return s ? Math.min(...s.dataset.s.trim().split(/\\s+/).map(Number)) : null; };
   const point = (el, at) => { const p = el.getPointAtLength(at); const q = new DOMPoint(p.x, p.y).matrixTransform(el.getScreenCTM()); return { x: q.x, y: q.y }; };
@@ -400,7 +400,8 @@ const CALM_PROBE = `(() => {
     ...loose(SHAPES).filter((el) => !el.closest('[data-calm]')),
     ...loose(FLOWS).filter((el) => !el.hasAttribute('data-calm')),
   ].map(where);
-  return { nodes, connectors, untagged, tol: 6 * scale };
+  const notes = [...svg.querySelectorAll('[data-note]')].map((el) => el.dataset.note);
+  return { nodes, connectors, untagged, notes, tol: 6 * scale };
 })()`;
 
 // The outline a node should be drawn with. A container's border follows how
@@ -427,6 +428,9 @@ function checkDrawing(id, model, d) {
   const rels = new Map((model.relationships || []).map((r) => [r['unique-id'], relationshipShape(r)]));
 
   for (const u of d.untagged) bad(`untagged ${u} — tag it data-calm, move it into a node's group, or mark it data-note`);
+  for (const n of new Set(d.notes)) {
+    if (!NOTE_KINDS.includes(n)) bad(`data-note="${n}" is not one of ${NOTE_KINDS.join(', ')}`);
+  }
   for (const n of d.nodes) {
     if (rels.has(n.id)) bad(`"${n.id}" is a relationship, but its data-calm is on a shape rather than a connector`);
     else if (!nodeIds.has(n.id)) bad(`data-calm="${n.id}" is not in the model`);
@@ -485,7 +489,7 @@ function checkDrawing(id, model, d) {
   }
 
   // The flow: each transition has a connector of its own in its direction,
-  // and the tour lights them in the flow's order. A two-way arrow serves one
+  // and the tour lights them in the flow's order. A two-way arrow must have one
   // transition each way.
   const flow = (model.flows || [])[0];
   const lit = d.connectors.filter((c) => c.step !== null && rels.has(c.id));
@@ -504,6 +508,9 @@ function checkDrawing(id, model, d) {
   }
   for (const [rid, lines] of pool) for (const c of lines) {
     if (c.dir === 'reverse' && !c.reverse) bad(`a "${rid}" connector is drawn against the relationship's direction with no destination-to-source transition`);
+    if (c.dir === 'both' && !(c.forward && c.reverse)) {
+      bad(`a two-way "${rid}" connector needs a transition in each direction; draw it one-way if the model has no reply`);
+    }
   }
 }
 
@@ -516,6 +523,7 @@ const CALM_BOX_PROBE = `(() => {
   const prev = d.previousElementSibling;
   return {
     present: true, open: d.open,
+    counts: (d.querySelector('.calm-counts') || d).textContent.trim(),
     text: pre ? pre.textContent : '',
     markup: pre ? pre.querySelectorAll('*').length : 0,
     copy: !!d.querySelector('button[data-calm-copy]'),
@@ -560,6 +568,10 @@ async function checkDisclosure(t, model) {
   let shown = null;
   try { shown = JSON.parse(box.text); } catch { bad("the disclosure's JSON does not parse"); }
   if (shown && JSON.stringify(shown) !== JSON.stringify(want)) bad("the disclosure's JSON does not match the model, its $schema and its metadata");
+  const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+  const steps = (model.flows || []).reduce((n, f) => n + f.transitions.length, 0);
+  const wantCounts = [plural(model.nodes.length, 'node'), plural(model.relationships.length, 'relationship'), ...(steps ? [plural(steps, 'flow step')] : [])].join(' · ');
+  if (box.counts !== wantCounts) bad(`the counts line reads "${box.counts}", want "${wantCounts}"`);
   if (!box.focusable) bad('the JSON block cannot be reached by keyboard: it needs tabindex="0", role="region" and an aria-label');
   if (!box.copy || !box.download) { bad('the disclosure needs a Copy and a Download button'); return; }
 

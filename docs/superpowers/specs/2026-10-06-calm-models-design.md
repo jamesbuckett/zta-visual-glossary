@@ -30,6 +30,7 @@ SVG; what changes is that each one is drawn from, and checked against, a model.
 | New shapes | Cylinder for data stores, folded-corner document for data assets |
 | Pilots | DNS, Kubernetes, OAuth, JWT, OWASP, reviewed before the other 100 |
 | Branching | Commits go to `main`, as with the tours and takeaways work. Nothing is pushed until James asks |
+| Pilot review, 6 October 2026 | Actors at `rx="20"`; `actor` for people and organisations only; a custom type where a built-in name collides; a transition each way for a two-way arrow; six `data-note` values; thin models stay |
 
 Facts about the 1.2 schema that shape the design, read from
 `calm/release/1.2/meta/core.json` and `flow.json` in `finos/architecture-as-code`:
@@ -96,6 +97,8 @@ entry, so nothing is stored twice:
 - `unique-id`: kebab-case, unique within the model. Ids are scoped to one term.
 - `node-type`: a built-in value where one honestly fits. Otherwise a custom kebab-case
   string that says what the thing is, such as `layer` or `policy`.
+- `actor` is for people and organisations only. A client machine or program is a `system`, or a `webclient` if it is a browser or an app's user interface.
+- When a built-in name collides with the term's own vocabulary, use a custom type: a Kubernetes pod is a `pod`, not a `service`.
 - `name`: the title drawn in the node's shape, word for word. It fits one `<text>`
   element; a title that wraps today is shortened or its box widened.
 - `description`: one sentence, stating only what the term's `explainer` says. UK spelling.
@@ -105,7 +108,7 @@ entry, so nothing is stored twice:
 | Type | Used for |
 |---|---|
 | `connects` | A directed link between two nodes, `source` to `destination` |
-| `interacts` | An `actor` node and the nodes it uses |
+| `interacts` | A node typed `actor` and the nodes it uses |
 | `deployed-in` | A node that runs inside another: a pod in a worker node |
 | `composed-of` | A node that is a part of another: a header in a token |
 
@@ -127,8 +130,7 @@ A model has one flow when at least one tour step lights a connector, and none ot
 - Transitions appear in the order the tour lights their connectors.
 - `sequence-number` runs 1 to N with no gaps or repeats.
 - Each transition has its own drawn connector, drawn in the transition's direction. A
-  two-way arrow, with a marker at both ends, stands for a request and its reply and
-  serves one transition in each direction.
+  two-way arrow, with a marker at both ends, stands for a request and its reply and must have one transition in each direction; a link with no reply in the model is drawn one-way.
 - The flow's `description` is the term's `caption` or a sentence from the explainer.
 
 Tour steps and transitions are not one-to-one: a step may light only a node, or several
@@ -145,8 +147,8 @@ Controls, interfaces, `options`, patterns, decorators, timelines and ADR links. 
 
 | Node type | Shape | Status |
 |---|---|---|
-| `actor`, `webclient` | Rounded box, `rx="12"` | Today's convention |
-| `service`, `system`, custom types | Square-cornered box, `rx="8"` | Today's convention |
+| `actor`, `webclient` | Rounded box, `rx="20"` | Rounder than today's 12, so it reads at a glance |
+| `service`, `system`, custom types | Square-cornered box, `rx="8"` (any `rx` under 16 counts as square) | Today's convention |
 | `database`, `ldap` | Cylinder | New |
 | `data-asset` | Document with a folded corner | New |
 | `network`, `ecosystem`, and any node that contains others | Zone | Today's zone |
@@ -182,6 +184,7 @@ allow and deny. Colour says nothing about node or relationship type.
   node's group, and every `flow*` element carries a relationship's id. A purely
   illustrative mark, such as a call-out box, a footer strip, an elided row, a self-loop or
   the struck-through X, opts out with `data-note="<short reason>"` on itself or its group.
+- `data-note` takes one of six values, and `verify.mjs` rejects any other: `call-out`, `footer`, `elided`, `self-loop`, `struck-through`, `becomes` (the same thing at two moments, or a thing and what it turns into).
 - Free-text annotations, footnotes, dividers and badges are not model elements and need no
   tag.
 
@@ -268,6 +271,7 @@ Phase 1 adds the declaration, empty, so `readTerms` always returns `CALM`.
   - node ids are unique, relationship ids are unique, and both are kebab-case
   - every node is named by at least one relationship
   - every node a relationship names exists
+  - an `interacts` relationship's actor is a node typed `actor`
   - no node contains itself, and no node is a container through both `deployed-in` and
     `composed-of`
   - every relationship a transition names exists and is drawn as a connector (`connects`
@@ -291,8 +295,7 @@ Model against drawing, measured in screen space like the existing checks:
   a tolerance that starts at 6 viewBox units and is tuned in the pilot. For `interacts`,
   every listed node is reached.
 - A connector drawn against its relationship's direction has a
-  `destination-to-source` transition on that relationship. A two-way arrow serves both
-  directions.
+  `destination-to-source` transition on that relationship. A two-way arrow has a transition in each direction.
 - If the tour lights any connector, the model has a flow.
 - Every child of a `deployed-in` or `composed-of` relationship sits inside its container,
   and the container's border is dashed or solid to match.
@@ -302,6 +305,7 @@ Model against drawing, measured in screen space like the existing checks:
 - Every `box*` and `zone*` element is inside a node's group or covered by a `data-note`,
   and every `flow*` element carries `data-calm` or `data-note`. Every `data-calm` value
   names a node or relationship in the model.
+- Every `data-note` value is one of the six.
 
 The disclosure, at 1440px. At 375px, with it open, the checks that can differ by width run again: it is present, its JSON is unchanged, Copy, Download and the JSON block are rendered, the keyboard attributes hold, and nothing overflows:
 
@@ -313,6 +317,7 @@ The disclosure, at 1440px. At 375px, with it open, the checks that can differ by
 - The JSON block can be reached and scrolled by keyboard, and has an accessible name.
 - Nothing overflows the viewport when it is open.
 - An open disclosure prints its JSON whole, not clipped to the scroll box.
+- The counts line matches the model, and leaves the flow out when there is none.
 
 Existing checks (a) and (b) learn the new shapes: `shape-cyl` and `shape-doc` count as
 boxes for label clearance, and their outlines are excluded from the stroke/text collision

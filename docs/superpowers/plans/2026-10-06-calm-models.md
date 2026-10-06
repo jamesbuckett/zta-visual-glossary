@@ -1729,6 +1729,13 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 
 ## Phase 3: batches
 
+The pilot review changed six rules after this plan was written: actors are drawn at
+`rx="20"`, `actor` is for people and organisations only, a custom type replaces a
+built-in name that collides, a two-way arrow needs a transition each way, `data-note`
+takes one of six values, and descriptions never lean on "it". Step 2b of the skill and
+the spec carry the rules as they stand; where the pilot models printed in Task 5 differ
+from `index.html`, `index.html` is right.
+
 Eleven batches, by first-listed domain. Each task restates the procedure so it can be run alone. For every term the rules are in step 2b of `.claude/skills/add-glossary-term/SKILL.md`, and the five pilots in `index.html` are the worked examples.
 
 "Reshape" means: keep every part of the layout that already agrees with the model; redraw what does not (an outline that contradicts its node type, a connector with no relationship, a relationship with no connector, a child outside its container, a shared trunk, a title on two lines); tag every node and connector; mark the rest `data-note`. Leave `steps`, `fact`, `caption` and `takeaways` alone unless the redraw makes one false.

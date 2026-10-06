@@ -13,6 +13,10 @@ const TOP_LEVEL = ['nodes', 'relationships', 'flows'];
 // The schema every model the page shows or downloads declares.
 export const CALM_SCHEMA = 'https://calm.finos.org/release/1.2/meta/calm.json';
 
+// The only values data-note may take: what a drawn mark is, when it is not a
+// component or a relationship. verify.mjs rejects any other.
+export const NOTE_KINDS = ['call-out', 'footer', 'elided', 'self-loop', 'struck-through', 'becomes'];
+
 // core.json is the architecture vocabulary; it refers to the other three.
 // strict is off because the schema keeps its definitions under `defs`, a
 // keyword ajv's strict mode does not know.
@@ -87,6 +91,10 @@ export async function checkModels(models, termIds, { requireAll = false } = {}) 
       for (const n of [s.from, ...s.to]) {
         if (!isNode.has(n)) err(`${id}: relationship "${rid}" names "${n}", which is not a node`);
         referenced.add(n);
+      }
+      if (s.kind === 'interacts') {
+        const actor = nodes.find((n) => n['unique-id'] === s.from);
+        if (actor && actor['node-type'] !== 'actor') err(`${id}: relationship "${rid}" is interacts, but "${s.from}" is typed ${actor['node-type']}, not actor`);
       }
       if (s.kind === 'connects' || s.kind === 'interacts') { connectors.add(rid); continue; }
       if (s.to.includes(s.from)) err(`${id}: in relationship "${rid}", node "${s.from}" contains itself`);
