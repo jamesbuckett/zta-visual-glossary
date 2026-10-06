@@ -1,7 +1,7 @@
 # CALM models behind every diagram — design
 
 Date: 2026-10-06
-Status: approved in brainstorming, awaiting spec review
+Status: approved on 6 October 2026; plan in `docs/superpowers/plans/2026-10-06-calm-models.md`
 
 ## Goal
 
@@ -114,6 +114,9 @@ entry, so nothing is stored twice:
 - A request and its reply are one relationship. The reply is a flow transition with
   `direction: "destination-to-source"`, not a second relationship.
 - A node is a container through `deployed-in` or through `composed-of`, never both.
+- `interacts` runs from the actor to the node it uses; that is its forward direction.
+- Every node is named by at least one relationship. The official CLI warns about a node
+  that is not.
 - `options` is not used.
 
 ### Flows
@@ -123,7 +126,9 @@ A model has one flow when at least one tour step lights a connector, and none ot
 
 - Transitions appear in the order the tour lights their connectors.
 - `sequence-number` runs 1 to N with no gaps or repeats.
-- Each transition has its own drawn connector, drawn in the transition's direction.
+- Each transition has its own drawn connector, drawn in the transition's direction. A
+  two-way arrow, with a marker at both ends, stands for a request and its reply and
+  serves one transition in each direction.
 - The flow's `description` is the term's `caption` or a sentence from the explainer.
 
 Tour steps and transitions are not one-to-one: a step may light only a node, or several
@@ -175,8 +180,8 @@ allow and deny. Colour says nothing about node or relationship type.
 - `data-calm` and `data-s` sit on the same element.
 - Every `box`, `box-accent`, `box-soft`, `zone` and `zone-accent` element sits inside a
   node's group, and every `flow*` element carries a relationship's id. A purely
-  illustrative mark, such as a mapping-table cell or the struck-through X, opts out with
-  `data-note="<short reason>"` on itself or its group.
+  illustrative mark, such as a call-out box, a footer strip, an elided row, a self-loop or
+  the struck-through X, opts out with `data-note="<short reason>"` on itself or its group.
 - Free-text annotations, footnotes, dividers and badges are not model elements and need no
   tag.
 
@@ -247,7 +252,7 @@ full-explainer disclosure.
 
 `extractObject(html, name)` walks `const CALM = {` to its matching brace, as
 `extractArray` does for brackets, and evaluates the literal in a bare context.
-`readTerms` returns `CALM`, an empty object if the declaration is absent.
+Phase 1 adds the declaration, empty, so `readTerms` always returns `CALM`.
 
 ### `validate.mjs` (`npm test`)
 
@@ -255,13 +260,18 @@ full-explainer disclosure.
 - Every `CALM` key is a term id. After lock-in, every term id has a model.
 - Each stored model validates against CALM 1.2 `core.json`. The eleven schema files under
   `calm/release/1.2/meta/` are vendored into `test/calm-schema/1.2/`, with a README giving
-  the source URL and the date fetched. `ajv` (2020-12 dialect) is a new devDependency.
+  the source URL and the date fetched. `ajv` (2020-12 dialect) is a new devDependency; it
+  loads the four files an architecture needs: core, control, flow and interface.
 - Reference checks the schema cannot express:
-  - node ids are unique, and relationship ids are unique
+  - a stored model holds only `nodes`, `relationships` and `flows`, and has at least one
+    node
+  - node ids are unique, relationship ids are unique, and both are kebab-case
+  - every node is named by at least one relationship
   - every node a relationship names exists
   - no node contains itself, and no node is a container through both `deployed-in` and
     `composed-of`
-  - every relationship a transition names exists
+  - every relationship a transition names exists and is drawn as a connector (`connects`
+    or `interacts`)
   - sequence numbers run 1 to N
   - a model has at most one flow
 
@@ -281,7 +291,9 @@ Model against drawing, measured in screen space like the existing checks:
   a tolerance that starts at 6 viewBox units and is tuned in the pilot. For `interacts`,
   every listed node is reached.
 - A connector drawn against its relationship's direction has a
-  `destination-to-source` transition on that relationship.
+  `destination-to-source` transition on that relationship. A two-way arrow serves both
+  directions.
+- If the tour lights any connector, the model has a flow.
 - Every child of a `deployed-in` or `composed-of` relationship sits inside its container,
   and the container's border is dashed or solid to match.
 - Walking the flow's transitions in sequence order, each has its own connector in the
@@ -297,14 +309,17 @@ The disclosure, at 1440px and 375px:
 - Its JSON parses, and its `nodes`, `relationships` and `flows` equal the stored model.
 - `$schema` and the four `metadata` fields are present and match the `TERMS` entry.
 - Copy and Download exist; Download produces `<id>.calm.json`.
+- Copy says "Copied" when the clipboard accepts the text and "Copy failed" when it refuses.
+- The JSON block can be reached and scrolled by keyboard, and has an accessible name.
 - Nothing overflows the viewport when it is open.
+- An open disclosure prints its JSON whole, not clipped to the scroll box.
 
 Existing checks (a) and (b) learn the new shapes: `shape-cyl` and `shape-doc` count as
 boxes for label clearance, and their outlines are excluded from the stroke/text collision
 check.
 
-`verify.mjs --calm-out <dir>` writes each disclosure's JSON to `<dir>/<id>.calm.json`, so
-the official CLI validates exactly what a reader would download.
+`verify.mjs --calm-out=<dir>` saves each term's download to `<dir>/<id>.calm.json`, so the
+official CLI validates exactly what a reader would download.
 
 ### Fixtures
 
@@ -322,12 +337,20 @@ check reports it:
 
 The fixtures are written before the checks, so each check is seen to fail first.
 
+`test/tour-fixtures.mjs` replaces the WireGuard diagram wholesale, so it gains a matching
+synthetic model and `data-calm` tags; otherwise its good case would fail check (e) once
+WireGuard has a real model.
+
 ### Official cross-check
 
 FINOS's `calm validate` CLI (`@finos/calm-cli`, run through `npx`, not installed in the
-repo) validates the files from `--calm-out`: the five pilots, then all 105 at lock-in. Its
-exact invocation, and whether it runs on this machine at all, is settled in the pilot. If
-it cannot run here, `ajv` is the only schema validation and the pilot summary says so.
+repo) validates the files from `--calm-out`: the five pilots, then all 105 at lock-in.
+
+Confirmed on this machine on 6 October 2026 with `@finos/calm-cli` 1.60.1 on Node 24.15:
+`npx --yes @finos/calm-cli@1.60.1 validate -a <file>` accepts an architecture whose
+`$schema` is the URL above, exits 0 with `hasErrors` and `hasWarnings` false, and exits 1
+on a missing node description, a relationship naming a missing node, or a transition
+naming a missing relationship. It warns about a node no relationship names.
 
 ### Reading the result
 
@@ -348,7 +371,9 @@ element screenshots of `#detail-content` are read for every redrawn diagram.
   checks; the two shape helpers and their CSS; `calmHtml` and its behaviour; verify check
   (e) and `--calm-out`; `test/calm-fixtures.mjs`. During the migration a term without a
   model renders as it does today, shows no disclosure, and is skipped by check (e).
-  Commit: `feat: add CALM model support to the glossary tooling`.
+  Three commits, one per reviewable piece: the model checks in `validate.mjs`, the
+  drawing grammar with check (e), and the disclosure. A `docs:` commit then adds the
+  model step to the skill, so the pilot and the batches can follow it.
 - **Phase 2, pilots.** DNS (a flow with replies), Kubernetes (`deployed-in` containment),
   OAuth (an actor and a multi-party sequence), JWT (`composed-of` anatomy with no flow),
   OWASP (the stretch case). Commit:
@@ -414,9 +439,6 @@ Push only when James asks.
   reads well.
 - **Schema drift:** CALM went from 1.0 to 1.2 quickly. The models pin 1.2 and the vendored
   copy is dated; moving to a later release is a separate change.
-- **The official CLI:** not yet run on this machine. Its pilot run also confirms the
-  `$schema` URL the page adds; if the CLI expects a different one, this spec is corrected
-  before the batches start.
 - **File size:** an estimated 250 KB on top of 750 KB. Measured after the pilots.
 - **Hook dependency:** `validate.mjs` stops being dependency-free.
 - **Fonts:** a real `verify` run still needs Google Fonts, as today.
