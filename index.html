@@ -8582,6 +8582,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
   };
 
   /* ====================================================================
+     CALM — one architecture model per term id, in the FINOS Common
+     Architecture Language Model 1.2 format. Each diagram is drawn from its
+     model, and verify.mjs checks that the two agree. Plain data only:
+     quoted keys, no functions, no template literals.
+     ==================================================================== */
+  const CALM = {
+  };
+
+  /* ====================================================================
      ENGINE — search, filter, routing, rendering. Data-driven; no term
      names are hard-coded below.
      ==================================================================== */

@@ -8,6 +8,7 @@
     "test": "node validate.mjs ./index.html",
     "test:tour": "node test/tour-fixtures.mjs",
     "test:takeaways": "node test/takeaways-fixtures.mjs",
+    "test:calm": "node test/calm-fixtures.mjs",
     "verify": "node verify.mjs"
   },
   "repository": {
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/jamesbuckett/zta-visual-glossary#readme",
   "devDependencies": {
+    "ajv": "^8.20.0",
     "playwright": "^1.60.0",
     "sharp": "^0.34.5"
   }

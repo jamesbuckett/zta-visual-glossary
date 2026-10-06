@@ -13,7 +13,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { extractArray, diagramIds } from './_terms.mjs';
+import { extractArray, extractObject, diagramIds } from './_terms.mjs';
+import { checkModels } from './_calm.mjs';
 
 // -----------------------------------------------------------------------------
 // CLI
@@ -60,7 +61,7 @@ const warn = (rule, msg) => warnings.push({ rule, msg });
   const dir = path.dirname(path.resolve(target));
   const whitelist = new Set([
     'screenshot.mjs', 'validate.mjs', 'a11y.mjs', 'run-evals.mjs', '_launch.mjs',
-    'glossary.mjs', 'verify.mjs', '_terms.mjs',
+    'glossary.mjs', 'verify.mjs', '_terms.mjs', '_calm.mjs',
   ]);
   const stray = fs.readdirSync(dir).filter((f) => {
     if (whitelist.has(f)) return false;
@@ -149,6 +150,15 @@ if (html.includes('const TERMS = [')) {
         err('takeaways-data', `${where}: takeaway ${i + 1} text repeats a tour step or the key fact word for word`);
       }
     });
+  }
+
+  // CALM models: one architecture per term id, each valid against the CALM 1.2
+  // schema and consistent in its own references. Whether a drawing matches
+  // its model is a rendered check, in verify.mjs.
+  let models = null;
+  try { models = extractObject(html, 'CALM'); } catch (e) { err('data-parse', `CALM: ${e.message}`); }
+  if (models) {
+    for (const f of await checkModels(models, terms.map((t) => t.id), { requireAll: false })) err(f.rule, f.msg);
   }
 }
 
