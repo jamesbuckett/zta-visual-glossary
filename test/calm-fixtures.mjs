@@ -71,6 +71,57 @@ function swap(html, from, to) {
   return html.replace(from, () => to);
 }
 
+const STEPS = `steps: [
+        { title: "User asks", text: "The user asks the app." },
+        { title: "App reads", text: "The app reads the store." },
+        { title: "Agent reports", text: "The agent reports and the app answers." }
+      ],
+      fact: "The app answers from the store."`;
+
+// Replaces the wireguard entry's tour and drawing, as test/tour-fixtures.mjs
+// does, so the fixture does not depend on the real entry.
+function withTour(html, tour) {
+  html = html.replace(/(id: "wireguard"[\s\S]*?),\n\s*steps: \[[\s\S]*?\],\n\s*fact: "[^"]*"/, '$1');
+  const at = html.indexOf('id: "wireguard"');
+  const close = html.indexOf('\n    }', at);
+  return html.slice(0, close) + `,\n      ${tour}` + html.slice(close);
+}
+function withDiagram(html, drawing) {
+  return html.replace(/ {4}wireguard: \(\) => `[\s\S]*?<\/svg>`/, `    wireguard: () => \`${drawing}\``);
+}
+
+// The fixture drawing: an actor, a service, a cylinder, a dashed zone holding
+// a service, and a solid container holding a document. Each option plants one
+// defect; with none it matches GOOD.
+const svg = (o = {}) => {
+  const p = {
+    storeTag: ' data-calm="store"', storeName: 'Store', storeShape: '${cyl(540, 28, 140, 72)}',
+    agentAppTag: 'agent-app', agentAppStep: '3', askEnd: '278', hostWidth: '240', extra: '', nest: false, ...o,
+  };
+  const agent = '<g data-s="3" data-calm="agent"><rect class="box" x="300" y="180" width="120" height="56" rx="8"/><text class="t-b" x="320" y="214">Agent</text></g>';
+  return `
+      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="fixture">
+        <g data-s="1 3" data-calm="user"><rect class="box" x="24" y="32" width="140" height="64" rx="12"/><text class="t-b" x="44" y="70">User</text></g>
+        <g data-s="1 2 3" data-calm="app"><rect class="box" x="280" y="32" width="140" height="64" rx="8"/><text class="t-b" x="300" y="70">App</text></g>
+        <g data-s="2"${p.storeTag}>${p.storeShape}<text class="t-b" x="566" y="72">${p.storeName}</text></g>
+        <g data-calm="host"><rect class="zone" x="260" y="150" width="${p.hostWidth}" height="110" rx="10"/><text class="t-sm t-mut" x="272" y="168">Host</text>${p.nest ? agent : ''}</g>
+        ${p.nest ? '' : agent}
+        <g data-calm="bundle"><rect class="box-soft" x="24" y="150" width="180" height="110" rx="8"/><text class="t-sm t-mut" x="36" y="168">Bundle</text></g>
+        <g data-calm="part">\${doc(44, 180, 140, 56)}<text class="t-b" x="60" y="214">Part &amp; seal</text></g>
+        <line class="flow" data-s="1" data-calm="user-app" x1="166" y1="52" x2="${p.askEnd}" y2="52" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="user-app" x1="278" y1="80" x2="166" y2="80" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="app-store" x1="422" y1="64" x2="538" y2="64" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="${p.agentAppStep}" data-calm="${p.agentAppTag}" x1="350" y1="178" x2="350" y2="98" marker-end="url(#ah-mut)"/>
+        ${p.extra}
+        \${badge(1, 222, 52, '1')}
+        \${badge(2, 480, 64, '2')}
+        \${badge(3, 350, 124, '3')}
+      </svg>`;
+};
+
+// The whole fixture page: synthetic tour, drawing and model on wireguard.
+const page = (o, m = GOOD) => withModel(withDiagram(withTour(base, STEPS), svg(o)), m);
+
 const CASES = [
   // [name, build, checker, expected exit, rule expected in the report, message fragment]
   ['good model validates', () => withModel(base, GOOD), 'validate', 0, null],
@@ -94,6 +145,26 @@ const CASES = [
     () => withModel(base, model((m) => { m.relationships.push({ 'unique-id': 'host-parts', 'relationship-type': { 'composed-of': { container: 'host', nodes: ['agent'] } } }); })),
     'validate', 1, 'calm-data', /both deployed-in and composed-of/],
   ['CALM that does not parse rejected', () => swap(base, 'const CALM = {', 'const CALM = {{'), 'validate', 1, 'data-parse', /CALM/],
+
+  // Check (e): the drawing against its model.
+  ['good drawing verifies', () => page(), 'verify', 0, null],
+  ['term without a model verifies during migration', () => withModel(base, null), 'verify', 0, null],
+  ['node not drawn caught', () => page({ storeTag: '' }), 'verify', 1, 'calm', /drawn 0 times/],
+  ['title that differs from the name caught', () => page({ storeName: 'Storage' }), 'verify', 1, 'calm', /no label reading "Store"/],
+  ['database drawn as a plain box caught',
+    () => page({ storeShape: '<rect class="box" x="540" y="28" width="140" height="72" rx="8"/>' }), 'verify', 1, 'calm', /drawn as a square box, want a cylinder/],
+  ['connector tagged with an unknown relationship caught', () => page({ agentAppTag: 'agent-nowhere' }), 'verify', 1, 'calm', /"agent-nowhere" is not in the model/],
+  ['connector ending on the wrong node caught', () => page({ askEnd: '220' }), 'verify', 1, 'calm', /does not run between/],
+  ['child outside its container caught', () => page({ hostWidth: '30' }), 'verify', 1, 'calm', /outside its container/],
+  ['untagged box caught', () => page({ extra: '<rect class="box" x="560" y="180" width="120" height="56" rx="8"/>' }), 'verify', 1, 'calm', /untagged/],
+  ['untagged flow caught', () => page({ extra: '<line class="flow" x1="620" y1="150" x2="620" y2="250"/>' }), 'verify', 1, 'calm', /untagged/],
+  ['box marked data-note accepted',
+    () => page({ extra: '<g data-note="call-out"><rect class="box" x="560" y="180" width="120" height="56" rx="8"/></g>' }), 'verify', 0, null],
+  ['nested data-calm caught', () => page({ nest: true }), 'verify', 1, 'calm', /nested/],
+  ['flow order that contradicts the tour caught', () => page({ agentAppStep: '1' }), 'verify', 1, 'calm', /flow order contradicts the tour/],
+  ['reverse connector with no reverse transition caught',
+    () => page({}, model((m) => { m.flows[0].transitions.pop(); })), 'verify', 1, 'calm', /against the relationship's direction/],
+  ['lit connectors with no flow caught', () => page({}, model((m) => { delete m.flows; })), 'verify', 1, 'calm', /has no flow/],
 ];
 
 let failed = 0;

@@ -537,6 +537,11 @@
     .dg .bad { fill: var(--state-bad); }
     .dg .stroke-bad { stroke: var(--state-bad); }
     .dg .divider { stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 4; }
+    /* Node outlines beyond the rect: a cylinder is a data store, a folded
+       document a data asset. The outline takes .box or .box-accent; the rim
+       and the fold are the second stroke each shape needs. */
+    .dg :is(.rim, .fold) { fill: none; stroke: var(--border-strong); stroke-width: 1.5; }
+    .dg .box-accent + :is(.rim, .fold), .dg .on > :is(.rim, .fold) { stroke: var(--accent); }
     /* arrowhead marker colours */
     .m-mut { fill: var(--text-muted); }
     .m-acc { fill: var(--accent); }
@@ -3500,6 +3505,14 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
   const icon = (name, x, y) => `<g class="ico" transform="translate(${x} ${y})">${ICONS[name]}</g>`;
   const badge = (n, x, y, steps) =>
     `<g class="badge" data-s="${steps}"><circle cx="${x}" cy="${y}" r="10"/><text x="${x}" y="${y + 4}" text-anchor="middle">${n}</text></g>`;
+  // Node outlines that are not a plain rect, drawn inside (x, y, w, h). cyl()
+  // is a data store and doc() a data asset; cls is "box" or "box-accent".
+  const cyl = (x, y, w, h, cls = 'box') =>
+    `<path class="${cls} shape shape-cyl" d="M${x} ${y + 8} A${w / 2} 8 0 0 1 ${x + w} ${y + 8} V${y + h - 8} A${w / 2} 8 0 0 1 ${x} ${y + h - 8} Z"/>` +
+    `<path class="shape rim" d="M${x} ${y + 8} A${w / 2} 8 0 0 0 ${x + w} ${y + 8}"/>`;
+  const doc = (x, y, w, h, cls = 'box') =>
+    `<path class="${cls} shape shape-doc" d="M${x} ${y} H${x + w - 12} L${x + w} ${y + 12} V${y + h} H${x} Z"/>` +
+    `<path class="shape fold" d="M${x + w - 12} ${y} V${y + 12} H${x + w}"/>`;
 
   /* ====================================================================
      DIAGRAMS — one function per term id, returning inline SVG built from

@@ -13,9 +13,28 @@ import os from 'os';
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { readTerms, declSpan } from '../_terms.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const base = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+
+const { CALM } = readTerms(path.join(root, 'index.html'));
+
+// The model of the fixture drawing below. Check (e) compares any modelled
+// term's drawing with its model, and this suite replaces the drawing.
+const FIXTURE_MODEL = {
+  nodes: [
+    { 'unique-id': 'peer-a', 'node-type': 'service', name: 'Peer A', description: 'One end of the tunnel.' },
+    { 'unique-id': 'peer-b', 'node-type': 'service', name: 'Peer B', description: 'The other end of the tunnel.' },
+  ],
+  relationships: [
+    { 'unique-id': 'tunnel', description: 'The peers exchange encrypted packets.', 'relationship-type': { connects: { source: { node: 'peer-a' }, destination: { node: 'peer-b' } } } },
+  ],
+  flows: [{
+    'unique-id': 'exchange', name: 'Exchange', description: 'The peers exchange encrypted packets.',
+    transitions: [{ 'relationship-unique-id': 'tunnel', 'sequence-number': 1, description: 'Peer A sends to peer B.' }],
+  }],
+};
 
 // A local server that accepts connections and never answers. One case points
 // the page's font stylesheet at it to prove the suites, which run verify with
@@ -42,16 +61,18 @@ function withTour(html, tour) {
 }
 
 function withDiagram(html, svg) {
-  return html.replace(/ {4}wireguard: \(\) => `[\s\S]*?<\/svg>`/, `    wireguard: () => \`${svg}\``);
+  html = html.replace(/ {4}wireguard: \(\) => `[\s\S]*?<\/svg>`/, `    wireguard: () => \`${svg}\``);
+  const { from, end } = declSpan(html, 'CALM', '{', '}');
+  return html.slice(0, from) + JSON.stringify({ ...CALM, wireguard: FIXTURE_MODEL }, null, 2) + html.slice(end + 1);
 }
 
 const svg = ({ b = '2', badgeAt = '360, 100', nestBadge = false } = {}) => {
   const bdg = `\${badge(3, ${badgeAt}, 3)}`;
   return `
       <svg class="dg" viewBox="0 0 720 200" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="fixture">
-        <g data-s="1"><rect class="box" x="40" y="60" width="200" height="80" rx="10"/>\${icon('user', 56, 76)}<text class="t-b" x="92" y="94">Peer A</text>${nestBadge ? bdg : ''}</g>
-        <g data-s="${b}"><rect class="box" x="480" y="60" width="200" height="80" rx="10"/><text class="t-b" x="500" y="94">Peer B</text></g>
-        <line class="flow" data-s="3" x1="240" y1="100" x2="478" y2="100" marker-end="url(#ah-mut)"/>
+        <g data-s="1" data-calm="peer-a"><rect class="box" x="40" y="60" width="200" height="80" rx="10"/>\${icon('user', 56, 76)}<text class="t-b" x="92" y="94">Peer A</text>${nestBadge ? bdg : ''}</g>
+        <g data-s="${b}" data-calm="peer-b"><rect class="box" x="480" y="60" width="200" height="80" rx="10"/><text class="t-b" x="500" y="94">Peer B</text></g>
+        <line class="flow" data-s="3" data-calm="tunnel" x1="240" y1="100" x2="478" y2="100" marker-end="url(#ah-mut)"/>
         ${nestBadge ? '' : bdg}
       </svg>`;
 };

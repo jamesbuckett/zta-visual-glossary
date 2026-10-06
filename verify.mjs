@@ -20,6 +20,12 @@
 //       a closed disclosure that opens for print, and nothing overflows at
 //       1440px or 375px
 //
+//   (e) CALM model — for a term with a model: every node drawn once, under
+//       its name, in the outline its type calls for; every connects and
+//       interacts relationship drawn as a connector between the right two
+//       nodes; every contained node inside its container; the flow in the
+//       tour's order; and no box, zone or flow left untagged
+//
 // A real run waits for the page's web fonts before it measures anything, and
 // reports a `fonts` error if they never load: geometry in fallback fonts is not
 // the geometry a reader sees (envoy's badge 3 passed in one and failed in the
@@ -37,6 +43,7 @@ import os from 'os';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { readTerms } from './_terms.mjs';
+import { relationshipShape } from './_calm.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
@@ -95,7 +102,7 @@ try {
   process.exit(2);
 }
 
-const { html, TERMS, TYPE_TAGS, PROV_TAGS, DOMAIN_TAGS, DIAGRAM_IDS } = data;
+const { html, TERMS, TYPE_TAGS, PROV_TAGS, DOMAIN_TAGS, DIAGRAM_IDS, CALM } = data;
 const ids = new Set(TERMS.map((t) => t.id));
 
 // ----- the six static fallback counters, plus the README's term count --------
@@ -197,14 +204,17 @@ const PROBE = `(() => {
   // Zone rects are background regions that labels legitimately straddle.
   // An icon's own <rect> strokes (server, cpu, network) are part of the icon,
   // not boxes, and would otherwise report the icon as crossing itself.
-  const rects = [...svg.querySelectorAll('rect')]
+  // A cylinder or a document is a box drawn as a path, so it counts here too.
+  const rects = [...svg.querySelectorAll('rect, path.shape-cyl, path.shape-doc')]
     .filter((r) => !r.closest('.ico'))
     .filter((r) => !/zone/.test(r.getAttribute('class') || ''))
-    .filter((r) => r.getAttribute('width') && r.getAttribute('height'))
-    .map((r) => Object.assign(box(r), {
-      cls: (r.getAttribute('class') || '(no class)') +
-           ' [' + r.getAttribute('x') + '..' + (+r.getAttribute('x') + +r.getAttribute('width')) + ']',
-    }));
+    .filter((r) => r.tagName !== 'rect' || (r.getAttribute('width') && r.getAttribute('height')))
+    .map((r) => {
+      const b = r.getBBox();   // user units; none of these shapes carries a transform
+      return Object.assign(box(r), {
+        cls: (r.getAttribute('class') || '(no class)') + ' [' + b.x + '..' + (b.x + b.width) + ']',
+      });
+    });
 
   // (a) a label overlapping a box on both axes but not sitting inside it.
   // The incursion is reported in user units: a label clipping a corner by a
@@ -233,6 +243,8 @@ const PROBE = `(() => {
     // stroke-bad is the decorative X struck over a broken primitive (pqc's
     // RSA/ECC, and 4 others). It is *meant* to sit on the label it cancels.
     if ((el.getAttribute('class') || '').includes('stroke-bad')) continue;
+    // A node's own outline, rim or fold is not a stroke crossing its label.
+    if ((el.getAttribute('class') || '').split(' ').includes('shape')) continue;
     const len = el.getTotalLength ? el.getTotalLength() : 0;
     if (!len) continue;
     const m = el.getScreenCTM();
@@ -336,6 +348,160 @@ const REOPEN_PROBE = `(() => {
   window.dispatchEvent(new HashChangeEvent('hashchange'));
   return document.querySelector('#detail-content .explainer-more').open;
 })()`;
+
+// Reads the drawing for check (e): every data-calm node group and connector,
+// and every box, zone and flow that carries neither a tag nor a data-note.
+// Positions are in screen px, and so is tol, the endpoint tolerance.
+const CALM_PROBE = `(() => {
+  const svg = document.querySelector('#detail-content svg.dg');
+  const vb = svg.viewBox.baseVal;
+  const scale = vb.width ? svg.getBoundingClientRect().width / vb.width : 1;
+  const rect = (el) => { const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, r: r.right, b: r.bottom }; };
+  const SHAPES = 'rect.box, rect.box-accent, rect.box-soft, rect.zone, rect.zone-accent, path.shape-cyl, path.shape-doc';
+  const FLOWS = '.flow, .flow-accent, .flow-ok, .flow-bad';
+  const kind = (el) => {
+    const c = el.classList;
+    if (c.contains('shape-cyl')) return 'cylinder';
+    if (c.contains('shape-doc')) return 'document';
+    if (c.contains('zone') || c.contains('zone-accent')) return 'dashed zone';
+    if (c.contains('box-soft')) return 'solid container';
+    return Number(el.getAttribute('rx')) >= 12 ? 'rounded box' : 'square box';
+  };
+  const step = (el) => { const s = el.closest('[data-s]'); return s ? Math.min(...s.dataset.s.trim().split(/\\s+/).map(Number)) : null; };
+  const point = (el, at) => { const p = el.getPointAtLength(at); const q = new DOMPoint(p.x, p.y).matrixTransform(el.getScreenCTM()); return { x: q.x, y: q.y }; };
+  const where = (el) => (el.getAttribute('class') || el.tagName) + ' at ' +
+    ['x', 'y', 'x1', 'y1', 'd'].map((a) => el.getAttribute(a)).filter(Boolean).join(',').slice(0, 40);
+
+  const nodes = [], connectors = [];
+  for (const el of svg.querySelectorAll('[data-calm]')) {
+    const id = el.dataset.calm;
+    if (el.matches(FLOWS)) {
+      const a = point(el, 0), b = point(el, el.getTotalLength());
+      const head = el.hasAttribute('marker-end'), tail = el.hasAttribute('marker-start');
+      // Read tail to head. A lone marker-start means the line was drawn backwards.
+      const back = tail && !head;
+      connectors.push({ id, from: back ? b : a, to: back ? a : b, twoWay: head && tail, step: step(el) });
+    } else {
+      const outline = el.matches(SHAPES) ? el : [...el.querySelectorAll(SHAPES)].find((s) => !s.closest('.ico'));
+      nodes.push({
+        id, box: rect(el),
+        outline: outline ? rect(outline) : null, shape: outline ? kind(outline) : null,
+        texts: [...el.querySelectorAll('text')].map((t) => t.textContent.trim()),
+        nested: !!el.parentElement.closest('[data-calm]'),
+      });
+    }
+  }
+  const loose = (sel) => [...svg.querySelectorAll(sel)].filter((el) => !el.closest('.ico') && !el.closest('[data-note]'));
+  const untagged = [
+    ...loose(SHAPES).filter((el) => !el.closest('[data-calm]')),
+    ...loose(FLOWS).filter((el) => !el.hasAttribute('data-calm')),
+  ].map(where);
+  return { nodes, connectors, untagged, tol: 6 * scale };
+})()`;
+
+// The outline a node should be drawn with. A container's border follows how
+// its children are held; everything else follows the node type.
+function wantShape(node, model) {
+  for (const r of model.relationships || []) {
+    const s = relationshipShape(r);
+    if (s.from !== node['unique-id']) continue;
+    if (s.kind === 'deployed-in') return 'dashed zone';
+    if (s.kind === 'composed-of') return 'solid container';
+  }
+  const type = node['node-type'];
+  if (type === 'actor' || type === 'webclient') return 'rounded box';
+  if (type === 'database' || type === 'ldap') return 'cylinder';
+  if (type === 'data-asset') return 'document';
+  if (type === 'network' || type === 'ecosystem') return 'dashed zone';
+  return 'square box';
+}
+
+// Check (e): the drawing against its model. `d` is what CALM_PROBE read.
+function checkDrawing(id, model, d) {
+  const bad = (msg) => err('calm', `${id}: ${msg}`);
+  const nodeIds = new Set(model.nodes.map((n) => n['unique-id']));
+  const rels = new Map((model.relationships || []).map((r) => [r['unique-id'], relationshipShape(r)]));
+
+  for (const u of d.untagged) bad(`untagged ${u} — tag it data-calm, move it into a node's group, or mark it data-note`);
+  for (const n of d.nodes) {
+    if (rels.has(n.id)) bad(`"${n.id}" is a relationship, but its data-calm is on a shape rather than a connector`);
+    else if (!nodeIds.has(n.id)) bad(`data-calm="${n.id}" is not in the model`);
+    if (n.nested) bad(`node "${n.id}" is nested inside another data-calm element`);
+  }
+  for (const c of d.connectors) {
+    if (nodeIds.has(c.id)) bad(`"${c.id}" is a node, but its data-calm is on a connector`);
+    else if (!rels.has(c.id)) bad(`data-calm="${c.id}" is not in the model`);
+  }
+
+  // Nodes: drawn once, under their name, in the outline their type calls for.
+  const drawn = new Map();
+  for (const node of model.nodes) {
+    const nid = node['unique-id'];
+    const hits = d.nodes.filter((n) => n.id === nid);
+    if (hits.length !== 1) { bad(`node "${nid}" is drawn ${hits.length} times, want once`); continue; }
+    const g = hits[0];
+    drawn.set(nid, g);
+    if (!g.texts.includes(node.name)) bad(`node "${nid}" has no label reading "${node.name}"`);
+    const want = wantShape(node, model);
+    if (!g.shape) bad(`node "${nid}" has no outline`);
+    else if (g.shape !== want) bad(`node "${nid}" (${node['node-type']}) is drawn as a ${g.shape}, want a ${want}`);
+  }
+
+  const on = (p, nid) => {
+    const g = drawn.get(nid);
+    return !!g && p.x >= g.box.x - d.tol && p.x <= g.box.r + d.tol && p.y >= g.box.y - d.tol && p.y <= g.box.b + d.tol;
+  };
+  const inside = (a, b) => a.x >= b.x - d.tol && a.r <= b.r + d.tol && a.y >= b.y - d.tol && a.b <= b.b + d.tol;
+
+  // Relationships: containment, or a connector between the right two nodes.
+  const pool = new Map();   // relationship id -> its connectors, each with a direction
+  for (const [rid, s] of rels) {
+    if (s.kind === 'deployed-in' || s.kind === 'composed-of') {
+      const outer = drawn.get(s.from);
+      for (const child of s.to) {
+        const inner = drawn.get(child);
+        if (outer && inner && outer.outline && inner.outline && !inside(inner.outline, outer.outline)) {
+          bad(`node "${child}" is drawn outside its container "${s.from}"`);
+        }
+      }
+      continue;
+    }
+    const lines = d.connectors.filter((c) => c.id === rid);
+    if (!lines.length) { bad(`relationship "${rid}" has no connector`); continue; }
+    const reached = new Set();
+    for (const c of lines) {
+      const forward = s.to.find((n) => on(c.from, s.from) && on(c.to, n));
+      const reverse = s.to.find((n) => on(c.from, n) && on(c.to, s.from));
+      if (!forward && !reverse) { bad(`a "${rid}" connector does not run between "${s.from}" and ${s.to.map((n) => `"${n}"`).join(' or ')}`); continue; }
+      reached.add(forward || reverse);
+      c.dir = c.twoWay ? 'both' : forward ? 'forward' : 'reverse';
+    }
+    if (lines.every((c) => c.dir)) for (const n of s.to) if (!reached.has(n)) bad(`relationship "${rid}" has no connector reaching "${n}"`);
+    pool.set(rid, lines.filter((c) => c.dir).sort((a, b) => (a.step ?? Infinity) - (b.step ?? Infinity)));
+  }
+
+  // The flow: each transition has a connector of its own in its direction,
+  // and the tour lights them in the flow's order. A two-way arrow serves one
+  // transition each way.
+  const flow = (model.flows || [])[0];
+  const lit = d.connectors.filter((c) => c.step !== null && rels.has(c.id));
+  if (!flow && lit.length) bad(`the tour lights ${lit.length} connector(s) but the model has no flow`);
+  let prev = 0;
+  for (const t of flow ? flow.transitions : []) {
+    const rid = t['relationship-unique-id'];
+    const want = t.direction === 'destination-to-source' ? 'reverse' : 'forward';
+    const n = t['sequence-number'];
+    const c = (pool.get(rid) || []).find((x) => !x[want] && (x.dir === want || x.dir === 'both'));
+    if (!c) { bad(`transition ${n} over "${rid}" has no ${want} connector of its own`); continue; }
+    c[want] = true;
+    if (c.step === null) bad(`transition ${n}'s connector is never lit by the tour`);
+    else if (c.step < prev) bad(`flow order contradicts the tour: transition ${n} is first lit at step ${c.step}, after one lit at step ${prev}`);
+    else prev = c.step;
+  }
+  for (const [rid, lines] of pool) for (const c of lines) {
+    if (c.dir === 'reverse' && !c.reverse) bad(`a "${rid}" connector is drawn against the relationship's direction with no destination-to-source transition`);
+  }
+}
 
 const tocIds = `(() => [...document.querySelectorAll('#toc [data-toc]')].map((e) => e.dataset.toc))()`;
 
@@ -525,6 +691,10 @@ for (const t of targets) {
     });
     await page.setViewportSize({ width: 1440, height: 1200 });
   }
+
+  // Check (e). A term without a model is skipped until every term has one.
+  const model = CALM[t.id];
+  if (model) checkDrawing(t.id, model, await page.evaluate(CALM_PROBE));
 
   for (const c of consoleErrors)    err('console',   `${t.id}: ${c}`);
 }
