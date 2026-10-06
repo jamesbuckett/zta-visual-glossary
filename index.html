@@ -3568,39 +3568,39 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     dns: () => `
       <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Recursive resolution — the resolver walks root, TLD, then authoritative, and caches the answer.">
-        <g data-s="1 5">
+        <g data-s="1 5" data-calm="client">
           <rect class="box" x="24" y="96" width="160" height="92" rx="12"/>
           ${icon('laptop', 40, 110)}
           <text class="t-b" x="72" y="128">Client</text>
           <text class="t-sm t-mut" x="72" y="146">wants the IP</text>
           <text class="t-sm t-mut" x="72" y="162">of example.com</text>
         </g>
-        <g data-s="1 2 3 4 5">
+        <g data-s="1 2 3 4 5" data-calm="resolver">
           <rect class="box" x="290" y="96" width="176" height="92" rx="8"/>
           ${icon('search', 306, 110)}
           <text class="t-b" x="338" y="128">Resolver</text>
           <text class="t-sm t-mut" x="338" y="146">asks each level</text>
           <text class="t-sm t-mut" x="338" y="162">caches answers</text>
         </g>
-        ${[['Root servers', 'the top', 24, 2], ['TLD', 'top-level domain', 116, 3], ['Authoritative', 'for the domain', 208, 4]].map(([name, sub, y, s]) => `
-          <g data-s="${s}">
+        ${[['root', 'Root servers', 'the top', 24, 2], ['tld', 'TLD', 'top-level domain', 116, 3], ['authoritative', 'Authoritative', 'for the domain', 208, 4]].map(([id, name, sub, y, s]) => `
+          <g data-s="${s}" data-calm="${id}">
             <rect class="box" x="540" y="${y}" width="156" height="52" rx="8"/>
             ${icon('server', 552, y + 14)}
             <text class="t-b" x="584" y="${y + 24}">${name}</text>
             <text class="t-sm t-mut" x="584" y="${y + 41}">${sub}</text>
           </g>`).join('')}
-        <g data-s="5">
-          <rect class="box" x="314" y="220" width="128" height="36" rx="6"/>
-          <text class="t-sm" x="378" y="242" text-anchor="middle">cached answer</text>
+        <g data-s="5" data-calm="cache">
+          ${cyl(314, 216, 128, 48)}
+          <text class="t-b" x="378" y="249" text-anchor="middle">Cache</text>
         </g>
-        <line class="flow" data-s="5" x1="378" y1="190" x2="378" y2="218" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="resolver-cache" x1="378" y1="190" x2="378" y2="214" marker-end="url(#ah-mut)"/>
 
-        <line class="flow" data-s="1" x1="186" y1="118" x2="288" y2="118" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="5" x1="288" y1="166" x2="186" y2="166" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="client-resolver" x1="186" y1="118" x2="288" y2="118" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="client-resolver" x1="288" y1="166" x2="186" y2="166" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="5" x="222" y="184" text-anchor="middle">IP address</text>
-        <line class="flow" data-s="2" x1="468" y1="116" x2="538" y2="56" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="468" y1="142" x2="538" y2="142" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="468" y1="168" x2="538" y2="228" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="resolver-root" x1="468" y1="116" x2="538" y2="56" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="resolver-tld" x1="468" y1="142" x2="538" y2="142" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="resolver-authoritative" x1="468" y1="168" x2="538" y2="228" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 208, 118, '1')}
         ${badge(2, 503, 86, '2')}
@@ -3713,50 +3713,54 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     jwt: () => `
-      <svg class="dg" viewBox="0 0 720 268" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Token anatomy — header, payload, and signature; the signature makes it tamper-evident.">
-        <g data-s="1">
-          <rect class="box" x="24" y="24" width="160" height="56" rx="6"/>
-          <text class="t-b" x="40" y="48">header</text>
-          <text class="t-sm t-mut" x="40" y="66">base64url</text>
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Token anatomy — header, payload, and signature; the signature makes it tamper-evident.">
+        <g data-calm="jwt">
+          <rect class="box-soft" x="24" y="16" width="672" height="112" rx="10"/>
+          <text class="t-b" x="40" y="40">JSON Web Token</text>
         </g>
-        <text class="t-b" x="194" y="60" text-anchor="middle">.</text>
-        <g data-s="2 4">
-          <rect class="box" x="204" y="24" width="280" height="56" rx="6"/>
-          <text class="t-b" x="220" y="48">payload</text>
-          <text class="t-sm t-mut" x="220" y="66">base64url</text>
+        <g data-s="1" data-calm="header">
+          ${doc(40, 56, 144, 56)}
+          <text class="t-b" x="56" y="80">header</text>
+          <text class="t-sm t-mut" x="56" y="98">base64url</text>
         </g>
-        <text class="t-b" x="494" y="60" text-anchor="middle">.</text>
-        <g data-s="3">
-          <rect class="box" x="504" y="24" width="192" height="56" rx="6"/>
-          <text class="t-b" x="520" y="48">signature</text>
-          <text class="t-sm t-mut" x="520" y="66">base64url</text>
+        <text class="t-b" x="194" y="92" text-anchor="middle">.</text>
+        <g data-s="2 4" data-calm="payload">
+          ${doc(204, 56, 280, 56)}
+          <text class="t-b" x="220" y="80">payload</text>
+          <text class="t-sm t-mut" x="220" y="98">base64url</text>
         </g>
-        <line class="flow" data-s="2" x1="344" y1="82" x2="344" y2="110" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
-          <rect class="box" x="204" y="112" width="280" height="84" rx="8"/>
-          ${icon('list-checks', 220, 126)}
-          <text class="t-b" x="252" y="144">Claims</text>
-          <text class="t-sm t-mut" x="252" y="162">who you are, what you</text>
-          <text class="t-sm t-mut" x="252" y="178">may do, when it expires</text>
+        <text class="t-b" x="494" y="92" text-anchor="middle">.</text>
+        <g data-s="3" data-calm="signature">
+          ${doc(504, 56, 176, 56)}
+          <text class="t-b" x="520" y="80">signature</text>
+          <text class="t-sm t-mut" x="520" y="98">base64url</text>
         </g>
-        <line class="flow" data-s="3" x1="600" y1="82" x2="600" y2="110" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="504" y="112" width="192" height="84" rx="8"/>
-          ${icon('shield-check', 520, 126)}
-          <text class="t-b" x="552" y="144">Verify</text>
-          <text class="t-sm t-mut" x="552" y="162">not tampered,</text>
-          <text class="t-sm t-mut" x="552" y="178">no database lookup</text>
+        <line class="flow" data-s="2" data-note="call-out" x1="344" y1="114" x2="344" y2="142" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-note="call-out">
+          <rect class="box" x="204" y="144" width="280" height="84" rx="8"/>
+          ${icon('list-checks', 220, 158)}
+          <text class="t-b" x="252" y="176">Claims</text>
+          <text class="t-sm t-mut" x="252" y="194">who you are, what you</text>
+          <text class="t-sm t-mut" x="252" y="210">may do, when it expires</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="24" y="216" width="672" height="40" rx="8"/>
-          ${icon('eye', 40, 224)}
-          <text class="t-sm" x="72" y="241">readable, not encrypted: no secrets in the payload</text>
+        <line class="flow" data-s="3" data-note="call-out" x1="592" y1="114" x2="592" y2="142" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-note="call-out">
+          <rect class="box" x="504" y="144" width="176" height="84" rx="8"/>
+          ${icon('shield-check', 520, 158)}
+          <text class="t-b" x="552" y="176">Verify</text>
+          <text class="t-sm t-mut" x="552" y="194">not tampered,</text>
+          <text class="t-sm t-mut" x="552" y="210">no database lookup</text>
+        </g>
+        <g data-s="4" data-note="call-out">
+          <rect class="box" x="24" y="248" width="672" height="40" rx="8"/>
+          ${icon('eye', 40, 256)}
+          <text class="t-sm" x="72" y="273">readable, not encrypted: no secrets in the payload</text>
         </g>
 
-        ${badge(1, 168, 40, '1')}
-        ${badge(2, 468, 40, '2')}
-        ${badge(3, 680, 40, '3')}
-        ${badge(4, 680, 236, '4')}
+        ${badge(1, 168, 84, '1')}
+        ${badge(2, 468, 84, '2')}
+        ${badge(3, 664, 84, '3')}
+        ${badge(4, 680, 268, '4')}
       </svg>`,
 
     bgp: () => `
@@ -3858,46 +3862,45 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     oauth: () => `
       <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Authorisation-code flow — the user consents and the app receives a scoped access token.">
-        <g data-s="1 2">
+        <g data-s="1 2" data-calm="user">
           <rect class="box" x="24" y="24" width="160" height="68" rx="12"/>
           ${icon('user', 40, 38)}
           <text class="t-b" x="72" y="56">You</text>
           <text class="t-sm t-mut" x="72" y="74">log in, consent</text>
         </g>
-        <g data-s="1 3 4">
+        <g data-s="1 3 4" data-calm="app">
           <rect class="box" x="24" y="176" width="160" height="72" rx="8"/>
           ${icon('app-window', 40, 190)}
           <text class="t-b" x="72" y="208">App</text>
           <text class="t-sm t-mut" x="72" y="226">never gets your</text>
           <text class="t-sm t-mut" x="72" y="241">credentials</text>
         </g>
-        <g data-s="1 2 3">
-          <rect class="box" x="276" y="24" width="184" height="96" rx="8"/>
+        <g data-s="1 2 3" data-calm="authz">
+          <rect class="box" x="276" y="24" width="224" height="68" rx="8"/>
           ${icon('shield-check', 292, 38)}
-          <text class="t-b" x="324" y="54">Authorisation</text>
-          <text class="t-b" x="324" y="72">server</text>
-          <text class="t-sm t-mut" x="324" y="92">issues tokens</text>
+          <text class="t-b" x="324" y="56">Authorisation server</text>
+          <text class="t-sm t-mut" x="324" y="74">issues tokens</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-calm="api">
           <rect class="box" x="536" y="176" width="160" height="72" rx="8"/>
           ${icon('server', 552, 190)}
           <text class="t-b" x="584" y="208">API</text>
           <text class="t-sm t-mut" x="584" y="226">the resource</text>
         </g>
-        <line class="flow" data-s="1" x1="104" y1="174" x2="104" y2="94" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="user-app" x1="104" y1="174" x2="104" y2="94" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="116" y="138">redirect</text>
-        <line class="flow" data-s="1" x1="186" y1="44" x2="274" y2="44" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="user-authz" x1="186" y1="44" x2="274" y2="44" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="230" y="38" text-anchor="middle">log in</text>
-        <line class="flow" data-s="2" x1="186" y1="72" x2="274" y2="72" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="user-authz" x1="186" y1="72" x2="274" y2="72" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="230" y="66" text-anchor="middle">consent</text>
-        <line class="flow" data-s="3" x1="274" y1="112" x2="186" y2="196" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="app-authz" x1="274" y1="88" x2="186" y2="196" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="240" y="172">scoped access token</text>
-        <line class="flow" data-s="4" x1="186" y1="212" x2="534" y2="212" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="app-api" x1="186" y1="212" x2="534" y2="212" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="380" y="204" text-anchor="middle">calls the API with the token</text>
 
         ${badge(1, 104, 132, '1')}
         ${badge(2, 168, 38, '2')}
-        ${badge(3, 246, 139, '3')}
+        ${badge(3, 233, 138, '3')}
         ${badge(4, 500, 212, '4')}
       </svg>`,
 
@@ -4145,40 +4148,40 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     kubernetes: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The control plane reconciles desired state, scheduling pods onto worker nodes.">
-        <g data-s="1">
-          <rect class="box" x="24" y="16" width="196" height="96" rx="8"/>
+        <g data-s="1" data-calm="desired-state">
+          ${doc(24, 16, 196, 96)}
           ${icon('file-text', 40, 30)}
           <text class="t-b" x="72" y="48">Desired state</text>
           <text class="t-sm t-mut" x="72" y="68">replicas</text>
           <text class="t-sm t-mut" x="72" y="84">images</text>
           <text class="t-sm t-mut" x="72" y="100">networking</text>
         </g>
-        <line class="flow" data-s="1" x1="122" y1="114" x2="122" y2="148" marker-end="url(#ah-mut)"/>
-        <g data-s="2 4 5">
+        <line class="flow" data-s="1" data-calm="declare" x1="122" y1="114" x2="122" y2="148" marker-end="url(#ah-mut)"/>
+        <g data-s="2 4 5" data-calm="control-plane">
           <rect class="box" x="24" y="150" width="196" height="100" rx="8"/>
           ${icon('cog', 40, 164)}
           <text class="t-b" x="72" y="182">Control plane</text>
           <text class="t-sm t-mut" x="72" y="202">reconciles reality</text>
           <text class="t-sm t-mut" x="72" y="218">to match</text>
         </g>
-        <path class="flow" data-s="2" d="M70 252 C70 284, 174 284, 174 252" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="2" data-note="reconcile loop" d="M70 252 C70 284, 174 284, 174 252" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" data-s="2" x="186" y="284">continuously</text>
 
-        ${[['worker node 1', 16], ['worker node 2', 150]].map(([t, y]) => `
-          <g data-s="3">
+        ${[['worker-1', 'worker node 1', 16], ['worker-2', 'worker node 2', 150]].map(([id, t, y]) => `
+          <g data-s="3" data-calm="${id}">
             <rect class="zone" x="300" y="${y}" width="396" height="108" rx="10"/>
             <text class="t-sm t-mut" x="312" y="${y + 18}">${t}</text>
           </g>`).join('')}
-        ${[[316, 44, 'scheduled', '', '3'], [444, 44, 'failed', ' bad', '3 4'], [572, 44, 'on demand', '', '5'],
-           [316, 178, 'scheduled', '', '3'], [444, 178, 'rescheduled', '', '4']].map(([x, y, sub, cls, s]) => `
-          <g data-s="${s}">
+        ${[['pod-scheduled-1', 316, 44, 'scheduled', '', '3'], ['pod-failed', 444, 44, 'failed', ' bad', '3 4'], ['pod-on-demand', 572, 44, 'on demand', '', '5'],
+           ['pod-scheduled-2', 316, 178, 'scheduled', '', '3'], ['pod-rescheduled', 444, 178, 'rescheduled', '', '4']].map(([id, x, y, sub, cls, s]) => `
+          <g data-s="${s}" data-calm="${id}">
             <rect class="box" x="${x}" y="${y}" width="112" height="64" rx="8"/>
             <text class="t-b" x="${x + 56}" y="${y + 29}" text-anchor="middle">Pod</text>
             <text class="t-sm${cls}" x="${x + 56}" y="${y + 47}" text-anchor="middle">${sub}</text>
           </g>`).join('')}
-        <line class="flow" data-s="3" x1="222" y1="180" x2="298" y2="76" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="222" y1="214" x2="298" y2="210" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="500" y1="110" x2="500" y2="176" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="schedule-1" x1="222" y1="180" x2="298" y2="76" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="schedule-2" x1="222" y1="214" x2="298" y2="210" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-note="rescheduled as" x1="500" y1="110" x2="500" y2="176" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 122, 131, '1')}
         ${badge(2, 122, 276, '2')}
@@ -6415,38 +6418,38 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     owasp: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ranked list of the ten most critical web app risks, led by Broken Access Control, with Supply Chain Failures entering at number three in the 2025 edition.">
-        <g data-s="1">
-          <rect class="zone" x="24" y="16" width="400" height="232" rx="10"/>
+        <g data-s="1" data-calm="top10">
+          <rect class="box-soft" x="24" y="16" width="400" height="232" rx="10"/>
           ${icon('list-checks', 36, 26)}
           <text class="t-b" x="68" y="44">OWASP Top 10:2025</text>
           <text class="t-sm t-mut" x="40" y="236">ranked from real-world data</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-calm="risk-1">
           <rect class="box" x="40" y="60" width="368" height="36" rx="4"/>
           <text class="t-sm t-b" x="52" y="83">1 · Broken Access Control</text>
         </g>
-        <g data-s="1">
+        <g data-s="1" data-note="elided rows">
           <rect class="box" x="40" y="104" width="368" height="24" rx="4"/>
           <text class="t-sm t-mut" x="52" y="120">2 · …</text>
         </g>
-        <g data-s="3">
+        <g data-s="3" data-calm="risk-3">
           <rect class="box" x="40" y="136" width="368" height="48" rx="4"/>
           <text class="t-sm t-b" x="52" y="156">3 · Software Supply Chain Failures</text>
           <text class="t-sm t-mut" x="52" y="173">new: was Vulnerable and Outdated</text>
         </g>
-        <g data-s="1">
+        <g data-s="1" data-note="elided rows">
           <rect class="box" x="40" y="192" width="368" height="24" rx="4"/>
           <text class="t-sm t-mut" x="52" y="208">4 to 10 · …</text>
         </g>
-        ${[['code', 'Developers', 'code against it', 16], ['shield', 'WAF rule sets', 'named after it', 96], ['list-checks', 'Auditors', 'check for it', 176]].map(([ico, name, sub, y]) => `
-          <g data-s="4">
-            <rect class="box" x="488" y="${y}" width="208" height="64" rx="8"/>
+        ${[['developers', 'developers-top10', 'code', 'Developers', 'code against it', 16, 12], ['waf-rules', 'waf-top10', 'shield', 'WAF rule sets', 'named after it', 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', 'check for it', 176, 12]].map(([id, rel, ico, name, sub, y, rx]) => `
+          <g data-s="4" data-calm="${id}">
+            <rect class="box" x="488" y="${y}" width="208" height="64" rx="${rx}"/>
             ${icon(ico, 504, y + 18)}
             <text class="t-b" x="536" y="${y + 29}">${name}</text>
             <text class="t-sm t-mut" x="536" y="${y + 47}">${sub}</text>
           </g>
-          <line class="flow" data-s="4" x1="426" y1="${y + 32}" x2="486" y2="${y + 32}" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="5">
+          <line class="flow" data-s="4" data-calm="${rel}" x1="486" y1="${y + 32}" x2="426" y2="${y + 32}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5" data-note="limitation">
           <rect class="box" x="24" y="260" width="672" height="32" rx="6"/>
           <text class="t-sm" x="40" y="281">a floor for awareness; go deeper with ASVS and the Cheat Sheet Series</text>
         </g>
@@ -8619,6 +8622,144 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
      quoted keys, no functions, no template literals.
      ==================================================================== */
   const CALM = {
+    dns: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "actor", "name": "Client", "description": "Needs the IP address behind a human-readable name such as example.com." },
+        { "unique-id": "resolver", "node-type": "service", "name": "Resolver", "description": "Walks the hierarchy and caches answers along the way to stay fast." },
+        { "unique-id": "root", "node-type": "service", "name": "Root servers", "description": "The first level of the hierarchy the resolver walks." },
+        { "unique-id": "tld", "node-type": "service", "name": "TLD", "description": "The server for the top-level domain, the second level of the hierarchy." },
+        { "unique-id": "authoritative", "node-type": "service", "name": "Authoritative", "description": "The authoritative server for the domain, the last level of the hierarchy." },
+        { "unique-id": "cache", "node-type": "database", "name": "Cache", "description": "Answers the resolver has cached to stay fast." }
+      ],
+      "relationships": [
+        { "unique-id": "client-resolver", "description": "The client asks the resolver to resolve a name into an IP address.",
+          "relationship-type": { "interacts": { "actor": "client", "nodes": ["resolver"] } } },
+        { "unique-id": "resolver-root", "description": "The resolver asks the root servers.",
+          "relationship-type": { "connects": { "source": { "node": "resolver" }, "destination": { "node": "root" } } } },
+        { "unique-id": "resolver-tld", "description": "The resolver asks the server for the top-level domain.",
+          "relationship-type": { "connects": { "source": { "node": "resolver" }, "destination": { "node": "tld" } } } },
+        { "unique-id": "resolver-authoritative", "description": "The resolver asks the authoritative server for the domain.",
+          "relationship-type": { "connects": { "source": { "node": "resolver" }, "destination": { "node": "authoritative" } } } },
+        { "unique-id": "resolver-cache", "description": "The resolver caches answers along the way.",
+          "relationship-type": { "connects": { "source": { "node": "resolver" }, "destination": { "node": "cache" } } } }
+      ],
+      "flows": [
+        { "unique-id": "resolve", "name": "Recursive resolution",
+          "description": "The resolver walks root, TLD, then authoritative, and caches the answer.",
+          "transitions": [
+            { "relationship-unique-id": "client-resolver", "sequence-number": 1, "description": "The client asks the resolver for the IP address behind a name." },
+            { "relationship-unique-id": "resolver-root", "sequence-number": 2, "description": "The resolver starts with the root servers." },
+            { "relationship-unique-id": "resolver-tld", "sequence-number": 3, "description": "Next it asks the server for the top-level domain." },
+            { "relationship-unique-id": "resolver-authoritative", "sequence-number": 4, "description": "Last it reaches the authoritative server for the domain." },
+            { "relationship-unique-id": "resolver-cache", "sequence-number": 5, "description": "The resolver caches the answer." },
+            { "relationship-unique-id": "client-resolver", "sequence-number": 6, "description": "The resolver returns the IP address to the client.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    kubernetes: {
+      "nodes": [
+        { "unique-id": "desired-state", "node-type": "data-asset", "name": "Desired state", "description": "What you declare: how many replicas, which images, what networking." },
+        { "unique-id": "control-plane", "node-type": "service", "name": "Control plane", "description": "Continuously reconciles reality to match the desired state." },
+        { "unique-id": "worker-1", "node-type": "system", "name": "worker node 1", "description": "A machine in the cluster that runs pods." },
+        { "unique-id": "worker-2", "node-type": "system", "name": "worker node 2", "description": "A machine in the cluster that runs pods." },
+        { "unique-id": "pod-scheduled-1", "node-type": "service", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 1." },
+        { "unique-id": "pod-failed", "node-type": "service", "name": "Pod", "description": "A pod whose workload has failed." },
+        { "unique-id": "pod-on-demand", "node-type": "service", "name": "Pod", "description": "A pod added when the control plane scales on demand." },
+        { "unique-id": "pod-scheduled-2", "node-type": "service", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 2." },
+        { "unique-id": "pod-rescheduled", "node-type": "service", "name": "Pod", "description": "The failed workload, rescheduled by the control plane." }
+      ],
+      "relationships": [
+        { "unique-id": "declare", "description": "The desired state is declared to the control plane.",
+          "relationship-type": { "connects": { "source": { "node": "desired-state" }, "destination": { "node": "control-plane" } } } },
+        { "unique-id": "schedule-1", "description": "The control plane schedules pods onto worker node 1.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "worker-1" } } } },
+        { "unique-id": "schedule-2", "description": "The control plane schedules pods onto worker node 2.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "worker-2" } } } },
+        { "unique-id": "worker-1-pods", "description": "Pods run on worker node 1.",
+          "relationship-type": { "deployed-in": { "container": "worker-1", "nodes": ["pod-scheduled-1", "pod-failed", "pod-on-demand"] } } },
+        { "unique-id": "worker-2-pods", "description": "Pods run on worker node 2.",
+          "relationship-type": { "deployed-in": { "container": "worker-2", "nodes": ["pod-scheduled-2", "pod-rescheduled"] } } }
+      ],
+      "flows": [
+        { "unique-id": "reconcile", "name": "Declare and schedule",
+          "description": "The control plane reconciles desired state, scheduling pods onto worker nodes.",
+          "transitions": [
+            { "relationship-unique-id": "declare", "sequence-number": 1, "description": "You declare the desired state." },
+            { "relationship-unique-id": "schedule-1", "sequence-number": 2, "description": "The control plane schedules pods onto worker node 1." },
+            { "relationship-unique-id": "schedule-2", "sequence-number": 3, "description": "The control plane schedules pods onto worker node 2." }
+          ] }
+      ]
+    },
+    oauth: {
+      "nodes": [
+        { "unique-id": "user", "node-type": "actor", "name": "You", "description": "Logs in and consents, without handing the app any credentials." },
+        { "unique-id": "app", "node-type": "system", "name": "App", "description": "Receives a token to call the API on your behalf." },
+        { "unique-id": "authz", "node-type": "service", "name": "Authorisation server", "description": "The resource's authorisation server, which issues the scoped, revocable access token." },
+        { "unique-id": "api", "node-type": "service", "name": "API", "description": "The resource the app calls on your behalf." }
+      ],
+      "relationships": [
+        { "unique-id": "user-app", "description": "You use the app, which redirects you to log in.",
+          "relationship-type": { "interacts": { "actor": "user", "nodes": ["app"] } } },
+        { "unique-id": "user-authz", "description": "You log in to the authorisation server and consent.",
+          "relationship-type": { "interacts": { "actor": "user", "nodes": ["authz"] } } },
+        { "unique-id": "app-authz", "description": "The app receives a scoped, revocable access token from the authorisation server.",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "authz" } } } },
+        { "unique-id": "app-api", "description": "The app calls the API with the token.",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "api" } } } }
+      ],
+      "flows": [
+        { "unique-id": "authorisation-code", "name": "Authorisation-code flow",
+          "description": "The user consents and the app receives a scoped access token.",
+          "transitions": [
+            { "relationship-unique-id": "user-app", "sequence-number": 1, "description": "The app redirects you to the authorisation server.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "user-authz", "sequence-number": 2, "description": "You log in." },
+            { "relationship-unique-id": "user-authz", "sequence-number": 3, "description": "You consent to what the app may do." },
+            { "relationship-unique-id": "app-authz", "sequence-number": 4, "description": "The authorisation server issues the app a scoped, revocable access token.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "app-api", "sequence-number": 5, "description": "The app uses the token to call the API on your behalf." }
+          ] }
+      ]
+    },
+    jwt: {
+      "nodes": [
+        { "unique-id": "jwt", "node-type": "data-asset", "name": "JSON Web Token", "description": "Packs claims into three base64url-encoded parts." },
+        { "unique-id": "header", "node-type": "data-asset", "name": "header", "description": "The first of the three base64url-encoded parts." },
+        { "unique-id": "payload", "node-type": "data-asset", "name": "payload", "description": "Carries the claims: who you are, what you may do, when it expires." },
+        { "unique-id": "signature", "node-type": "data-asset", "name": "signature", "description": "Lets anyone with the verification key confirm the token has not been tampered with." }
+      ],
+      "relationships": [
+        { "unique-id": "jwt-parts", "description": "A JSON Web Token is made of a header, a payload and a signature.",
+          "relationship-type": { "composed-of": { "container": "jwt", "nodes": ["header", "payload", "signature"] } } }
+      ]
+    },
+    owasp: {
+      "nodes": [
+        { "unique-id": "top10", "node-type": "data-asset", "name": "OWASP Top 10:2025", "description": "A periodically updated, ranked list of the most critical web application security risks." },
+        { "unique-id": "risk-1", "node-type": "risk", "name": "1 · Broken Access Control", "description": "Kept at number one in the 2025 edition." },
+        { "unique-id": "risk-3", "node-type": "risk", "name": "3 · Software Supply Chain Failures", "description": "Enters at number three, expanded from 2021's Vulnerable and Outdated Components." },
+        { "unique-id": "developers", "node-type": "actor", "name": "Developers", "description": "Code against the list." },
+        { "unique-id": "waf-rules", "node-type": "service", "name": "WAF rule sets", "description": "WAFs ship rule sets named after the list." },
+        { "unique-id": "auditors", "node-type": "actor", "name": "Auditors", "description": "Check for it." }
+      ],
+      "relationships": [
+        { "unique-id": "top10-risks", "description": "The list ranks the risks.",
+          "relationship-type": { "composed-of": { "container": "top10", "nodes": ["risk-1", "risk-3"] } } },
+        { "unique-id": "developers-top10", "description": "Developers code against the list.",
+          "relationship-type": { "interacts": { "actor": "developers", "nodes": ["top10"] } } },
+        { "unique-id": "waf-top10", "description": "WAF rule sets are named after the list.",
+          "relationship-type": { "connects": { "source": { "node": "waf-rules" }, "destination": { "node": "top10" } } } },
+        { "unique-id": "auditors-top10", "description": "Auditors check for it.",
+          "relationship-type": { "interacts": { "actor": "auditors", "nodes": ["top10"] } } }
+      ],
+      "flows": [
+        { "unique-id": "baseline", "name": "A shared baseline",
+          "description": "The list is used everywhere as a baseline.",
+          "transitions": [
+            { "relationship-unique-id": "developers-top10", "sequence-number": 1, "description": "Developers code against it." },
+            { "relationship-unique-id": "waf-top10", "sequence-number": 2, "description": "WAFs ship rule sets named after it." },
+            { "relationship-unique-id": "auditors-top10", "sequence-number": 3, "description": "Auditors check for it." }
+          ] }
+      ]
+    },
   };
 
   /* ====================================================================
