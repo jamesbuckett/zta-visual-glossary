@@ -128,6 +128,7 @@ A model has one flow when at least one tour step lights a connector, and none ot
 (JWT's anatomy tour lights parts, not connectors). The flow mirrors the tour:
 
 - Transitions appear in the order the tour lights their connectors.
+- Every connector the tour lights has a transition of its own; a two-way arrow has two.
 - `sequence-number` runs 1 to N with no gaps or repeats.
 - Each transition has its own drawn connector, drawn in the transition's direction. A
   two-way arrow, with a marker at both ends, stands for a request and its reply and must have one transition in each direction; a link with no reply in the model is drawn one-way.
@@ -183,7 +184,7 @@ allow and deny. Colour says nothing about node or relationship type.
 - Every `box`, `box-accent`, `box-soft`, `zone` and `zone-accent` element sits inside a
   node's group, and every `flow*` element carries a relationship's id. A purely
   illustrative mark, such as a call-out box, a footer strip, an elided row, a self-loop or
-  the struck-through X, opts out with `data-note="<short reason>"` on itself or its group.
+  the struck-through X, opts out with `data-note`, set to one of the six values below, on itself or its group.
 - `data-note` takes one of six values, and `verify.mjs` rejects any other: `call-out`, `footer`, `elided`, `self-loop`, `struck-through`, `becomes` (the same thing at two moments, or a thing and what it turns into).
 - Free-text annotations, footnotes, dividers and badges are not model elements and need no
   tag.
@@ -217,8 +218,8 @@ full-explainer disclosure.
      <a href="https://calm.finos.org/">Common Architecture Language Model</a> (CALM),
      release 1.2.</p>
   <p class="calm-counts">6 nodes · 5 relationships · 5 flow steps</p>
-  <p class="calm-key">Rounded box: actor or client. Square box: service or system.
-     Cylinder: data store. Folded document: data asset. Dashed zone: deployed in.
+  <p class="calm-key">Rounded box: actor or web client. Square box: service, system
+     or other component. Cylinder: data store. Folded document: data asset. Dashed zone: deployed in.
      Solid container: composed of.</p>
   <div class="calm-actions">
     <button type="button" data-calm-copy>Copy</button>
@@ -306,6 +307,7 @@ Model against drawing, measured in screen space like the existing checks:
   and every `flow*` element carries `data-calm` or `data-note`. Every `data-calm` value
   names a node or relationship in the model.
 - Every `data-note` value is one of the six.
+- Every connector the tour lights is a transition in the flow.
 
 The disclosure, at 1440px. At 375px, with it open, the checks that can differ by width run again: it is present, its JSON is unchanged, Copy, Download and the JSON block are rendered, the keyboard attributes hold, and nothing overflows:
 

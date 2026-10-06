@@ -511,6 +511,9 @@ function checkDrawing(id, model, d) {
     if (c.dir === 'both' && !(c.forward && c.reverse)) {
       bad(`a two-way "${rid}" connector needs a transition in each direction; draw it one-way if the model has no reply`);
     }
+    if (flow && c.dir === 'forward' && c.step !== null && !c.forward) {
+      bad(`a "${rid}" connector lit at step ${c.step} has no transition; every arrow the tour lights is a step in the flow`);
+    }
   }
 }
 

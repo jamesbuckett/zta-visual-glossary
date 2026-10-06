@@ -153,7 +153,7 @@ node is a container through one of the two kinds, never both. Write each descrip
 it makes sense on its own, as for nodes.
 
 **Flow.** Write one flow if any tour step lights a connector, none otherwise. List the
-transitions in the order the tour lights their connectors, numbered 1 to N. A reply is a
+transitions in the order the tour lights their connectors, numbered 1 to N. Every arrow the tour lights is a transition; an arrow that is not part of the flow carries no `data-s`. A reply is a
 transition with `"direction": "destination-to-source"`. Each transition needs a
 connector of its own drawn in its direction. A two-way
 arrow stands for a request and its reply, so it must have one transition each way; draw a
