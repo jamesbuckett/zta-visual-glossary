@@ -36,6 +36,7 @@
 //   node verify.mjs calico istio     # just these, while adding an entry
 //   node verify.mjs --json           # machine-readable
 //   node verify.mjs --offline        # no network; for the fixture suites only
+//   node verify.mjs --calm-out=<dir> # also save each term's CALM download there
 //   npm run verify
 
 import fs from 'fs';
@@ -43,7 +44,7 @@ import os from 'os';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { readTerms } from './_terms.mjs';
-import { relationshipShape } from './_calm.mjs';
+import { relationshipShape, CALM_SCHEMA } from './_calm.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
@@ -60,7 +61,7 @@ const flags = {
 };
 
 if (flags.help) {
-  console.log('Usage: node verify.mjs [term-id ...] [--target=<path>] [--json] [--quiet] [--offline]');
+  console.log('Usage: node verify.mjs [term-id ...] [--target=<path>] [--json] [--quiet] [--offline] [--calm-out=<dir>]');
   console.log('       with no term-id, every term is checked');
   console.log('       --offline answers every network request with an empty response (fixture suites only)');
   console.log('       without it, the run waits for the web fonts and reports a fonts error if they do not load');
@@ -69,7 +70,7 @@ if (flags.help) {
 
 const KNOWN_FLAGS = ['--json', '--quiet', '-q', '--help', '-h', '--offline'];
 const unknownFlag = args.find(
-  (a) => a.startsWith('-') && !KNOWN_FLAGS.includes(a) && !a.startsWith('--target=')
+  (a) => a.startsWith('-') && !KNOWN_FLAGS.includes(a) && !a.startsWith('--target=') && !a.startsWith('--calm-out=')
 );
 if (unknownFlag) {
   console.error(`verify.mjs: unknown flag: ${unknownFlag}`);
@@ -78,6 +79,9 @@ if (unknownFlag) {
 
 const wanted = args.filter((a) => !a.startsWith('-'));
 const targetFlag = args.find((a) => a.startsWith('--target='));
+const calmOutFlag = args.find((a) => a.startsWith('--calm-out='));
+const calmOut = calmOutFlag ? path.resolve(calmOutFlag.slice('--calm-out='.length)) : null;
+if (calmOut) fs.mkdirSync(calmOut, { recursive: true });
 const source = targetFlag ? path.resolve(targetFlag.slice('--target='.length)) : path.join(root, 'index.html');
 
 if (!fs.existsSync(source)) {
@@ -503,6 +507,98 @@ function checkDrawing(id, model, d) {
   }
 }
 
+// Reads the "CALM model" disclosure as rendered. `markup` counts the elements
+// inside the JSON block: one, the <code>, unless the JSON was parsed as HTML.
+const CALM_BOX_PROBE = `(() => {
+  const d = document.querySelector('#detail-content .calm-more');
+  if (!d) return { present: false };
+  const pre = d.querySelector('.calm-json');
+  const prev = d.previousElementSibling;
+  return {
+    present: true, open: d.open,
+    text: pre ? pre.textContent : '',
+    markup: pre ? pre.querySelectorAll('*').length : 0,
+    copy: !!d.querySelector('button[data-calm-copy]'),
+    download: !!d.querySelector('button[data-calm-download]'),
+    afterExplainer: !!(prev && prev.matches('.explainer-more')),
+    focusable: !!pre && pre.tabIndex === 0 && pre.getAttribute('role') === 'region' && !!pre.getAttribute('aria-label'),
+    overflow: d.scrollWidth > d.clientWidth + 1 || d.getBoundingClientRect().right > document.documentElement.clientWidth + 1,
+    clipped: !!pre && pre.scrollHeight > pre.clientHeight + 1,
+  };
+})()`;
+
+// Presses Copy twice against a stubbed clipboard, one that accepts and one
+// that refuses, and reports the status line each time. A headless browser's
+// own clipboard proves nothing; the wiring is what is under test.
+const COPY_PROBE = `(async () => {
+  const root = document.querySelector('#detail-content .calm-more');
+  const wrote = [];
+  const press = async () => { root.querySelector('[data-calm-copy]').click(); await new Promise((r) => setTimeout(r, 0)); return root.querySelector('.calm-status').textContent; };
+  const stub = (writeText) => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+  stub((s) => { wrote.push(s); return Promise.resolve(); });
+  const ok = await press();
+  stub(() => Promise.reject(new Error('denied')));
+  const refused = await press();
+  return { ok, refused, wrote: wrote[0] };
+})()`;
+
+// The disclosure for one term: what it shows, and what print, Copy and
+// Download do with it. Leaves it open, at 1440px.
+async function checkDisclosure(t, model) {
+  const bad = (msg) => err('calm', `${t.id}: ${msg}`);
+  const want = { $schema: CALM_SCHEMA, ...model, metadata: { term: t.term, 'glossary-id': t.id, caption: t.caption, source: t.source.url } };
+
+  let box = await page.evaluate(CALM_BOX_PROBE);
+  if (!box.present) { bad('no "CALM model" disclosure'); return; }
+  if (box.open) bad('the CALM disclosure is open when the term opens');
+  if (!box.afterExplainer) bad('the CALM disclosure does not sit directly after the full explainer');
+  if (box.markup !== 1) bad('the model JSON was parsed as markup');
+  let shown = null;
+  try { shown = JSON.parse(box.text); } catch { bad("the disclosure's JSON does not parse"); }
+  if (shown && JSON.stringify(shown) !== JSON.stringify(want)) bad("the disclosure's JSON does not match the model, its $schema and its metadata");
+  if (!box.focusable) bad('the JSON block cannot be reached by keyboard: it needs tabindex="0", role="region" and an aria-label');
+  if (!box.copy || !box.download) { bad('the disclosure needs a Copy and a Download button'); return; }
+
+  // Print leaves a closed disclosure closed.
+  const opened = await page.evaluate(`(() => {
+    window.dispatchEvent(new Event('beforeprint'));
+    const open = document.querySelector('#detail-content .calm-more').open;
+    window.dispatchEvent(new Event('afterprint'));
+    return open;
+  })()`);
+  if (opened) bad('printing opens the CALM disclosure');
+
+  await page.click('#detail-content .calm-more summary');
+  box = await page.evaluate(CALM_BOX_PROBE);
+  if (!box.open) { bad('clicking "CALM model" does not open it'); return; }
+  if (box.overflow) bad('the open disclosure overflows at 1440px');
+
+  // An open one prints whole, not clipped to its scroll box.
+  await page.emulateMedia({ media: 'print' });
+  if ((await page.evaluate(CALM_BOX_PROBE)).clipped) bad('an open CALM disclosure prints clipped — the JSON block must print whole');
+  await page.emulateMedia({ media: null });
+
+  const copied = await page.evaluate(COPY_PROBE);
+  if (copied.ok !== 'Copied' || copied.wrote !== box.text) bad('Copy does not put the JSON on the clipboard and say "Copied"');
+  if (copied.refused !== 'Copy failed') bad(`a refused clipboard write is not reported (status "${copied.refused}", want "Copy failed")`);
+
+  const [download] = await Promise.all([
+    page.waitForEvent('download', { timeout: 5000 }),
+    page.click('#detail-content [data-calm-download]'),
+  ]).catch(() => [null]);
+  if (!download) bad('Download does not start a download');
+  else {
+    const name = download.suggestedFilename();
+    if (name !== `${t.id}.calm.json`) bad(`Download saves "${name}", want "${t.id}.calm.json"`);
+    if (calmOut) await download.saveAs(path.join(calmOut, `${t.id}.calm.json`));
+    else await download.cancel();
+  }
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  if ((await page.evaluate(CALM_BOX_PROBE)).overflow) bad('the open disclosure overflows at 375px');
+  await page.setViewportSize({ width: 1440, height: 1200 });
+}
+
 const tocIds = `(() => [...document.querySelectorAll('#toc [data-toc]')].map((e) => e.dataset.toc))()`;
 
 // Lays the page out so every face its text needs is requested, waits for font
@@ -528,7 +624,7 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
 // not: the geometry checks measure text in the page's own fonts. An empty
 // reply rather than an abort, because an aborted request logs a console error.
 if (flags.offline) {
-  await page.route((url) => url.protocol !== 'file:', (route) => route.fulfill({
+  await page.route((url) => url.protocol !== 'file:' && url.protocol !== 'blob:', (route) => route.fulfill({
     status: 200,
     contentType: route.request().resourceType() === 'stylesheet' ? 'text/css' : 'text/plain',
     body: '',
@@ -694,7 +790,10 @@ for (const t of targets) {
 
   // Check (e). A term without a model is skipped until every term has one.
   const model = CALM[t.id];
-  if (model) checkDrawing(t.id, model, await page.evaluate(CALM_PROBE));
+  if (model) {
+    checkDrawing(t.id, model, await page.evaluate(CALM_PROBE));
+    await checkDisclosure(t, model);
+  }
 
   for (const c of consoleErrors)    err('console',   `${t.id}: ${c}`);
 }

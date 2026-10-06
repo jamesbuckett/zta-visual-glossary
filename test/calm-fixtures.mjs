@@ -165,6 +165,19 @@ const CASES = [
   ['reverse connector with no reverse transition caught',
     () => page({}, model((m) => { m.flows[0].transitions.pop(); })), 'verify', 1, 'calm', /against the relationship's direction/],
   ['lit connectors with no flow caught', () => page({}, model((m) => { delete m.flows; })), 'verify', 1, 'calm', /has no flow/],
+
+  // The disclosure: what it shows, and what Copy, Download and print do.
+  ['missing disclosure caught', () => swap(page(), '${calmHtml(e)}', ''), 'verify', 1, 'calm', /no "CALM model" disclosure/],
+  ['disclosure starting open caught', () => swap(page(), '<details class="calm-more"', '<details open class="calm-more"'), 'verify', 1, 'calm', /open when the term opens/],
+  ['disclosure JSON that differs from the model caught', () => swap(page(), '...CALM[e.id],', ''), 'verify', 1, 'calm', /does not match the model/],
+  ['unescaped JSON caught',
+    () => swap(page(), '<code>${esc(JSON.stringify(calmDoc(e), null, 2))}</code>', '<code>${JSON.stringify(calmDoc(e), null, 2)}</code>'),
+    'verify', 1, 'calm', /parsed as markup/],
+  ['download named for the wrong term caught', () => swap(page(), '`${box.dataset.term}.calm.json`', '"model.json"'), 'verify', 1, 'calm', /Download saves/],
+  ['silent copy failure caught', () => swap(page(), '() => { status.textContent = "Copy failed"; }', '() => {}'), 'verify', 1, 'calm', /refused clipboard write/],
+  ['print clipping caught',
+    () => swap(page(), '.calm-json { max-height: none; overflow: visible; white-space: pre-wrap; }', ''), 'verify', 1, 'calm', /prints clipped/],
+  ['JSON block not reachable by keyboard caught', () => swap(page(), 'class="calm-json" tabindex="0"', 'class="calm-json"'), 'verify', 1, 'calm', /keyboard/],
 ];
 
 let failed = 0;

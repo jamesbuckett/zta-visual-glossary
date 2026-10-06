@@ -10,6 +10,8 @@ import { fileURLToPath } from 'url';
 const SCHEMA_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'test', 'calm-schema', '1.2');
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const TOP_LEVEL = ['nodes', 'relationships', 'flows'];
+// The schema every model the page shows or downloads declares.
+export const CALM_SCHEMA = 'https://calm.finos.org/release/1.2/meta/calm.json';
 
 // core.json is the architecture vocabulary; it refers to the other three.
 // strict is off because the schema keeps its definitions under `defs`, a

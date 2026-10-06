@@ -450,17 +450,33 @@
     .takeaway p { margin: 0; font-size: 0.95rem; line-height: 1.5; }
 
     .explainer-more { margin-top: var(--space-5); }
-    .explainer-more summary {
+    :is(.explainer-more, .calm-more) summary {
       display: inline-flex; align-items: center; gap: var(--space-2);
       color: var(--text-muted); font-size: var(--fs-small); font-weight: 700;
       cursor: pointer; list-style: none;
     }
-    .explainer-more summary::-webkit-details-marker { display: none; }
-    .explainer-more summary:hover { color: var(--accent); }
-    .explainer-more summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius); }
-    .explainer-more summary svg { width: 16px; height: 16px; transition: transform var(--transition); }
-    .explainer-more[open] summary svg { transform: rotate(90deg); }
+    :is(.explainer-more, .calm-more) summary::-webkit-details-marker { display: none; }
+    :is(.explainer-more, .calm-more) summary:hover { color: var(--accent); }
+    :is(.explainer-more, .calm-more) summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius); }
+    :is(.explainer-more, .calm-more) summary svg { width: 16px; height: 16px; transition: transform var(--transition); }
+    :is(.explainer-more, .calm-more)[open] summary svg { transform: rotate(90deg); }
     .explainer-more .explainer { margin-top: var(--space-4); }
+
+    /* The CALM model behind the diagram: collapsed, with the JSON in a block
+       that scrolls inside itself so the page never scrolls sideways. */
+    .calm-more { margin-top: var(--space-4); }
+    .calm-body { margin-top: var(--space-4); }
+    .calm-body p { max-width: 68ch; margin-bottom: var(--space-3); font-size: var(--fs-small); }
+    .calm-counts { font-family: var(--font-mono); }
+    .calm-counts, .calm-key, .calm-status { color: var(--text-muted); }
+    .calm-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); }
+    .calm-status { font-size: var(--fs-small); }
+    .calm-json {
+      margin: 0; padding: var(--space-4); max-height: 420px; overflow: auto;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      font-size: 12px; line-height: 1.5;
+    }
+    .calm-json:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .detail-section-label {
       font-family: var(--font-mono); font-size: 11px; font-weight: 400; line-height: var(--leading-body);
@@ -627,6 +643,8 @@
       .dg .dim { opacity: 1; }
       .dg .on { animation: none; }
       .takeaway { break-inside: avoid; }
+      .calm-json { max-height: none; overflow: visible; white-space: pre-wrap; }
+      .calm-actions { display: none; }
     }
 
     /* ==================================================================
@@ -8814,6 +8832,59 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </details>`;
   }
 
+  // The model as a reader gets it: the stored model, the schema it follows,
+  // and which glossary entry it describes.
+  function calmDoc(e) {
+    return {
+      "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+      ...CALM[e.id],
+      "metadata": { "term": e.term, "glossary-id": e.id, "caption": e.caption, "source": e.source.url }
+    };
+  }
+  // The CALM model, collapsed under the explainer. A term with no model yet
+  // gets no disclosure.
+  function calmHtml(e) {
+    const m = CALM[e.id];
+    if (!m) return "";
+    const count = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+    const steps = (m.flows || []).reduce((n, f) => n + f.transitions.length, 0);
+    return `
+      <details class="calm-more" data-term="${e.id}">
+        <summary>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          CALM model
+        </summary>
+        <div class="calm-body">
+          <p>This diagram as architecture as code: a model in the FINOS <a href="https://calm.finos.org/" target="_blank" rel="noopener noreferrer">Common Architecture Language Model</a> (CALM), release 1.2.</p>
+          <p class="calm-counts">${count(m.nodes.length, "node")} · ${count(m.relationships.length, "relationship")} · ${count(steps, "flow step")}</p>
+          <p class="calm-key">Rounded box: actor or client. Square box: service or system. Cylinder: data store. Folded document: data asset. Dashed zone: deployed in. Solid container: composed of.</p>
+          <div class="calm-actions">
+            <button class="related-pill" type="button" data-calm-copy>Copy</button>
+            <button class="related-pill" type="button" data-calm-download>Download</button>
+            <span class="calm-status" aria-live="polite"></span>
+          </div>
+          <pre class="calm-json" tabindex="0" role="region" aria-label="CALM model, JSON"><code>${esc(JSON.stringify(calmDoc(e), null, 2))}</code></pre>
+        </div>
+      </details>`;
+  }
+  // Copy or download the model exactly as the disclosure shows it.
+  function calmAction(btn) {
+    const box = btn.closest(".calm-more");
+    const text = box.querySelector(".calm-json").textContent;
+    if (btn.hasAttribute("data-calm-copy")) {
+      const status = box.querySelector(".calm-status");
+      navigator.clipboard.writeText(text).then(
+        () => { status.textContent = "Copied"; },
+        () => { status.textContent = "Copy failed"; });
+      return;
+    }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([text + "\n"], { type: "application/json" }));
+    a.download = `${box.dataset.term}.calm.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 0);
+  }
+
   function detailHtml(e) {
     const aliasLine = (e.aliases && e.aliases.length)
       ? `<span> &middot; keywords: <span class="alias">${e.aliases.map(esc).join(", ")}</span></span>` : "";
@@ -8852,6 +8923,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </div>
       ${diagramHtml(e)}
       ${takeawaysHtml(e)}
+      ${calmHtml(e)}
       <div class="detail-tags">
         <h2 class="detail-section-label">Tags — click to browse</h2>
         <div class="chip-row">${typeChips}${provChips}${domainChips}</div>
@@ -8963,6 +9035,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
   // Detail view: back button, related pills, tag filters
   els.detailContent.addEventListener("click", (ev) => {
+    const calmBtn = ev.target.closest("[data-calm-copy], [data-calm-download]");
+    if (calmBtn) { calmAction(calmBtn); return; }
     const step = ev.target.closest(".tour-chip");
     if (step) { setStep(step.closest(".tour"), Number(step.dataset.step)); return; }
     if (ev.target.closest("[data-back]")) { location.hash = ""; return; }
