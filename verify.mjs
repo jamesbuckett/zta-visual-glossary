@@ -523,6 +523,7 @@ const CALM_BOX_PROBE = `(() => {
     afterExplainer: !!(prev && prev.matches('.explainer-more')),
     focusable: !!pre && pre.tabIndex === 0 && pre.getAttribute('role') === 'region' && !!pre.getAttribute('aria-label'),
     overflow: d.scrollWidth > d.clientWidth + 1 || d.getBoundingClientRect().right > document.documentElement.clientWidth + 1,
+    rendered: ['button[data-calm-copy]', 'button[data-calm-download]', '.calm-json'].every((s) => { const el = d.querySelector(s); return !!el && el.getClientRects().length > 0; }),
     clipped: !!pre && pre.scrollHeight > pre.clientHeight + 1,
   };
 })()`;
@@ -539,7 +540,10 @@ const COPY_PROBE = `(async () => {
   const ok = await press();
   stub(() => Promise.reject(new Error('denied')));
   const refused = await press();
-  return { ok, refused, wrote: wrote[0] };
+  root.querySelector('.calm-status').textContent = '';
+  stub(undefined);
+  const missing = await press();
+  return { ok, refused, missing, wrote: wrote[0] };
 })()`;
 
 // The disclosure for one term: what it shows, and what print, Copy and
@@ -582,6 +586,8 @@ async function checkDisclosure(t, model) {
   if (copied.ok !== 'Copied' || copied.wrote !== box.text) bad('Copy does not put the JSON on the clipboard and say "Copied"');
   if (copied.refused !== 'Copy failed') bad(`a refused clipboard write is not reported (status "${copied.refused}", want "Copy failed")`);
 
+  if (copied.missing !== 'Copy failed') bad(`a missing clipboard is not reported (status "${copied.missing}", want "Copy failed")`);
+
   const [download] = await Promise.all([
     page.waitForEvent('download', { timeout: 5000 }),
     page.click('#detail-content [data-calm-download]'),
@@ -590,12 +596,21 @@ async function checkDisclosure(t, model) {
   else {
     const name = download.suggestedFilename();
     if (name !== `${t.id}.calm.json`) bad(`Download saves "${name}", want "${t.id}.calm.json"`);
+    const saved = await download.path();
+    if (!saved || fs.readFileSync(saved, 'utf8') !== box.text + '\n') bad('Download does not save the JSON the disclosure shows');
     if (calmOut) await download.saveAs(path.join(calmOut, `${t.id}.calm.json`));
-    else await download.cancel();
+    await download.delete();
   }
 
   await page.setViewportSize({ width: 375, height: 812 });
-  if ((await page.evaluate(CALM_BOX_PROBE)).overflow) bad('the open disclosure overflows at 375px');
+  const narrow = await page.evaluate(CALM_BOX_PROBE);
+  if (!narrow.present || !narrow.open) bad('the CALM disclosure is not present and open at 375px');
+  else {
+    if (narrow.text !== box.text) bad('the disclosure JSON changes at 375px');
+    if (!narrow.rendered) bad('Copy, Download or the JSON block is not rendered at 375px');
+    if (!narrow.focusable) bad('the JSON block cannot be reached by keyboard at 375px');
+    if (narrow.overflow) bad('the open disclosure overflows at 375px');
+  }
   await page.setViewportSize({ width: 1440, height: 1200 });
 }
 

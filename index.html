@@ -8873,7 +8873,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     const text = box.querySelector(".calm-json").textContent;
     if (btn.hasAttribute("data-calm-copy")) {
       const status = box.querySelector(".calm-status");
-      navigator.clipboard.writeText(text).then(
+      Promise.resolve().then(() => navigator.clipboard.writeText(text)).then(
         () => { status.textContent = "Copied"; },
         () => { status.textContent = "Copy failed"; });
       return;

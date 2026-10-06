@@ -178,6 +178,11 @@ const CASES = [
   ['print clipping caught',
     () => swap(page(), '.calm-json { max-height: none; overflow: visible; white-space: pre-wrap; }', ''), 'verify', 1, 'calm', /prints clipped/],
   ['JSON block not reachable by keyboard caught', () => swap(page(), 'class="calm-json" tabindex="0"', 'class="calm-json"'), 'verify', 1, 'calm', /keyboard/],
+  ['download with different content caught', () => swap(page(), 'new Blob([text + "\\n"]', 'new Blob(["{}"]'), 'verify', 1, 'calm', /does not save the JSON/],
+  ['controls hidden at phone width caught',
+    () => swap(page(), '</style>', '@media (max-width: 400px) { .calm-actions { display: none; } }</style>'), 'verify', 1, 'calm', /375px/],
+  ['missing clipboard not reported caught',
+    () => swap(page(), 'Promise.resolve().then(() => navigator.clipboard.writeText(text))', 'navigator.clipboard.writeText(text)'), 'verify', 1, 'calm', /missing clipboard/],
 ];
 
 let failed = 0;

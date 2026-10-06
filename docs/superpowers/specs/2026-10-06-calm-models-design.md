@@ -303,7 +303,7 @@ Model against drawing, measured in screen space like the existing checks:
   and every `flow*` element carries `data-calm` or `data-note`. Every `data-calm` value
   names a node or relationship in the model.
 
-The disclosure, at 1440px and 375px:
+The disclosure, at 1440px. At 375px, with it open, the checks that can differ by width run again: it is present, its JSON is unchanged, Copy, Download and the JSON block are rendered, the keyboard attributes hold, and nothing overflows:
 
 - It is present, closed by default, and stays closed for print.
 - Its JSON parses, and its `nodes`, `relationships` and `flows` equal the stored model.
