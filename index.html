@@ -3679,20 +3679,20 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     vlan: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One switch, three isolated broadcast domains; traffic between them must pass through a router.">
-        ${[['guest-vlan', 'Guest VLAN', 'guest-devices', 'laptop', 'guest devices', 24, '2 3 4', '1 2 3 4'], ['voice-vlan', 'Voice VLAN', 'voice-phones', 'phone', 'voice phones', 256, '2', '1 2'], ['server-vlan', 'Server VLAN', 'servers', 'server', 'servers', 488, '2 3 4', '1 2 3 4']].map(([vid, name, did, ico, dev, x, s, ds]) => `
+        ${[['guest-vlan', 'Guest VLAN', 'guest-devices', 'laptop', 'guest devices', 24, '2 3 4'], ['voice-vlan', 'Voice VLAN', 'voice-phones', 'phone', 'voice phones', 256, '2'], ['server-vlan', 'Server VLAN', 'servers', 'server', 'servers', 488, '2 3 4']].map(([vid, name, did, ico, dev, x, s]) => `
           <g data-s="${s}" data-calm="${vid}">
             <rect class="zone" x="${x}" y="16" width="208" height="100" rx="10"/>
             <text class="t-b" x="${x + 12}" y="36">${name}</text>
             <text class="t-sm t-mut" x="${x + 12}" y="52">broadcast domain</text>
           </g>
-          <g data-s="${ds}" data-calm="${did}">
+          <g data-s="${s}" data-calm="${did}">
             <rect class="box" x="${x + 12}" y="60" width="184" height="44" rx="8"/>
             ${icon(ico, x + 24, 70)}
             <text class="t-sm" x="${x + 56}" y="86">${dev}</text>
           </g>`).join('')}
-        <line class="flow" data-s="4" data-calm="guest-switch" x1="128" y1="106" x2="258" y2="158" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-calm="voice-switch" x1="320" y1="106" x2="330" y2="158" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" data-calm="switch-servers" x1="462" y1="158" x2="592" y2="106" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 4" data-calm="guest-switch" x1="128" y1="106" x2="258" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="voice-switch" x1="320" y1="106" x2="330" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 4" data-calm="servers-switch" x1="462" y1="158" x2="592" y2="106" marker-end="url(#ah-mut)"/>
         <line class="flow-bad" data-s="3" data-note="call-out" x1="176" y1="136" x2="544" y2="136" marker-end="url(#ah-bad)"/>
         <text class="t-sm bad" data-s="3" x="450" y="130" text-anchor="middle">no direct path</text>
 
@@ -3832,11 +3832,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           </g>`).join('')}
         ${[['host-a', 62, 96], ['host-b', 122, 122], ['host-c', 182, 148]].map(([id, y1, y2]) => `
           <line class="flow" data-s="2" data-calm="${id}-router" x1="198" y1="${y1}" x2="260" y2="${y2}" marker-end="url(#ah-mut)"/>`).join('')}
-        <line class="flow" data-s="4" data-calm="host-c-router" x1="260" y1="172" x2="198" y2="194" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="238" y="205" text-anchor="middle">reply</text>
+        <line class="flow" data-s="4" data-calm="host-c-router" x1="260" y1="178" x2="198" y2="198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="238" y="208" text-anchor="middle">reply</text>
 
         <g data-s="2 3 4" data-calm="nat-router">
-          <rect class="box" x="262" y="62" width="170" height="120" rx="8"/>
+          <rect class="box" x="262" y="62" width="158" height="120" rx="8"/>
           ${icon('router', 278, 76)}
           <text class="t-b" x="310" y="94">NAT router</text>
           <text class="t-sm t-mut" x="310" y="118">rewrites source</text>
@@ -3844,9 +3844,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="310" y="150">IP and port</text>
         </g>
 
-        <line class="flow" data-s="3" data-calm="router-internet" x1="434" y1="106" x2="554" y2="106" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="494" y="128" text-anchor="middle">one public address</text>
-        <line class="flow" data-s="4" data-calm="router-internet" x1="554" y1="146" x2="434" y2="146" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="router-internet" x1="422" y1="106" x2="554" y2="106" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="488" y="128" text-anchor="middle">one public address</text>
+        <line class="flow" data-s="4" data-calm="router-internet" x1="554" y1="146" x2="422" y2="146" marker-end="url(#ah-mut)"/>
 
         <g data-s="3 4" data-calm="internet">
           <rect class="zone" x="556" y="84" width="140" height="76" rx="10"/>
@@ -3856,17 +3856,17 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="604" y="149">address</text>
         </g>
 
-        <line class="flow" data-s="4" data-calm="router-table" x1="347" y1="184" x2="347" y2="220" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="router-table" x1="341" y1="184" x2="341" y2="218" marker-end="url(#ah-mut)"/>
         <g data-s="4" data-calm="translation-table">
-          ${doc(248, 222, 200, 58)}
-          <text class="t-sm t-b" x="264" y="246">translation table</text>
-          <text class="t-sm t-mut" x="264" y="265">maps replies back</text>
+          ${cyl(241, 220, 200, 64)}
+          <text class="t-sm t-b" x="341" y="256" text-anchor="middle">translation table</text>
+          <text class="t-sm t-mut" x="341" y="273" text-anchor="middle">maps replies back</text>
         </g>
 
         ${badge(1, 180, 114, '1')}
         ${badge(2, 229, 122, '2')}
-        ${badge(3, 494, 106, '3')}
-        ${badge(4, 476, 146, '4')}
+        ${badge(3, 488, 106, '3')}
+        ${badge(4, 470, 146, '4')}
       </svg>`,
 
     oauth: () => `
@@ -8837,10 +8837,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "guest-vlan", "node-type": "network", "name": "Guest VLAN", "description": "A virtual LAN that separates guest traffic into a broadcast domain of its own." },
         { "unique-id": "voice-vlan", "node-type": "network", "name": "Voice VLAN", "description": "A virtual LAN that separates voice traffic into a broadcast domain of its own." },
         { "unique-id": "server-vlan", "node-type": "network", "name": "Server VLAN", "description": "A virtual LAN that separates server traffic into a broadcast domain of its own." },
-        { "unique-id": "guest-devices", "node-type": "system", "name": "guest devices", "description": "The guest devices, on the guest VLAN." },
-        { "unique-id": "voice-phones", "node-type": "system", "name": "voice phones", "description": "The voice phones, on the voice VLAN." },
-        { "unique-id": "servers", "node-type": "system", "name": "servers", "description": "The servers, on the server VLAN." },
-        { "unique-id": "switch", "node-type": "system", "name": "One physical switch", "description": "The single physical network every device plugs into, partitioned into separate broadcast domains by tagging Ethernet frames (the 802.1Q standard)." },
+        { "unique-id": "guest-devices", "node-type": "system", "name": "guest devices", "description": "The guest devices sit on the guest VLAN and plug into the one physical switch." },
+        { "unique-id": "voice-phones", "node-type": "system", "name": "voice phones", "description": "The voice phones sit on the voice VLAN and plug into the one physical switch." },
+        { "unique-id": "servers", "node-type": "system", "name": "servers", "description": "The servers sit on the server VLAN and plug into the one physical switch." },
+        { "unique-id": "switch", "node-type": "system", "name": "One physical switch", "description": "The one physical switch every device plugs into, which tags Ethernet frames (the 802.1Q standard) to partition the network into separate broadcast domains." },
         { "unique-id": "router", "node-type": "system", "name": "Router", "description": "The router that traffic between VLANs must pass through; a router or firewall must still decide what may cross between VLANs." }
       ],
       "relationships": [
@@ -8854,8 +8854,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "guest-devices" }, "destination": { "node": "switch" } } } },
         { "unique-id": "voice-switch", "description": "The voice phones plug into the same switch.",
           "relationship-type": { "connects": { "source": { "node": "voice-phones" }, "destination": { "node": "switch" } } } },
-        { "unique-id": "switch-servers", "description": "The switch connects the servers, which plug into the same switch.",
-          "relationship-type": { "connects": { "source": { "node": "switch" }, "destination": { "node": "servers" } } } },
+        { "unique-id": "servers-switch", "description": "The servers plug into the same switch.",
+          "relationship-type": { "connects": { "source": { "node": "servers" }, "destination": { "node": "switch" } } } },
         { "unique-id": "switch-router", "description": "The switch connects to the router, which traffic between VLANs must pass through.",
           "relationship-type": { "connects": { "source": { "node": "switch" }, "destination": { "node": "router" } } } }
       ],
@@ -8866,7 +8866,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "guest-switch", "sequence-number": 1, "description": "Traffic from a guest device for the server VLAN reaches the switch." },
             { "relationship-unique-id": "switch-router", "sequence-number": 2, "description": "Devices on different VLANs cannot talk directly, so the switch passes the traffic to the router." },
             { "relationship-unique-id": "switch-router", "sequence-number": 3, "description": "The router passes the traffic back to the switch, bound for the server VLAN.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "switch-servers", "sequence-number": 4, "description": "The switch delivers the traffic to the servers." }
+            { "relationship-unique-id": "servers-switch", "sequence-number": 4, "description": "The switch delivers the traffic to the servers.", "direction": "destination-to-source" }
           ] }
       ]
     },
@@ -8878,7 +8878,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "host-c", "node-type": "system", "name": "Host C", "description": "An internal host with its own private address." },
         { "unique-id": "nat-router", "node-type": "system", "name": "NAT router", "description": "The router that rewrites the source and destination IP and port of packets as they cross the boundary, mapping many private addresses onto a single public one." },
         { "unique-id": "internet", "node-type": "network", "name": "Internet", "description": "The public side of the boundary, which sees the single public address rather than the internal network structure." },
-        { "unique-id": "translation-table", "node-type": "data-asset", "name": "translation table", "description": "The table the NAT router keeps so that replies are sent back to the correct internal host." }
+        { "unique-id": "translation-table", "node-type": "database", "name": "translation table", "description": "The table the NAT router keeps so that replies are sent back to the correct internal host." }
       ],
       "relationships": [
         { "unique-id": "private-network-hosts", "description": "Hosts A, B and C are on the private network.",
