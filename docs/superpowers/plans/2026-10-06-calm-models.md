@@ -1729,6 +1729,9 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 
 ## Phase 3: batches
 
+Every batch follows "Appendix: batch procedure". Where a batch task's steps and the
+appendix differ, the appendix is right.
+
 The pilot review changed six rules after this plan was written: actors are drawn at
 `rx="20"`, `actor` is for people and organisations only, a custom type replaces a
 built-in name that collides, a two-way arrow needs a transition each way, `data-note`
@@ -2039,6 +2042,236 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 - [ ] **Step 10:** Change the spec's status line to `implemented; a CALM model became mandatory on <date>` and commit it as `docs: close out the CALM models spec`. Stop for James's review. Push only when he asks.
 
 ---
+
+## Appendix: batch procedure
+
+This is the shared procedure for every Phase 3 batch. Each batch task names its term ids
+and its commit message; this appendix says how each term is done, and it supersedes a
+batch task's step wording where the two differ: it adds a before-capture, an official
+CLI run and the format of the batch summary.
+
+### Where the rules and examples are
+
+- **The rules:** step 2b ("Write the CALM model and tag the drawing") of
+  `.claude/skills/add-glossary-term/SKILL.md`. Read it in full before you start. It is
+  short, and `verify.mjs` enforces most of it.
+- **Worked examples:** the five pilot terms in `index.html`. Read at least three of them,
+  model and drawing side by side: `CALM.dns` with `DIAGRAMS.dns` (a flow with replies and
+  a cylinder), `CALM.kubernetes` with `DIAGRAMS.kubernetes` (containers through
+  `deployed-in`, a document, two notes, rows built with `.map` that carry an id column),
+  `CALM.oauth` (an actor and `interacts`), `CALM.jwt` (a `composed-of` container, no
+  flow, call-outs), `CALM.owasp` (a stretch case).
+- **Where models go:** append each new model to the end of `const CALM = {` in
+  `index.html`, in the order your brief lists the ids, at four-space indent, formatted
+  like the pilots.
+
+### What "reshape" means
+
+Keep every part of a layout that already agrees with the model. Redraw only what does
+not: an outline that contradicts its node type, a connector with no relationship, a
+relationship with no connector, a child drawn outside its container, a shared trunk, a
+title on two lines. Tag every node and connector. Mark the rest `data-note`. The aim is a
+diagram at least as clear as today's in which every shape honestly is what the model says.
+
+Do not edit any term's `explainer`, `takeaways` or `source`. Leave `steps`, `fact` and
+`caption` alone unless your redraw makes one false; if you must reword one, list it in
+your report. If a model shows that an explainer itself may be wrong, report it; do not
+fix it.
+
+### Per term
+
+1. **Read the term.** Print its entry and its drawing:
+
+   ```bash
+   node --input-type=module -e 'import { readTerms } from "./_terms.mjs"; const { TERMS } = readTerms("./index.html"); const t = TERMS.find((x) => x.id === process.argv[1]); console.log("CAPTION: " + t.caption + "\nEXPLAINER: " + t.explainer.replace(/\s+/g, " ")); t.steps.forEach((s, i) => console.log("  step " + (i + 1) + ": " + s.title + " — " + s.text)); console.log("FACT: " + t.fact);' <id>
+   grep -n "^    <id>: () => " index.html
+   ```
+
+2. **Write the model from the explainer.** The rules the pilot review settled, which are
+   the ones most easily got wrong:
+   - `actor` is for people and organisations only. A client machine or program is a
+     `system`, or a `webclient` if it is a browser or an app's user interface.
+     `interacts` is only for a node typed `actor`; everything else uses `connects`.
+   - Use a custom kebab-case type when a built-in name collides with the term's own
+     vocabulary (a Kubernetes pod is a `pod`), or when no built-in type honestly fits.
+   - A `name` is the title drawn in the shape, word for word, in one `<text>`.
+   - Every description states only what the term's own copy says (its explainer first,
+     its caption and tour steps where the explainer is silent) and makes sense on its own
+     in the downloaded JSON: name the thing, never "it".
+   - Something a component reads and writes as it runs (a cache, a lookup table, an
+     index, a log) is a `database`. Something made once and handed on or kept (a token, a
+     certificate, a manifest, a policy file) is a `data-asset`.
+   - You may add a node for something the old drawing only labelled, when the term's copy
+     names it. Do not invent a node the copy does not name.
+   - `protocol` only if it is one of HTTP, HTTPS, FTP, SFTP, JDBC, WebSocket, SocketIO,
+     LDAP, AMQP, TLS, mTLS, TCP. Otherwise name the protocol in the description, unless
+     the term is itself that protocol.
+   - Every node appears in at least one relationship.
+   - Traffic each way over one link is one relationship. The flow is a sub-story of the
+     tour: write one when the tour narrates traffic (if it lights any arrow, the model
+     has a flow), with the transitions in the order the tour lights their connectors.
+     Each transition needs a lit connector of its own, drawn in its direction; a
+     connector lit at several steps can serve a transition at any of them. A two-way
+     arrow is two transitions, one each way.
+   - The tour may also light a connector that is not a transition, to show structure
+     ("every device plugs into the switch"). Do not strip or move a step's lighting to
+     suit the flow: each tour step should light what it lit before, unless the model
+     shows that was wrong.
+
+3. **Reshape and tag the drawing.**
+   - Outline by node type: `rx="20"` for `actor` and `webclient`; `rx="8"` for `service`,
+     `system` and custom types (any `rx` under 16 counts as square, so small rows may
+     keep theirs); `${cyl(x, y, w, h)}` for `database` and `ldap`; `${doc(x, y, w, h)}`
+     for `data-asset`; `rect.zone` for `network`, `ecosystem` and a `deployed-in`
+     container; `rect.box-soft` for a `composed-of` container. Many existing boxes have
+     `rx="12"`; that now counts as square, so set each box by its node's type.
+   - One `<g data-calm="<node id>">` per node, holding its outline, icon and labels. A
+     container's group holds its outline and own label only; children are sibling groups
+     drawn inside it. Never nest `data-calm`.
+   - One `<line>` or `<path>` per connector, carrying `data-calm="<relationship id>"`,
+     ending within 6 viewBox units of each node group's bounding box. A sequence
+     diagram's lifeline goes in its node's group.
+   - Anything else with a `box`, `zone` or `flow` class takes `data-note`, set to one of:
+     `call-out`, `footer`, `elided`, `self-loop`, `struck-through`, `becomes`. A noted
+     mark may still carry `data-s`.
+   - Colour keeps its meaning: accent is the subject or the secure path, green and red
+     are allow and deny. Do not use colour to show node or relationship type.
+
+4. **Gate the term.** `npm test; echo "exit $?"` then `npm run verify <id>; echo "exit $?"`.
+   Both exit 0. Fix every `calm`, `calm-data`, `clearance`, `collision`, `badge` and
+   `tour` finding before the next term. Moving a connector's end a few units so it meets
+   its node is the intended fix for an endpoint finding.
+
+   If the checker rejects a drawing that you are confident is right and matches its
+   model, do not weaken the checker and do not bend a good drawing to satisfy it. Stop
+   and report BLOCKED with the term, the finding text, and why you think the checker is
+   wrong. Do not edit `verify.mjs`, `validate.mjs`, `_calm.mjs`, `_terms.mjs` or the
+   fixture suites in a batch.
+
+### Captures
+
+Save the capture script from "Appendix: review captures" as `$S/capture.mjs`, where `S` is
+your session's scratchpad directory.
+Before you change anything, capture the batch as it stands:
+
+```bash
+node $S/capture.mjs "$PWD" $S/captures-<batch>-before <ids…>
+```
+
+After the batch, capture it again into `$S/captures-<batch>` and read every image with
+the Read tool: per term, `<id>-light.png` and `<id>-dark.png` (the tour card, every part
+visible) and `<id>-calm-light.png` (the open disclosure). For each term check:
+
+- every shape reads as what the model says it is, and any new outline sits well with its
+  labels and icon
+- the fully lit drawing still tells the story in the caption and steps, and is at least
+  as clear as its before-image
+- light and dark are both legible, and nothing is crowded, clipped or misaligned
+- the disclosure shows the counts, the key and the JSON
+
+### Second pass
+
+Re-read each model against its explainer: no description claims more than the explainer
+says or leans on "it"; each node type is the honest one; each `data-note` is on something
+that is not a component or a relationship; each transition has a lit arrow of its own;
+each tour step still lights what its text describes.
+
+### Official CLI
+
+Run FINOS's own validator over the batch's downloads:
+
+```bash
+OUT=$S/calm-out-<batch>
+node verify.mjs <ids…> --calm-out="$OUT"; echo "verify exit $?"
+for f in "$OUT"/*.calm.json; do npx --yes @finos/calm-cli@1.60.1 validate -a "$f" > "$f.report" 2>/dev/null; echo "$(basename "$f") exit $?"; done
+grep -L '"hasErrors": false' "$OUT"/*.report; grep -L '"hasWarnings": false' "$OUT"/*.report
+```
+
+Expected: `verify exit 0`, every CLI line `exit 0`, and the two `grep -L` commands print
+nothing.
+
+### Batch gates and commit
+
+`npm test`, `npm run test:calm`, `npm run test:tour`, `npm run test:takeaways` and
+`npm run verify` (all 105 terms; needs Google Fonts; several minutes, so run it once) all
+exit 0, each exit code read directly with `; echo "exit $?"`. `npm run glossary` reports
+105 terms; `glossary.txt` changes only if you reworded a tour step.
+
+Commit `index.html` (and `glossary.txt` if it changed) direct to `main` with the message
+your brief gives and the trailer `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`.
+Do not push.
+
+### The batch summary (goes in your report)
+
+- Per term: the model in one line (node count, relationship count, flow steps), what you
+  redrew and what you kept.
+- Every `data-note`: the term, the element, the value, and why it is not a component or
+  a relationship.
+- Every caption, step or fact you reworded, with before and after (or "none").
+- Every stretch model: a term whose model is valid but of little use to a CALM tool, or
+  where a node type is a compromise, and why.
+- Any explainer you suspect is wrong.
+- Anything in the rules that was unclear or that you had to interpret, so the rule can be
+  fixed before the next batch.
+
+### SVG facts that have bitten before
+
+- SVG collapses runs of spaces; never pad a label with spaces.
+- Budget about 6.6px per character for the 11px mono face and about 8px for the 13px bold.
+- `getBBox()` ignores transforms.
+- Use the `t-acc` class for accent text, never a `fill="var(--accent)"` attribute.
+- Each diagram's `aria-label` is its caption. `viewBox` stays 720 wide.
+- A flow may run under its badge, but a badge must not cover a label.
+
+## Appendix: open items for the final review
+
+Minor points task reviews raised and deferred. The final whole-branch review decides which
+must be fixed before the work is called done. Tasks 1 to 6 as of 7 October 2026.
+
+Tooling:
+- `package-lock.json`: npm changed the root licence from ISC to MIT when `ajv` was added
+  (it now matches `package.json`).
+- `_calm.mjs`: with more than one flow, the transition checks run on every flow. Correct,
+  but noisy, since a model may have only one.
+- `verify.mjs` `CALM_PROBE`: it recognises a box or zone only as a `<rect>` or one of the
+  two shape helpers, and a flow only by the four flow classes. A `<path class="box">`
+  outside a node group would not be reported untagged. No diagram has one today.
+- `verify.mjs`: a connector tagged with a `deployed-in` or `composed-of` relationship id
+  is accepted silently. A node's box includes badge and label overhang, so the endpoint
+  test is slightly loose.
+- `verify.mjs`: a line with no markers, drawn against its relationship's direction, is
+  read as a reply and asked for a `destination-to-source` transition. The skill says to
+  draw every line source to destination, so the message points at the right fix.
+- `verify.mjs`: when no pairing of transitions to connectors works, the explanatory walk
+  can name a different symptom from the root cause if one relationship has several
+  connectors. The search has no memoisation, which is harmless at realistic sizes. The
+  "flow order contradicts the tour" message reads awkwardly.
+- `verify.mjs`: keyboard reach of the JSON block is checked through its attributes, not
+  by pressing keys. The missing-clipboard check stubs the clipboard as an object with no
+  `writeText`, not as `undefined`.
+- `test/calm-fixtures.mjs`: no case yet for `interacts` with an unreached node, a node
+  drawn twice, a wrong container border, a document where a cylinder is wanted, or a
+  lone `marker-start`.
+
+Page:
+- `calmAction`: the download's object URL is released on a 0 ms timeout; some browsers
+  may want longer. The "Copied" or "Copy failed" status never clears, and a repeat is not
+  announced again.
+- A lit zone gets an accent outline and no fill, so it is fainter than a lit box (BGP).
+- NAT: the reply arrowhead at Host C meets the private-network zone's dashed border.
+
+Documents:
+- `CLAUDE.md`: two sentences added in Task 4 were not rewrapped. The skill's step 6 intro
+  still says "the two geometry checks" though the list runs (a) to (e).
+- Some lines added to the skill and the spec after the pilot review are not wrapped like
+  the text around them. The protocol exception and the label-to-node rule are in the
+  skill and in the spec's Decisions table, but not in the spec's body.
+
+For James, not for the review:
+- The TCP/IP explainer never mentions headers or encapsulation, though its caption and
+  all four tour steps rest on them. Not edited here.
+- Stretch or thin models so far: JWT (one relationship, no flow), OWASP (a list), TCP/IP
+  (four layers; the header staircase is a call-out), DHCP (two nodes, one relationship).
 
 ## Appendix: review captures
 
