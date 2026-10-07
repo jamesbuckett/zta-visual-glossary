@@ -7869,61 +7869,63 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     cntlm: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf — that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN.">
-        <g data-s="1">
-          <rect class="box" x="24" y="40" width="172" height="72" rx="8"/>
+        <g data-s="1" data-calm="cli-tools">
+          <rect class="box" x="24" y="40" width="172" height="80" rx="8"/>
           ${icon('terminal', 40, 54)}
           <text class="t-b" x="72" y="72">CLI tools</text>
           <text class="t-sm t-mut" x="72" y="90">http_proxy to</text>
           <text class="t-sm t-mut" x="72" y="105">loopback</text>
         </g>
-        <line class="flow" data-s="1" x1="198" y1="76" x2="250" y2="76" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3 4">
-          <rect class="box" x="252" y="40" width="188" height="72" rx="8"/>
+        <line class="flow" data-s="1" data-calm="tools-cntlm" x1="198" y1="80" x2="250" y2="80" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4" data-calm="cntlm">
+          <rect class="box" x="252" y="40" width="188" height="80" rx="8"/>
           ${icon('arrow-left-right', 268, 54)}
           <text class="t-b" x="300" y="72">Cntlm</text>
           <text class="t-sm t-mut" x="300" y="90">127.0.0.1:3128</text>
           <text class="t-sm t-mut" x="300" y="105">adds NTLM</text>
         </g>
-        <g data-s="1 2">
-          <rect class="box" x="520" y="40" width="176" height="72" rx="8"/>
+        <g data-s="1 2 3" data-calm="parent-proxy">
+          <rect class="box" x="520" y="40" width="176" height="80" rx="8"/>
           ${icon('building-2', 536, 54)}
           <text class="t-b" x="568" y="72">Parent proxy</text>
           <text class="t-sm t-mut" x="568" y="90">wants NTLM</text>
         </g>
-        <line class="flow" data-s="1" x1="442" y1="62" x2="518" y2="62" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="480" y="55" text-anchor="middle">forwards</text>
-        <line class="flow" data-s="2" x1="518" y1="92" x2="442" y2="92" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="480" y="85" text-anchor="middle">407</text>
+        <line class="flow" data-s="1" data-calm="cntlm-proxy" x1="442" y1="58" x2="518" y2="58" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="480" y="51" text-anchor="middle">forwards</text>
+        <line class="flow" data-s="2" data-calm="cntlm-proxy" x1="518" y1="82" x2="442" y2="82" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="480" y="75" text-anchor="middle">407</text>
+        <line class="flow" data-s="3" data-calm="cntlm-proxy" x1="442" y1="106" x2="518" y2="106" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="480" y="99" text-anchor="middle">NTLM</text>
 
-        <g data-s="2">
-          <rect class="box" x="484" y="140" width="212" height="88" rx="8"/>
-          ${icon('list-checks', 500, 154)}
-          <text class="t-b" x="532" y="172">Dialect</text>
-          <text class="t-sm t-mut" x="532" y="190">NTLMv2, NTLM2SR,</text>
-          <text class="t-sm t-mut" x="532" y="205">NT, NTLM, LM</text>
-          <text class="t-sm t-mut" x="532" y="220">cntlm -M probes</text>
+        <g data-s="2" data-note="call-out">
+          <rect class="box" x="484" y="148" width="212" height="88" rx="8"/>
+          ${icon('list-checks', 500, 162)}
+          <text class="t-b" x="532" y="180">Dialect</text>
+          <text class="t-sm t-mut" x="532" y="198">NTLMv2, NTLM2SR,</text>
+          <text class="t-sm t-mut" x="532" y="213">NT, NTLM, LM</text>
+          <text class="t-sm t-mut" x="532" y="228">cntlm -M probes</text>
         </g>
-        <line class="flow" data-s="3" x1="346" y1="138" x2="346" y2="114" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="252" y="140" width="188" height="88" rx="8"/>
-          ${icon('file-text', 268, 154)}
-          <text class="t-b" x="300" y="172">cntlm.conf</text>
-          <text class="t-sm t-mut" x="300" y="190">hashes, not a</text>
-          <text class="t-sm t-mut" x="300" y="205">password: reading</text>
-          <text class="t-sm t-mut" x="300" y="220">it is enough</text>
+        <line class="flow" data-s="3" data-calm="conf-cntlm" x1="346" y1="146" x2="346" y2="122" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="cntlm-conf">
+          ${doc(252, 148, 188, 88)}
+          ${icon('file-text', 268, 162)}
+          <text class="t-b" x="300" y="180">cntlm.conf</text>
+          <text class="t-sm t-mut" x="300" y="198">hashes, not a</text>
+          <text class="t-sm t-mut" x="300" y="213">password: reading</text>
+          <text class="t-sm t-mut" x="300" y="228">it is enough</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="24" y="160" width="172" height="64" rx="8"/>
-          ${icon('users', 40, 174)}
-          <text class="t-b" x="72" y="192">Other hosts</text>
-          <text class="t-sm t-mut" x="72" y="210">on the LAN, -g</text>
+        <g data-s="4" data-calm="other-hosts">
+          <rect class="box" x="24" y="164" width="172" height="64" rx="8"/>
+          ${icon('users', 40, 178)}
+          <text class="t-b" x="72" y="196">Other hosts</text>
+          <text class="t-sm t-mut" x="72" y="214">on the LAN, -g</text>
         </g>
-        <path class="flow-bad" data-s="4" d="M198 192 H224 V100 H250" marker-end="url(#ah-bad)"/>
+        <path class="flow-bad" data-s="4" data-calm="hosts-cntlm" d="M198 196 H224 V104 H250" marker-end="url(#ah-bad)"/>
 
-        ${badge(1, 224, 76, '1')}
-        ${badge(2, 680, 154, '2')}
-        ${badge(3, 424, 154, '3')}
-        ${badge(4, 224, 146, '4')}
+        ${badge(1, 224, 80, '1')}
+        ${badge(2, 680, 162, '2')}
+        ${badge(3, 412, 172, '3')}
+        ${badge(4, 224, 150, '4')}
       </svg>`,
 
     calico: () => `
@@ -7983,46 +7985,46 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     envoy: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.">
-        <g data-s="1">
-          <rect class="box" x="24" y="72" width="120" height="64" rx="12"/>
+        <g data-s="4" data-calm="envoy">
+          <rect class="box-soft" x="152" y="36" width="408" height="136" rx="10"/>
+          <text class="t-sm t-b" x="164" y="54">Envoy</text>
+        </g>
+        <g data-s="1" data-calm="client">
+          <rect class="box" x="24" y="72" width="120" height="64" rx="8"/>
           <text class="t-b" x="84" y="100" text-anchor="middle">Client</text>
           <text class="t-sm t-mut" x="84" y="118" text-anchor="middle">downstream</text>
         </g>
-        <line class="flow" data-s="1" x1="146" y1="104" x2="174" y2="104" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="zone" x="160" y="36" width="400" height="136" rx="10"/>
-          <text class="t-sm t-b" x="172" y="54">Envoy</text>
-        </g>
-        <g data-s="1">
+        <line class="flow" data-s="1" data-calm="client-listener" x1="146" y1="104" x2="174" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="1" data-calm="listener">
           <rect class="box" x="176" y="72" width="92" height="64" rx="8"/>
           <text class="t-b" x="222" y="100" text-anchor="middle">Listener</text>
           <text class="t-sm t-mut" x="222" y="118" text-anchor="middle">socket</text>
         </g>
-        <line class="flow" data-s="2" x1="270" y1="104" x2="282" y2="104" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
+        <line class="flow" data-s="2" data-calm="listener-filters" x1="270" y1="104" x2="282" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-calm="filter-chains">
           <rect class="box" x="284" y="64" width="152" height="84" rx="8"/>
           <text class="t-b" x="360" y="86" text-anchor="middle">Filter chains</text>
           <text class="t-sm t-mut" x="360" y="104" text-anchor="middle">L3/L4: mTLS</text>
           <text class="t-sm t-mut" x="360" y="120" text-anchor="middle">L7: JWT,</text>
           <text class="t-sm t-mut" x="360" y="136" text-anchor="middle">RBAC, ext_authz</text>
         </g>
-        <line class="flow" data-s="3" x1="438" y1="104" x2="450" y2="104" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
+        <line class="flow" data-s="3" data-calm="filters-router" x1="438" y1="104" x2="450" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="router">
           <rect class="box" x="452" y="72" width="92" height="64" rx="8"/>
           <text class="t-b" x="498" y="100" text-anchor="middle">Router</text>
           <text class="t-sm t-mut" x="498" y="118" text-anchor="middle">selects</text>
         </g>
-        <line class="flow" data-s="3" x1="546" y1="104" x2="574" y2="104" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
+        <line class="flow" data-s="3" data-calm="router-cluster" x1="546" y1="104" x2="574" y2="104" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="cluster">
           <rect class="box" x="576" y="64" width="120" height="84" rx="8"/>
           <text class="t-b" x="636" y="90" text-anchor="middle">Cluster</text>
           <text class="t-sm t-mut" x="636" y="108" text-anchor="middle">upstream hosts</text>
           <text class="t-sm t-mut" x="636" y="124" text-anchor="middle">load balanced</text>
         </g>
 
-        <line class="flow" data-s="4" x1="360" y1="222" x2="360" y2="174" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="control-plane-envoy" x1="360" y1="222" x2="360" y2="174" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="376" y="202">xDS over gRPC, live</text>
-        <g data-s="4 5">
+        <g data-s="4 5" data-calm="control-plane">
           <rect class="box" x="216" y="224" width="264" height="60" rx="8"/>
           ${icon('cog', 232, 242)}
           <text class="t-b" x="264" y="250">Control plane</text>
@@ -8321,15 +8323,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     http2: () => `
       <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Requests and responses become binary frames tagged by stream, interleaved on one TCP connection; one lost packet stalls every stream.">
-        <g data-s="1">
-          <rect class="box" x="24" y="60" width="148" height="132" rx="12"/>
+        <g data-s="1" data-calm="client">
+          <rect class="box" x="24" y="60" width="148" height="132" rx="8"/>
           ${icon('laptop', 40, 74)}
           <text class="t-b" x="72" y="92">Client</text>
           <text class="t-sm t-mut" x="40" y="130">GET /index</text>
           <text class="t-sm t-mut" x="40" y="152">GET /app.js</text>
           <text class="t-sm t-mut" x="40" y="174">GET /logo</text>
         </g>
-        <g data-s="1">
+        <g data-s="1" data-calm="server">
           <rect class="box" x="548" y="60" width="148" height="132" rx="8"/>
           ${icon('server', 564, 74)}
           <text class="t-b" x="596" y="92">Server</text>
@@ -8337,34 +8339,34 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="564" y="152">200 · js</text>
           <text class="t-sm t-mut" x="564" y="174">200 · png</text>
         </g>
-        <g data-s="3">
+        <g data-s="3" data-note="call-out">
           <rect class="zone" x="188" y="16" width="344" height="212" rx="10"/>
           <text class="t-sm" x="360" y="36" text-anchor="middle">one TCP connection, over TLS</text>
         </g>
 
         <text class="t-sm t-mut" data-s="3" x="200" y="90">requests</text>
-        <line class="flow" data-s="3" x1="174" y1="96" x2="546" y2="96" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-server" x1="174" y1="96" x2="546" y2="96" marker-end="url(#ah-mut)"/>
         ${[['H1', 304], ['H3', 344], ['H5', 384]].map(([f, x]) => `
-          <g data-s="2">
+          <g data-s="2" data-note="call-out">
             <rect class="box" x="${x}" y="74" width="32" height="20" rx="3"/>
             <text class="t-sm" x="${x + 16}" y="88" text-anchor="middle">${f}</text>
           </g>`).join('')}
 
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="220" y="108" width="280" height="24" rx="6"/>
           <text class="t-sm" x="360" y="124" text-anchor="middle">HPACK: repeated headers sent as an index</text>
         </g>
 
         ${[['H3', 224], ['D3', 264], ['H1', 304], ['D1', 344], ['H5', 384], ['D5', 424], ['D1', 464]].map(([f, x]) => `
-          <g data-s="2">
+          <g data-s="2" data-note="call-out">
             <rect class="box" x="${x}" y="148" width="32" height="20" rx="3"/>
             <text class="t-sm" x="${x + 16}" y="162" text-anchor="middle">${f}</text>
           </g>`).join('')}
-        <line class="flow" data-s="3" x1="546" y1="170" x2="174" y2="170" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-server" x1="546" y1="170" x2="174" y2="170" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" data-s="3" x="360" y="188" text-anchor="middle">responses, interleaved</text>
         <text class="t-sm t-mut" data-s="2" x="360" y="214" text-anchor="middle">H = HEADERS · D = DATA · n = stream ID</text>
 
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="244" width="672" height="36" rx="6"/>
           <text class="t-b" x="40" y="267">TCP</text>
           <line class="stroke-bad" x1="84" y1="254" x2="100" y2="270" stroke-width="2"/>
@@ -8381,44 +8383,46 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     fix: () => `
       <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A fund and a broker exchange numbered tag=value messages over a FIX session; a sequence gap triggers a resend, but trust rests on CompIDs and the network.">
-        <g data-s="1 3">
-          <rect class="box" x="24" y="16" width="160" height="48" rx="12"/>
+        <g data-s="1 3" data-calm="fund">
+          <rect class="box" x="24" y="16" width="160" height="48" rx="20"/>
           ${icon('briefcase', 40, 28)}
           <text class="t-b" x="72" y="38">Fund</text>
           <text class="t-sm t-mut" x="72" y="55">buy side</text>
+          <line class="divider" x1="104" y1="66" x2="104" y2="214"/>
         </g>
-        <g data-s="1 3">
-          <rect class="box" x="536" y="16" width="160" height="48" rx="8"/>
+        <g data-s="1 3" data-calm="broker">
+          <rect class="box" x="536" y="16" width="160" height="48" rx="20"/>
           ${icon('landmark', 552, 28)}
           <text class="t-b" x="584" y="38">Broker</text>
           <text class="t-sm t-mut" x="584" y="55">sell side</text>
+          <line class="divider" x1="616" y1="66" x2="616" y2="214"/>
         </g>
-        <line class="divider" x1="104" y1="66" x2="104" y2="214"/>
-        <line class="divider" x1="616" y1="66" x2="616" y2="214"/>
 
-        <line class="flow" data-s="4" x1="106" y1="84" x2="614" y2="84" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="fund-broker" x1="106" y1="84" x2="614" y2="84" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="360" y="77" text-anchor="middle">35=A Logon · seq 1</text>
-        <line class="flow" data-s="1" x1="106" y1="108" x2="614" y2="108" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="fund-broker" x1="106" y1="108" x2="614" y2="108" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="360" y="101" text-anchor="middle">35=D new order · seq 2</text>
-        <line class="flow" data-s="1" x1="614" y1="132" x2="106" y2="132" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="fund-broker" x1="614" y1="132" x2="106" y2="132" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="360" y="125" text-anchor="middle">35=8 execution report</text>
-        <line class="flow-bad" data-s="4" x1="106" y1="156" x2="346" y2="156"/>
+        <g data-note="struck-through">
+          <line class="flow-bad" data-s="4" x1="106" y1="156" x2="346" y2="156"/>
+          <line class="stroke-bad" data-s="4" x1="352" y1="148" x2="368" y2="164" stroke-width="2"/>
+          <line class="stroke-bad" data-s="4" x1="368" y1="148" x2="352" y2="164" stroke-width="2"/>
+        </g>
         <text class="t-sm" data-s="4" x="226" y="149" text-anchor="middle">35=D new order · seq 3</text>
-        <line class="stroke-bad" data-s="4" x1="352" y1="148" x2="368" y2="164" stroke-width="2"/>
-        <line class="stroke-bad" data-s="4" x1="368" y1="148" x2="352" y2="164" stroke-width="2"/>
         <text class="t-sm bad" data-s="4" x="380" y="160">lost</text>
-        <line class="flow" data-s="4" x1="106" y1="180" x2="614" y2="180" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="fund-broker" x1="106" y1="180" x2="614" y2="180" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="360" y="173" text-anchor="middle">35=0 heartbeat · seq 4</text>
-        <line class="flow" data-s="4" x1="614" y1="204" x2="106" y2="204" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="fund-broker" x1="614" y1="204" x2="106" y2="204" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="360" y="197" text-anchor="middle">35=2 resend request: seq 3</text>
 
-        <rect class="box" data-s="2" x="24" y="228" width="672" height="32" rx="6"/>
+        <rect class="box" data-s="2" data-note="call-out" x="24" y="228" width="672" height="32" rx="6"/>
         ${[['8=FIX.4.4|', 40, '2'], ['35=D|', 112, '2'], ['49=FUND|', 151, '3'], ['56=BROKER|', 210, '3'], ['34=2|', 282, '2 4'],
            ['55=VOD|', 321, '2'], ['54=1|', 373, '2'], ['38=500|', 412, '2'], ['…', 464, '2']].map(([f, x, s]) => `
           <text class="t-sm" data-s="${s}" x="${x}" y="249">${f}</text>`).join('')}
         <text class="t-sm t-mut" data-s="2" x="490" y="249">| = SOH · abridged</text>
 
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="272" width="672" height="32" rx="6"/>
           <text class="t-sm bad" x="40" y="292">trust: CompID + known IP on a leased line, often unencrypted</text>
           <text class="t-sm ok" x="460" y="292">FIXS = FIX over TLS</text>
@@ -8505,66 +8509,66 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     har: () => `
       <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A browser exports the traffic behind a page as a JSON HAR file, one timed entry per request; cookies and tokens travel with it, so a shared file can hand over a session.">
-        <g data-s="1">
-          <rect class="box" x="24" y="16" width="144" height="48" rx="12"/>
+        <g data-s="1" data-calm="browser">
+          <rect class="box" x="24" y="16" width="144" height="48" rx="20"/>
           ${icon('app-window', 40, 28)}
           <text class="t-b" x="72" y="38">Browser</text>
           <text class="t-sm t-mut" x="72" y="55">dev tools</text>
         </g>
-        <g data-s="1">
+        <g data-s="1" data-calm="web-server">
           <rect class="box" x="24" y="200" width="144" height="48" rx="8"/>
           ${icon('server', 40, 212)}
           <text class="t-b" x="72" y="229">Web server</text>
         </g>
-        <line class="flow" data-s="1" x1="56" y1="66" x2="56" y2="198" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="browser-server" x1="56" y1="66" x2="56" y2="198" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" data-s="1" x="64" y="120">requests</text>
-        <line class="flow" data-s="1" x1="136" y1="198" x2="136" y2="66" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="browser-server" x1="136" y1="198" x2="136" y2="66" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" data-s="1" x="128" y="150" text-anchor="end">responses</text>
-        <line class="flow" data-s="1" x1="170" y1="40" x2="214" y2="40" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="browser-har" x1="170" y1="40" x2="214" y2="40" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="192" y="33" text-anchor="middle">export</text>
 
-        <g data-s="1">
-          <rect class="box" x="216" y="16" width="276" height="232" rx="8"/>
+        <g data-s="1 4" data-calm="har-file">
+          ${doc(216, 16, 276, 232)}
           ${icon('file-code', 232, 28)}
           <text class="t-b" x="264" y="38">page.har</text>
           <text class="t-sm t-mut" x="264" y="55">a JSON log</text>
         </g>
         <text class="t-sm t-mut" data-s="2" x="242" y="78">entries: one per request</text>
         ${[['GET /', '200', 86], ['POST /login', '302', 114], ['GET /app.js', '200', 142]].map(([req, status, y]) => `
-          <g data-s="2">
+          <g data-s="2" data-note="call-out">
             <rect class="box" x="232" y="${y}" width="244" height="24" rx="4"/>
             <text class="t-sm" x="242" y="${y + 16}">${req}</text>
             <text class="t-sm t-mut" x="328" y="${y + 16}">${status}</text>
           </g>`).join('')}
-        <g data-s="3">
+        <g data-s="3" data-note="call-out">
           ${[[364, 12, 93], [376, 20, 93], [396, 40, 93], [436, 16, 93], [372, 40, 121], [412, 12, 121], [388, 16, 149], [404, 60, 149]].map(([x, w, y]) => `
           <rect class="box-soft" x="${x}" y="${y}" width="${w}" height="10" rx="2"/>`).join('')}
           <text class="t-sm t-mut" x="242" y="184">timings: dns connect wait receive</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="232" y="196" width="244" height="40" rx="4"/>
           <text class="t-sm bad" x="242" y="212">Cookie: sid=8f3a…</text>
           <text class="t-sm bad" x="242" y="228">Authorization: Bearer eyJ…</text>
         </g>
 
-        <line class="flow" data-s="1" x1="494" y1="40" x2="542" y2="40" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="518" y="33" text-anchor="middle">share</text>
-        <g data-s="1 4">
-          <rect class="box" x="544" y="16" width="152" height="48" rx="12"/>
+        <line class="flow" data-s="1 4" data-calm="desk-har" x1="494" y1="40" x2="542" y2="40" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1 4" x="518" y="33" text-anchor="middle">share</text>
+        <g data-s="1 4" data-calm="support-desk">
+          <rect class="box" x="544" y="16" width="152" height="48" rx="20"/>
           ${icon('users', 560, 28)}
           <text class="t-b" x="592" y="38">Support desk</text>
           <text class="t-sm t-mut" x="592" y="55">for debugging</text>
         </g>
-        <line class="flow-bad" data-s="4" x1="620" y1="66" x2="620" y2="198" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="4" x="610" y="136" text-anchor="end">session tokens</text>
-        <g data-s="4">
-          <rect class="box" x="544" y="200" width="152" height="48" rx="12"/>
+        <line class="flow-bad" data-s="4" data-calm="intruder-har" x1="494" y1="224" x2="542" y2="224" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="518" y="216" text-anchor="middle">tokens</text>
+        <g data-s="4" data-calm="intruder">
+          <rect class="box" x="544" y="200" width="152" height="48" rx="20"/>
           ${icon('skull', 560, 212)}
           <text class="t-b" x="592" y="222">Intruder</text>
           <text class="t-sm t-mut" x="592" y="239">session hijack</text>
         </g>
 
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="264" width="672" height="36" rx="6"/>
           <text class="t-sm ok" x="40" y="287">Chrome's default export drops Cookie, Set-Cookie, Authorization</text>
           <text class="t-sm bad" x="472" y="287">URLs and bodies stay</text>
@@ -9202,6 +9206,144 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "alpaca-upstream", "sequence-number": 4, "description": "The upstream answers 407 Proxy Authentication Required.", "direction": "destination-to-source" },
             { "relationship-unique-id": "alpaca-upstream", "sequence-number": 5, "description": "Alpaca parses the Proxy-Authenticate header and runs the handshake itself; where several credentials are configured, Alpaca tries the schemes the proxy advertises in Chrome's preference order: Negotiate, then NTLM, then Basic." },
             { "relationship-unique-id": "process-alpaca", "sequence-number": 6, "description": "Any process that can reach the loopback port borrows your authenticated egress, because the listener has no authentication of its own." }
+          ] }
+      ]
+    },
+    cntlm: {
+      "nodes": [
+        { "unique-id": "cli-tools", "node-type": "system", "name": "CLI tools", "description": "The tools behind Cntlm, which point at loopback and cannot perform the NTLM (NT LAN Manager) handshake themselves." },
+        { "unique-id": "cntlm", "node-type": "service", "name": "Cntlm", "description": "A small GPL-2.0 daemon written in C that listens on 127.0.0.1:3128, forwards to a parent proxy and adds the NTLM handshake the application behind Cntlm cannot perform; because Microsoft has deprecated NTLM, Cntlm is best understood as a prosthesis for a proxy you do not control rather than a design to carry forward." },
+        { "unique-id": "parent-proxy", "node-type": "service", "name": "Parent proxy", "description": "The parent proxy Cntlm forwards to, a proxy you do not control, which answers with a 407 and wants the NTLM handshake; a corporate proxy of a certain age will accept exactly one dialect." },
+        { "unique-id": "cntlm-conf", "node-type": "data-asset", "name": "cntlm.conf", "description": "The configuration file where credentials live as hashes rather than a password, as cntlm -H prints them (PassNTLMv2, PassNT and PassLM); PassNT and PassNTLMv2 are precisely what the NTLM exchange consumes, so whoever can read cntlm.conf can authenticate as you, and the sample configuration's advice about 0600 permissions is the whole of the protection." },
+        { "unique-id": "other-hosts", "node-type": "system", "name": "Other hosts", "description": "Other machines on the LAN, which can share Cntlm once gateway mode (-g) drops the loopback binding: authenticated egress granted on the basis of network position, which is the assumption Zero Trust exists to remove." }
+      ],
+      "relationships": [
+        { "unique-id": "tools-cntlm", "description": "The tools send their requests to Cntlm on loopback, at 127.0.0.1:3128.",
+          "relationship-type": { "connects": { "source": { "node": "cli-tools" }, "destination": { "node": "cntlm" } } } },
+        { "unique-id": "cntlm-proxy", "description": "Cntlm forwards requests to the parent proxy and answers the parent proxy's 407 with the NTLM handshake, in the dialect the Auth setting selects: NTLMv2, NTLM2SR, NT, NTLM or LM.",
+          "relationship-type": { "connects": { "source": { "node": "cntlm" }, "destination": { "node": "parent-proxy" } } } },
+        { "unique-id": "conf-cntlm", "description": "Cntlm reads from cntlm.conf the hashes the NTLM exchange consumes.",
+          "relationship-type": { "connects": { "source": { "node": "cntlm-conf" }, "destination": { "node": "cntlm" } } } },
+        { "unique-id": "hosts-cntlm", "description": "In gateway mode (-g), other machines on the LAN send their requests through Cntlm, gated only by -A and -D allow and deny rules matching on IP and mask.",
+          "relationship-type": { "connects": { "source": { "node": "other-hosts" }, "destination": { "node": "cntlm" } } } }
+      ],
+      "flows": [
+        { "unique-id": "authenticated-egress", "name": "Authenticated egress",
+          "description": "The tools point at loopback and Cntlm answers the parent proxy's 407 with a hash read from cntlm.conf; that file is the credential, and gateway mode hands the same authenticated egress to anything on the LAN.",
+          "transitions": [
+            { "relationship-unique-id": "tools-cntlm", "sequence-number": 1, "description": "The tools send a request to Cntlm, listening on loopback at 127.0.0.1:3128." },
+            { "relationship-unique-id": "cntlm-proxy", "sequence-number": 2, "description": "Cntlm forwards the request to the parent proxy." },
+            { "relationship-unique-id": "cntlm-proxy", "sequence-number": 3, "description": "The parent proxy answers 407, wanting NTLM in a dialect the proxy accepts.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "conf-cntlm", "sequence-number": 4, "description": "Cntlm reads a hash from cntlm.conf, which holds hashes rather than a password." },
+            { "relationship-unique-id": "cntlm-proxy", "sequence-number": 5, "description": "Cntlm answers the parent proxy's 407 with the NTLM handshake, using the hash read from cntlm.conf." },
+            { "relationship-unique-id": "hosts-cntlm", "sequence-number": 6, "description": "With gateway mode, other machines on the LAN share Cntlm and the same authenticated egress." }
+          ] }
+      ]
+    },
+    envoy: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "A downstream client, which connects to a listener." },
+        { "unique-id": "envoy", "node-type": "service", "name": "Envoy", "description": "An L7 proxy written in C++, built at Lyft and a CNCF graduated project, which runs out of process next to every workload rather than as a library and is, for Zero Trust, the textbook Policy Enforcement Point; the sidecar pattern is not free, since each proxy holds the configuration and connection state for what the proxy might talk to." },
+        { "unique-id": "listener", "node-type": "listener", "name": "Listener", "description": "A listener, a named socket that a downstream client connects to." },
+        { "unique-id": "filter-chains", "node-type": "filter-chain", "name": "Filter chains", "description": "A filter chain of L3/L4 network filters and, for HTTP, a second, L7 chain added by the connection manager: there Envoy terminates mTLS and can require a client certificate, the JWT authentication filter validates end-user tokens, the RBAC filter matches on the authenticated principal, and the ext_authz filter calls out to an external decision point for a per-request allow or deny." },
+        { "unique-id": "router", "node-type": "router", "name": "Router", "description": "The router at the end of the filter chains, which selects a cluster." },
+        { "unique-id": "cluster", "node-type": "cluster", "name": "Cluster", "description": "A cluster, a group of logically similar upstream hosts, where a load-balancing policy picks an endpoint." },
+        { "unique-id": "control-plane", "node-type": "service", "name": "Control plane", "description": "The management server that streams configuration to Envoy over xDS; adopting Envoy in practice means adopting a control plane, which then becomes the most security-critical component you run, because whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once." }
+      ],
+      "relationships": [
+        { "unique-id": "envoy-parts", "description": "A listener, filter chains and a router are parts of Envoy's internal model.",
+          "relationship-type": { "composed-of": { "container": "envoy", "nodes": ["listener", "filter-chains", "router"] } } },
+        { "unique-id": "client-listener", "description": "A downstream client connects to the listener.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "listener" } } } },
+        { "unique-id": "listener-filters", "description": "The connection passes from the listener through the filter chains.",
+          "relationship-type": { "connects": { "source": { "node": "listener" }, "destination": { "node": "filter-chains" } } } },
+        { "unique-id": "filters-router", "description": "At the end of the filter chains, the request reaches the router.",
+          "relationship-type": { "connects": { "source": { "node": "filter-chains" }, "destination": { "node": "router" } } } },
+        { "unique-id": "router-cluster", "description": "The request leaves the router for the cluster the router selects, where a load-balancing policy picks an endpoint.",
+          "relationship-type": { "connects": { "source": { "node": "router" }, "destination": { "node": "cluster" } } } },
+        { "unique-id": "control-plane-envoy", "description": "The management server streams configuration to Envoy over gRPC through xDS (LDS for listeners, RDS for routes, CDS for clusters, EDS for endpoints and SDS for TLS certificates and keys), so routes, upstreams and certificates change under live traffic without a restart or a dropped connection.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "envoy" } } } }
+      ],
+      "flows": [
+        { "unique-id": "request-and-config", "name": "Request path and live configuration",
+          "description": "A request enters a listener, runs a filter chain that can authenticate and authorise the request, then leaves for a cluster, and every part of that configuration arrives live from a control plane over xDS.",
+          "transitions": [
+            { "relationship-unique-id": "client-listener", "sequence-number": 1, "description": "A downstream client connects to a listener, a named socket." },
+            { "relationship-unique-id": "listener-filters", "sequence-number": 2, "description": "The connection passes through the L3/L4 network filters, and for HTTP a second, L7 chain, where Envoy can authenticate and authorise the request." },
+            { "relationship-unique-id": "filters-router", "sequence-number": 3, "description": "At the end of the filter chains, the router takes the request." },
+            { "relationship-unique-id": "router-cluster", "sequence-number": 4, "description": "The router selects a cluster, where a load-balancing policy picks an endpoint." },
+            { "relationship-unique-id": "control-plane-envoy", "sequence-number": 5, "description": "A management server streams configuration to Envoy over xDS, so routes, upstreams and certificates change under live traffic without a restart." }
+          ] }
+      ]
+    },
+    http2: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client, which runs many exchanges at once over one TCP connection, where an HTTP/1.1 client opens several parallel connections to get the same concurrency." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server, which answers with responses split into binary frames tagged with a stream ID." }
+      ],
+      "relationships": [
+        { "unique-id": "client-server", "description": "The client and the server exchange requests and responses split into binary frames tagged with a stream ID, interleaved over one TCP connection, with headers compressed by HPACK; every stream shares that one ordered byte stream, so a single lost packet stalls all of them.",
+          "protocol": "HTTP",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "server" } } } }
+      ],
+      "flows": [
+        { "unique-id": "interleaved-streams", "name": "Interleaved streams",
+          "description": "Requests and responses become binary frames tagged by stream, interleaved on one TCP connection; one lost packet stalls every stream.",
+          "transitions": [
+            { "relationship-unique-id": "client-server", "sequence-number": 1, "description": "The client's requests travel as binary frames tagged with a stream ID, many exchanges at once over the one TCP connection." },
+            { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "The server's responses come back as binary frames, the streams interleaved on the same connection.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    fix: {
+      "nodes": [
+        { "unique-id": "fund", "node-type": "actor", "name": "Fund", "description": "A trading firm that sends orders and cancellations to the broker in real time, named in the fund's own messages by tag 49, the SenderCompID; FIX's own guidance treats the SenderCompID, matched to a known IP address, as the basic check on who is at the other end." },
+        { "unique-id": "broker", "node-type": "actor", "name": "Broker", "description": "A trading firm that receives the fund's orders, named in the fund's messages by tag 56, the TargetCompID, and sends back execution reports." }
+      ],
+      "relationships": [
+        { "unique-id": "fund-broker", "description": "The fund and the broker exchange numbered tag=value messages, such as orders, cancellations and trade confirmations, over a FIX session, which leaves security to the network beneath it: encryption is often skipped on private leased lines, and a session is only cryptographically authenticated when the firms run it as FIXS, FIX over TLS.",
+          "relationship-type": { "interacts": { "actor": "fund", "nodes": ["broker"] } } }
+      ],
+      "flows": [
+        { "unique-id": "numbered-session", "name": "A numbered session",
+          "description": "A fund and a broker exchange numbered tag=value messages over a FIX session; a sequence gap triggers a resend, but trust rests on CompIDs and the network.",
+          "transitions": [
+            { "relationship-unique-id": "fund-broker", "sequence-number": 1, "description": "The fund sends a new order, 35=D, numbered like every message in the session." },
+            { "relationship-unique-id": "fund-broker", "sequence-number": 2, "description": "The broker answers with an execution report, 35=8.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "fund-broker", "sequence-number": 3, "description": "A session opens with a Logon." },
+            { "relationship-unique-id": "fund-broker", "sequence-number": 4, "description": "The session stays alive on heartbeats and numbers every message." },
+            { "relationship-unique-id": "fund-broker", "sequence-number": 5, "description": "The gap in the sequence triggers a resend request rather than a silently lost order.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    har: {
+      "nodes": [
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "A browser, whose developer tools export a HAR of the HTTP traffic behind a page load so that a slow or failing page can be examined later or handed to someone else." },
+        { "unique-id": "web-server", "node-type": "service", "name": "Web server", "description": "The web server behind the page load, which answers each of the browser's requests with a response's status, headers and content." },
+        { "unique-id": "har-file", "node-type": "data-asset", "name": "page.har", "description": "A HAR file, a JSON log of the HTTP traffic behind a page load, whose entries array holds one record per request (the URL, method, headers, cookies and any posted body, then the response's status, headers and content, plus a timings breakdown); a HAR records cookies and Authorization headers in the clear, and although Chrome now leaves the Cookie, Set-Cookie and Authorization headers out of an export by default, everything else, URLs and bodies included, is still in the file." },
+        { "unique-id": "support-desk", "node-type": "actor", "name": "Support desk", "description": "A support desk the HAR file is handed to so that a slow or failing page can be examined; a file shared with a support desk can hand over a live session." },
+        { "unique-id": "intruder", "node-type": "actor", "name": "Intruder", "description": "An intruder who uses the session tokens in a HAR file to hijack a session: in 2023 an intruder in Okta's support system used session tokens from customers' HAR files to hijack the sessions of five of those customers." }
+      ],
+      "relationships": [
+        { "unique-id": "browser-server", "description": "The browser sends the HTTP requests behind a page load to the web server and receives the responses.",
+          "protocol": "HTTP",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "web-server" } } } },
+        { "unique-id": "browser-har", "description": "The browser's developer tools export the HTTP traffic behind the page load as a HAR file.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "har-file" } } } },
+        { "unique-id": "desk-har", "description": "The HAR file is shared with the support desk, so that a slow or failing page can be examined.",
+          "relationship-type": { "interacts": { "actor": "support-desk", "nodes": ["har-file"] } } },
+        { "unique-id": "intruder-har", "description": "The intruder takes the session tokens the HAR file records in the clear.",
+          "relationship-type": { "interacts": { "actor": "intruder", "nodes": ["har-file"] } } }
+      ],
+      "flows": [
+        { "unique-id": "export-and-share", "name": "Export and share",
+          "description": "A browser exports the traffic behind a page as a JSON HAR file, one timed entry per request; cookies and tokens travel with the file, so a shared file can hand over a session.",
+          "transitions": [
+            { "relationship-unique-id": "browser-server", "sequence-number": 1, "description": "The browser sends the HTTP requests behind a page load to the web server." },
+            { "relationship-unique-id": "browser-server", "sequence-number": 2, "description": "The web server answers each request with a response: status, headers and content.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "browser-har", "sequence-number": 3, "description": "The browser's developer tools export the traffic as a HAR, a JSON log." },
+            { "relationship-unique-id": "desk-har", "sequence-number": 4, "description": "The HAR file is handed to a support desk, so that a slow or failing page can be examined.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "intruder-har", "sequence-number": 5, "description": "An intruder takes the session tokens from the HAR file and hijacks the live session.", "direction": "destination-to-source" }
           ] }
       ]
     },
