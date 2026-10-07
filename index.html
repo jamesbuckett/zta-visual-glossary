@@ -5233,7 +5233,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     pki: () => `
       <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.">
-        <g data-s="1 2 4" data-calm="root-ca">
+        <g data-s="1 2" data-calm="root-ca">
           <rect class="box" x="24" y="16" width="176" height="60" rx="8"/>
           ${icon('shield-check', 40, 34)}
           <text class="t-b" x="72" y="42">Root CA</text>
@@ -5249,27 +5249,23 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           ${icon('server', 40, 250)}
           <text class="t-b" x="72" y="267">Server</text>
         </g>
-        <g data-s="2 4" data-calm="intermediate-certificate">
-          ${doc(248, 124, 216, 60)}
-          ${icon('file-badge', 260, 142)}
-          <text class="t-sm t-b" x="292" y="150">intermediate certificate</text>
-          <text class="t-sm t-mut" x="292" y="167">signed by the root CA</text>
-        </g>
-        <g data-s="3 4" data-calm="server-certificate">
-          ${doc(248, 232, 216, 60)}
-          ${icon('file-badge', 260, 250)}
-          <text class="t-sm t-b" x="292" y="258">server certificate</text>
-          <text class="t-sm t-mut" x="292" y="275">binds key to name</text>
-        </g>
+        ${[['root-certificate', 'root certificate', 'for the root CA', 16, '1 4'], ['intermediate-certificate', 'intermediate certificate', 'for the intermediate CA', 124, '2 4'], ['server-certificate', 'server certificate', 'for the server', 232, '3 4']].map(([id, name, sub, y, s]) => `
+          <g data-s="${s}" data-calm="${id}">
+            ${doc(248, y, 216, 60)}
+            ${icon('file-badge', 260, y + 18)}
+            <text class="t-sm t-b" x="292" y="${y + 26}">${name}</text>
+            <text class="t-sm t-mut" x="292" y="${y + 43}">${sub}</text>
+          </g>`).join('')}
         <g data-s="1 4" data-calm="client">
-          <rect class="box" x="544" y="124" width="152" height="168" rx="8"/>
-          ${icon('globe', 560, 140)}
-          <text class="t-b" x="592" y="157">Client</text>
-          <text class="t-sm t-mut" x="592" y="175">e.g. a browser</text>
+          <rect class="box" x="544" y="124" width="152" height="60" rx="8"/>
+          ${icon('globe', 560, 142)}
+          <text class="t-b" x="592" y="150">Client</text>
+          <text class="t-sm t-mut" x="592" y="168">e.g. a browser</text>
         </g>
 
-        <path class="flow" data-s="1 4" data-calm="root-ca-client" d="M202 46 H620 V122" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1 4" x="411" y="39" text-anchor="middle">already trusted</text>
+        <line class="flow" data-s="1" data-calm="root-ca-root-certificate" x1="202" y1="46" x2="246" y2="46" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="1 4" data-calm="root-certificate-client" d="M466 46 H620 V122" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1 4" x="543" y="39" text-anchor="middle">already trusted</text>
 
         <path class="flow" data-s="2" data-calm="root-ca-intermediate-certificate" d="M112 78 V100 H356 V122" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="136" y="94">signs</text>
@@ -5280,14 +5276,14 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="3" data-calm="server-certificate-server" x1="246" y1="262" x2="202" y2="262" marker-end="url(#ah-mut)"/>
 
         <line class="flow" data-s="4" data-calm="intermediate-certificate-client" x1="466" y1="154" x2="542" y2="154" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="490" y="146" text-anchor="middle">verify</text>
-        <line class="flow" data-s="4" data-calm="server-certificate-client" x1="466" y1="262" x2="542" y2="262" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="490" y="254" text-anchor="middle">verify</text>
+        <text class="t-sm" data-s="4" x="504" y="146" text-anchor="middle">verify</text>
+        <path class="flow" data-s="4" data-calm="server-certificate-client" d="M466 262 H620 V186" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="543" y="254" text-anchor="middle">verify</text>
 
-        ${badge(1, 226, 46, '1')}
+        ${badge(1, 620, 84, '1')}
         ${badge(2, 300, 100, '2')}
         ${badge(3, 300, 208, '3')}
-        ${badge(4, 676, 142, '4')}
+        ${badge(4, 620, 224, '4')}
       </svg>`,
 
     rbac: () => `
@@ -6184,17 +6180,17 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     tailscale: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh.">
         <g data-s="1" data-calm="idp">
-          <rect class="box" x="24" y="16" width="172" height="60" rx="8"/>
-          ${icon('users', 40, 34)}
-          <text class="t-b" x="72" y="42">Your IdP</text>
-          <text class="t-sm t-mut" x="72" y="60">existing identity</text>
+          <rect class="box" x="24" y="16" width="164" height="60" rx="8"/>
+          ${icon('users', 36, 34)}
+          <text class="t-b" x="68" y="42">Your IdP</text>
+          <text class="t-sm t-mut" x="68" y="60">existing identity</text>
         </g>
-        <line class="flow" data-s="1" data-calm="coordination-idp" x1="198" y1="46" x2="234" y2="46" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="coordination-idp" x1="190" y1="46" x2="242" y2="46" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
         <g data-s="1 2 5" data-calm="coordination">
-          <rect class="box" x="236" y="16" width="216" height="60" rx="8"/>
-          ${icon('server', 252, 34)}
-          <text class="t-b" x="284" y="42">Coordination server</text>
-          <text class="t-sm t-mut" x="284" y="60">auth and keys</text>
+          <rect class="box" x="244" y="16" width="208" height="60" rx="8"/>
+          ${icon('server', 256, 34)}
+          <text class="t-b" x="288" y="42">Coordination server</text>
+          <text class="t-sm t-mut" x="288" y="60">auth and keys</text>
         </g>
         <line class="flow" data-s="5" data-calm="acls-coordination" x1="490" y1="46" x2="454" y2="46" marker-end="url(#ah-mut)"/>
         <g data-s="5" data-calm="acls">
@@ -9517,12 +9513,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "intermediate-ca", "node-type": "service", "name": "Intermediate CA", "description": "An intermediate Certificate Authority, whose certificate the root CA signs and which in turn signs the server's certificate." },
         { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server, whose public key the server's certificate binds to the server's name." },
         { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client, a relying party such as a browser, which trusts the binding of key to identity without prior contact by verifying each signature and walking the chain up to a root the client already trusts; every padlock in a browser is a PKI trust decision." },
-        { "unique-id": "intermediate-certificate", "node-type": "data-asset", "name": "intermediate certificate", "description": "The intermediate CA's X.509 certificate, signed by the root CA to vouch that the intermediate CA's key belongs to the intermediate CA's name; certificates carry an expiry and can be revoked, and protocols like ACME automate issuance and renewal at scale." },
+        { "unique-id": "root-certificate", "node-type": "data-asset", "name": "root certificate", "description": "The root CA's certificate, binding the root CA's public key to the root CA's name, which the client holds as the trusted root at the top of the chain; certificates carry an expiry and can be revoked." },
+        { "unique-id": "intermediate-certificate", "node-type": "data-asset", "name": "intermediate certificate", "description": "The intermediate CA's X.509 certificate, signed by the root CA to vouch that the intermediate CA's key belongs to the intermediate CA's name; certificates carry an expiry and can be revoked." },
         { "unique-id": "server-certificate", "node-type": "data-asset", "name": "server certificate", "description": "The server's X.509 certificate, signed by the intermediate CA to bind the server's public key to the server's name; certificates carry an expiry and can be revoked, and protocols like ACME automate issuance and renewal at scale." }
       ],
       "relationships": [
-        { "unique-id": "root-ca-client", "description": "The client already trusts the root CA, so the root CA is where the client's trust in the chain starts.",
-          "relationship-type": { "connects": { "source": { "node": "root-ca" }, "destination": { "node": "client" } } } },
+        { "unique-id": "root-ca-root-certificate", "description": "The root CA's certificate comes from the root CA, binding the root CA's public key to the root CA's name.",
+          "relationship-type": { "connects": { "source": { "node": "root-ca" }, "destination": { "node": "root-certificate" } } } },
+        { "unique-id": "root-certificate-client", "description": "The client holds the root CA's certificate as a root the client already trusts; anyone holding a CA's certificate can verify the signature and walk the chain up to a trusted root.",
+          "relationship-type": { "connects": { "source": { "node": "root-certificate" }, "destination": { "node": "client" } } } },
         { "unique-id": "root-ca-intermediate-certificate", "description": "The root CA signs the intermediate CA's X.509 certificate, vouching that the intermediate CA's key belongs to the intermediate CA's name.",
           "relationship-type": { "connects": { "source": { "node": "root-ca" }, "destination": { "node": "intermediate-certificate" } } } },
         { "unique-id": "intermediate-certificate-intermediate-ca", "description": "The intermediate CA's certificate passes to the intermediate CA, binding the intermediate CA's key to the intermediate CA's name.",
@@ -9540,7 +9539,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "chain-of-trust", "name": "Chain of trust",
           "description": "A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.",
           "transitions": [
-            { "relationship-unique-id": "root-ca-client", "sequence-number": 1, "description": "Trust starts at the root CA, which the client already trusts." },
+            { "relationship-unique-id": "root-certificate-client", "sequence-number": 1, "description": "The client holds the root CA's certificate, the trusted root that the client's walk up the chain ends at." },
             { "relationship-unique-id": "root-ca-intermediate-certificate", "sequence-number": 2, "description": "The root CA signs the intermediate CA's X.509 certificate, vouching that the intermediate CA's key belongs to the intermediate CA's name." },
             { "relationship-unique-id": "intermediate-ca-server-certificate", "sequence-number": 3, "description": "The intermediate CA in turn signs the server's certificate, binding the server's public key to the server's name." },
             { "relationship-unique-id": "server-certificate-client", "sequence-number": 4, "description": "The client verifies the intermediate CA's signature on the server's certificate." },
@@ -9551,11 +9550,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     vault: {
       "nodes": [
         { "unique-id": "workload", "node-type": "service", "name": "Workload", "description": "A workload that needs credentials such as database passwords, API keys and certificates and, in a Zero Trust system, authenticates to the vault with a workload identity, often SPIFFE, to retrieve exactly the secrets the workload needs, just in time; hard-coding the credentials in config files or source control instead is a recipe for leaks." },
-        { "unique-id": "vault", "node-type": "service", "name": "Vault", "description": "A secrets manager such as HashiCorp Vault, which hands secrets out only to identities that prove they should have them, with every access authenticated, authorised and logged; centralising secrets also makes the vault a high-value target and a start-up dependency for every service that needs one." },
+        { "unique-id": "vault", "node-type": "service", "name": "Vault", "description": "A secrets manager such as HashiCorp Vault, which hands secrets out only to identities that prove they should have them, with every access authenticated, authorised and logged, giving an audit trail and fast rotation when something is exposed; centralising secrets also makes the vault a high-value target and a start-up dependency for every service that needs one." },
         { "unique-id": "secrets", "node-type": "database", "name": "secrets", "description": "The credentials the vault stores centrally, encrypted, behind authentication and fine-grained policy." },
         { "unique-id": "policy", "node-type": "data-asset", "name": "fine-grained policy", "description": "The fine-grained policy behind which the vault keeps its secrets, so that the vault hands a secret only to an identity that proves it should have the secret." },
         { "unique-id": "dynamic-secret", "node-type": "data-asset", "name": "dynamic secret", "description": "A dynamic secret: rather than a long-lived shared password, a short-lived credential the vault generates on demand and revokes automatically, shrinking the window in which a leaked secret is useful." },
-        { "unique-id": "audit-log", "node-type": "database", "name": "audit log", "description": "The log of every access to the vault, giving an audit trail and fast rotation when something is exposed." }
+        { "unique-id": "audit-log", "node-type": "database", "name": "audit log", "description": "The log in which the vault records every access to the vault." }
       ],
       "relationships": [
         { "unique-id": "workload-vault", "description": "The workload authenticates to the vault with the workload's identity, often SPIFFE, to retrieve exactly the secrets the workload needs.",
@@ -9591,7 +9590,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "ml-kem-key-exchange", "node-type": "key-exchange", "name": "ML-KEM key exchange", "description": "Key encapsulation with ML-KEM, from CRYSTALS-Kyber, which NIST finalised as FIPS 203 in August 2024 and which is based on structured lattices, a hard problem both classical and quantum computers struggle with; the new algorithms cost more, as larger keys and signatures mean more handshake data, and have far less cryptanalytic history than RSA and elliptic curves." }
       ],
       "relationships": [
-        { "unique-id": "adversary-handshake", "description": "Adversaries can record the encrypted traffic today and decrypt the traffic once quantum hardware arrives: harvest now, decrypt later.",
+        { "unique-id": "adversary-handshake", "description": "Adversaries can record encrypted traffic today, to decrypt the traffic once quantum hardware arrives that could break RSA and elliptic-curve key exchange; ML-KEM key exchange is layered into the TLS handshake to keep that traffic secure.",
           "relationship-type": { "interacts": { "actor": "adversary", "nodes": ["hybrid-handshake"] } } },
         { "unique-id": "hybrid-handshake-key-exchanges", "description": "The hybrid TLS handshake layers ML-KEM key exchange alongside classical key exchange.",
           "relationship-type": { "composed-of": { "container": "hybrid-handshake", "nodes": ["classical-key-exchange", "ml-kem-key-exchange"] } } }
@@ -9600,7 +9599,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "harvest-now-decrypt-later", "name": "Harvest now, decrypt later",
           "description": "Adversaries can record encrypted traffic today and decrypt it once quantum hardware arrives, so long-lived secrets need protecting now.",
           "transitions": [
-            { "relationship-unique-id": "adversary-handshake", "sequence-number": 1, "description": "Adversaries record the encrypted traffic today, to decrypt the traffic once quantum hardware arrives.", "direction": "destination-to-source" }
+            { "relationship-unique-id": "adversary-handshake", "sequence-number": 1, "description": "Adversaries can record encrypted traffic today, to decrypt the traffic once quantum hardware arrives that could break RSA and elliptic-curve key exchange; layering ML-KEM key exchange into the TLS handshake keeps that traffic secure.", "direction": "destination-to-source" }
           ] }
       ]
     },
