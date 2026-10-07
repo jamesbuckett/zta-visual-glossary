@@ -154,7 +154,11 @@ C; each startup stage as Firmware and OS) count as named, provided each descript
 only what the copy says of the class. An artefact the copy says stays inside its holder (a key sealed
 in a TPM) is a `composed-of` part drawn inside it; one that is presented, shared, fetched
 or handed on (a certificate, a public key, a config file) is a separate `data-asset`
-joined to its holder by an arrow. A network that a link only crosses, with nothing
+joined to its holder by an arrow. The two halves of a key pair are judged separately: the half
+that never leaves its holder is a `composed-of` part, and the half handed to another party
+inside the narrated exchange (a public key and credential ID registered with a site) is
+what that link carries, even though the other party stores it; a key or certificate the
+holder keeps as its own and presents stays a node. A network that a link only crosses, with nothing
 deployed in it, is a `call-out` zone named in the link's description, not a node. A trust anchor the copy says a party holds (a root CA's certificate) is a
 `data-asset` that party reads, like any other certificate. An artefact the copy places
 nowhere, neither inside its holder nor handed on (a policy, an audit log), is a separate

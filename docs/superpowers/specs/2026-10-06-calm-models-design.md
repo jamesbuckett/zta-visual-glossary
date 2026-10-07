@@ -152,6 +152,11 @@ entry, so nothing is stored twice:
   however long it lives; a thing named only inside a limitation stays in that description
   (batch 4 review: IdP's token is link content, SAML's assertion and OIDC's ID token are
   nodes).
+- The two halves of a key pair are judged separately: the half that never leaves its
+  holder is a `composed-of` part; the half handed to another party inside the narrated
+  exchange (a public key and credential ID registered with a site) is what that link
+  carries, even though the other party stores it; a key or certificate the holder keeps as
+  its own and presents stays a node (batch 5 review).
 - An application takes its type from its role in the term's exchange: requester `system`,
   answerer `service`. A connector may end on a labelled entry inside its node's outline.
   A fan-out of one event to several instances is one transition and one connector per
