@@ -137,7 +137,11 @@ built-in `node-type` that honestly fits; otherwise use a custom kebab-case type 
 
 You may add a node for something the old drawing only labelled, when the term's copy
 names it: a "private network" label becomes a zone around its hosts. Do not invent a node
-the copy does not name.
+the copy does not name. An artefact the copy says stays inside its holder (a key sealed
+in a TPM) is a `composed-of` part drawn inside it; one that is presented, shared, fetched
+or handed on (a certificate, a public key, a config file) is a separate `data-asset`
+joined to its holder by an arrow. A network that a link only crosses, with nothing
+deployed in it, is a `call-out` zone named in the link's description, not a node.
 
 The type sets the outline:
 
@@ -177,7 +181,9 @@ chronological: a model mirrors how the term is explained, not a packet trace. A 
 with `"direction": "destination-to-source"`. Each transition needs a lit connector of its
 own, drawn in its direction; a connector lit at several steps can serve a transition at
 any of them. A two-way arrow stands for traffic each way, so it must have one transition
-each way; draw a link with no return traffic in the model one-way. The tour may also
+each way; draw a link with no return traffic in the model one-way. The two halves of a
+handshake or key exchange carry no protocol detail the copy does not give: "the client
+sends its side" is enough. The tour may also
 light a connector that is not a transition, to show structure: "every device plugs into
 the switch" lights three links and adds nothing to the flow.
 

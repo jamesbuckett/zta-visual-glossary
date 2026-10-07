@@ -127,7 +127,13 @@ entry, so nothing is stored twice:
   limitation that is a property of the link itself (its transport, its encryption, its
   ordering), which ends the link's description after what passes.
 - Two actors may be joined by `interacts` only when the copy names organisations or
-  people and no system of theirs. Where the tour's order differs from the protocol's, the
+  people and no system of theirs.
+- An artefact the copy says stays inside its holder is a `composed-of` part; one that is
+  presented, shared, fetched or handed on is a separate `data-asset` joined by an arrow.
+  A network that a link only crosses, with nothing deployed in it, is a `call-out` zone
+  named in the link's description.
+- The two halves of a handshake or key exchange carry no protocol detail the copy does
+  not give. Where the tour's order differs from the protocol's, the
   transition descriptions say the protocol's order.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
   `description` names it.
