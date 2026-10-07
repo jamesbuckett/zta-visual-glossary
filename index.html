@@ -3645,31 +3645,31 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     tls: () => `
       <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Handshake sequence — negotiate, authenticate with a certificate, then exchange encrypted data.">
-        <g data-s="1 3 4">
-          <rect class="box" x="24" y="12" width="180" height="48" rx="12"/>
+        <g data-s="1 3 4" data-calm="client">
+          <rect class="box" x="24" y="12" width="180" height="48" rx="8"/>
           ${icon('laptop', 40, 24)}
           <text class="t-b" x="72" y="41">Client</text>
+          <line class="divider" x1="114" y1="62" x2="114" y2="248"/>
         </g>
-        <g data-s="1 2 3 4">
+        <g data-s="1 2 3 4" data-calm="server">
           <rect class="box" x="516" y="12" width="180" height="48" rx="8"/>
           ${icon('server', 532, 24)}
           <text class="t-b" x="564" y="34">Server</text>
           <text class="t-sm t-mut" x="564" y="51">has a certificate</text>
+          <line class="divider" x1="606" y1="62" x2="606" y2="248"/>
         </g>
-        <line class="divider" x1="114" y1="62" x2="114" y2="248"/>
-        <line class="divider" x1="606" y1="62" x2="606" y2="248"/>
-        <line class="flow" data-s="1" x1="116" y1="92" x2="604" y2="92" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="client-server" x1="116" y1="92" x2="604" y2="92" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="360" y="85" text-anchor="middle">negotiate ciphers</text>
-        <line class="flow" data-s="2" x1="604" y1="124" x2="116" y2="124" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="client-server" x1="604" y1="124" x2="116" y2="124" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="360" y="117" text-anchor="middle">server's certificate</text>
-        <line class="flow" data-s="3" x1="116" y1="156" x2="604" y2="156" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-server" x1="116" y1="156" x2="604" y2="156" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="360" y="149" text-anchor="middle">public-key crypto agrees session keys</text>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="zone" x="104" y="176" width="512" height="72" rx="8"/>
           <text class="t-sm" x="360" y="194" text-anchor="middle">encrypted with fast symmetric crypto</text>
         </g>
-        <line class="flow" data-s="4" x1="116" y1="212" x2="604" y2="212" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="604" y1="234" x2="116" y2="234" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="client-server" x1="116" y1="212" x2="604" y2="212" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="client-server" x1="604" y1="234" x2="116" y2="234" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 150, 92, '1')}
         ${badge(2, 570, 124, '2')}
@@ -3915,73 +3915,75 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     vpn: () => `
       <svg class="dg" viewBox="0 0 720 262" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An encrypted tunnel carries private traffic across the untrusted public internet.">
-        <g data-s="1 2">
-          <rect class="box" x="24" y="64" width="160" height="112" rx="12"/>
+        <g data-s="1 2" data-calm="device">
+          <rect class="box" x="24" y="64" width="152" height="112" rx="8"/>
           ${icon('laptop', 40, 78)}
           <text class="t-b" x="72" y="96">Device</text>
           <text class="t-sm t-mut" x="72" y="114">or a whole</text>
           <text class="t-sm t-mut" x="72" y="130">site</text>
         </g>
-        <rect class="zone" x="200" y="24" width="320" height="192" rx="10"/>
-        <text class="t-sm t-mut" x="360" y="44" text-anchor="middle">untrusted internet</text>
-        <text class="t-sm" data-s="2" x="360" y="92" text-anchor="middle">encrypted tunnel</text>
-        <g data-s="2">
-          <rect class="box" x="186" y="104" width="348" height="32" rx="16"/>
+        <g data-note="call-out">
+          <rect class="zone" x="192" y="24" width="312" height="192" rx="10"/>
+          <text class="t-sm t-mut" x="348" y="44" text-anchor="middle">untrusted internet</text>
         </g>
-        <line class="flow" data-s="2 3" x1="232" y1="120" x2="532" y2="120" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="536" y="64" width="160" height="112" rx="8"/>
-          ${icon('building-2', 552, 78)}
-          <text class="t-b" x="584" y="96">Private</text>
-          <text class="t-sm t-mut" x="584" y="114">network</text>
-          <text class="t-sm t-mut" x="552" y="148">corporate</text>
-          <text class="t-sm t-mut" x="552" y="164">resources</text>
+        <text class="t-sm" data-s="2" x="348" y="92" text-anchor="middle">encrypted tunnel</text>
+        <g data-s="2" data-note="call-out">
+          <rect class="box" x="178" y="104" width="340" height="32" rx="16"/>
         </g>
-        <g data-s="4">
+        <line class="flow" data-s="2 3" data-calm="device-network" x1="178" y1="120" x2="518" y2="120" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="private-network">
+          <rect class="zone" x="520" y="64" width="176" height="112" rx="10"/>
+          ${icon('building-2', 532, 78)}
+          <text class="t-b" x="564" y="96">Private network</text>
+          <text class="t-sm t-mut" x="536" y="148">corporate</text>
+          <text class="t-sm t-mut" x="536" y="164">resources</text>
+        </g>
+        <g data-s="4" data-note="call-out">
           <text class="t-sm t-mut" x="24" y="245">the protocol underneath:</text>
           ${[['IPsec', 216], ['WireGuard', 340], ['TLS-based', 464]].map(([t, x]) => `
             <rect class="box" x="${x}" y="226" width="112" height="28" rx="6"/>
             <text class="t-sm" x="${x + 56}" y="244" text-anchor="middle">${t}</text>`).join('')}
         </g>
 
-        ${badge(1, 168, 78, '1')}
-        ${badge(2, 212, 120, '2')}
-        ${badge(3, 680, 78, '3')}
+        ${badge(1, 160, 78, '1')}
+        ${badge(2, 200, 120, '2')}
+        ${badge(3, 676, 156, '3')}
         ${badge(4, 600, 240, '4')}
       </svg>`,
 
     wireguard: () => `
-      <svg class="dg" viewBox="0 0 720 248" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two peers identified by public keys establish a lightweight encrypted tunnel.">
-        ${[['Peer A', 24, 'A'], ['Peer B', 496, 'B']].map(([name, x, k]) => `
-          <g data-s="2 3">
-            <rect class="box" x="${x}" y="24" width="200" height="124" rx="12"/>
-            ${icon('laptop', x + 16, 38)}
-            <text class="t-b" x="${x + 48}" y="56">${name}</text>
+      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two peers identified by public keys establish a lightweight encrypted tunnel.">
+        ${[['peer-a', 'Peer A', 'key-a', 'A', 24], ['peer-b', 'Peer B', 'key-b', 'B', 496]].map(([pid, name, kid, k, x]) => `
+          <g data-s="2 3" data-calm="${pid}">
+            <rect class="box" x="${x}" y="16" width="200" height="96" rx="8"/>
+            ${icon('laptop', x + 16, 30)}
+            <text class="t-b" x="${x + 48}" y="48">${name}</text>
           </g>
-          <g data-s="1">
-            <rect class="box" x="${x + 16}" y="76" width="168" height="56" rx="6"/>
-            ${icon('key-round', x + 28, 92)}
-            <text class="t-sm t-b" x="${x + 60}" y="102">public key ${k}</text>
-            <text class="t-sm t-mut" x="${x + 60}" y="118">is its identity</text>
+          <line class="flow" data-s="1" data-calm="${kid}-${pid}" x1="${x + 100}" y1="142" x2="${x + 100}" y2="114" marker-end="url(#ah-mut)"/>
+          <g data-s="1" data-calm="${kid}">
+            ${doc(x, 144, 200, 56)}
+            ${icon('key-round', x + 16, 160)}
+            <text class="t-sm t-b" x="${x + 48}" y="168">public key ${k}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="184">is its identity</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" x1="226" y1="56" x2="494" y2="56" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="48" text-anchor="middle">quick handshake</text>
-        <g data-s="3">
-          <rect class="box" x="226" y="88" width="268" height="32" rx="16"/>
+        <line class="flow" data-s="2" data-calm="peer-a-peer-b" x1="226" y1="48" x2="494" y2="48" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="40" text-anchor="middle">quick handshake</text>
+        <g data-s="3" data-note="call-out">
+          <rect class="box" x="226" y="68" width="268" height="32" rx="16"/>
         </g>
-        <line class="flow" data-s="3" x1="268" y1="104" x2="492" y2="104" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="360" y="140" text-anchor="middle">encrypted, very low overhead</text>
-        <g data-s="4">
-          <rect class="box" x="24" y="172" width="672" height="56" rx="8"/>
-          ${icon('cpu', 40, 188)}
-          <text class="t-b" x="72" y="196">Inside the Linux kernel</text>
-          <text class="t-sm t-mut" x="72" y="214">a codebase small enough to audit by hand</text>
+        <line class="flow" data-s="3" data-calm="peer-a-peer-b" x1="226" y1="84" x2="494" y2="84" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="124" text-anchor="middle">encrypted, very low overhead</text>
+        <g data-s="4" data-note="footer">
+          <rect class="box" x="24" y="216" width="672" height="56" rx="8"/>
+          ${icon('cpu', 40, 232)}
+          <text class="t-b" x="72" y="240">Inside the Linux kernel</text>
+          <text class="t-sm t-mut" x="72" y="258">a codebase small enough to audit by hand</text>
         </g>
 
-        ${badge(1, 190, 90, '1')}
-        ${badge(2, 250, 56, '2')}
-        ${badge(3, 248, 104, '3')}
-        ${badge(4, 680, 186, '4')}
+        ${badge(1, 196, 172, '1')}
+        ${badge(2, 250, 48, '2')}
+        ${badge(3, 256, 84, '3')}
+        ${badge(4, 680, 230, '4')}
       </svg>`,
 
     zerotrust: () => `
@@ -4363,35 +4365,34 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     ssh: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An encrypted channel is established first; key-based login then proves identity inside it.">
-        <g data-s="1 2 3">
-          <rect class="box" x="24" y="36" width="160" height="188" rx="12"/>
+        <g data-s="1 2 3" data-calm="client">
+          <rect class="box" x="24" y="36" width="152" height="188" rx="8"/>
           ${icon('laptop', 40, 50)}
           <text class="t-b" x="72" y="68">Client</text>
         </g>
-        <g data-s="1 2 3">
-          <rect class="box" x="536" y="36" width="160" height="188" rx="8"/>
-          ${icon('server', 552, 50)}
-          <text class="t-b" x="584" y="68">Remote</text>
-          <text class="t-sm t-mut" x="584" y="86">machine</text>
+        <g data-s="1 2 3" data-calm="remote-machine">
+          <rect class="box" x="520" y="36" width="176" height="188" rx="8"/>
+          ${icon('server', 536, 50)}
+          <text class="t-b" x="568" y="68">Remote machine</text>
         </g>
-        <g data-s="1">
-          <rect class="zone" x="200" y="16" width="320" height="216" rx="10"/>
-          <text class="t-sm" x="360" y="36" text-anchor="middle">encrypted channel</text>
+        <g data-s="1" data-note="call-out">
+          <rect class="zone" x="192" y="16" width="312" height="216" rx="10"/>
+          <text class="t-sm" x="348" y="36" text-anchor="middle">encrypted channel</text>
         </g>
-        <line class="flow" data-s="1" x1="186" y1="68" x2="534" y2="68" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="61" text-anchor="middle">key exchange</text>
-        <line class="flow" data-s="2" x1="186" y1="112" x2="534" y2="112" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="105" text-anchor="middle">log in: key pair or password</text>
+        <line class="flow" data-s="1" data-calm="client-remote" x1="178" y1="68" x2="518" y2="68" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="348" y="61" text-anchor="middle">key exchange</text>
+        <line class="flow" data-s="2" data-calm="client-remote" x1="178" y1="112" x2="518" y2="112" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="348" y="105" text-anchor="middle">log in: key pair or password</text>
         ${[['interactive shell', 156], ['file transfer', 184], ['port forwarding', 212]].map(([t, y]) => `
-          <line class="flow" data-s="3" x1="186" y1="${y}" x2="534" y2="${y}" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-          <text class="t-sm" data-s="3" x="360" y="${y - 6}" text-anchor="middle">${t}</text>`).join('')}
-        <line class="flow-bad" data-s="4" x1="186" y1="256" x2="534" y2="256" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="4" x="360" y="250" text-anchor="middle">the cleartext tools SSH replaces</text>
+          <line class="flow" data-s="3" data-calm="client-remote" x1="178" y1="${y}" x2="518" y2="${y}" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+          <text class="t-sm" data-s="3" x="348" y="${y - 6}" text-anchor="middle">${t}</text>`).join('')}
+        <line class="flow-bad" data-s="4" data-note="call-out" x1="178" y1="256" x2="518" y2="256" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="348" y="250" text-anchor="middle">the cleartext tools SSH replaces</text>
 
-        ${badge(1, 222, 68, '1')}
-        ${badge(2, 222, 112, '2')}
-        ${badge(3, 222, 184, '3')}
-        ${badge(4, 222, 256, '4')}
+        ${badge(1, 214, 68, '1')}
+        ${badge(2, 214, 112, '2')}
+        ${badge(3, 214, 184, '3')}
+        ${badge(4, 214, 256, '4')}
       </svg>`,
 
     dhcp: () => `
@@ -4503,7 +4504,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     ipsec: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Tunnel mode — a gateway encrypts and wraps whole packets for transit between sites.">
-        <g data-s="1">
+        <g data-s="1" data-note="call-out">
           <text class="t-sm t-b" x="24" y="40">Transport mode</text>
           <text class="t-sm t-mut" x="24" y="56">host to host</text>
           <rect class="box" x="232" y="24" width="120" height="40" rx="4"/>
@@ -4511,7 +4512,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="356" y="24" width="340" height="40" rx="4"/>
           <text class="t-sm" x="526" y="48" text-anchor="middle">payload, protected</text>
         </g>
-        <g data-s="2 3">
+        <g data-s="2 3" data-note="call-out">
           <text class="t-sm t-b" x="24" y="104">Tunnel mode</text>
           <text class="t-sm t-mut" x="24" y="120">whole packet wrapped</text>
           <rect class="box" x="232" y="88" width="120" height="40" rx="4"/>
@@ -4523,19 +4524,19 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm" x="588" y="112" text-anchor="middle">payload</text>
           <text class="t-sm t-mut" x="526" y="146" text-anchor="middle">the original packet, protected</text>
         </g>
-        ${[['Gateway A', 'site A', 24], ['Gateway B', 'site B', 516]].map(([name, sub, x]) => `
-          <g data-s="3 4">
+        ${[['gateway-a', 'Gateway A', 'site A', 24], ['gateway-b', 'Gateway B', 'site B', 516]].map(([id, name, sub, x]) => `
+          <g data-s="3 4" data-calm="${id}">
             <rect class="box" x="${x}" y="168" width="180" height="72" rx="8"/>
             ${icon('router', x + 16, 182)}
             <text class="t-b" x="${x + 48}" y="200">${name}</text>
             <text class="t-sm t-mut" x="${x + 48}" y="218">${sub}</text>
           </g>`).join('')}
-        <line class="flow" data-s="4" x1="206" y1="184" x2="514" y2="184" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="gateway-a-gateway-b" x1="206" y1="184" x2="514" y2="184" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="360" y="177" text-anchor="middle">IKE: key exchange, negotiation</text>
-        <g data-s="3">
+        <g data-s="3" data-note="call-out">
           <rect class="box" x="206" y="204" width="308" height="28" rx="14"/>
         </g>
-        <line class="flow" data-s="3" x1="250" y1="218" x2="512" y2="218" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="gateway-a-gateway-b" x1="206" y1="218" x2="514" y2="218" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 212, 44, '1')}
         ${badge(2, 212, 108, '2')}
@@ -4545,38 +4546,36 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     mtls: () => `
       <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mutual handshake — both client and server present a certificate and verify the other's.">
-        ${[['Client', 24, '2', 'the server'], ['Server', 536, '1', 'the client']].map(([name, x, cs, other]) => `
-          <g data-s="3 4">
-            <rect class="box" x="${x}" y="16" width="160" height="232" rx="8"/>
+        ${[['client', 'Client', 24, 'client-certificate', 'client certificate', '2', 'the server'], ['server', 'Server', 520, 'server-certificate', 'server certificate', '1', 'the client']].map(([id, name, x, cid, cert, cs, other]) => `
+          <g data-s="3 4" data-calm="${id}">
+            <rect class="box" x="${x}" y="16" width="176" height="160" rx="8"/>
             ${icon('server', x + 16, 28)}
             <text class="t-b" x="${x + 48}" y="46">${name}</text>
+            ${icon('shield-check', x + 16, 104)}
+            <text class="t-sm" x="${x + 48}" y="114">verifies</text>
+            <text class="t-sm" x="${x + 48}" y="130">${other}</text>
           </g>
-          <g data-s="${cs}">
-            <rect class="box" x="${x + 16}" y="62" width="128" height="48" rx="6"/>
-            ${icon('file-badge', x + 24, 74)}
-            <text class="t-sm" x="${x + 56}" y="90">certificate</text>
-          </g>
-          <g data-s="3">
-            <rect class="box" x="${x + 16}" y="126" width="128" height="44" rx="6"/>
-            ${icon('shield-check', x + 24, 136)}
-            <text class="t-sm" x="${x + 56}" y="144">verifies</text>
-            <text class="t-sm" x="${x + 56}" y="160">${other}</text>
+          <line class="flow" data-s="${cs}" data-calm="${cid}-${id}" x1="${x + 88}" y1="198" x2="${x + 88}" y2="178" marker-end="url(#ah-mut)"/>
+          <g data-s="${cs}" data-calm="${cid}">
+            ${doc(x, 200, 176, 48)}
+            ${icon('file-badge', x + 12, 212)}
+            <text class="t-sm" x="${x + 44}" y="229">${cert}</text>
           </g>`).join('')}
-        <line class="flow" data-s="1" x1="534" y1="76" x2="186" y2="76" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="69" text-anchor="middle">server certificate</text>
-        <line class="flow" data-s="2" x1="186" y1="104" x2="534" y2="104" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="97" text-anchor="middle">client certificate</text>
-        <g data-s="4">
-          <rect class="zone" x="196" y="182" width="328" height="60" rx="8"/>
-          <text class="t-sm" x="360" y="198" text-anchor="middle">application data</text>
+        <line class="flow" data-s="1" data-calm="client-server" x1="518" y1="60" x2="202" y2="60" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="53" text-anchor="middle">server certificate</text>
+        <line class="flow" data-s="2" data-calm="client-server" x1="202" y1="92" x2="518" y2="92" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="85" text-anchor="middle">client certificate</text>
+        <g data-s="4" data-note="call-out">
+          <rect class="zone" x="212" y="108" width="296" height="60" rx="8"/>
+          <text class="t-sm" x="360" y="126" text-anchor="middle">application data</text>
         </g>
-        <line class="flow" data-s="4" x1="186" y1="214" x2="534" y2="214" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="534" y1="232" x2="186" y2="232" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="client-server" x1="202" y1="142" x2="518" y2="142" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="client-server" x1="518" y1="158" x2="202" y2="158" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 500, 76, '1')}
-        ${badge(2, 220, 104, '2')}
-        ${badge(3, 150, 138, '3')}
-        ${badge(4, 220, 214, '4')}
+        ${badge(1, 484, 60, '1')}
+        ${badge(2, 236, 92, '2')}
+        ${badge(3, 176, 112, '3')}
+        ${badge(4, 236, 142, '4')}
       </svg>`,
 
     spiffe: () => `
@@ -9345,6 +9344,144 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "browser-har", "sequence-number": 3, "description": "The browser's developer tools export the traffic as a HAR, a JSON log." },
             { "relationship-unique-id": "desk-har", "sequence-number": 4, "description": "The HAR file is handed to a support desk, so that a slow or failing page can be examined.", "direction": "destination-to-source" },
             { "relationship-unique-id": "intruder-har", "sequence-number": 5, "description": "An intruder takes the session tokens from the HAR file and hijacks the live session.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    tls: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client end of the TLS connection; in ordinary use TLS authenticates the server alone, so the client stays unauthenticated at this layer unless mTLS is used." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server, which presents its certificate during the handshake; the server's certificate is how TLS authenticates the server." }
+      ],
+      "relationships": [
+        { "unique-id": "client-server", "description": "The client and the server talk over a TCP connection to which TLS gives confidentiality, integrity and server authentication, with traffic encrypted by fast symmetric crypto once the handshake has agreed on session keys; TLS protects data only in transit.",
+          "protocol": "TLS",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "server" } } } }
+      ],
+      "flows": [
+        { "unique-id": "handshake-and-traffic", "name": "Handshake and encrypted traffic",
+          "description": "A handshake negotiates ciphers and uses the server's certificate plus public-key cryptography to agree on session keys, after which traffic is encrypted with fast symmetric crypto.",
+          "transitions": [
+            { "relationship-unique-id": "client-server", "sequence-number": 1, "description": "The handshake opens the connection by negotiating which ciphers to use." },
+            { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "The server presents its certificate, which is how TLS authenticates the server.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "Using the server's certificate plus public-key cryptography, the client sends its side of the agreement on session keys." },
+            { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "The server sends its side of the agreement, and the client and the server have agreed on session keys.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-server", "sequence-number": 5, "description": "From then on, traffic from the client to the server is encrypted with fast symmetric crypto." },
+            { "relationship-unique-id": "client-server", "sequence-number": 6, "description": "Traffic from the server to the client is encrypted with fast symmetric crypto too.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    vpn: {
+      "nodes": [
+        { "unique-id": "device", "node-type": "system", "name": "Device", "description": "A device, or a whole site, that needs to reach a network, for remote access to corporate resources or to shield its traffic on hostile networks; once connected, a traditional VPN gives the device broad network reach, so a stolen credential or compromised laptop inherits that access, the gap ZTNA was designed to close." },
+        { "unique-id": "private-network", "node-type": "network", "name": "Private network", "description": "The private network at the far end of the tunnel, where the traffic reaches corporate resources." }
+      ],
+      "relationships": [
+        { "unique-id": "device-network", "description": "The device's traffic crosses the untrusted internet to the private network through an encrypted tunnel, as if the traffic were on a private link; the tunnel's security and topology depend entirely on the underlying protocol: IPsec, WireGuard or a TLS-based design.",
+          "relationship-type": { "connects": { "source": { "node": "device" }, "destination": { "node": "private-network" } } } }
+      ],
+      "flows": [
+        { "unique-id": "tunnel", "name": "Encrypted tunnel",
+          "description": "An encrypted tunnel carries private traffic across the untrusted public internet.",
+          "transitions": [
+            { "relationship-unique-id": "device-network", "sequence-number": 1, "description": "Traffic from the device crosses the untrusted internet through the encrypted tunnel and reaches the private network." }
+          ] }
+      ]
+    },
+    wireguard: {
+      "nodes": [
+        { "unique-id": "peer-a", "node-type": "system", "name": "Peer A", "description": "A WireGuard peer, identified by public key A." },
+        { "unique-id": "peer-b", "node-type": "system", "name": "Peer B", "description": "A WireGuard peer, identified by public key B." },
+        { "unique-id": "key-a", "node-type": "data-asset", "name": "public key A", "description": "Peer A's public key, which is Peer A's identity; WireGuard's minimalism leaves gaps, since key distribution and configuration are deliberately out of scope, so something else, Tailscale's coordination server for example, has to manage peers at scale." },
+        { "unique-id": "key-b", "node-type": "data-asset", "name": "public key B", "description": "Peer B's public key, which is Peer B's identity; WireGuard's minimalism leaves gaps, since key distribution and configuration are deliberately out of scope, so something else, Tailscale's coordination server for example, has to manage peers at scale." }
+      ],
+      "relationships": [
+        { "unique-id": "key-a-peer-a", "description": "Public key A identifies Peer A.",
+          "relationship-type": { "connects": { "source": { "node": "key-a" }, "destination": { "node": "peer-a" } } } },
+        { "unique-id": "key-b-peer-b", "description": "Public key B identifies Peer B.",
+          "relationship-type": { "connects": { "source": { "node": "key-b" }, "destination": { "node": "peer-b" } } } },
+        { "unique-id": "peer-a-peer-b", "description": "Once configured, Peer A and Peer B establish an encrypted WireGuard tunnel with quick handshakes, and the tunnel runs with very low overhead.",
+          "relationship-type": { "connects": { "source": { "node": "peer-a" }, "destination": { "node": "peer-b" } } } }
+      ],
+      "flows": [
+        { "unique-id": "handshake-and-tunnel", "name": "Handshake and tunnel",
+          "description": "Two peers identified by public keys establish a lightweight encrypted tunnel.",
+          "transitions": [
+            { "relationship-unique-id": "peer-a-peer-b", "sequence-number": 1, "description": "Once configured, Peer A sends its side of a quick handshake to Peer B." },
+            { "relationship-unique-id": "peer-a-peer-b", "sequence-number": 2, "description": "Peer B sends its side of the quick handshake, and the encrypted tunnel is established.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "peer-a-peer-b", "sequence-number": 3, "description": "Traffic from Peer A crosses the encrypted tunnel to Peer B with very low overhead." },
+            { "relationship-unique-id": "peer-a-peer-b", "sequence-number": 4, "description": "Traffic from Peer B crosses the encrypted tunnel to Peer A with very low overhead too.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    ssh: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client, which gets an authenticated, encrypted connection to a remote machine and authenticates inside the encrypted channel with a password or, preferably, a public-key pair; accepting an unverified host key on first connection leaves room for a man-in-the-middle." },
+        { "unique-id": "remote-machine", "node-type": "service", "name": "Remote machine", "description": "The remote machine at the other end of the connection, SSH being the everyday tool for administering servers securely; SSH is only as safe as its key management, and unmanaged keys accumulate in authorized_keys files." }
+      ],
+      "relationships": [
+        { "unique-id": "client-remote", "description": "The client and the remote machine share an encrypted channel, established first through key exchange, inside which the client authenticates and which carries interactive shells, file transfer and port forwarding, a safe replacement for the cleartext remote-access tools of the past.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "remote-machine" } } } }
+      ],
+      "flows": [
+        { "unique-id": "channel-then-login", "name": "Channel, then login",
+          "description": "An encrypted channel is established first; key-based login then proves identity inside the channel.",
+          "transitions": [
+            { "relationship-unique-id": "client-remote", "sequence-number": 1, "description": "The client sends its side of the key exchange that establishes an encrypted channel to the remote machine." },
+            { "relationship-unique-id": "client-remote", "sequence-number": 2, "description": "The remote machine sends its side of the key exchange, and the encrypted channel is established.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-remote", "sequence-number": 3, "description": "Only then does the client authenticate, inside the channel, with a password or, preferably, a public-key pair." },
+            { "relationship-unique-id": "client-remote", "sequence-number": 4, "description": "The channel carries an interactive shell from the client to the remote machine." },
+            { "relationship-unique-id": "client-remote", "sequence-number": 5, "description": "The interactive shell carries traffic from the remote machine back to the client.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-remote", "sequence-number": 6, "description": "The channel carries file transfer from the client to the remote machine." },
+            { "relationship-unique-id": "client-remote", "sequence-number": 7, "description": "The channel carries file transfer from the remote machine to the client.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-remote", "sequence-number": 8, "description": "The channel carries port forwarding from the client to the remote machine." },
+            { "relationship-unique-id": "client-remote", "sequence-number": 9, "description": "The channel carries port forwarding from the remote machine back to the client.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    ipsec: {
+      "nodes": [
+        { "unique-id": "gateway-a", "node-type": "service", "name": "Gateway A", "description": "The gateway at site A, which in tunnel mode encrypts whole packets and wraps each inside a new one for transit to site B; IPsec's flexibility makes IPsec complex to configure." },
+        { "unique-id": "gateway-b", "node-type": "service", "name": "Gateway B", "description": "The gateway at site B, which in tunnel mode encrypts whole packets and wraps each inside a new one for transit to site A; IPsec's flexibility makes IPsec complex to configure." }
+      ],
+      "relationships": [
+        { "unique-id": "gateway-a-gateway-b", "description": "Gateway A and Gateway B are joined by an IPsec tunnel, the basis of many site-to-site VPNs, which carries whole packets between the sites wrapped inside new ones, encrypted and integrity-protected at the IP layer with no changes to the application, once the Internet Key Exchange (IKE) protocol has handled key exchange and negotiation; mismatched IKE proposals between vendors are a common reason tunnels fail to establish.",
+          "relationship-type": { "connects": { "source": { "node": "gateway-a" }, "destination": { "node": "gateway-b" } } } }
+      ],
+      "flows": [
+        { "unique-id": "tunnel-mode", "name": "Tunnel mode",
+          "description": "A gateway encrypts and wraps whole packets for transit between sites.",
+          "transitions": [
+            { "relationship-unique-id": "gateway-a-gateway-b", "sequence-number": 1, "description": "In tunnel mode, Gateway A encrypts and integrity-protects whole packets and wraps each inside a new one for transit to Gateway B." },
+            { "relationship-unique-id": "gateway-a-gateway-b", "sequence-number": 2, "description": "Gateway B wraps whole packets the same way for transit back to Gateway A.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "gateway-a-gateway-b", "sequence-number": 3, "description": "Before the tunnel carries packets, Gateway A sends its side of the key exchange and negotiation, which the Internet Key Exchange (IKE) protocol handles." },
+            { "relationship-unique-id": "gateway-a-gateway-b", "sequence-number": 4, "description": "Gateway B sends its side of the IKE key exchange and negotiation, and the tunnel is established.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    mtls: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "service", "name": "Client", "description": "The client workload, which in mutual TLS must present a certificate too, and which verifies the server during the handshake." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server workload, which presents a certificate as in ordinary TLS, and which verifies the client during the handshake." },
+        { "unique-id": "client-certificate", "node-type": "data-asset", "name": "client certificate", "description": "The client's certificate, the client workload's own cryptographic identity; every certificate has to be issued, rotated and revoked." },
+        { "unique-id": "server-certificate", "node-type": "data-asset", "name": "server certificate", "description": "The server's certificate, the server workload's own cryptographic identity; every certificate has to be issued, rotated and revoked." }
+      ],
+      "relationships": [
+        { "unique-id": "client-certificate-client", "description": "The client certificate is the client's own cryptographic identity, which the client presents during the handshake.",
+          "relationship-type": { "connects": { "source": { "node": "client-certificate" }, "destination": { "node": "client" } } } },
+        { "unique-id": "server-certificate-server", "description": "The server certificate is the server's own cryptographic identity, which the server presents during the handshake.",
+          "relationship-type": { "connects": { "source": { "node": "server-certificate" }, "destination": { "node": "server" } } } },
+        { "unique-id": "client-server", "description": "The client and the server talk over mutual TLS, in which each side verifies the other during the handshake, giving strong two-way authentication without passwords; mTLS proves which workload is at each end but not what that workload may do, so authorisation is still a separate check.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "server" } } } }
+      ],
+      "flows": [
+        { "unique-id": "mutual-handshake", "name": "Mutual handshake",
+          "description": "Both client and server present a certificate and verify the other's.",
+          "transitions": [
+            { "relationship-unique-id": "client-server", "sequence-number": 1, "description": "The server presents its certificate, as in ordinary TLS.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "Mutual TLS requires the client to present its certificate too, and each side verifies the other during the handshake." },
+            { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "Application data then flows from the client to the server." },
+            { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "Application data flows from the server to the client too.", "direction": "destination-to-source" }
           ] }
       ]
     },
