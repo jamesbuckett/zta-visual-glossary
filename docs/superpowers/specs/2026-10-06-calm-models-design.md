@@ -123,7 +123,12 @@ entry, so nothing is stored twice:
   `database` is the destination of whatever reads or writes it. A fetch or lookup drawn
   the other way is a `destination-to-source` transition.
 - A relationship's description says what passes between its two nodes, in one sentence.
-  The term's limitations belong to the node they are about, not to a link.
+  The term's limitations belong to the node they are about, not to a link, except a
+  limitation that is a property of the link itself (its transport, its encryption, its
+  ordering), which ends the link's description after what passes.
+- Two actors may be joined by `interacts` only when the copy names organisations or
+  people and no system of theirs. Where the tour's order differs from the protocol's, the
+  transition descriptions say the protocol's order.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
   `description` names it.
 - A request and its reply are one relationship. The reply is a flow transition with

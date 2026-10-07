@@ -162,7 +162,12 @@ lookup or fetch request drawn the other way a `destination-to-source` transition
 HTTPS, FTP, SFTP, JDBC, WebSocket, SocketIO, LDAP, AMQP, TLS, mTLS, TCP); otherwise name
 the protocol in the description, unless the term is itself that protocol. Every node must appear in at least one relationship. A
 node is a container through one of the two kinds, never both. A relationship's description says what passes between its two nodes, in one sentence;
-the term's limitations belong to the node they are about, not to a link. Write each description so
+the term's limitations belong to the node they are about, not to a link, except a
+limitation that is a property of the link itself (its transport, its encryption, its
+ordering), which ends the link's description after what passes. Two actors may be joined
+by `interacts` only when the copy names organisations or people and no system of theirs.
+Where the tour's order differs from the protocol's, the transition descriptions say the
+protocol's order. Write each description so
 it makes sense on its own, as for nodes.
 
 **Flow.** Write one flow when the tour narrates traffic: if it lights any arrow, the
