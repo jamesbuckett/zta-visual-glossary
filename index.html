@@ -5029,29 +5029,29 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     websockets: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An HTTP Upgrade handshake flips a single TCP connection into a persistent, two-way frame stream.">
-        <g data-s="1 3">
-          <rect class="box" x="24" y="12" width="180" height="44" rx="12"/>
+        <g data-s="1 3" data-calm="client">
+          <rect class="box" x="24" y="12" width="180" height="44" rx="8"/>
           ${icon('laptop', 40, 22)}
           <text class="t-b" x="72" y="39">Client</text>
+          <line class="divider" x1="114" y1="58" x2="114" y2="240"/>
         </g>
-        <g data-s="2 3">
+        <g data-s="2 3" data-calm="server">
           <rect class="box" x="516" y="12" width="180" height="44" rx="8"/>
           ${icon('server', 532, 22)}
           <text class="t-b" x="564" y="39">Server</text>
+          <line class="divider" x1="606" y1="58" x2="606" y2="240"/>
         </g>
-        <line class="divider" x1="114" y1="58" x2="114" y2="240"/>
-        <line class="divider" x1="606" y1="58" x2="606" y2="240"/>
-        <line class="flow" data-s="1" x1="116" y1="92" x2="604" y2="92" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="client-server" x1="116" y1="92" x2="604" y2="92" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="360" y="85" text-anchor="middle">HTTP/1.1 GET + Upgrade: websocket</text>
-        <line class="flow" data-s="2" x1="604" y1="124" x2="116" y2="124" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="client-server" x1="604" y1="124" x2="116" y2="124" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="360" y="117" text-anchor="middle">101 Switching Protocols</text>
-        <g data-s="3">
+        <g data-s="3" data-note="call-out">
           <rect class="zone" x="104" y="144" width="512" height="96" rx="8"/>
           <text class="t-sm" x="360" y="164" text-anchor="middle">same TCP socket: frames, any time</text>
         </g>
-        <line class="flow" data-s="3" x1="116" y1="188" x2="604" y2="188" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="604" y1="216" x2="116" y2="216" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
+        <line class="flow" data-s="3" data-calm="client-server" x1="116" y1="188" x2="604" y2="188" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-server" x1="604" y1="216" x2="116" y2="216" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-note="footer">
           <rect class="box" x="24" y="252" width="672" height="40" rx="8"/>
           ${icon('lock', 40, 260)}
           <text class="t-b" x="72" y="277">wss://</text>
@@ -5066,37 +5066,39 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     webtransport: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One HTTP/3 connection carries many independent streams plus unreliable datagrams — no cross-stream head-of-line blocking.">
-        <g data-s="1 2 3">
-          <rect class="box" x="24" y="72" width="140" height="120" rx="12"/>
-          ${icon('app-window', 40, 86)}
-          <text class="t-b" x="72" y="104">Browser</text>
-          <text class="t-sm t-mut" x="40" y="130">browser code</text>
+        <g data-s="1 2 3" data-calm="browser">
+          <rect class="box" x="24" y="56" width="140" height="168" rx="20"/>
+          ${icon('app-window', 40, 72)}
+          <text class="t-b" x="72" y="90">Browser</text>
+          <text class="t-sm t-mut" x="40" y="116">browser code</text>
         </g>
-        <g data-s="1 2 3">
-          <rect class="box" x="556" y="72" width="140" height="120" rx="8"/>
-          ${icon('server', 572, 86)}
-          <text class="t-b" x="604" y="104">Server</text>
+        <g data-s="1 2 3" data-calm="server">
+          <rect class="box" x="556" y="56" width="140" height="168" rx="8"/>
+          ${icon('server', 572, 72)}
+          <text class="t-b" x="604" y="90">Server</text>
         </g>
-        <g data-s="1">
+        <g data-s="1" data-note="call-out">
           <rect class="zone" x="180" y="16" width="360" height="228" rx="10"/>
           <text class="t-sm" x="360" y="36" text-anchor="middle">one HTTP/3 connection · QUIC · UDP</text>
         </g>
-        <text class="t-sm t-mut" data-s="2 4" x="376" y="64">bidirectional stream</text>
-        <line class="flow" data-s="2 4" x1="166" y1="74" x2="554" y2="74" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" data-s="2 4" x="376" y="104">unidirectional stream</text>
-        <line class="flow" data-s="2 4" x1="166" y1="114" x2="554" y2="114" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" data-s="2 4" x="376" y="144">unidirectional stream</text>
-        <line class="flow-bad" data-s="2 4" x1="166" y1="154" x2="346" y2="154"/>
-        <line class="stroke-bad" data-s="4" x1="352" y1="146" x2="368" y2="162" stroke-width="2"/>
-        <line class="stroke-bad" data-s="4" x1="368" y1="146" x2="352" y2="162" stroke-width="2"/>
-        <text class="t-sm bad" data-s="4" x="378" y="158">lost: only this waits</text>
-        <text class="t-sm t-mut" data-s="3" x="376" y="200">datagrams: fire-and-forget</text>
-        <line class="flow" data-s="3" x1="166" y1="210" x2="554" y2="210" stroke-dasharray="2 6" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="2 4" x="356" y="72">bidirectional stream</text>
+        <line class="flow" data-s="2 4" data-calm="browser-server" x1="166" y1="82" x2="554" y2="82" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="2 4" x="356" y="110">unidirectional stream</text>
+        <line class="flow" data-s="2 4" data-calm="browser-server" x1="166" y1="120" x2="554" y2="120" marker-end="url(#ah-mut)"/>
+        <g data-note="struck-through">
+          <line class="flow-bad" data-s="2 4" x1="166" y1="158" x2="330" y2="158"/>
+          <line class="stroke-bad" data-s="4" x1="336" y1="150" x2="352" y2="166" stroke-width="2"/>
+          <line class="stroke-bad" data-s="4" x1="352" y1="150" x2="336" y2="166" stroke-width="2"/>
+        </g>
+        <text class="t-sm t-mut" data-s="2 4" x="356" y="148">unidirectional stream</text>
+        <text class="t-sm bad" data-s="4" x="362" y="166">lost: only this waits</text>
+        <text class="t-sm t-mut" data-s="3" x="356" y="188">datagrams: fire-and-forget</text>
+        <line class="flow" data-s="3" data-calm="browser-server" x1="166" y1="198" x2="554" y2="198" stroke-dasharray="2 6" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 520, 36, '1')}
-        ${badge(2, 520, 74, '2')}
-        ${badge(3, 300, 210, '3')}
-        ${badge(4, 330, 154, '4')}
+        ${badge(2, 520, 82, '2')}
+        ${badge(3, 300, 198, '3')}
+        ${badge(4, 312, 158, '4')}
       </svg>`,
 
     openziti: () => `
@@ -5537,43 +5539,54 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     websec: () => `
-      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP allowlist limits what injected code can reach.">
-        <path class="flow" data-s="5" d="M592 42 V24 H128 V42" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="5" x="360" y="16" text-anchor="middle">limits what injected code can do</text>
-        ${[['code', 'XSS', 'injected script runs', "in the victim's session", 24, '1'], ['send', 'CSRF', 'forged request from', 'a logged-in browser', 256, '3']].map(([ico, name, l1, l2, x, s]) => `
-          <g data-s="${s}">
-            <rect class="box" x="${x}" y="44" width="208" height="84" rx="8"/>
-            ${icon(ico, x + 16, 58)}
-            <text class="t-b" x="${x + 48}" y="76">${name}</text>
-            <text class="t-sm bad" x="${x + 48 + name.length * 8 + 8}" y="76">attack</text>
-            <text class="t-sm t-mut" x="${x + 48}" y="98">${l1}</text>
-            <text class="t-sm t-mut" x="${x + 48}" y="114">${l2}</text>
-          </g>`).join('')}
-        ${[['shield-check', 'Escape output', 'and validate input', 24, '2'], ['key-round', 'Anti-CSRF tokens', 'and SameSite cookies', 256, '4']].map(([ico, name, sub, x, s]) => `
-          <g data-s="${s}">
-            <rect class="box" x="${x}" y="164" width="208" height="64" rx="8"/>
-            ${icon(ico, x + 16, 176)}
-            <text class="t-b" x="${x + 48}" y="194">${name}</text>
-            <text class="t-sm t-mut" x="${x + 48}" y="212">${sub}</text>
-          </g>
-          <line class="flow" data-s="${s}" x1="${x + 104}" y1="130" x2="${x + 104}" y2="162" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="5">
-          <rect class="box" x="488" y="44" width="208" height="184" rx="8"/>
-          ${icon('list-checks', 504, 58)}
-          <text class="t-b" x="536" y="76">CSP</text>
-          <text class="t-sm t-mut" x="536" y="98">response header</text>
-          <text class="t-sm t-mut" x="504" y="130">lists which</text>
-          <text class="t-sm t-mut" x="504" y="146">script, style and</text>
-          <text class="t-sm t-mut" x="504" y="162">connection sources</text>
-          <text class="t-sm t-mut" x="504" y="178">a page may load</text>
+      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP allowlist limits what injected code can reach.">
+        <g data-s="1 2 3 4" data-calm="attacker">
+          <rect class="box" x="272" y="12" width="176" height="44" rx="20"/>
+          ${icon('skull', 288, 22)}
+          <text class="t-b" x="320" y="39">Attacker</text>
         </g>
-        <text class="t-sm t-mut" x="360" y="260" text-anchor="middle">Together: the core of browser-side application security.</text>
+        <g data-s="1 2 3 4 5" data-calm="browser">
+          <rect class="box" x="24" y="96" width="176" height="120" rx="20"/>
+          ${icon('app-window', 40, 110)}
+          <text class="t-b" x="72" y="128">Browser</text>
+          <text class="t-sm t-mut" x="40" y="156">logged-in user</text>
+          <text class="t-sm t-mut" x="40" y="180">script runs with</text>
+          <text class="t-sm t-mut" x="40" y="196">the victim's session</text>
+        </g>
+        <g data-s="1 2 3 4 5" data-calm="site">
+          <rect class="box" x="520" y="96" width="176" height="120" rx="8"/>
+          ${icon('server', 536, 110)}
+          <text class="t-b" x="568" y="128">Site</text>
+          <text class="t-sm t-mut" x="536" y="156">where the user is</text>
+          <text class="t-sm t-mut" x="536" y="172">authenticated</text>
+        </g>
 
-        ${badge(1, 216, 60, '1')}
-        ${badge(2, 128, 146, '2')}
-        ${badge(3, 448, 60, '3')}
-        ${badge(4, 360, 146, '4')}
-        ${badge(5, 680, 60, '5')}
+        <path class="flow-bad" data-s="1 2" data-calm="attacker-site" d="M450 34 H608 V94" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="1 2" x="529" y="26" text-anchor="middle">XSS: injects script</text>
+        <path class="flow-bad" data-s="3 4" data-calm="attacker-browser" d="M270 34 H112 V94" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="3 4" x="180" y="26" text-anchor="middle">CSRF: tricks the browser</text>
+
+        <line class="flow-bad" data-s="1 2" data-calm="browser-site" x1="518" y1="124" x2="202" y2="124" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="1 2" x="360" y="117" text-anchor="middle">page + injected script</text>
+        <line class="flow-bad" data-s="3 4" data-calm="browser-site" x1="202" y1="164" x2="518" y2="164" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="3 4" x="360" y="157" text-anchor="middle">forged request + cookies</text>
+        <line class="flow" data-s="5" data-calm="browser-site" x1="518" y1="204" x2="202" y2="204" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="360" y="197" text-anchor="middle">CSP header: allowed sources</text>
+
+        ${[['shield-check', 'Escape output', 'and validate input', 24, '2'], ['key-round', 'Anti-CSRF tokens', 'and SameSite cookies', 256, '4'], ['list-checks', 'CSP', 'limits injected code', 488, '5']].map(([ico, name, sub, x, s]) => `
+          <g data-s="${s}" data-note="call-out">
+            <rect class="box" x="${x}" y="236" width="208" height="56" rx="8"/>
+            ${icon(ico, x + 16, 252)}
+            <text class="t-b" x="${x + 48}" y="260">${name}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="278">${sub}</text>
+          </g>`).join('')}
+        <text class="t-sm t-mut" x="360" y="312" text-anchor="middle">Together: the core of browser-side application security.</text>
+
+        ${badge(1, 608, 64, '1')}
+        ${badge(2, 216, 250, '2')}
+        ${badge(3, 112, 64, '3')}
+        ${badge(4, 448, 250, '4')}
+        ${badge(5, 680, 250, '5')}
       </svg>`,
 
     vault: () => `
@@ -6228,59 +6241,58 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     pac: () => `
-      <svg class="dg" viewBox="0 0 720 236" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.">
-        <g data-s="1 5">
-          <rect class="box" x="24" y="16" width="176" height="56" rx="8"/>
-          ${icon('file-code', 40, 32)}
-          <text class="t-b" x="72" y="41">PAC file</text>
-          <text class="t-sm t-mut" x="72" y="59">URL or WPAD</text>
+      <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.">
+        <g data-s="1 2 3 4 5" data-calm="pac-file">
+          ${doc(24, 24, 168, 160)}
+          ${icon('file-code', 40, 38)}
+          <text class="t-b" x="72" y="56">PAC file</text>
+          <text class="t-sm t-b" x="40" y="92">FindProxyForURL</text>
+          <text class="t-sm t-mut" x="40" y="108">(url, host)</text>
+          <text class="t-sm" x="40" y="136">shExpMatch()</text>
+          <text class="t-sm" x="40" y="152">dnsDomainIs()</text>
+          <text class="t-sm" x="40" y="168">isInNet()</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="256" y="16" width="208" height="56" rx="12"/>
-          ${icon('skull', 272, 32)}
-          <text class="t-b" x="304" y="41">Attacker</text>
-          <text class="t-sm t-mut" x="304" y="59">poisons WPAD</text>
+        <g data-s="1 2 3 4 5" data-calm="browser">
+          <rect class="box" x="304" y="48" width="160" height="108" rx="8"/>
+          ${icon('app-window', 320, 82)}
+          <text class="t-b" x="352" y="100">Browser / OS</text>
+          <text class="t-sm t-mut" x="352" y="118">every request</text>
         </g>
-        <line class="flow-bad" data-s="5" x1="254" y1="44" x2="202" y2="44" marker-end="url(#ah-bad)"/>
-        <line class="flow" data-s="1" x1="112" y1="74" x2="112" y2="106" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2">
-          <rect class="box" x="24" y="108" width="176" height="72" rx="12"/>
-          ${icon('app-window', 40, 122)}
-          <text class="t-b" x="72" y="140">Browser / OS</text>
-          <text class="t-sm t-mut" x="72" y="158">every request</text>
-        </g>
-        <line class="flow" data-s="2" x1="202" y1="144" x2="254" y2="144" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3 4">
-          <rect class="box" x="256" y="96" width="208" height="124" rx="8"/>
-          ${icon('code', 272, 110)}
-          <text class="t-b" x="304" y="128">FindProxyForURL</text>
-          <text class="t-sm t-mut" x="304" y="146">(url, host)</text>
-          <text class="t-sm" x="272" y="172">shExpMatch()</text>
-          <text class="t-sm" x="272" y="188">dnsDomainIs()</text>
-          <text class="t-sm" x="272" y="204">isInNet()</text>
-        </g>
-        <line class="flow" data-s="3" x1="466" y1="124" x2="518" y2="124" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="492" y="116" text-anchor="middle">DIRECT</text>
-        <g data-s="3">
-          <rect class="box" x="520" y="96" width="176" height="56" rx="8"/>
-          ${icon('server', 536, 112)}
-          <text class="t-b" x="568" y="121">Internal</text>
-          <text class="t-sm t-mut" x="568" y="139">host</text>
-        </g>
-        <line class="flow" data-s="4" x1="466" y1="192" x2="518" y2="192" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="492" y="184" text-anchor="middle">PROXY</text>
-        <g data-s="4">
-          <rect class="box" x="520" y="164" width="176" height="56" rx="8"/>
-          ${icon('shield', 536, 180)}
-          <text class="t-b" x="568" y="189">Web gateway</text>
-          <text class="t-sm t-mut" x="568" y="207">inspect + policy</text>
-        </g>
+        <line class="flow" data-s="1" data-calm="browser-pac" x1="302" y1="80" x2="194" y2="80" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="240" y="72" text-anchor="middle">URL or WPAD</text>
+        <line class="flow" data-s="2" data-calm="browser-pac" x1="302" y1="124" x2="194" y2="124" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="248" y="116" text-anchor="middle">calls</text>
 
-        ${badge(1, 184, 30, '1')}
-        ${badge(2, 228, 144, '2')}
-        ${badge(3, 680, 110, '3')}
-        ${badge(4, 680, 178, '4')}
-        ${badge(5, 448, 30, '5')}
+        <g data-s="3" data-calm="internal-host">
+          <rect class="box" x="528" y="36" width="168" height="56" rx="8"/>
+          ${icon('server', 544, 52)}
+          <text class="t-b" x="576" y="70">Internal host</text>
+        </g>
+        <line class="flow" data-s="3" data-calm="browser-internal" x1="466" y1="64" x2="526" y2="64" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="496" y="56" text-anchor="middle">DIRECT</text>
+        <g data-s="4" data-calm="gateway">
+          <rect class="box" x="528" y="112" width="168" height="56" rx="8"/>
+          ${icon('shield', 544, 128)}
+          <text class="t-b" x="576" y="134">Web gateway</text>
+          <text class="t-sm t-mut" x="576" y="152">inspect + policy</text>
+        </g>
+        <line class="flow" data-s="4" data-calm="browser-gateway" x1="466" y1="140" x2="526" y2="140" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="496" y="132" text-anchor="middle">PROXY</text>
+
+        <g data-s="5" data-calm="attacker">
+          <rect class="box" x="24" y="204" width="176" height="56" rx="20"/>
+          ${icon('skull', 40, 220)}
+          <text class="t-b" x="72" y="229">Attacker</text>
+          <text class="t-sm t-mut" x="72" y="247">poisons WPAD</text>
+        </g>
+        <path class="flow-bad" data-s="5" data-calm="attacker-browser" d="M202 232 H384 V158" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="5" x="216" y="224">poisoned WPAD response</text>
+
+        ${badge(1, 168, 48, '1')}
+        ${badge(2, 168, 96, '2')}
+        ${badge(3, 680, 46, '3')}
+        ${badge(4, 680, 122, '4')}
+        ${badge(5, 384, 196, '5')}
       </svg>`,
 
     dlp: () => `
@@ -7797,9 +7809,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     alpaca: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
-        <rect class="zone" x="16" y="12" width="424" height="232" rx="10"/>
-        <text class="t-sm t-mut" x="28" y="30">your machine</text>
-        <g data-s="1">
+        <g data-calm="machine">
+          <rect class="zone" x="16" y="12" width="416" height="232" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="30">your machine</text>
+        </g>
+        <g data-s="1" data-calm="cli-tool">
           <rect class="box" x="32" y="40" width="184" height="96" rx="8"/>
           ${icon('terminal', 48, 54)}
           <text class="t-b" x="80" y="72">CLI tool</text>
@@ -7807,48 +7821,49 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="80" y="106">knows only</text>
           <text class="t-sm t-mut" x="80" y="122">http_proxy</text>
         </g>
-        <line class="flow" data-s="1" x1="218" y1="88" x2="246" y2="88" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3 4 5">
-          <rect class="box" x="248" y="40" width="176" height="96" rx="8"/>
+        <line class="flow" data-s="1" data-calm="tool-alpaca" x1="218" y1="88" x2="246" y2="88" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4 5" data-calm="alpaca">
+          <rect class="box" x="248" y="40" width="160" height="96" rx="8"/>
           ${icon('route', 264, 54)}
           <text class="t-b" x="296" y="72">Alpaca</text>
           <text class="t-sm t-mut" x="296" y="90">localhost:3128</text>
           <text class="t-sm t-mut" x="296" y="106">no auth of</text>
           <text class="t-sm t-mut" x="296" y="122">its own</text>
         </g>
-        <line class="flow" data-s="2" x1="336" y1="166" x2="336" y2="138" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
-          <rect class="box" x="248" y="168" width="176" height="60" rx="8"/>
-          ${icon('file-code', 264, 186)}
-          <text class="t-b" x="296" y="194">PAC file</text>
-          <text class="t-sm t-mut" x="296" y="212">picks the upstream</text>
-        </g>
-        <g data-s="5">
+        <g data-s="5" data-calm="any-process">
           <rect class="box" x="32" y="168" width="184" height="60" rx="8"/>
           ${icon('terminal', 48, 186)}
           <text class="t-b" x="80" y="194">Any process</text>
           <text class="t-sm t-mut" x="80" y="212">on this machine</text>
         </g>
-        <line class="flow-bad" data-s="5" x1="218" y1="184" x2="246" y2="132" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="5" data-calm="process-alpaca" x1="218" y1="184" x2="246" y2="132" marker-end="url(#ah-bad)"/>
 
-        <g data-s="3 4">
+        <g data-s="2" data-calm="pac-file">
+          ${doc(536, 168, 160, 60)}
+          ${icon('file-code', 552, 186)}
+          <text class="t-b" x="584" y="194">PAC file</text>
+          <text class="t-sm t-mut" x="584" y="212">picks the route</text>
+        </g>
+        <path class="flow" data-s="2" data-calm="pac-alpaca" d="M534 198 H328 V138" marker-end="url(#ah-mut)"/>
+
+        <g data-s="3 4" data-calm="upstream">
           <rect class="box" x="536" y="40" width="160" height="96" rx="8"/>
           ${icon('building-2', 552, 54)}
           <text class="t-b" x="584" y="72">Upstream</text>
           <text class="t-sm t-mut" x="584" y="90">proxy the</text>
           <text class="t-sm t-mut" x="584" y="106">PAC names</text>
         </g>
-        <line class="flow" data-s="3" x1="426" y1="64" x2="534" y2="64" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="alpaca-upstream" x1="410" y1="64" x2="534" y2="64" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="480" y="57" text-anchor="middle">CONNECT</text>
-        <line class="flow" data-s="4" x1="534" y1="92" x2="426" y2="92" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="alpaca-upstream" x1="534" y1="92" x2="410" y2="92" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="480" y="85" text-anchor="middle">407</text>
-        <line class="flow" data-s="4" x1="426" y1="120" x2="534" y2="120" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="alpaca-upstream" x1="410" y1="120" x2="534" y2="120" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="480" y="113" text-anchor="middle">credential</text>
 
         ${badge(1, 200, 54, '1')}
-        ${badge(2, 408, 182, '2')}
-        ${badge(3, 520, 64, '3')}
-        ${badge(4, 520, 92, '4')}
+        ${badge(2, 480, 198, '2')}
+        ${badge(3, 522, 64, '3')}
+        ${badge(4, 522, 92, '4')}
         ${badge(5, 200, 182, '5')}
       </svg>`,
 
@@ -9054,6 +9069,139 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "browser-server", "sequence-number": 3, "description": "A request that is not simple, with custom headers or a method like PUT, triggers a preflight OPTIONS check first." },
             { "relationship-unique-id": "browser-server", "sequence-number": 4, "description": "The preflight check passes.", "direction": "destination-to-source" },
             { "relationship-unique-id": "browser-server", "sequence-number": 5, "description": "Then the browser sends the PUT request itself." }
+          ] }
+      ]
+    },
+    websockets: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client, which starts the WebSocket connection as an HTTP/1.1 GET carrying an Upgrade: websocket header and can then push messages at any time." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server, which answers the upgrade with 101 Switching Protocols and can then push messages at any time; checking the Origin header the browser sends is up to the server, or a malicious page can open a socket with the user's cookies." }
+      ],
+      "relationships": [
+        { "unique-id": "client-server", "description": "The client and the server share one long-lived, full-duplex connection: a normal HTTP request is upgraded, and the same TCP socket then carries lightweight frames in both directions, with no request/response turn-taking; production deployments use wss://, which wraps the connection in TLS, and the handshake is not blocked by the same-origin policy.",
+          "protocol": "WebSocket",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "server" } } } }
+      ],
+      "flows": [
+        { "unique-id": "upgrade-and-frames", "name": "Upgrade and frames",
+          "description": "An HTTP Upgrade handshake flips a single TCP connection into a persistent, two-way frame stream.",
+          "transitions": [
+            { "relationship-unique-id": "client-server", "sequence-number": 1, "description": "The client sends an HTTP/1.1 GET carrying an Upgrade: websocket header." },
+            { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "The server answers 101 Switching Protocols.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "The same TCP socket then carries lightweight frames from the client to the server, at any time." },
+            { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "The server can push frames to the client at any time too.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    webtransport: {
+      "nodes": [
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, where WebTransport gives browser code a low-latency session over HTTP/3." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server at the other end of the browser code's WebTransport session." }
+      ],
+      "relationships": [
+        { "unique-id": "browser-server", "description": "Browser code and the server share a low-latency session over HTTP/3, and therefore over QUIC and UDP, falling back to HTTP/2 over TCP where QUIC is blocked; within one connection the session offers reliable bidirectional and unidirectional streams plus unreliable datagrams, and because the streams are independent, one lost packet stalls only its own stream; neither the W3C API nor the IETF protocol specification is final.",
+          "protocol": "HTTP",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "server" } } } }
+      ],
+      "flows": [
+        { "unique-id": "streams-and-datagrams", "name": "Streams and datagrams",
+          "description": "One HTTP/3 connection carries many independent streams plus unreliable datagrams, with no cross-stream head-of-line blocking.",
+          "transitions": [
+            { "relationship-unique-id": "browser-server", "sequence-number": 1, "description": "A reliable bidirectional stream carries data from the browser code to the server." },
+            { "relationship-unique-id": "browser-server", "sequence-number": 2, "description": "The same bidirectional stream carries data from the server back to the browser code.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "browser-server", "sequence-number": 3, "description": "A reliable unidirectional stream carries data from the browser code to the server." },
+            { "relationship-unique-id": "browser-server", "sequence-number": 4, "description": "Unreliable datagrams carry fire-and-forget packets, for things like game state or live media, alongside the streams' guaranteed delivery." }
+          ] }
+      ]
+    },
+    websec: {
+      "nodes": [
+        { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "The attacker behind both attacks: Cross-Site Scripting injects attacker-controlled script into a page, and Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted request." },
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The logged-in user's browser, in which injected script runs with the victim's session, stealing tokens or acting as the user." },
+        { "unique-id": "site", "node-type": "service", "name": "Site", "description": "The site where the user is authenticated, whose pages injected script can run in and whose responses can carry a Content Security Policy header." }
+      ],
+      "relationships": [
+        { "unique-id": "attacker-site", "description": "Cross-Site Scripting injects attacker-controlled script into a page on the site; escaping output and validating input defeat Cross-Site Scripting.",
+          "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["site"] } } },
+        { "unique-id": "attacker-browser", "description": "Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where the user is authenticated.",
+          "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["browser"] } } },
+        { "unique-id": "browser-site", "description": "The browser loads the site's pages and sends the site requests with the user's cookies; anti-CSRF tokens and SameSite cookies defend against forged requests, and a Content Security Policy response header sharply limits what injected code can do even if XSS slips through. No single defence is sufficient alone: defence in depth is the point.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "site" } } } }
+      ],
+      "flows": [
+        { "unique-id": "attacks-and-policy", "name": "Two attacks and a policy",
+          "description": "XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP allowlist limits what injected code can reach.",
+          "transitions": [
+            { "relationship-unique-id": "attacker-site", "sequence-number": 1, "description": "Cross-Site Scripting injects attacker-controlled script into a page on the site." },
+            { "relationship-unique-id": "browser-site", "sequence-number": 2, "description": "The page carries the injected script to the browser, where the script runs with the victim's session, stealing tokens or acting as the user.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "attacker-browser", "sequence-number": 3, "description": "Cross-Site Request Forgery tricks the logged-in user's browser." },
+            { "relationship-unique-id": "browser-site", "sequence-number": 4, "description": "The browser fires an unwanted state-changing request at the site, where the user is authenticated, riding the user's cookies." },
+            { "relationship-unique-id": "browser-site", "sequence-number": 5, "description": "The site's response carries a Content Security Policy header, which lists which script, style and connection sources a page may load.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    pac: {
+      "nodes": [
+        { "unique-id": "pac-file", "node-type": "data-asset", "name": "PAC file", "description": "A Proxy Auto-Configuration file: a small JavaScript file exporting one function, FindProxyForURL(url, host), whose rules use built-in helpers like shExpMatch(), dnsDomainIs() and isInNet() to match on hostname, domain or IP range." },
+        { "unique-id": "browser", "node-type": "system", "name": "Browser / OS", "description": "The browser or OS, which calls FindProxyForURL for every request to decide how to reach the requested URL; modern browsers strip the path and query from HTTPS URLs before passing them to the PAC script, and tightly sandbox what the script can do." },
+        { "unique-id": "internal-host", "node-type": "system", "name": "Internal host", "description": "An internal host, which the PAC rules return DIRECT for, so internal traffic goes direct." },
+        { "unique-id": "gateway", "node-type": "service", "name": "Web gateway", "description": "A forward proxy or Secure Web Gateway, which inspects web traffic and applies policy." },
+        { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "An attacker who abuses WPAD discovery: a poisoned response can route all of a victim's traffic through the attacker's proxy." }
+      ],
+      "relationships": [
+        { "unique-id": "browser-pac", "description": "The browser locates the PAC file from a manually configured URL or via WPAD (Web Proxy Auto-Discovery), which finds wpad.dat through DHCP option 252 or DNS, and calls the file's FindProxyForURL for every request; the function returns a string such as 'PROXY swg.example.com:8080; DIRECT' or 'DIRECT'.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "pac-file" } } } },
+        { "unique-id": "browser-internal", "description": "Internal traffic goes direct from the browser to the internal host.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "internal-host" } } } },
+        { "unique-id": "browser-gateway", "description": "Everything that is not internal is steered through the forward proxy or Secure Web Gateway for inspection and policy; in a zero-trust deployment a PAC file is the agentless way to funnel web traffic through the gateway, with no per-application setup.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "gateway" } } } },
+        { "unique-id": "attacker-browser", "description": "WPAD discovery has been repeatedly abused: a poisoned response can route all of a victim's traffic through an attacker's proxy.",
+          "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["browser"] } } }
+      ],
+      "flows": [
+        { "unique-id": "proxy-decision", "name": "Locate, call and route",
+          "description": "The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.",
+          "transitions": [
+            { "relationship-unique-id": "browser-pac", "sequence-number": 1, "description": "The browser locates the PAC file from a manually configured URL, or via WPAD, which finds the file through DHCP or DNS." },
+            { "relationship-unique-id": "browser-pac", "sequence-number": 2, "description": "For every request, the browser or OS calls the file's one function, FindProxyForURL(url, host), to decide how to reach the requested URL." },
+            { "relationship-unique-id": "browser-internal", "sequence-number": 3, "description": "Rules match on hostname, domain or IP range, so internal traffic goes DIRECT." },
+            { "relationship-unique-id": "browser-gateway", "sequence-number": 4, "description": "Everything else is steered through the forward proxy or Secure Web Gateway for inspection and policy." },
+            { "relationship-unique-id": "attacker-browser", "sequence-number": 5, "description": "A poisoned WPAD response can route all of a victim's traffic through an attacker's proxy." }
+          ] }
+      ]
+    },
+    alpaca: {
+      "nodes": [
+        { "unique-id": "machine", "node-type": "system", "name": "your machine", "description": "The local machine, on whose loopback port Alpaca listens; any process on the machine that can reach that port can use Alpaca." },
+        { "unique-id": "cli-tool", "node-type": "system", "name": "CLI tool", "description": "A command-line tool such as curl, git, npm, pip or docker, which mostly does not know how to evaluate a proxy auto-configuration script or answer a 407 Proxy Authentication Required challenge, and understands one thing: an http_proxy environment variable naming a single host and port." },
+        { "unique-id": "alpaca", "node-type": "service", "name": "Alpaca", "description": "A small Apache-2.0 Go binary that runs a plain HTTP proxy on loopback, localhost:3128 by default, with no authentication of its own; Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component." },
+        { "unique-id": "any-process", "node-type": "system", "name": "Any process", "description": "Any process that can reach Alpaca's loopback port, which borrows your authenticated egress." },
+        { "unique-id": "pac-file", "node-type": "data-asset", "name": "PAC file", "description": "The proxy auto-configuration file, taken from system settings on macOS and Linux/GNOME or from the -C flag, which Alpaca treats as the trust root." },
+        { "unique-id": "upstream", "node-type": "service", "name": "Upstream", "description": "The upstream proxy the PAC file names, which can answer 407 Proxy Authentication Required." }
+      ],
+      "relationships": [
+        { "unique-id": "machine-processes", "description": "The CLI tool, Alpaca and any other process run on your machine.",
+          "relationship-type": { "deployed-in": { "container": "machine", "nodes": ["cli-tool", "alpaca", "any-process"] } } },
+        { "unique-id": "tool-alpaca", "description": "The CLI tool points at Alpaca through the http_proxy environment variable, which names Alpaca's host and port on loopback.",
+          "protocol": "HTTP",
+          "relationship-type": { "connects": { "source": { "node": "cli-tool" }, "destination": { "node": "alpaca" } } } },
+        { "unique-id": "pac-alpaca", "description": "For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use.",
+          "relationship-type": { "connects": { "source": { "node": "pac-file" }, "destination": { "node": "alpaca" } } } },
+        { "unique-id": "alpaca-upstream", "description": "For HTTPS Alpaca opens a CONNECT tunnel through the upstream proxy, so Alpaca sees only the host and port; when the upstream answers 407, Alpaca parses the Proxy-Authenticate header and runs the handshake itself. Credential forwarding is permissive by default, so a PAC fetched over plain HTTP, or discovered through WPAD on a shared segment, is enough for a network-position attacker to collect an NTLMv2 hash or a Kerberos service ticket; ALPACA_PROXY_AUTH_ALLOWLIST pins credentials to named DNS suffixes.",
+          "relationship-type": { "connects": { "source": { "node": "alpaca" }, "destination": { "node": "upstream" } } } },
+        { "unique-id": "process-alpaca", "description": "Because the listener has no authentication of its own, any process that can reach the loopback port borrows your authenticated egress.",
+          "relationship-type": { "connects": { "source": { "node": "any-process" }, "destination": { "node": "alpaca" } } } }
+      ],
+      "flows": [
+        { "unique-id": "authenticated-egress", "name": "Authenticated egress",
+          "description": "The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request and answers the 407 with a credential the tool never had, and since the listener has no authentication of its own, any local process can use Alpaca too.",
+          "transitions": [
+            { "relationship-unique-id": "tool-alpaca", "sequence-number": 1, "description": "The CLI tool sends its request to the host and port its http_proxy variable names: Alpaca, on loopback." },
+            { "relationship-unique-id": "pac-alpaca", "sequence-number": 2, "description": "Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use." },
+            { "relationship-unique-id": "alpaca-upstream", "sequence-number": 3, "description": "For HTTPS, Alpaca opens a CONNECT tunnel, so Alpaca sees only the host and port." },
+            { "relationship-unique-id": "alpaca-upstream", "sequence-number": 4, "description": "The upstream answers 407 Proxy Authentication Required.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "alpaca-upstream", "sequence-number": 5, "description": "Alpaca parses the Proxy-Authenticate header and runs the handshake itself; where several credentials are configured, Alpaca tries the schemes the proxy advertises in Chrome's preference order: Negotiate, then NTLM, then Basic." },
+            { "relationship-unique-id": "process-alpaca", "sequence-number": 6, "description": "Any process that can reach the loopback port borrows your authenticated egress, because the listener has no authentication of its own." }
           ] }
       ]
     },
