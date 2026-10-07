@@ -133,7 +133,8 @@ entry, so nothing is stored twice:
 A model has one flow when the tour narrates traffic: if the tour lights any arrow, the
 model has a flow (JWT's anatomy tour lights parts, not connectors). The flow mirrors the tour:
 
-- Transitions appear in the order the tour lights their connectors.
+- Transitions appear in the order the tour lights their connectors, even where the tour is
+  conceptual rather than chronological.
 - Each transition has a lit connector of its own; a connector lit at several steps can
   serve a transition at any of them.
 - The tour may light a connector that is not a transition, to show structure.
@@ -192,7 +193,8 @@ allow and deny. Colour says nothing about node or relationship type.
 - Every `box`, `box-accent`, `box-soft`, `zone` and `zone-accent` element sits inside a
   node's group, and every `flow*` element carries a relationship's id. A purely
   illustrative mark, such as a call-out box, a footer strip, an elided row, a self-loop or
-  the struck-through X, opts out with `data-note`, set to one of the six values below, on itself or its group.
+  the X over a broken or stalled primitive, opts out with `data-note`, set to one of the six
+  values below, on itself or its group.
 - `data-note` takes one of six values, and `verify.mjs` rejects any other: `call-out`, `footer`, `elided`, `self-loop`, `struck-through`, `becomes` (the same thing at two moments, or a thing and what it turns into).
 - Free-text annotations, footnotes, dividers and badges are not model elements and need no
   tag.

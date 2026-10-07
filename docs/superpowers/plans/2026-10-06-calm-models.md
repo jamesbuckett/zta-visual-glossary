@@ -2171,7 +2171,8 @@ visible) and `<id>-calm-light.png` (the open disclosure). For each term check:
 
 ### Second pass
 
-Re-read each model against its explainer: no description claims more than the explainer
+Re-read each model against its explainer: qualifiers such as "usually", "can" and "most"
+survive, as they do in takeaways; no description claims more than the explainer
 says or leans on "it"; each node type is the honest one; each `data-note` is on something
 that is not a component or a relationship; each transition has a lit arrow of its own;
 each tour step still lights what its text describes.

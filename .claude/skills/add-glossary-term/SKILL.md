@@ -162,7 +162,8 @@ it makes sense on its own, as for nodes.
 
 **Flow.** Write one flow when the tour narrates traffic: if it lights any arrow, the
 model has a flow. List the transitions in the order the tour lights their connectors,
-numbered 1 to N. A reply, or any traffic going back over the same link, is a transition
+numbered 1 to N. The flow follows the tour's order even where the tour is conceptual rather than
+chronological: a model mirrors how the term is explained, not a packet trace. A reply, or any traffic going back over the same link, is a transition
 with `"direction": "destination-to-source"`. Each transition needs a lit connector of its
 own, drawn in its direction; a connector lit at several steps can serve a transition at
 any of them. A two-way arrow stands for traffic each way, so it must have one transition
@@ -188,7 +189,7 @@ the switch" lights three links and adds nothing to the flow.
   - `footer`: a strip of text under the drawing, usually the limitation
   - `elided`: a row or box standing for things the explainer does not name
   - `self-loop`: a line from a component back to itself
-  - `struck-through`: the X struck over a broken primitive
+  - `struck-through`: a broken or stalled primitive, and the X that marks it
   - `becomes`: an arrow joining the same thing at two moments, or a thing and what it
     turns into
 - Free text, dividers and badges need no tag.
