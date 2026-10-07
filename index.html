@@ -9123,10 +9123,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "nodes": [
         { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "The attacker behind both attacks: Cross-Site Scripting injects attacker-controlled script into a page, and Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request." },
         { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The logged-in user's browser, in which injected script runs with the victim's session, stealing tokens or acting as the user." },
-        { "unique-id": "site", "node-type": "service", "name": "Site", "description": "The site where the user is authenticated, whose pages injected script can run in and whose responses can carry a Content Security Policy header." }
+        { "unique-id": "site", "node-type": "service", "name": "Site", "description": "The site where the user is authenticated, whose pages injected script can run in and whose responses can carry a Content Security Policy header; escaping output and validating input defeat Cross-Site Scripting, yet no single defence, whether output escaping, anti-CSRF tokens, SameSite cookies or CSP, is sufficient alone." }
       ],
       "relationships": [
-        { "unique-id": "attacker-site", "description": "Cross-Site Scripting injects attacker-controlled script into a page on the site; escaping output and validating input defeat Cross-Site Scripting.",
+        { "unique-id": "attacker-site", "description": "Cross-Site Scripting injects attacker-controlled script into a page on the site.",
           "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["site"] } } },
         { "unique-id": "attacker-browser", "description": "Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where the user is authenticated.",
           "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["browser"] } } },
