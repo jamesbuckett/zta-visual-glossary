@@ -4704,38 +4704,36 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     idp: () => `
       <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A central identity provider authenticates users and issues tokens that many apps trust.">
         <g data-s="1 4" data-calm="user">
-          <rect class="box" x="24" y="48" width="160" height="72" rx="20"/>
-          ${icon('user', 40, 62)}
-          <text class="t-b" x="72" y="80">User</text>
-          <text class="t-sm t-mut" x="72" y="98">logs in once</text>
+          <rect class="box" x="24" y="96" width="160" height="72" rx="20"/>
+          ${icon('user', 40, 110)}
+          <text class="t-b" x="72" y="128">User</text>
+          <text class="t-sm t-mut" x="72" y="146">logs in once</text>
         </g>
-        <line class="flow" data-s="1 4" data-calm="user-idp" x1="186" y1="72" x2="274" y2="60" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 4" data-calm="user-idp" x1="186" y1="132" x2="258" y2="132" marker-end="url(#ah-mut)"/>
         <g data-s="1 2 4" data-calm="idp">
-          <rect class="box" x="276" y="24" width="184" height="72" rx="8"/>
-          ${icon('shield-check', 292, 38)}
-          <text class="t-b" x="324" y="56">IdP</text>
-          <text class="t-sm t-mut" x="324" y="74">central authority</text>
+          <rect class="box" x="260" y="56" width="200" height="152" rx="8"/>
+          ${icon('shield-check', 276, 70)}
+          <text class="t-b" x="308" y="88">IdP</text>
+          <text class="t-sm t-mut" x="308" y="106">central authority</text>
         </g>
-        <line class="flow" data-s="2" data-calm="idp-token" x1="368" y1="98" x2="368" y2="126" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3 4" data-calm="token">
-          ${doc(276, 128, 184, 64)}
-          ${icon('file-badge', 292, 140)}
-          <text class="t-sm t-b" x="324" y="156">Assertion or token</text>
-          <text class="t-sm t-mut" x="324" y="172">SAML, OAuth, OIDC</text>
+        <g data-s="2" data-note="call-out">
+          ${[['SAML', 276], ['OAuth', 336], ['OIDC', 396]].map(([t, x]) => `
+            <rect class="box" x="${x}" y="152" width="56" height="32" rx="4"/>
+            <text class="t-sm" x="${x + 28}" y="172" text-anchor="middle">${t}</text>`).join('')}
         </g>
-        ${[['app-1', 24, 148, 56], ['app-2', 108, 162, 136], ['app-3', 192, 176, 218]].map(([id, y, y1, y2]) => `
+        ${[['app-1', 24, 96, 52], ['app-2', 108, 132, 136], ['app-3', 192, 168, 220]].map(([id, y, y1, y2]) => `
           <g data-s="3 4" data-calm="${id}">
             <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
             ${icon('app-window', 552, y + 16)}
             <text class="t-b" x="584" y="${y + 25}">App</text>
             <text class="t-sm t-mut" x="584" y="${y + 43}">no own passwords</text>
           </g>
-          <line class="flow" data-s="3 4" data-calm="token-${id}" x1="462" y1="${y1}" x2="534" y2="${y2}" marker-end="url(#ah-mut)"/>`).join('')}
+          <line class="flow" data-s="3 4" data-calm="idp-${id}" x1="462" y1="${y1}" x2="534" y2="${y2}" marker-end="url(#ah-mut)"/>`).join('')}
 
-        ${badge(1, 206, 70, '1')}
-        ${badge(2, 390, 112, '2')}
-        ${badge(3, 498, 149, '3')}
-        ${badge(4, 168, 62, '4')}
+        ${badge(1, 222, 132, '1')}
+        ${badge(2, 444, 72, '2')}
+        ${badge(3, 498, 134, '3')}
+        ${badge(4, 168, 110, '4')}
       </svg>`,
 
     sase: () => `
@@ -4945,16 +4943,16 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     pkce: () => `
       <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The client commits to a hashed secret up front and proves it on redemption, so an intercepted code cannot be exchanged.">
         <g data-s="1 2 4" data-calm="client">
-          <rect class="box" x="24" y="16" width="168" height="180" rx="8"/>
+          <rect class="box" x="24" y="16" width="216" height="180" rx="8"/>
           ${icon('app-window', 40, 30)}
           <text class="t-b" x="72" y="48">Client</text>
         </g>
-        <line class="flow" data-s="1" data-calm="client-code-verifier" x1="108" y1="198" x2="108" y2="230" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="client-code-verifier" x1="132" y1="198" x2="132" y2="230" marker-end="url(#ah-mut)"/>
         <g data-s="1 4" data-calm="code-verifier">
-          ${doc(24, 232, 168, 60)}
-          ${icon('key-round', 36, 246)}
-          <text class="t-sm t-b" x="68" y="256">code_verifier</text>
-          <text class="t-sm t-mut" x="68" y="272">random secret</text>
+          ${doc(48, 232, 168, 60)}
+          ${icon('key-round', 60, 246)}
+          <text class="t-sm t-b" x="92" y="256">code_verifier</text>
+          <text class="t-sm t-mut" x="92" y="272">random secret</text>
         </g>
         <g data-s="2 3 4 5" data-calm="server">
           <rect class="box" x="480" y="16" width="216" height="180" rx="8"/>
@@ -4966,30 +4964,30 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-b" x="508" y="130">re-hash and</text>
           <text class="t-sm t-mut" x="508" y="146">compare</text>
         </g>
-        <line class="flow" data-s="2" data-calm="client-server" x1="194" y1="64" x2="478" y2="64" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="336" y="57" text-anchor="middle">code_challenge: SHA-256 hash</text>
-        <line class="flow" data-s="3" data-calm="client-server" x1="478" y1="100" x2="194" y2="100" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="336" y="93" text-anchor="middle">authorisation code</text>
-        <line class="flow" data-s="4" data-calm="client-server" x1="194" y1="136" x2="478" y2="136" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="336" y="129" text-anchor="middle">code + code_verifier</text>
-        <line class="flow" data-s="4" data-calm="client-server" x1="478" y1="172" x2="194" y2="172" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="336" y="165" text-anchor="middle">tokens</text>
+        <line class="flow" data-s="2" data-calm="client-server" x1="242" y1="64" x2="478" y2="64" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="366" y="57" text-anchor="middle">code_challenge: SHA-256 hash</text>
+        <line class="flow" data-s="3" data-calm="client-server" x1="478" y1="100" x2="242" y2="100" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="366" y="93" text-anchor="middle">authorisation code</text>
+        <line class="flow" data-s="4" data-calm="client-server" x1="242" y1="136" x2="478" y2="136" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="366" y="129" text-anchor="middle">code + code_verifier</text>
+        <line class="flow" data-s="4" data-calm="client-server" x1="478" y1="172" x2="242" y2="172" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="366" y="165" text-anchor="middle">tokens</text>
 
-        <line class="flow-bad" data-s="5" data-note="call-out" x1="248" y1="102" x2="248" y2="234" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="5" data-note="call-out" x1="284" y1="102" x2="284" y2="234" marker-end="url(#ah-bad)"/>
         <g data-s="5" data-note="call-out">
-          <rect class="box" x="228" y="236" width="200" height="52" rx="12"/>
-          ${icon('skull', 244, 250)}
-          <text class="t-b" x="276" y="258">Interceptor</text>
-          <text class="t-sm t-mut" x="276" y="276">code, no verifier</text>
+          <rect class="box" x="264" y="236" width="200" height="52" rx="12"/>
+          ${icon('skull', 280, 250)}
+          <text class="t-b" x="312" y="258">Interceptor</text>
+          <text class="t-sm t-mut" x="312" y="276">code, no verifier</text>
         </g>
-        <path class="flow-bad" data-s="5" data-note="call-out" d="M430 262 H588 V198" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="5" x="446" y="254">exchange fails</text>
+        <path class="flow-bad" data-s="5" data-note="call-out" d="M466 262 H588 V198" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="5" x="480" y="254">exchange fails</text>
 
-        ${badge(1, 130, 214, '1')}
-        ${badge(2, 214, 64, '2')}
-        ${badge(3, 444, 100, '3')}
-        ${badge(4, 214, 136, '4')}
-        ${badge(5, 248, 214, '5')}
+        ${badge(1, 154, 214, '1')}
+        ${badge(2, 256, 64, '2')}
+        ${badge(3, 452, 100, '3')}
+        ${badge(4, 256, 136, '4')}
+        ${badge(5, 284, 214, '5')}
       </svg>`,
 
     oidc: () => `
@@ -9742,7 +9740,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "radius-server", "node-type": "service", "name": "RADIUS", "description": "A RADIUS server, the system that holds identities, which centralises network access control by verifying your credentials, deciding what you are allowed to do and logging the session: authentication, authorisation and accounting, the AAA model, a long-standing backbone of enterprise and ISP network access." }
       ],
       "relationships": [
-        { "unique-id": "you-access-device", "description": "You connect to the access device: Wi-Fi, a VPN or a switch port.",
+        { "unique-id": "you-access-device", "description": "You connect to the access device, such as Wi-Fi, a VPN or a switch port, with your credentials.",
           "relationship-type": { "interacts": { "actor": "you", "nodes": ["access-device"] } } },
         { "unique-id": "access-device-radius", "description": "The access device asks the RADIUS server to verify your credentials, decide what you are allowed to do and log the session, and the RADIUS server responds; RADIUS authenticates responses with a shared secret and MD5, a construction the 2024 Blast-RADIUS attack showed can be forged over UDP, so deployments should require the Message-Authenticator attribute or run RADIUS inside TLS.",
           "relationship-type": { "connects": { "source": { "node": "access-device" }, "destination": { "node": "radius-server" } } } }
@@ -9806,33 +9804,29 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     idp: {
       "nodes": [
         { "unique-id": "user", "node-type": "actor", "name": "User", "description": "A user, whose identity the Identity Provider verifies." },
-        { "unique-id": "idp", "node-type": "service", "name": "IdP", "description": "An Identity Provider, the central authority that verifies identities and issues the assertions or tokens that applications trust, the hub of single sign-on and the anchor of identity in zero-trust designs, with examples ranging from open-source Keycloak to managed cloud directory services; centralising identity also concentrates risk, as a compromised or unavailable IdP affects every application that trusts the IdP." },
-        { "unique-id": "token", "node-type": "data-asset", "name": "Assertion or token", "description": "An assertion or token the Identity Provider issues, via SAML, OAuth or OIDC, which applications trust." },
-        { "unique-id": "app-1", "node-type": "service", "name": "App", "description": "An application that trusts what the Identity Provider issues, so the application does not manage passwords itself." },
-        { "unique-id": "app-2", "node-type": "service", "name": "App", "description": "An application that trusts what the Identity Provider issues, so the application does not manage passwords itself." },
-        { "unique-id": "app-3", "node-type": "service", "name": "App", "description": "An application that trusts what the Identity Provider issues, so the application does not manage passwords itself." }
+        { "unique-id": "idp", "node-type": "service", "name": "IdP", "description": "An Identity Provider, the central authority that verifies identities and issues the assertions or tokens, via SAML, OAuth or OIDC, that applications trust, the hub of single sign-on and the anchor of identity in zero-trust designs, with examples ranging from open-source Keycloak to managed cloud directory services; centralising identity also concentrates risk, as a compromised or unavailable IdP affects every application that trusts the IdP." },
+        { "unique-id": "app-1", "node-type": "service", "name": "App", "description": "An application that trusts the assertions or tokens the Identity Provider issues, so the application does not manage passwords itself." },
+        { "unique-id": "app-2", "node-type": "service", "name": "App", "description": "An application that trusts the assertions or tokens the Identity Provider issues, so the application does not manage passwords itself." },
+        { "unique-id": "app-3", "node-type": "service", "name": "App", "description": "An application that trusts the assertions or tokens the Identity Provider issues, so the application does not manage passwords itself." }
       ],
       "relationships": [
         { "unique-id": "user-idp", "description": "The user logs in to the Identity Provider, which verifies the user's identity.",
           "relationship-type": { "interacts": { "actor": "user", "nodes": ["idp"] } } },
-        { "unique-id": "idp-token", "description": "The Identity Provider issues the assertion or token, via SAML, OAuth or OIDC.",
-          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "token" } } } },
-        { "unique-id": "token-app-1", "description": "The assertion or token passes to the application, which trusts the assertion or token instead of managing passwords itself.",
-          "relationship-type": { "connects": { "source": { "node": "token" }, "destination": { "node": "app-1" } } } },
-        { "unique-id": "token-app-2", "description": "The assertion or token passes to the application, which trusts the assertion or token instead of managing passwords itself.",
-          "relationship-type": { "connects": { "source": { "node": "token" }, "destination": { "node": "app-2" } } } },
-        { "unique-id": "token-app-3", "description": "The assertion or token passes to the application, which trusts the assertion or token instead of managing passwords itself.",
-          "relationship-type": { "connects": { "source": { "node": "token" }, "destination": { "node": "app-3" } } } }
+        { "unique-id": "idp-app-1", "description": "The Identity Provider issues an assertion or token, via SAML, OAuth or OIDC, that the application trusts instead of managing passwords itself.",
+          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "app-1" } } } },
+        { "unique-id": "idp-app-2", "description": "The Identity Provider issues an assertion or token, via SAML, OAuth or OIDC, that the application trusts instead of managing passwords itself.",
+          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "app-2" } } } },
+        { "unique-id": "idp-app-3", "description": "The Identity Provider issues an assertion or token, via SAML, OAuth or OIDC, that the application trusts instead of managing passwords itself.",
+          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "app-3" } } } }
       ],
       "flows": [
         { "unique-id": "central-identity", "name": "Central identity",
           "description": "A central identity provider authenticates users and issues tokens that many apps trust.",
           "transitions": [
             { "relationship-unique-id": "user-idp", "sequence-number": 1, "description": "The Identity Provider, the central authority that verifies identities, verifies the user." },
-            { "relationship-unique-id": "idp-token", "sequence-number": 2, "description": "The Identity Provider issues an assertion or token, via SAML, OAuth or OIDC." },
-            { "relationship-unique-id": "token-app-1", "sequence-number": 3, "description": "An application trusts what the Identity Provider issues, so the application does not manage passwords itself." },
-            { "relationship-unique-id": "token-app-2", "sequence-number": 4, "description": "A second application trusts what the Identity Provider issues too." },
-            { "relationship-unique-id": "token-app-3", "sequence-number": 5, "description": "A third application trusts what the Identity Provider issues too, which makes the Identity Provider the hub of single sign-on." }
+            { "relationship-unique-id": "idp-app-1", "sequence-number": 2, "description": "The Identity Provider issues an assertion or token, via SAML, OAuth or OIDC, that the application trusts, so the application does not manage passwords itself." },
+            { "relationship-unique-id": "idp-app-2", "sequence-number": 3, "description": "The Identity Provider issues a second application an assertion or token that the application trusts too." },
+            { "relationship-unique-id": "idp-app-3", "sequence-number": 4, "description": "A third application trusts what the Identity Provider issues too, which makes the Identity Provider the hub of single sign-on." }
           ] }
       ]
     },
