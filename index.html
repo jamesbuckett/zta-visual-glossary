@@ -4314,7 +4314,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     mqtt: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Publishers send to topics on a broker, which fans messages out to subscribers.">
         <g data-s="1 2 3" data-calm="broker">
-          <rect class="box-soft" x="276" y="48" width="168" height="140" rx="8"/>
+          <rect class="box-soft" x="268" y="48" width="184" height="140" rx="8"/>
           ${icon('server', 292, 62)}
           <text class="t-b" x="324" y="80">Broker</text>
           <text class="t-sm t-mut" x="324" y="98">central</text>
@@ -4331,7 +4331,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             <text class="t-b" x="72" y="${y + 25}">Sensor</text>
             <text class="t-sm t-mut" x="72" y="${y + 43}">publisher</text>
           </g>`).join('')}
-        <line class="flow" data-s="1" data-calm="sensor-1-topic" x1="186" y1="68" x2="290" y2="124" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="sensor-1-topic" x1="186" y1="68" x2="290" y2="132" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="1" data-calm="sensor-2-topic" x1="186" y1="164" x2="290" y2="160" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="229" y="128" text-anchor="middle">publish</text>
 
@@ -5539,13 +5539,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     websec: () => `
-      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP allowlist limits what injected code can reach.">
-        <g data-s="1 2 3 4" data-calm="attacker">
+      <svg class="dg" viewBox="0 0 720 332" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="XSS runs injected script in the victim's session; CSRF rides their cookies for forged requests; a CSP allowlist limits what injected code can reach.">
+        <g data-s="1 3" data-calm="attacker">
           <rect class="box" x="272" y="12" width="176" height="44" rx="20"/>
           ${icon('skull', 288, 22)}
           <text class="t-b" x="320" y="39">Attacker</text>
         </g>
-        <g data-s="1 2 3 4 5" data-calm="browser">
+        <g data-s="1 3 5" data-calm="browser">
           <rect class="box" x="24" y="96" width="176" height="120" rx="20"/>
           ${icon('app-window', 40, 110)}
           <text class="t-b" x="72" y="128">Browser</text>
@@ -5553,7 +5553,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="40" y="180">script runs with</text>
           <text class="t-sm t-mut" x="40" y="196">the victim's session</text>
         </g>
-        <g data-s="1 2 3 4 5" data-calm="site">
+        <g data-s="1 3 5" data-calm="site">
           <rect class="box" x="520" y="96" width="176" height="120" rx="8"/>
           ${icon('server', 536, 110)}
           <text class="t-b" x="568" y="128">Site</text>
@@ -5561,26 +5561,27 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="536" y="172">authenticated</text>
         </g>
 
-        <path class="flow-bad" data-s="1 2" data-calm="attacker-site" d="M450 34 H608 V94" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="1 2" x="529" y="26" text-anchor="middle">XSS: injects script</text>
-        <path class="flow-bad" data-s="3 4" data-calm="attacker-browser" d="M270 34 H112 V94" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="3 4" x="180" y="26" text-anchor="middle">CSRF: tricks the browser</text>
+        <path class="flow-bad" data-s="1" data-calm="attacker-site" d="M450 34 H608 V94" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="1" x="529" y="26" text-anchor="middle">XSS: injects script</text>
+        <path class="flow-bad" data-s="3" data-calm="attacker-browser" d="M270 34 H112 V94" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="3" x="180" y="26" text-anchor="middle">CSRF: tricks the browser</text>
 
-        <line class="flow-bad" data-s="1 2" data-calm="browser-site" x1="518" y1="124" x2="202" y2="124" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="1 2" x="360" y="117" text-anchor="middle">page + injected script</text>
-        <line class="flow-bad" data-s="3 4" data-calm="browser-site" x1="202" y1="164" x2="518" y2="164" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="3 4" x="360" y="157" text-anchor="middle">forged request + cookies</text>
+        <line class="flow-bad" data-s="1" data-calm="browser-site" x1="518" y1="124" x2="202" y2="124" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="1" x="360" y="117" text-anchor="middle">page + injected script</text>
+        <line class="flow-bad" data-s="3" data-calm="browser-site" x1="202" y1="164" x2="518" y2="164" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="3" x="360" y="157" text-anchor="middle">forged request + cookies</text>
         <line class="flow" data-s="5" data-calm="browser-site" x1="518" y1="204" x2="202" y2="204" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="5" x="360" y="197" text-anchor="middle">CSP header: allowed sources</text>
 
-        ${[['shield-check', 'Escape output', 'and validate input', 24, '2'], ['key-round', 'Anti-CSRF tokens', 'and SameSite cookies', 256, '4'], ['list-checks', 'CSP', 'limits injected code', 488, '5']].map(([ico, name, sub, x, s]) => `
+        ${[['shield-check', 'Escape output', 'and validate input', 'to defeat XSS', 24, '2'], ['key-round', 'Anti-CSRF tokens', 'and SameSite cookies', 'defend against CSRF', 256, '4'], ['list-checks', 'CSP', 'limits injected code', 'if XSS slips through', 488, '5']].map(([ico, name, sub, attack, x, s]) => `
           <g data-s="${s}" data-note="call-out">
-            <rect class="box" x="${x}" y="236" width="208" height="56" rx="8"/>
+            <rect class="box" x="${x}" y="236" width="208" height="68" rx="8"/>
             ${icon(ico, x + 16, 252)}
             <text class="t-b" x="${x + 48}" y="260">${name}</text>
-            <text class="t-sm t-mut" x="${x + 48}" y="278">${sub}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="277">${sub}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="293">${attack}</text>
           </g>`).join('')}
-        <text class="t-sm t-mut" x="360" y="312" text-anchor="middle">Together: the core of browser-side application security.</text>
+        <text class="t-sm t-mut" x="360" y="324" text-anchor="middle">Together: the core of browser-side application security.</text>
 
         ${badge(1, 608, 64, '1')}
         ${badge(2, 216, 250, '2')}
@@ -6242,7 +6243,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     pac: () => `
       <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.">
-        <g data-s="1 2 3 4 5" data-calm="pac-file">
+        <g data-s="1 2 3" data-calm="pac-file">
           ${doc(24, 24, 168, 160)}
           ${icon('file-code', 40, 38)}
           <text class="t-b" x="72" y="56">PAC file</text>
@@ -6258,9 +6259,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-b" x="352" y="100">Browser / OS</text>
           <text class="t-sm t-mut" x="352" y="118">every request</text>
         </g>
-        <line class="flow" data-s="1" data-calm="browser-pac" x1="302" y1="80" x2="194" y2="80" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="pac-browser" x1="302" y1="80" x2="194" y2="80" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="240" y="72" text-anchor="middle">URL or WPAD</text>
-        <line class="flow" data-s="2" data-calm="browser-pac" x1="302" y1="124" x2="194" y2="124" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="pac-browser" x1="302" y1="124" x2="194" y2="124" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="248" y="116" text-anchor="middle">calls</text>
 
         <g data-s="3" data-calm="internal-host">
@@ -6466,7 +6467,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="40" y="192" width="368" height="24" rx="4"/>
           <text class="t-sm t-mut" x="52" y="208">4 to 10 · …</text>
         </g>
-        ${[['developers', 'developers-top10', 'code', 'Developers', ['code against it'], 16, 20], ['wafs', 'waf-top10', 'shield', 'WAFs', ['ship rule sets', 'named after it'], 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', ['check for it'], 176, 20]].map(([id, rel, ico, name, subs, y, rx]) => {
+        ${[['developers', 'developers-top10', 'code', 'Developers', ['code against it'], 16, 20], ['wafs', 'top10-wafs', 'shield', 'WAFs', ['ship rule sets', 'named after it'], 96, 8], ['auditors', 'auditors-top10', 'list-checks', 'Auditors', ['check for it'], 176, 20]].map(([id, rel, ico, name, subs, y, rx]) => {
           const t = y + 37 - 8 * subs.length;   // title baseline: the title and sub-labels sit centred in the box
           return `
           <g data-s="4" data-calm="${id}">
@@ -7808,7 +7809,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     alpaca: () => `
-      <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
+      <svg class="dg" viewBox="0 0 720 336" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
         <g data-calm="machine">
           <rect class="zone" x="16" y="12" width="416" height="232" rx="10"/>
           <text class="t-sm t-mut" x="28" y="30">your machine</text>
@@ -7839,12 +7840,12 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow-bad" data-s="5" data-calm="process-alpaca" x1="218" y1="184" x2="246" y2="132" marker-end="url(#ah-bad)"/>
 
         <g data-s="2" data-calm="pac-file">
-          ${doc(536, 168, 160, 60)}
-          ${icon('file-code', 552, 186)}
-          <text class="t-b" x="584" y="194">PAC file</text>
-          <text class="t-sm t-mut" x="584" y="212">picks the route</text>
+          ${doc(248, 264, 160, 60)}
+          ${icon('file-code', 264, 282)}
+          <text class="t-b" x="296" y="290">PAC file</text>
+          <text class="t-sm t-mut" x="296" y="308">picks the route</text>
         </g>
-        <path class="flow" data-s="2" data-calm="pac-alpaca" d="M534 198 H328 V138" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="pac-alpaca" x1="328" y1="262" x2="328" y2="138" marker-end="url(#ah-mut)"/>
 
         <g data-s="3 4" data-calm="upstream">
           <rect class="box" x="536" y="40" width="160" height="96" rx="8"/>
@@ -7861,7 +7862,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <text class="t-sm" data-s="4" x="480" y="113" text-anchor="middle">credential</text>
 
         ${badge(1, 200, 54, '1')}
-        ${badge(2, 480, 198, '2')}
+        ${badge(2, 328, 200, '2')}
         ${badge(3, 522, 64, '3')}
         ${badge(4, 522, 92, '4')}
         ${badge(5, 200, 182, '5')}
@@ -8559,8 +8560,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-b" x="592" y="38">Support desk</text>
           <text class="t-sm t-mut" x="592" y="55">for debugging</text>
         </g>
-        <line class="flow-bad" data-s="4" data-calm="intruder-har" x1="494" y1="224" x2="542" y2="224" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="4" x="518" y="216" text-anchor="middle">tokens</text>
+        <path class="flow-bad" data-s="4" data-calm="intruder-har" d="M494 180 H620 V198" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="557" y="172" text-anchor="middle">tokens</text>
         <g data-s="4" data-calm="intruder">
           <rect class="box" x="544" y="200" width="152" height="48" rx="20"/>
           ${icon('skull', 560, 212)}
@@ -8783,8 +8784,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "composed-of": { "container": "top10", "nodes": ["risk-1", "risk-3"] } } },
         { "unique-id": "developers-top10", "description": "Developers code against the list.",
           "relationship-type": { "interacts": { "actor": "developers", "nodes": ["top10"] } } },
-        { "unique-id": "waf-top10", "description": "WAFs ship rule sets named after the list.",
-          "relationship-type": { "connects": { "source": { "node": "wafs" }, "destination": { "node": "top10" } } } },
+        { "unique-id": "top10-wafs", "description": "WAFs ship rule sets named after the list.",
+          "relationship-type": { "connects": { "source": { "node": "top10" }, "destination": { "node": "wafs" } } } },
         { "unique-id": "auditors-top10", "description": "Auditors check for the risks on the list.",
           "relationship-type": { "interacts": { "actor": "auditors", "nodes": ["top10"] } } }
       ],
@@ -8793,7 +8794,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "description": "The list is used everywhere as a baseline.",
           "transitions": [
             { "relationship-unique-id": "developers-top10", "sequence-number": 1, "description": "Developers code against the list." },
-            { "relationship-unique-id": "waf-top10", "sequence-number": 2, "description": "WAFs ship rule sets named after the list." },
+            { "relationship-unique-id": "top10-wafs", "sequence-number": 2, "description": "WAFs ship rule sets named after the list.", "direction": "destination-to-source" },
             { "relationship-unique-id": "auditors-top10", "sequence-number": 3, "description": "Auditors check for the risks on the list." }
           ] }
       ]
@@ -8974,21 +8975,21 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     grpc: {
       "nodes": [
         { "unique-id": "proto", "node-type": "data-asset", "name": ".proto file", "description": "The .proto file that defines the contract between services, from which client and server code is generated." },
-        { "unique-id": "client", "node-type": "service", "name": "Client", "description": "A service that calls another service as if invoking a local function." },
+        { "unique-id": "client", "node-type": "service", "name": "Client", "description": "A service that calls another service as if invoking a local function; browsers cannot speak native gRPC, so a web client needs gRPC-Web and a translating proxy." },
         { "unique-id": "client-code", "node-type": "stub", "name": "generated client code", "description": "The client code generated from the .proto contract." },
         { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The service that the client calls as if invoking a local function." },
-        { "unique-id": "server-code", "node-type": "stub", "name": "generated server code", "description": "The server code generated from the same .proto contract." }
+        { "unique-id": "server-code", "node-type": "stub", "name": "generated server code", "description": "The server code generated from the .proto contract." }
       ],
       "relationships": [
         { "unique-id": "proto-client", "description": "Client code is generated from the .proto contract.",
           "relationship-type": { "connects": { "source": { "node": "proto" }, "destination": { "node": "client" } } } },
-        { "unique-id": "proto-server", "description": "Server code is generated from the same .proto contract.",
+        { "unique-id": "proto-server", "description": "Server code is generated from the .proto contract.",
           "relationship-type": { "connects": { "source": { "node": "proto" }, "destination": { "node": "server" } } } },
         { "unique-id": "client-parts", "description": "The generated client code is part of the client.",
           "relationship-type": { "composed-of": { "container": "client", "nodes": ["client-code"] } } },
         { "unique-id": "server-parts", "description": "The generated server code is part of the server.",
           "relationship-type": { "composed-of": { "container": "server", "nodes": ["server-code"] } } },
-        { "unique-id": "client-server", "description": "The client calls the server as if invoking a local function, with data serialised as compact binary Protocol Buffers over HTTP/2, which enables multiplexing and streaming with low latency; browsers cannot speak native gRPC, and the binary messages are harder to inspect by hand than JSON.",
+        { "unique-id": "client-server", "description": "The client calls the server as if invoking a local function, with data serialised as compact binary Protocol Buffers over HTTP/2, which enables multiplexing and streaming with low latency; the binary messages are harder to inspect by hand than JSON.",
           "protocol": "HTTP",
           "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "server" } } } }
       ],
@@ -9049,7 +9050,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "description": "A combined transport-and-TLS handshake completes in one round trip; then independent encrypted streams flow over UDP.",
           "transitions": [
             { "relationship-unique-id": "client-server", "sequence-number": 1, "description": "The client starts the transport and cryptographic handshakes together, setting up the connection and TLS 1.3 encryption at once." },
-            { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "The server answers, and the connection is ready after a single round trip, or zero when resuming.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "The server answers, and the connection is usually ready after a single round trip, or zero when resuming.", "direction": "destination-to-source" },
             { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "Stream 1 carries encrypted data, multiplexed over the one connection." },
             { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "Stream 3 flows independently: a packet lost on stream 2 stalls only stream 2." }
           ] }
@@ -9057,11 +9058,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     cors: {
       "nodes": [
-        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, which attaches an Origin header when script on one site calls another, and only exposes the reply if the server returns a matching Access-Control-Allow-Origin." },
-        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server on the other site, which relaxes the browser's same-origin policy by telling the browser which foreign origins may read the server's responses." }
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, which attaches an Origin header when script on one site calls another, and only exposes the reply if the server returns a matching Access-Control-Allow-Origin; CORS is enforced only by browsers and governs in-browser JavaScript, not server-to-server calls." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server on the other site, which relaxes the browser's same-origin policy by telling the browser which foreign origins may read the server's responses; CORS is no substitute for real authorisation." }
       ],
       "relationships": [
-        { "unique-id": "browser-server", "description": "Script in the browser calls the server on another site; CORS is enforced only by browsers, governs in-browser JavaScript rather than server-to-server calls, and is no substitute for real authorisation.",
+        { "unique-id": "browser-server", "description": "Script in the browser calls the server on another site.",
           "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "server" } } } }
       ],
       "flows": [
@@ -9099,11 +9100,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     webtransport: {
       "nodes": [
-        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, where WebTransport gives browser code a low-latency session over HTTP/3." },
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, where WebTransport gives browser code a low-latency session over HTTP/3; the WebTransport API reached cross-browser support in 2026, though neither the W3C API nor the IETF protocol specification is final." },
         { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server at the other end of the browser code's WebTransport session." }
       ],
       "relationships": [
-        { "unique-id": "browser-server", "description": "Browser code and the server share a low-latency session over HTTP/3, and therefore over QUIC and UDP, falling back to HTTP/2 over TCP where QUIC is blocked; within one connection the session offers reliable bidirectional and unidirectional streams plus unreliable datagrams, and because the streams are independent, one lost packet stalls only its own stream; neither the W3C API nor the IETF protocol specification is final.",
+        { "unique-id": "browser-server", "description": "Browser code and the server share a low-latency session over HTTP/3, and therefore over QUIC and UDP, falling back to HTTP/2 over TCP where QUIC is blocked; within one connection the session offers reliable bidirectional and unidirectional streams plus unreliable datagrams, and because the streams are independent, one lost packet stalls only its own stream.",
           "protocol": "HTTP",
           "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "server" } } } }
       ],
@@ -9120,7 +9121,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     websec: {
       "nodes": [
-        { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "The attacker behind both attacks: Cross-Site Scripting injects attacker-controlled script into a page, and Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted request." },
+        { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "The attacker behind both attacks: Cross-Site Scripting injects attacker-controlled script into a page, and Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request." },
         { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The logged-in user's browser, in which injected script runs with the victim's session, stealing tokens or acting as the user." },
         { "unique-id": "site", "node-type": "service", "name": "Site", "description": "The site where the user is authenticated, whose pages injected script can run in and whose responses can carry a Content Security Policy header." }
       ],
@@ -9129,7 +9130,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["site"] } } },
         { "unique-id": "attacker-browser", "description": "Cross-Site Request Forgery tricks a logged-in user's browser into firing an unwanted state-changing request to a site where the user is authenticated.",
           "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["browser"] } } },
-        { "unique-id": "browser-site", "description": "The browser loads the site's pages and sends the site requests with the user's cookies; anti-CSRF tokens and SameSite cookies defend against forged requests, and a Content Security Policy response header sharply limits what injected code can do even if XSS slips through. No single defence is sufficient alone: defence in depth is the point.",
+        { "unique-id": "browser-site", "description": "The browser loads the site's pages and sends the site requests with the user's cookies; anti-CSRF tokens and SameSite cookies defend against forged requests, and a Content Security Policy response header sharply limits what injected code can do even if XSS slips through.",
           "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "site" } } } }
       ],
       "flows": [
@@ -9149,15 +9150,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "pac-file", "node-type": "data-asset", "name": "PAC file", "description": "A Proxy Auto-Configuration file: a small JavaScript file exporting one function, FindProxyForURL(url, host), whose rules use built-in helpers like shExpMatch(), dnsDomainIs() and isInNet() to match on hostname, domain or IP range." },
         { "unique-id": "browser", "node-type": "system", "name": "Browser / OS", "description": "The browser or OS, which calls FindProxyForURL for every request to decide how to reach the requested URL; modern browsers strip the path and query from HTTPS URLs before passing them to the PAC script, and tightly sandbox what the script can do." },
         { "unique-id": "internal-host", "node-type": "system", "name": "Internal host", "description": "An internal host, which the PAC rules return DIRECT for, so internal traffic goes direct." },
-        { "unique-id": "gateway", "node-type": "service", "name": "Web gateway", "description": "A forward proxy or Secure Web Gateway, which inspects web traffic and applies policy." },
+        { "unique-id": "gateway", "node-type": "service", "name": "Web gateway", "description": "A forward proxy or Secure Web Gateway, which inspects web traffic and applies policy; in a zero-trust deployment a PAC file is the agentless way to funnel web traffic through the gateway, with no per-application setup." },
         { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "An attacker who abuses WPAD discovery: a poisoned response can route all of a victim's traffic through the attacker's proxy." }
       ],
       "relationships": [
-        { "unique-id": "browser-pac", "description": "The browser locates the PAC file from a manually configured URL or via WPAD (Web Proxy Auto-Discovery), which finds wpad.dat through DHCP option 252 or DNS, and calls the file's FindProxyForURL for every request; the function returns a string such as 'PROXY swg.example.com:8080; DIRECT' or 'DIRECT'.",
-          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "pac-file" } } } },
+        { "unique-id": "pac-browser", "description": "The PAC file reaches the browser, which locates the file from a manually configured URL or via WPAD (Web Proxy Auto-Discovery), which finds wpad.dat through DHCP option 252 or DNS, and the browser calls the file's FindProxyForURL for every request, the function returning a string such as 'PROXY swg.example.com:8080; DIRECT' or 'DIRECT'.",
+          "relationship-type": { "connects": { "source": { "node": "pac-file" }, "destination": { "node": "browser" } } } },
         { "unique-id": "browser-internal", "description": "Internal traffic goes direct from the browser to the internal host.",
           "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "internal-host" } } } },
-        { "unique-id": "browser-gateway", "description": "Everything that is not internal is steered through the forward proxy or Secure Web Gateway for inspection and policy; in a zero-trust deployment a PAC file is the agentless way to funnel web traffic through the gateway, with no per-application setup.",
+        { "unique-id": "browser-gateway", "description": "Everything that is not internal is steered through the forward proxy or Secure Web Gateway for inspection and policy.",
           "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "gateway" } } } },
         { "unique-id": "attacker-browser", "description": "WPAD discovery has been repeatedly abused: a poisoned response can route all of a victim's traffic through an attacker's proxy.",
           "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["browser"] } } }
@@ -9166,8 +9167,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "proxy-decision", "name": "Locate, call and route",
           "description": "The browser calls FindProxyForURL for each URL; rules return DIRECT for internal hosts or a proxy for the rest, steering web traffic to a Secure Web Gateway.",
           "transitions": [
-            { "relationship-unique-id": "browser-pac", "sequence-number": 1, "description": "The browser locates the PAC file from a manually configured URL, or via WPAD, which finds the file through DHCP or DNS." },
-            { "relationship-unique-id": "browser-pac", "sequence-number": 2, "description": "For every request, the browser or OS calls the file's one function, FindProxyForURL(url, host), to decide how to reach the requested URL." },
+            { "relationship-unique-id": "pac-browser", "sequence-number": 1, "description": "The browser locates the PAC file from a manually configured URL, or via WPAD, which finds the file through DHCP or DNS.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "pac-browser", "sequence-number": 2, "description": "For every request, the browser or OS calls the file's one function, FindProxyForURL(url, host), to decide how to reach the requested URL.", "direction": "destination-to-source" },
             { "relationship-unique-id": "browser-internal", "sequence-number": 3, "description": "Rules match on hostname, domain or IP range, so internal traffic goes DIRECT." },
             { "relationship-unique-id": "browser-gateway", "sequence-number": 4, "description": "Everything else is steered through the forward proxy or Secure Web Gateway for inspection and policy." },
             { "relationship-unique-id": "attacker-browser", "sequence-number": 5, "description": "A poisoned WPAD response can route all of a victim's traffic through an attacker's proxy." }
@@ -9178,7 +9179,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "nodes": [
         { "unique-id": "machine", "node-type": "system", "name": "your machine", "description": "The local machine, on whose loopback port Alpaca listens; any process on the machine that can reach that port can use Alpaca." },
         { "unique-id": "cli-tool", "node-type": "system", "name": "CLI tool", "description": "A command-line tool such as curl, git, npm, pip or docker, which mostly does not know how to evaluate a proxy auto-configuration script or answer a 407 Proxy Authentication Required challenge, and understands one thing: an http_proxy environment variable naming a single host and port." },
-        { "unique-id": "alpaca", "node-type": "service", "name": "Alpaca", "description": "A small Apache-2.0 Go binary that runs a plain HTTP proxy on loopback, localhost:3128 by default, with no authentication of its own; Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component." },
+        { "unique-id": "alpaca", "node-type": "service", "name": "Alpaca", "description": "A small Apache-2.0 Go binary that runs a plain HTTP proxy on loopback, localhost:3128 by default, with no authentication of its own; by default Alpaca forwards credentials permissively, authenticating to whatever proxy the PAC file names, so a PAC file fetched over plain HTTP, or discovered through WPAD on a shared segment, is enough for a network-position attacker to collect an NTLMv2 hash or a Kerberos service ticket, and ALPACA_PROXY_AUTH_ALLOWLIST pins credentials to named DNS suffixes; Alpaca is a compatibility shim for the perimeter model rather than a zero-trust component." },
         { "unique-id": "any-process", "node-type": "system", "name": "Any process", "description": "Any process that can reach Alpaca's loopback port, which borrows your authenticated egress." },
         { "unique-id": "pac-file", "node-type": "data-asset", "name": "PAC file", "description": "The proxy auto-configuration file, taken from system settings on macOS and Linux/GNOME or from the -C flag, which Alpaca treats as the trust root." },
         { "unique-id": "upstream", "node-type": "service", "name": "Upstream", "description": "The upstream proxy the PAC file names, which can answer 407 Proxy Authentication Required." }
@@ -9191,7 +9192,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "cli-tool" }, "destination": { "node": "alpaca" } } } },
         { "unique-id": "pac-alpaca", "description": "For each request Alpaca evaluates FindProxyForURL from the PAC file to decide DIRECT or which upstream proxy to use.",
           "relationship-type": { "connects": { "source": { "node": "pac-file" }, "destination": { "node": "alpaca" } } } },
-        { "unique-id": "alpaca-upstream", "description": "For HTTPS Alpaca opens a CONNECT tunnel through the upstream proxy, so Alpaca sees only the host and port; when the upstream answers 407, Alpaca parses the Proxy-Authenticate header and runs the handshake itself. Credential forwarding is permissive by default, so a PAC fetched over plain HTTP, or discovered through WPAD on a shared segment, is enough for a network-position attacker to collect an NTLMv2 hash or a Kerberos service ticket; ALPACA_PROXY_AUTH_ALLOWLIST pins credentials to named DNS suffixes.",
+        { "unique-id": "alpaca-upstream", "description": "For HTTPS Alpaca opens a CONNECT tunnel through the upstream proxy, so Alpaca sees only the host and port, and when the upstream answers 407, Alpaca parses the Proxy-Authenticate header and runs the handshake itself.",
           "relationship-type": { "connects": { "source": { "node": "alpaca" }, "destination": { "node": "upstream" } } } },
         { "unique-id": "process-alpaca", "description": "Because the listener has no authentication of its own, any process that can reach the loopback port borrows your authenticated egress.",
           "relationship-type": { "connects": { "source": { "node": "any-process" }, "destination": { "node": "alpaca" } } } }
@@ -9245,7 +9246,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "client", "node-type": "system", "name": "Client", "description": "A downstream client, which connects to a listener." },
         { "unique-id": "envoy", "node-type": "service", "name": "Envoy", "description": "An L7 proxy written in C++, built at Lyft and a CNCF graduated project, which runs out of process next to every workload rather than as a library and is, for Zero Trust, the textbook Policy Enforcement Point; the sidecar pattern is not free, since each proxy holds the configuration and connection state for what the proxy might talk to." },
         { "unique-id": "listener", "node-type": "listener", "name": "Listener", "description": "A listener, a named socket that a downstream client connects to." },
-        { "unique-id": "filter-chains", "node-type": "filter-chain", "name": "Filter chains", "description": "A filter chain of L3/L4 network filters and, for HTTP, a second, L7 chain added by the connection manager: there Envoy terminates mTLS and can require a client certificate, the JWT authentication filter validates end-user tokens, the RBAC filter matches on the authenticated principal, and the ext_authz filter calls out to an external decision point for a per-request allow or deny." },
+        { "unique-id": "filter-chains", "node-type": "filter-chain", "name": "Filter chains", "description": "A filter chain of L3/L4 network filters and, for HTTP, a second, L7 chain added by the connection manager: in those chains Envoy terminates mTLS and can require a client certificate, the JWT authentication filter validates end-user tokens, the RBAC filter matches on the authenticated principal, and the ext_authz filter calls out to an external decision point for a per-request allow or deny." },
         { "unique-id": "router", "node-type": "router", "name": "Router", "description": "The router at the end of the filter chains, which selects a cluster." },
         { "unique-id": "cluster", "node-type": "cluster", "name": "Cluster", "description": "A cluster, a group of logically similar upstream hosts, where a load-balancing policy picks an endpoint." },
         { "unique-id": "control-plane", "node-type": "service", "name": "Control plane", "description": "The management server that streams configuration to Envoy over xDS; adopting Envoy in practice means adopting a control plane, which then becomes the most security-critical component you run, because whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once." }
@@ -9297,22 +9298,22 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     fix: {
       "nodes": [
-        { "unique-id": "fund", "node-type": "actor", "name": "Fund", "description": "A trading firm that sends orders and cancellations to the broker in real time, named in the fund's own messages by tag 49, the SenderCompID; FIX's own guidance treats the SenderCompID, matched to a known IP address, as the basic check on who is at the other end." },
+        { "unique-id": "fund", "node-type": "actor", "name": "Fund", "description": "A trading firm that sends orders and cancellations to the broker in real time, named in the fund's own messages by tag 49, the SenderCompID." },
         { "unique-id": "broker", "node-type": "actor", "name": "Broker", "description": "A trading firm that receives the fund's orders, named in the fund's messages by tag 56, the TargetCompID, and sends back execution reports." }
       ],
       "relationships": [
-        { "unique-id": "fund-broker", "description": "The fund and the broker exchange numbered tag=value messages, such as orders, cancellations and trade confirmations, over a FIX session, which leaves security to the network beneath it: encryption is often skipped on private leased lines, and a session is only cryptographically authenticated when the firms run it as FIXS, FIX over TLS.",
+        { "unique-id": "fund-broker", "description": "The fund and the broker exchange numbered tag=value messages, such as orders, cancellations and trade confirmations, over a FIX session, which leaves security to the network beneath it: FIX's own guidance treats the SenderCompID, matched to a known IP address, as the basic check on who is at the other end, encryption is often skipped on private leased lines, and a session is only cryptographically authenticated when the firms run it as FIXS, FIX over TLS.",
           "relationship-type": { "interacts": { "actor": "fund", "nodes": ["broker"] } } }
       ],
       "flows": [
         { "unique-id": "numbered-session", "name": "A numbered session",
           "description": "A fund and a broker exchange numbered tag=value messages over a FIX session; a sequence gap triggers a resend, but trust rests on CompIDs and the network.",
           "transitions": [
-            { "relationship-unique-id": "fund-broker", "sequence-number": 1, "description": "The fund sends a new order, 35=D, numbered like every message in the session." },
+            { "relationship-unique-id": "fund-broker", "sequence-number": 1, "description": "Once the session has opened with a Logon, the fund sends a new order, 35=D, numbered like every message in the session." },
             { "relationship-unique-id": "fund-broker", "sequence-number": 2, "description": "The broker answers with an execution report, 35=8.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "fund-broker", "sequence-number": 3, "description": "A session opens with a Logon." },
+            { "relationship-unique-id": "fund-broker", "sequence-number": 3, "description": "Every session opens with a Logon, before any order is sent." },
             { "relationship-unique-id": "fund-broker", "sequence-number": 4, "description": "The session stays alive on heartbeats and numbers every message." },
-            { "relationship-unique-id": "fund-broker", "sequence-number": 5, "description": "The gap in the sequence triggers a resend request rather than a silently lost order.", "direction": "destination-to-source" }
+            { "relationship-unique-id": "fund-broker", "sequence-number": 5, "description": "A gap in the sequence triggers a resend request rather than a silently lost order.", "direction": "destination-to-source" }
           ] }
       ]
     },
