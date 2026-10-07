@@ -8093,7 +8093,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     istio: () => `
-      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.">
+      <svg class="dg" viewBox="0 0 720 324" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.">
         <g data-s="1 2 3" data-calm="istiod">
           <rect class="box" x="232" y="16" width="232" height="68" rx="8"/>
           ${icon('cog', 248, 30)}
@@ -8101,21 +8101,24 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="280" y="66">discovery, config, CA</text>
         </g>
         <g data-s="3" data-calm="policy">
-          ${doc(496, 12, 200, 92)}
-          <text class="t-sm t-b" x="508" y="30">policy</text>
-          <text class="t-sm t-mut" x="508" y="48">PeerAuthentication</text>
-          <text class="t-sm t-mut" x="508" y="64">RequestAuthentication</text>
-          <text class="t-sm t-mut" x="508" y="80">AuthorizationPolicy</text>
+          ${doc(496, 8, 200, 80)}
+          <text class="t-sm t-b" x="508" y="22">policy</text>
+          <text class="t-sm t-mut" x="508" y="38">PeerAuthentication</text>
+          <text class="t-sm t-mut" x="508" y="52">RequestAuthentication</text>
+          <text class="t-sm t-mut" x="508" y="66">AuthorizationPolicy</text>
         </g>
-        <line class="flow" data-s="3" data-calm="policy-istiod" x1="494" y1="50" x2="466" y2="50" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2 4" data-calm="istiod-app-sidecar" x1="300" y1="86" x2="120" y2="158" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-1" x1="408" y1="86" x2="436" y2="154" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-2" x1="448" y1="86" x2="532" y2="154" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="policy-istiod" x1="494" y1="48" x2="466" y2="48" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 4" data-calm="istiod-app-sidecar" x1="244" y1="86" x2="112" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="istiod-envoy" x1="296" y1="86" x2="288" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-1" x1="404" y1="86" x2="436" y2="154" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-2" x1="424" y1="86" x2="528" y2="154" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="5" data-calm="istiod-ztunnel" d="M440 86 L584 150 V238" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="istiod-waypoint" x1="460" y1="86" x2="640" y2="154" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="350" y="116" text-anchor="middle">SPIFFE ID</text>
 
         <g data-s="4" data-note="call-out">
-          <rect class="zone" x="16" y="128" width="328" height="176" rx="10"/>
-          <text class="t-sm t-mut" x="332" y="146" text-anchor="end">sidecar mode</text>
+          <rect class="zone" x="16" y="128" width="328" height="184" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="304">sidecar mode</text>
         </g>
         <g data-s="1 4" data-calm="app-sidecar">
           <rect class="box" x="32" y="160" width="136" height="68" rx="8"/>
@@ -8132,8 +8135,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <text class="t-sm t-mut" data-s="4" x="32" y="264">one proxy in every pod</text>
 
         <g data-s="5" data-note="call-out">
-          <rect class="zone" x="376" y="128" width="328" height="176" rx="10"/>
-          <text class="t-sm t-mut" x="692" y="146" text-anchor="end">ambient mode</text>
+          <rect class="zone" x="376" y="128" width="328" height="184" rx="10"/>
+          <text class="t-sm t-mut" x="388" y="304">ambient mode</text>
         </g>
         ${[['1', 392], ['2', 488]].map(([k, x]) => `
           <g data-s="1 5" data-calm="app-ambient-${k}">
@@ -8156,8 +8159,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
 
         ${badge(1, 448, 70, '1')}
-        ${badge(2, 240, 110, '2')}
-        ${badge(3, 664, 32, '3')}
+        ${badge(2, 204, 108, '2')}
+        ${badge(3, 664, 28, '3')}
         ${badge(4, 312, 174, '4')}
         ${badge(5, 672, 254, '5')}
       </svg>`,
@@ -10557,6 +10560,12 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "app-ambient-1" } } } },
         { "unique-id": "istiod-app-ambient-2", "description": "istiod issues the second ambient-mode workload an X.509 certificate whose subject alternative name carries a SPIFFE ID, spiffe://<trust-domain>/ns/<namespace>/sa/<serviceaccount>, derived from the Kubernetes service account, and rotates the certificate automatically.",
           "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "app-ambient-2" } } } },
+        { "unique-id": "istiod-envoy", "description": "istiod pushes policy, and Envoy configuration translated from high-level intent, to the Envoy sidecar.",
+          "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "envoy" } } } },
+        { "unique-id": "istiod-ztunnel", "description": "istiod pushes policy to the per-node ztunnel.",
+          "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "ztunnel" } } } },
+        { "unique-id": "istiod-waypoint", "description": "istiod pushes policy, and Envoy configuration translated from high-level intent, to the waypoint proxy, which is still Envoy.",
+          "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "waypoint" } } } },
         { "unique-id": "app-sidecar-envoy", "description": "The sidecar-mode app's traffic passes to the app's own Envoy sidecar over unencrypted loopback.",
           "relationship-type": { "connects": { "source": { "node": "app-sidecar" }, "destination": { "node": "envoy" } } } },
         { "unique-id": "app-ambient-1-ztunnel", "description": "The first ambient-mode app's traffic passes to the node's ztunnel over unencrypted loopback.",
@@ -10575,9 +10584,12 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "istiod-app-ambient-2", "sequence-number": 3, "description": "istiod issues the second ambient-mode workload an X.509 certificate carrying a SPIFFE ID, and rotates the certificate automatically." },
             { "relationship-unique-id": "policy-istiod", "sequence-number": 4, "description": "The policy resources, PeerAuthentication, RequestAuthentication and AuthorizationPolicy, reach istiod." },
             { "relationship-unique-id": "app-sidecar-envoy", "sequence-number": 5, "description": "In sidecar mode, the app's traffic passes to the Envoy proxy running beside the app." },
-            { "relationship-unique-id": "app-ambient-1-ztunnel", "sequence-number": 6, "description": "In ambient mode, the first app's traffic passes to the node's ztunnel." },
-            { "relationship-unique-id": "app-ambient-2-ztunnel", "sequence-number": 7, "description": "The second app's traffic passes to the same per-node ztunnel." },
-            { "relationship-unique-id": "ztunnel-waypoint", "sequence-number": 8, "description": "Only where L7 rules are wanted, the ztunnel carries traffic in HBONE up to a waypoint proxy." }
+            { "relationship-unique-id": "istiod-envoy", "sequence-number": 6, "description": "In sidecar mode, istiod pushes policy, and Envoy configuration translated from high-level intent, to the Envoy sidecar." },
+            { "relationship-unique-id": "app-ambient-1-ztunnel", "sequence-number": 7, "description": "In ambient mode, the first app's traffic passes to the node's ztunnel." },
+            { "relationship-unique-id": "app-ambient-2-ztunnel", "sequence-number": 8, "description": "The second app's traffic passes to the same per-node ztunnel." },
+            { "relationship-unique-id": "ztunnel-waypoint", "sequence-number": 9, "description": "Only where L7 rules are wanted, the ztunnel carries traffic in HBONE up to a waypoint proxy." },
+            { "relationship-unique-id": "istiod-ztunnel", "sequence-number": 10, "description": "In ambient mode, istiod pushes policy to the per-node ztunnel." },
+            { "relationship-unique-id": "istiod-waypoint", "sequence-number": 11, "description": "istiod pushes policy, and Envoy configuration translated from high-level intent, to the waypoint proxy." }
           ] }
       ]
     },
