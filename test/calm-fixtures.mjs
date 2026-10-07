@@ -96,9 +96,10 @@ function withDiagram(html, drawing) {
 const svg = (o = {}) => {
   const p = {
     storeTag: ' data-calm="store"', storeName: 'Store', storeShape: '${cyl(540, 28, 140, 72)}',
-    agentAppTag: 'agent-app', agentAppStep: '3', askEnd: '278', hostWidth: '240', userRx: '20', extra: '', nest: false, ...o,
+    agentAppTag: 'agent-app', agentAppStep: '3', askEnd: '278', hostWidth: '240', userRx: '20', extra: '', nest: false,
+    agentSize: 'width="120" height="56"', agentTitleY: '214', ...o,
   };
-  const agent = '<g data-s="3" data-calm="agent"><rect class="box" x="300" y="180" width="120" height="56" rx="8"/><text class="t-b" x="320" y="214">Agent</text></g>';
+  const agent = `<g data-s="3" data-calm="agent"><rect class="box" x="300" y="180" ${p.agentSize} rx="8"/><text class="t-b" x="320" y="${p.agentTitleY}">Agent</text></g>`;
   return `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="fixture">
         <g data-s="1 3" data-calm="user"><rect class="box" x="24" y="32" width="140" height="64" rx="${p.userRx}"/><text class="t-b" x="44" y="70">User</text></g>
@@ -184,6 +185,13 @@ const CASES = [
   ['reverse connector with no reverse transition caught',
     () => page({}, model((m) => { m.flows[0].transitions.pop(); })), 'verify', 1, 'calm', /against the relationship's direction/],
   ['lit connectors with no flow caught', () => page({}, model((m) => { delete m.flows; })), 'verify', 1, 'calm', /has no flow/],
+
+  // Type words: the page draws each node's type in a clear corner. A box only
+  // just big enough for its title has no clear corner in any font.
+  ['type word with no clear corner caught',
+    () => page({ agentSize: 'width="80" height="32"', agentTitleY: '202' }), 'verify', 1, 'calm-type', /node "agent": its type word "SERVICE" overlaps "Agent"/],
+  ['type words not drawn caught',
+    () => swap(page(), 'function labelCalmTypes(fig) {', 'function labelCalmTypes(fig) { return;'), 'verify', 1, 'calm-type', /node "user" has no type word/],
 
   // The disclosure: what it shows, and what Copy, Download and print do.
   ['missing disclosure caught', () => swap(page(), '${calmHtml(e)}', ''), 'verify', 1, 'calm', /no "CALM model" disclosure/],

@@ -160,6 +160,14 @@ The type sets the outline:
 | a container through `deployed-in` | `<rect class="zone" …/>`, whatever its type |
 | a container through `composed-of` | `<rect class="box-soft" …/>`, whatever its type |
 
+Every modelled node carries its type word, drawn by the page from the model; leave one
+corner of each node clear of title, sub-label, icon and badge, about 12 units high and the
+word's width (`DATA ASSET` is the widest built-in; a custom type can be wider), or
+`npm run verify` reports `calm-type`. The page tries bottom-right, top-right, bottom-left,
+then top-left (top-right first in a container, whose title sits top-left), and keeps a
+cylinder's word below its top rim. To make room, give the node more height or move a
+sub-label; nothing else needs to move unless the extra height pushes it.
+
 **Relationships.** Use `connects` (source to destination) between two nodes,
 `interacts` (actor to node) for a node typed `actor` and what it uses, `deployed-in` for a node that
 runs inside another, `composed-of` for a node that is a part of another. A request and
@@ -267,8 +275,10 @@ and runs the two geometry checks that have caught defects invisible at thumbnail
 - **(e) CALM model** — every node drawn once under its name, in the outline its type
   calls for; every `connects` and `interacts` relationship drawn as a connector between
   the right two nodes; contained nodes inside their container; the flow in the tour's
-  order; nothing with a `box`, `zone` or `flow` class left untagged. It also checks the
-  "CALM model" disclosure: its JSON, Copy, Download and print.
+  order; nothing with a `box`, `zone` or `flow` class left untagged; and, under the rule
+  `calm-type`, every node's type word present, inside its outline and clear of every
+  other label, icon and badge. It also checks the "CALM model" disclosure: its JSON,
+  Copy, Download and print.
 
 It also re-checks the step 4 counters, so a bare `npm run verify` catches drift you missed.
 

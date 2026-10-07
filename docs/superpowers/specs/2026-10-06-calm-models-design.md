@@ -189,6 +189,11 @@ A node that contains others is drawn as a container whatever its type. Two helpe
 `icon()` and `badge()` and emit the new outlines: `<path class="box shape-cyl">` and
 `<path class="box shape-doc">`, each with an accent variant on `box-accent`.
 
+Every modelled node carries its type word, drawn by the page from the model; leave one
+corner of each node clear of title, sub-label, icon and badge, about 12 units high and the
+word's width (`DATA ASSET` is the widest built-in; a custom type can be wider), or
+`npm run verify` reports `calm-type`.
+
 ### Relationship to mark
 
 | Relationship | Mark |
@@ -282,6 +287,25 @@ full-explainer disclosure.
 - The disclosure is closed by default and is not forced open for print, unlike the
   explainer.
 
+### Type words
+
+- One rule beside the other `.dg` text classes:
+  `.dg .calm-type { font-size: 9px; fill: var(--text-muted); letter-spacing: .08em; }`.
+- `labelCalmTypes(fig)` is called from `showDetail()` once the detail view is unhidden,
+  because geometry reads as zero while it is hidden, and again whenever the page's web
+  fonts finish loading (`document.fonts`, `loadingdone`), because it measures text. A term
+  with no model gets no words.
+- For each node of `CALM[id]` it appends `<text class="calm-type">` to the node's
+  `data-calm` group, holding the `node-type` uppercased with hyphens as spaces, so the word
+  dims with its node. It places the word inside the node's outline at the first corner
+  clear of every label, icon (taken as a 24 by 24 box at its translate, since `getBBox()`
+  ignores transforms) and badge in the drawing, of the outlines of other nodes (except a
+  container that holds this one) and of a document's fold: bottom-right, top-right,
+  bottom-left, top-left, with top-right first in a container (`zone`, `zone-accent`,
+  `box-soft`), whose own title sits top-left. A cylinder's word keeps below its top rim.
+  With no clear corner the word goes bottom-right anyway, and check (e) reports it.
+- The key line in the disclosure is unchanged.
+
 ## 4. Tooling and verification
 
 ### `_terms.mjs`
@@ -341,6 +365,16 @@ Model against drawing, measured in screen space like the existing checks:
 - Every `data-note` value is one of the six.
 - If the tour lights any arrow, the model has a flow. A lit connector need not be a
   transition.
+- Type words, reported under their own rule, `calm-type`: every node's group holds exactly
+  one `.calm-type` text, reading the node's type word; it lies inside the node's outline;
+  and no other text, icon or badge in the drawing shares its line, in screen space: none
+  overlaps it vertically by more than the 2-unit cushion the other geometry checks allow
+  while overlapping it, or sitting less than 3 units beside it, horizontally. The page
+  leaves 4 units beside a word, so one that only just misses its neighbour was placed with
+  no clear corner; lines stacked above or below, whose boxes touch, are not counted. A
+  finding names the node and what its word overlaps or sits beside. The word is also an
+  ordinary label to checks (a) and (b), so a word across a box border or under a connector
+  is reported there too.
 
 The disclosure, at 1440px. At 375px, with it open, the checks that can differ by width run again: it is present, its JSON is unchanged, Copy, Download and the JSON block are rendered, the keyboard attributes hold, and nothing overflows:
 
@@ -374,6 +408,9 @@ check reports it:
   `name`; a database drawn as a plain box; a connector tagged with an unknown
   relationship; a connector ending on the wrong node; a child outside its container; an
   untagged box; a flow whose order contradicts the tour.
+- `verify.mjs --offline`, rule `calm-type`: a node whose box is too small for a clear
+  corner in any font, so the result does not depend on the fallback font the offline run
+  measures in; and a page whose labelling is disabled, which reports "no type word".
 
 The fixtures are written before the checks, so each check is seen to fail first.
 

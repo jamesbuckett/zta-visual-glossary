@@ -24,7 +24,9 @@
 //       its name, in the outline its type calls for; every connects and
 //       interacts relationship drawn as a connector between the right two
 //       nodes; every contained node inside its container; the flow in the
-//       tour's order; and no box, zone or flow left untagged
+//       tour's order; and no box, zone or flow left untagged; and every
+//       node's type word (rule calm-type) present, inside its outline, and
+//       clear of every other label, icon and badge
 //
 // A real run waits for the page's web fonts before it measures anything, and
 // reports a `fonts` error if they never load: geometry in fallback fonts is not
@@ -376,6 +378,34 @@ const CALM_PROBE = `(() => {
   const where = (el) => (el.getAttribute('class') || el.tagName) + ' at ' +
     ['x', 'y', 'x1', 'y1', 'd'].map((a) => el.getAttribute(a)).filter(Boolean).join(',').slice(0, 40);
 
+  // What a node's type word must keep clear of: every other label, icon and
+  // badge, each with the words a report names it by.
+  const owner = (el) => { const g = el.closest('[data-calm]'); return g ? ' of "' + g.dataset.calm + '"' : ''; };
+  const marks = [
+    ...[...svg.querySelectorAll('text')].filter((t) => !t.closest('.badge'))
+      .map((t) => ({ el: t, s: t.matches('.calm-type') ? 'the type word' + owner(t) : '"' + t.textContent.trim().slice(0, 44) + '"' })),
+    ...[...svg.querySelectorAll('.ico')].map((g) => ({ el: g, s: 'the icon' + owner(g) })),
+    ...[...svg.querySelectorAll('.badge')].map((g) => ({ el: g, s: 'badge ' + g.textContent.trim() })),
+  ].map((m) => Object.assign(m, rect(m.el)));
+  // A mark is in the way when it shares the word's line, overlapping it by
+  // more than the usual 2-unit cushion vertically, and either overlaps it or
+  // sits under 3 units beside it: the page leaves 4 between a word and the
+  // text beside it, so a word that only just misses was placed with no clear
+  // corner. Stacked lines, whose boxes touch, are not in the way. Returns the
+  // horizontal overlap in user units (negative for a gap), or null.
+  const crowds = (a, b) => {
+    const ox = Math.min(a.r, b.r) - Math.max(a.x, b.x), oy = Math.min(a.b, b.b) - Math.max(a.y, b.y);
+    return oy > 2 * scale && ox > -3 * scale ? ox / scale : null;
+  };
+  const typeWords = (el, outline) => [...el.querySelectorAll('text.calm-type')].map((t) => {
+    const w = rect(t), o = outline ? rect(outline) : null;
+    return {
+      s: t.textContent,
+      inside: !!o && w.x >= o.x && w.r <= o.r && w.y >= o.y && w.b <= o.b,
+      crowded: marks.filter((m) => m.el !== t).map((m) => ({ s: m.s, by: crowds(w, m) })).filter((m) => m.by !== null),
+    };
+  });
+
   const nodes = [], connectors = [];
   for (const el of svg.querySelectorAll('[data-calm]')) {
     const id = el.dataset.calm;
@@ -391,6 +421,7 @@ const CALM_PROBE = `(() => {
         id, box: rect(el),
         outline: outline ? rect(outline) : null, shape: outline ? kind(outline) : null,
         texts: [...el.querySelectorAll('text')].map((t) => t.textContent.trim()),
+        words: typeWords(el, outline),
         nested: !!el.parentElement.closest('[data-calm]'),
       });
     }
@@ -424,6 +455,7 @@ function wantShape(node, model) {
 // Check (e): the drawing against its model. `d` is what CALM_PROBE read.
 function checkDrawing(id, model, d) {
   const bad = (msg) => err('calm', `${id}: ${msg}`);
+  const typeBad = (msg) => err('calm-type', `${id}: ${msg}`);
   const nodeIds = new Set(model.nodes.map((n) => n['unique-id']));
   const rels = new Map((model.relationships || []).map((r) => [r['unique-id'], relationshipShape(r)]));
 
@@ -453,6 +485,20 @@ function checkDrawing(id, model, d) {
     const want = wantShape(node, model);
     if (!g.shape) bad(`node "${nid}" has no outline`);
     else if (g.shape !== want) bad(`node "${nid}" (${node['node-type']}) is drawn as a ${g.shape}, want a ${want}`);
+
+    // The type word the page draws from the model: one, reading the type,
+    // inside the outline, on nothing else.
+    const word = node['node-type'].replace(/-/g, ' ').toUpperCase();
+    if (!g.words.length) typeBad(`node "${nid}" has no type word — the page should draw "${word}" in it`);
+    else if (g.words.length > 1) typeBad(`node "${nid}" has ${g.words.length} type words, want one`);
+    for (const w of g.words) {
+      if (w.s !== word) typeBad(`node "${nid}": its type word reads "${w.s}", want "${word}"`);
+      if (g.shape && !w.inside) typeBad(`node "${nid}": its type word "${w.s}" is not inside its outline`);
+      for (const o of w.crowded) {
+        const what = o.by > 0 ? `overlaps ${o.s}` : `sits ${(-o.by).toFixed(1)} units beside ${o.s}`;
+        typeBad(`node "${nid}": its type word "${w.s}" ${what} — give the node a clear corner`);
+      }
+    }
   }
 
   const on = (p, nid) => {

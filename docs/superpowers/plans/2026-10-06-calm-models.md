@@ -2185,6 +2185,10 @@ fix it.
      for `data-asset`; `rect.zone` for `network`, `ecosystem` and a `deployed-in`
      container; `rect.box-soft` for a `composed-of` container. Many existing boxes have
      `rx="12"`; that now counts as square, so set each box by its node's type.
+   - Every modelled node carries its type word, drawn by the page from the model; leave
+     one corner of each node clear of title, sub-label, icon and badge, about 12 units
+     high and the word's width (`DATA ASSET` is the widest built-in; a custom type can be
+     wider), or `npm run verify` reports `calm-type`.
    - One `<g data-calm="<node id>">` per node, holding its outline, icon and labels. A
      container's group holds its outline and own label only; children are sibling groups
      drawn inside it. Never nest `data-calm`.
@@ -2198,9 +2202,9 @@ fix it.
      are allow and deny. Do not use colour to show node or relationship type.
 
 4. **Gate the term.** `npm test; echo "exit $?"` then `npm run verify <id>; echo "exit $?"`.
-   Both exit 0. Fix every `calm`, `calm-data`, `clearance`, `collision`, `badge` and
-   `tour` finding before the next term. Moving a connector's end a few units so it meets
-   its node is the intended fix for an endpoint finding.
+   Both exit 0. Fix every `calm`, `calm-type`, `calm-data`, `clearance`, `collision`,
+   `badge` and `tour` finding before the next term. Moving a connector's end a few units
+   so it meets its node is the intended fix for an endpoint finding.
 
    If the checker rejects a drawing that you are confident is right and matches its
    model, do not weaken the checker and do not bend a good drawing to satisfy it. Stop

@@ -62,7 +62,8 @@ also drives the diagram tour: every chip, the panel text, keyboard stepping and 
 motion. It also checks every term's takeaway tiles against the data, the limitation
 marker, and the collapsed explainer and its print behaviour, at desktop and phone width.
 For a term with a CALM model it compares the drawing with the model (shapes, connectors,
-containment, flow order) and checks the model disclosure.
+containment, flow order), and checks the model disclosure and that every node's type
+word sits clear.
 Pass term ids to narrow it (`npm run verify calico`).
 
 The three fixture suites run `verify.mjs` with `--offline`, which answers every network
