@@ -3952,38 +3952,38 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     wireguard: () => `
-      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two peers identified by public keys establish a lightweight encrypted tunnel.">
+      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Two peers identified by public keys establish a lightweight encrypted tunnel.">
         ${[['peer-a', 'Peer A', 'key-a', 'A', 24], ['peer-b', 'Peer B', 'key-b', 'B', 496]].map(([pid, name, kid, k, x]) => `
           <g data-s="2 3" data-calm="${pid}">
-            <rect class="box" x="${x}" y="16" width="200" height="96" rx="8"/>
-            ${icon('laptop', x + 16, 30)}
-            <text class="t-b" x="${x + 48}" y="48">${name}</text>
+            <rect class="box" x="${x}" y="16" width="200" height="72" rx="8"/>
+            ${icon('laptop', x + 16, 40)}
+            <text class="t-b" x="${x + 48}" y="57">${name}</text>
           </g>
-          <line class="flow" data-s="1" data-calm="${kid}-${pid}" x1="${x + 100}" y1="142" x2="${x + 100}" y2="114" marker-end="url(#ah-mut)"/>
+          <line class="flow" data-s="1" data-calm="${kid}-${pid}" x1="${x + 100}" y1="118" x2="${x + 100}" y2="90" marker-end="url(#ah-mut)"/>
           <g data-s="1" data-calm="${kid}">
-            ${doc(x, 144, 200, 56)}
-            ${icon('key-round', x + 16, 160)}
-            <text class="t-sm t-b" x="${x + 48}" y="168">public key ${k}</text>
-            <text class="t-sm t-mut" x="${x + 48}" y="184">is its identity</text>
+            ${doc(x, 120, 200, 56)}
+            ${icon('key-round', x + 16, 136)}
+            <text class="t-sm t-b" x="${x + 48}" y="144">public key ${k}</text>
+            <text class="t-sm t-mut" x="${x + 48}" y="160">is its identity</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" data-calm="peer-a-peer-b" x1="226" y1="48" x2="494" y2="48" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="40" text-anchor="middle">quick handshake</text>
+        <line class="flow" data-s="2" data-calm="peer-a-peer-b" x1="226" y1="36" x2="494" y2="36" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="28" text-anchor="middle">quick handshake</text>
         <g data-s="3" data-note="call-out">
-          <rect class="box" x="226" y="68" width="268" height="32" rx="16"/>
+          <rect class="box" x="226" y="52" width="268" height="28" rx="14"/>
         </g>
-        <line class="flow" data-s="3" data-calm="peer-a-peer-b" x1="226" y1="84" x2="494" y2="84" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="360" y="124" text-anchor="middle">encrypted, very low overhead</text>
+        <line class="flow" data-s="3" data-calm="peer-a-peer-b" x1="226" y1="66" x2="494" y2="66" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="360" y="100" text-anchor="middle">encrypted, very low overhead</text>
         <g data-s="4" data-note="footer">
-          <rect class="box" x="24" y="216" width="672" height="56" rx="8"/>
-          ${icon('cpu', 40, 232)}
-          <text class="t-b" x="72" y="240">Inside the Linux kernel</text>
-          <text class="t-sm t-mut" x="72" y="258">a codebase small enough to audit by hand</text>
+          <rect class="box" x="24" y="192" width="672" height="56" rx="8"/>
+          ${icon('cpu', 40, 208)}
+          <text class="t-b" x="72" y="216">Inside the Linux kernel</text>
+          <text class="t-sm t-mut" x="72" y="234">a codebase small enough to audit by hand</text>
         </g>
 
-        ${badge(1, 196, 172, '1')}
-        ${badge(2, 250, 48, '2')}
-        ${badge(3, 256, 84, '3')}
-        ${badge(4, 680, 230, '4')}
+        ${badge(1, 196, 148, '1')}
+        ${badge(2, 250, 36, '2')}
+        ${badge(3, 256, 66, '3')}
+        ${badge(4, 680, 206, '4')}
       </svg>`,
 
     zerotrust: () => `
@@ -4545,21 +4545,23 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     mtls: () => `
-      <svg class="dg" viewBox="0 0 720 264" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mutual handshake — both client and server present a certificate and verify the other's.">
+      <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mutual handshake — both client and server present a certificate and verify the other's.">
         ${[['client', 'Client', 24, 'client-certificate', 'client certificate', '2', 'the server'], ['server', 'Server', 520, 'server-certificate', 'server certificate', '1', 'the client']].map(([id, name, x, cid, cert, cs, other]) => `
           <g data-s="3 4" data-calm="${id}">
             <rect class="box" x="${x}" y="16" width="176" height="160" rx="8"/>
             ${icon('server', x + 16, 28)}
             <text class="t-b" x="${x + 48}" y="46">${name}</text>
+          </g>
+          <g data-s="3">
             ${icon('shield-check', x + 16, 104)}
             <text class="t-sm" x="${x + 48}" y="114">verifies</text>
             <text class="t-sm" x="${x + 48}" y="130">${other}</text>
           </g>
-          <line class="flow" data-s="${cs}" data-calm="${cid}-${id}" x1="${x + 88}" y1="198" x2="${x + 88}" y2="178" marker-end="url(#ah-mut)"/>
+          <line class="flow" data-s="${cs}" data-calm="${cid}-${id}" x1="${x + 88}" y1="210" x2="${x + 88}" y2="178" marker-end="url(#ah-mut)"/>
           <g data-s="${cs}" data-calm="${cid}">
-            ${doc(x, 200, 176, 48)}
-            ${icon('file-badge', x + 12, 212)}
-            <text class="t-sm" x="${x + 44}" y="229">${cert}</text>
+            ${doc(x, 212, 176, 48)}
+            ${icon('file-badge', x + 12, 224)}
+            <text class="t-sm" x="${x + 44}" y="241">${cert}</text>
           </g>`).join('')}
         <line class="flow" data-s="1" data-calm="client-server" x1="518" y1="60" x2="202" y2="60" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="360" y="53" text-anchor="middle">server certificate</text>
@@ -9363,8 +9365,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "transitions": [
             { "relationship-unique-id": "client-server", "sequence-number": 1, "description": "The handshake opens the connection by negotiating which ciphers to use." },
             { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "The server presents its certificate, which is how TLS authenticates the server.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "Using the server's certificate plus public-key cryptography, the client sends its side of the agreement on session keys." },
-            { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "The server sends its side of the agreement, and the client and the server have agreed on session keys.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "The client sends its side of the session-key agreement." },
+            { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "The server sends its side, and with the server's certificate plus public-key cryptography the client and the server have agreed on session keys.", "direction": "destination-to-source" },
             { "relationship-unique-id": "client-server", "sequence-number": 5, "description": "From then on, traffic from the client to the server is encrypted with fast symmetric crypto." },
             { "relationship-unique-id": "client-server", "sequence-number": 6, "description": "Traffic from the server to the client is encrypted with fast symmetric crypto too.", "direction": "destination-to-source" }
           ] }
@@ -9395,9 +9397,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "key-b", "node-type": "data-asset", "name": "public key B", "description": "Peer B's public key, which is Peer B's identity; WireGuard's minimalism leaves gaps, since key distribution and configuration are deliberately out of scope, so something else, Tailscale's coordination server for example, has to manage peers at scale." }
       ],
       "relationships": [
-        { "unique-id": "key-a-peer-a", "description": "Public key A identifies Peer A.",
+        { "unique-id": "key-a-peer-a", "description": "Public key A passes to Peer A as Peer A's identity.",
           "relationship-type": { "connects": { "source": { "node": "key-a" }, "destination": { "node": "peer-a" } } } },
-        { "unique-id": "key-b-peer-b", "description": "Public key B identifies Peer B.",
+        { "unique-id": "key-b-peer-b", "description": "Public key B passes to Peer B as Peer B's identity.",
           "relationship-type": { "connects": { "source": { "node": "key-b" }, "destination": { "node": "peer-b" } } } },
         { "unique-id": "peer-a-peer-b", "description": "Once configured, Peer A and Peer B establish an encrypted WireGuard tunnel with quick handshakes, and the tunnel runs with very low overhead.",
           "relationship-type": { "connects": { "source": { "node": "peer-a" }, "destination": { "node": "peer-b" } } } }
@@ -9416,10 +9418,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     ssh: {
       "nodes": [
         { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client, which gets an authenticated, encrypted connection to a remote machine and authenticates inside the encrypted channel with a password or, preferably, a public-key pair; accepting an unverified host key on first connection leaves room for a man-in-the-middle." },
-        { "unique-id": "remote-machine", "node-type": "service", "name": "Remote machine", "description": "The remote machine at the other end of the connection, SSH being the everyday tool for administering servers securely; SSH is only as safe as its key management, and unmanaged keys accumulate in authorized_keys files." }
+        { "unique-id": "remote-machine", "node-type": "system", "name": "Remote machine", "description": "The remote machine at the other end of the connection; SSH is the everyday tool for administering servers securely, but SSH is only as safe as its key management, and unmanaged keys accumulate in authorized_keys files." }
       ],
       "relationships": [
-        { "unique-id": "client-remote", "description": "The client and the remote machine share an encrypted channel, established first through key exchange, inside which the client authenticates and which carries interactive shells, file transfer and port forwarding, a safe replacement for the cleartext remote-access tools of the past.",
+        { "unique-id": "client-remote", "description": "The client and the remote machine share an encrypted channel, established first through key exchange, inside which the client authenticates and which carries interactive shells, file transfer and port forwarding; the channel is a safe replacement for the cleartext remote-access tools of the past.",
           "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "remote-machine" } } } }
       ],
       "flows": [
@@ -9466,9 +9468,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "server-certificate", "node-type": "data-asset", "name": "server certificate", "description": "The server's certificate, the server workload's own cryptographic identity; every certificate has to be issued, rotated and revoked." }
       ],
       "relationships": [
-        { "unique-id": "client-certificate-client", "description": "The client certificate is the client's own cryptographic identity, which the client presents during the handshake.",
+        { "unique-id": "client-certificate-client", "description": "The client reads its certificate, the client's own cryptographic identity, and presents the certificate during the handshake.",
           "relationship-type": { "connects": { "source": { "node": "client-certificate" }, "destination": { "node": "client" } } } },
-        { "unique-id": "server-certificate-server", "description": "The server certificate is the server's own cryptographic identity, which the server presents during the handshake.",
+        { "unique-id": "server-certificate-server", "description": "The server reads its certificate, the server's own cryptographic identity, and presents the certificate during the handshake.",
           "relationship-type": { "connects": { "source": { "node": "server-certificate" }, "destination": { "node": "server" } } } },
         { "unique-id": "client-server", "description": "The client and the server talk over mutual TLS, in which each side verifies the other during the handshake, giving strong two-way authentication without passwords; mTLS proves which workload is at each end but not what that workload may do, so authorisation is still a separate check.",
           "protocol": "mTLS",
