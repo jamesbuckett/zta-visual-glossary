@@ -137,11 +137,16 @@ built-in `node-type` that honestly fits; otherwise use a custom kebab-case type 
 
 You may add a node for something the old drawing only labelled, when the term's copy
 names it: a "private network" label becomes a zone around its hosts. Do not invent a node
-the copy does not name. An artefact the copy says stays inside its holder (a key sealed
+the copy does not name. Instances of a class the copy names (your devices as Device A, B and
+C; each startup stage as Firmware and OS) count as named, provided each description claims
+only what the copy says of the class. An artefact the copy says stays inside its holder (a key sealed
 in a TPM) is a `composed-of` part drawn inside it; one that is presented, shared, fetched
 or handed on (a certificate, a public key, a config file) is a separate `data-asset`
 joined to its holder by an arrow. A network that a link only crosses, with nothing
-deployed in it, is a `call-out` zone named in the link's description, not a node.
+deployed in it, is a `call-out` zone named in the link's description, not a node. A trust anchor the copy says a party holds (a root CA's certificate) is a
+`data-asset` that party reads, like any other certificate. An artefact the copy places
+nowhere, neither inside its holder nor handed on (a policy, an audit log), is a separate
+node joined by an arrow: a `data-asset` if made once, a `database` if written at run time.
 
 The type sets the outline:
 
@@ -201,7 +206,8 @@ the switch" lights three links and adds nothing to the flow.
 - Anything else drawn with a `box`, `zone` or `flow` class is not part of the
   architecture and says so with `data-note` on it or its group. The value is one of six,
   and `verify.mjs` rejects any other:
-  - `call-out`: a box or arrow that explains a part of the drawing
+  - `call-out`: a box or arrow that explains a part of the drawing, including the practice
+    the subject replaces (a hard-coded password beside a vault)
   - `footer`: a strip of text under the drawing, usually the limitation
   - `elided`: a row or box standing for things the explainer does not name
   - `self-loop`: a line from a component back to itself

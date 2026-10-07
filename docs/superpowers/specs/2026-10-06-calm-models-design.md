@@ -134,7 +134,11 @@ entry, so nothing is stored twice:
   A network that a link only crosses, with nothing deployed in it, is a `call-out` zone
   named in the link's description.
 - The two halves of a handshake or key exchange carry no protocol detail the copy does
-  not give. Where the tour's order differs from the protocol's, the
+  not give.
+- A trust anchor the copy says a party holds is a `data-asset` that party reads. An
+  artefact the copy places nowhere is a separate node joined by an arrow: `data-asset` if
+  made once, `database` if written at run time. Instances of a class the copy names count
+  as named. A `call-out` may show the practice the subject replaces. Where the tour's order differs from the protocol's, the
   transition descriptions say the protocol's order.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
   `description` names it.
