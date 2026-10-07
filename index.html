@@ -4992,47 +4992,43 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     oidc: () => `
       <svg class="dg" viewBox="0 0 720 260" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OAuth grants an access token for APIs; OIDC adds a signed ID Token (a JWT) that attests who the user is.">
-        <g data-s="1 2 3 4">
-          <rect class="box" x="24" y="24" width="160" height="216" rx="8"/>
+        <g data-s="1 2 3 4" data-calm="app">
+          <rect class="box" x="24" y="24" width="176" height="216" rx="8"/>
           ${icon('app-window', 40, 38)}
           <text class="t-b" x="72" y="56">App</text>
         </g>
-        <g data-s="1 2 3 4">
-          <rect class="box" x="536" y="24" width="160" height="216" rx="8"/>
-          ${icon('shield-check', 552, 38)}
-          <text class="t-b" x="584" y="56">OpenID</text>
-          <text class="t-sm t-mut" x="584" y="74">Provider</text>
+        <g data-s="1 2 3 4" data-calm="provider">
+          <rect class="box-soft" x="520" y="24" width="176" height="216" rx="8"/>
+          ${icon('shield-check', 536, 38)}
+          <text class="t-b" x="568" y="56">OpenID Provider</text>
         </g>
-        <line class="flow" data-s="2" x1="186" y1="96" x2="534" y2="96" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="89" text-anchor="middle">request with the openid scope</text>
-
-        <line class="flow" data-s="1" x1="534" y1="132" x2="426" y2="132"/>
-        <line class="flow" data-s="1" x1="294" y1="132" x2="186" y2="132" marker-end="url(#ah-mut)"/>
-        <g data-s="1">
-          <rect class="box" x="296" y="116" width="128" height="32" rx="6"/>
-          <text class="t-sm t-b" x="360" y="136" text-anchor="middle">access token</text>
+        <g data-s="4" data-calm="userinfo">
+          <rect class="box" x="536" y="176" width="152" height="44" rx="8"/>
+          <text class="t-sm t-b" x="548" y="194">UserInfo</text>
+          <text class="t-sm t-mut" x="548" y="210">name, email</text>
         </g>
+        <line class="flow" data-s="2" data-calm="app-provider" x1="202" y1="68" x2="518" y2="68" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="61" text-anchor="middle">request with the openid scope</text>
 
-        <line class="flow" data-s="3" x1="534" y1="180" x2="450" y2="180"/>
-        <line class="flow" data-s="3" x1="270" y1="180" x2="186" y2="180" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="272" y="158" width="176" height="44" rx="6"/>
-          <text class="t-sm t-b" x="360" y="176" text-anchor="middle">ID Token: signed JWT</text>
-          <text class="t-sm t-mut" x="360" y="192" text-anchor="middle">sub · iss · aud</text>
+        <line class="flow" data-s="1" data-calm="app-provider" x1="518" y1="100" x2="202" y2="100" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="93" text-anchor="middle">access token</text>
+
+        <line class="flow" data-s="3" data-calm="provider-id-token" x1="518" y1="148" x2="466" y2="148" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="id-token">
+          ${doc(256, 116, 208, 64)}
+          <text class="t-b" x="268" y="138">ID Token</text>
+          <text class="t-sm t-mut" x="268" y="155">signed JWT</text>
+          <text class="t-sm t-mut" x="268" y="171">sub · iss · aud</text>
         </g>
+        <line class="flow" data-s="3" data-calm="id-token-app" x1="254" y1="148" x2="202" y2="148" marker-end="url(#ah-mut)"/>
 
-        <line class="flow" data-s="4" x1="186" y1="222" x2="550" y2="222" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="360" y="215" text-anchor="middle">UserInfo call</text>
-        <g data-s="4">
-          <rect class="box" x="552" y="192" width="132" height="40" rx="6"/>
-          <text class="t-sm t-b" x="564" y="209">UserInfo</text>
-          <text class="t-sm t-mut" x="564" y="224">name, email</text>
-        </g>
+        <line class="flow" data-s="4" data-calm="app-userinfo" x1="202" y1="198" x2="534" y2="198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="191" text-anchor="middle">UserInfo call</text>
 
-        ${badge(1, 480, 132, '1')}
-        ${badge(2, 220, 96, '2')}
-        ${badge(3, 492, 180, '3')}
-        ${badge(4, 220, 222, '4')}
+        ${badge(1, 472, 100, '1')}
+        ${badge(2, 248, 68, '2')}
+        ${badge(3, 492, 148, '3')}
+        ${badge(4, 248, 198, '4')}
       </svg>`,
 
     websockets: () => `
@@ -5163,79 +5159,95 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     scim: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync.">
-        <g data-s="1 2 3">
-          <rect class="box" x="24" y="72" width="160" height="136" rx="8"/>
-          ${icon('users', 40, 86)}
-          <text class="t-b" x="72" y="104">Identity</text>
-          <text class="t-b" x="72" y="120">provider</text>
-          <text class="t-sm t-mut" x="40" y="160">pushes each</text>
-          <text class="t-sm t-mut" x="40" y="176">lifecycle change</text>
+        <g data-s="1 2 3" data-calm="idp">
+          <rect class="box" x="24" y="40" width="208" height="96" rx="8"/>
+          ${icon('users', 40, 56)}
+          <text class="t-b" x="72" y="74">Identity provider</text>
+          <text class="t-sm t-mut" x="72" y="96">pushes each</text>
+          <text class="t-sm t-mut" x="72" y="112">lifecycle change</text>
         </g>
-        ${[['create: joiner', 100, '1'], ['update: mover', 140, '2'], ['deactivate: leaver', 180, '3']].map(([t, y, s]) => `
-          <line class="flow" data-s="${s}" x1="186" y1="${y}" x2="498" y2="${y}" marker-end="url(#ah-mut)"/>
-          <text class="t-sm" data-s="${s}" x="352" y="${y - 7}" text-anchor="middle">${t}</text>`).join('')}
-        <text class="t-sm bad" data-s="3" x="352" y="204" text-anchor="middle">no orphaned accounts</text>
-        <rect class="zone" x="500" y="16" width="196" height="248" rx="10"/>
-        <text class="t-sm t-mut" x="512" y="34">connected apps</text>
-        ${[44, 120, 196].map((y) => `
-          <g data-s="1 2 3 4">
+        ${[['create: joiner', 172, '1'], ['update: mover', 204, '2'], ['deactivate: leaver', 236, '3']].map(([t, y, s]) => `
+          <text class="t-sm" data-s="${s}" x="72" y="${y}">${t}</text>`).join('')}
+        <text class="t-sm bad" data-s="3" x="72" y="258">no orphaned accounts</text>
+        <g data-note="call-out">
+          <rect class="zone" x="500" y="16" width="196" height="248" rx="10"/>
+          <text class="t-sm t-mut" x="512" y="34">connected apps</text>
+        </g>
+        ${[['app-1', 44, 64], ['app-2', 120, 88], ['app-3', 196, 112]].map(([id, y, y1]) => `
+          <g data-s="1 2 3 4" data-calm="${id}">
             <rect class="box" x="516" y="${y}" width="164" height="56" rx="8"/>
             ${icon('app-window', 528, y + 16)}
             <text class="t-b" x="560" y="${y + 25}">App</text>
             <text class="t-sm t-mut" x="560" y="${y + 43}">/Users, /Groups</text>
-          </g>`).join('')}
+          </g>
+          <line class="flow" data-s="1 2 3" data-calm="idp-${id}" x1="234" y1="${y1}" x2="514" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
 
-        ${badge(1, 216, 100, '1')}
-        ${badge(2, 216, 140, '2')}
-        ${badge(3, 216, 180, '3')}
-        ${badge(4, 664, 58, '4')}
+        ${badge(1, 48, 168, '1')}
+        ${badge(2, 48, 200, '2')}
+        ${badge(3, 48, 232, '3')}
+        ${badge(4, 680, 30, '4')}
       </svg>`,
 
     mfa: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it.">
         ${[['lock', 'Know', 'a password', 24], ['smartphone', 'Have', 'phone or key', 256], ['fingerprint', 'Are', 'a fingerprint', 488]].map(([ico, name, sub, x]) => `
-          <g data-s="1">
+          <g data-s="1" data-note="call-out">
             <rect class="box" x="${x}" y="16" width="208" height="56" rx="8"/>
             ${icon(ico, x + 16, 32)}
             <text class="t-b" x="${x + 48}" y="41">${name}</text>
             <text class="t-sm t-mut" x="${x + 48}" y="59">${sub}</text>
           </g>`).join('')}
-        <g data-s="2">
-          <rect class="box" x="24" y="104" width="180" height="56" rx="8"/>
-          ${icon('message-square', 40, 120)}
-          <text class="t-b" x="72" y="129">SMS or TOTP</text>
-          <text class="t-sm t-mut" x="72" y="147">a typed code</text>
+        <g data-s="2" data-calm="you">
+          <rect class="box" x="24" y="100" width="136" height="64" rx="20"/>
+          ${icon('user', 40, 112)}
+          <text class="t-b" x="72" y="124">You</text>
+          <text class="t-sm t-mut" x="72" y="140">type a code</text>
         </g>
-        <line class="flow-bad" data-s="2" x1="206" y1="132" x2="274" y2="132" marker-end="url(#ah-bad)"/>
-        <g data-s="2 3">
-          <rect class="box" x="276" y="104" width="184" height="56" rx="8"/>
-          ${icon('skull', 292, 120)}
-          <text class="t-b" x="324" y="129">Fake site</text>
-          <text class="t-sm t-mut" x="324" y="147">phishing page</text>
+        <line class="flow-bad" data-s="2" data-calm="you-fake-site" x1="162" y1="132" x2="286" y2="132" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="2" x="224" y="152" text-anchor="middle">SMS or TOTP code</text>
+        <g data-s="2 3" data-calm="fake-site">
+          <rect class="box" x="288" y="100" width="176" height="64" rx="8"/>
+          ${icon('skull', 304, 112)}
+          <text class="t-b" x="336" y="124">Fake site</text>
+          <text class="t-sm t-mut" x="336" y="140">phishing page</text>
         </g>
-        <g data-s="3 4">
-          <rect class="box" x="24" y="196" width="180" height="84" rx="8"/>
-          ${icon('key-round', 40, 210)}
-          <text class="t-b" x="72" y="228">Passkey</text>
-          <text class="t-sm t-mut" x="72" y="246">usually synced</text>
-          <text class="t-sm t-mut" x="72" y="262">across devices</text>
+        <g data-s="3 4" data-calm="passkey">
+          ${doc(536, 100, 160, 64)}
+          ${icon('key-round', 548, 112)}
+          <text class="t-b" x="580" y="124">Passkey</text>
+          <text class="t-sm t-mut" x="580" y="140">usually synced</text>
         </g>
-        <line class="flow-bad" data-s="3" x1="206" y1="206" x2="330" y2="164" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="3" x="344" y="186">cannot be replayed here</text>
-        <line class="flow-ok" data-s="3" x1="206" y1="240" x2="514" y2="240" marker-end="url(#ah-ok)"/>
-        <text class="t-sm" data-s="3" x="360" y="233" text-anchor="middle">challenge bound to the origin</text>
-        <g data-s="3">
-          <rect class="box" x="516" y="208" width="180" height="64" rx="8"/>
-          ${icon('globe', 532, 224)}
-          <text class="t-b" x="564" y="236">Real site</text>
-          <text class="t-sm t-mut" x="564" y="254">its own origin</text>
+        <line class="flow" data-s="4" data-calm="passkey-authenticator" x1="616" y1="166" x2="616" y2="194" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="628" y="184">synced</text>
+
+        <g data-s="3" data-calm="real-site">
+          <rect class="box" x="24" y="196" width="160" height="64" rx="8"/>
+          ${icon('globe', 40, 208)}
+          <text class="t-b" x="72" y="220">Real site</text>
+          <text class="t-sm t-mut" x="72" y="236">its own origin</text>
+        </g>
+        <line class="flow-ok" data-s="3" data-calm="browser-real-site" x1="286" y1="228" x2="186" y2="228" marker-end="url(#ah-ok)"/>
+        <text class="t-sm" data-s="3" x="236" y="221" text-anchor="middle">origin-bound</text>
+        <g data-s="3" data-calm="browser">
+          <rect class="box" x="288" y="196" width="160" height="64" rx="20"/>
+          ${icon('app-window', 304, 208)}
+          <text class="t-b" x="336" y="220">Browser</text>
+        </g>
+        <line class="flow-bad" data-s="3" data-note="struck-through" x1="376" y1="194" x2="376" y2="166" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="3" x="364" y="184" text-anchor="end">cannot be replayed here</text>
+        <line class="flow" data-s="3" data-calm="browser-authenticator" x1="450" y1="228" x2="534" y2="228" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="492" y="221" text-anchor="middle">challenge</text>
+        <g data-s="3 4" data-calm="authenticator">
+          <rect class="box" x="536" y="196" width="160" height="64" rx="8"/>
+          ${icon('smartphone', 552, 208)}
+          <text class="t-b" x="584" y="220">Authenticator</text>
         </g>
         <text class="t-sm" data-s="4" x="360" y="290" text-anchor="middle">a passkey replaces the password entirely</text>
 
         ${badge(1, 216, 30, '1')}
-        ${badge(2, 240, 132, '2')}
-        ${badge(3, 490, 240, '3')}
-        ${badge(4, 188, 210, '4')}
+        ${badge(2, 224, 132, '2')}
+        ${badge(3, 492, 246, '3')}
+        ${badge(4, 596, 180, '4')}
       </svg>`,
 
     pki: () => `
@@ -5299,55 +5311,50 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <text class="t-sm t-b t-mut" x="544" y="22" text-anchor="middle">ABAC — by attributes</text>
         <line class="divider" x1="360" y1="36" x2="360" y2="304"/>
 
-        <g data-s="1">
-          <rect class="box" x="60" y="36" width="240" height="60" rx="12"/>
+        <g data-s="1" data-calm="user">
+          <rect class="box" x="60" y="36" width="240" height="60" rx="20"/>
           ${icon('user', 76, 48)}
           <text class="t-b" x="108" y="66">User</text>
           <text class="t-sm t-mut" x="108" y="83">a person</text>
         </g>
-        <g data-s="1 2">
-          <rect class="box" x="60" y="140" width="240" height="60" rx="8"/>
+        <g data-s="1 2" data-calm="role">
+          <rect class="box-soft" x="60" y="140" width="240" height="164" rx="8"/>
           ${icon('users', 76, 152)}
           <text class="t-b" x="108" y="170">Role</text>
           <text class="t-sm t-mut" x="108" y="187">e.g. billing-admin</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="60" y="244" width="240" height="60" rx="8"/>
-          ${icon('list-checks', 76, 256)}
-          <text class="t-b" x="108" y="274">Permissions</text>
-          <text class="t-sm t-mut" x="108" y="291">grouped into the role</text>
+        <g data-s="2" data-calm="permissions">
+          ${doc(76, 204, 208, 84)}
+          ${icon('list-checks', 88, 218)}
+          <text class="t-b" x="120" y="236">Permissions</text>
+          <text class="t-sm t-mut" x="120" y="253">grouped into the role</text>
         </g>
-        <line class="flow" data-s="1" x1="180" y1="96" x2="180" y2="138" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="user-role" x1="180" y1="98" x2="180" y2="138" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="198" y="121">assigned to</text>
-        <line class="flow" data-s="2" x1="180" y1="200" x2="180" y2="242" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="198" y="225">grants</text>
 
-        <g data-s="3">
-          <rect class="zone" x="384" y="36" width="320" height="124" rx="10"/>
-          <text class="t-sm t-mut" x="398" y="54">attributes</text>
-          <rect class="box" x="398" y="64" width="140" height="36" rx="6"/>
-          <text class="t-sm" x="468" y="86" text-anchor="middle">subject</text>
-          <rect class="box" x="552" y="64" width="140" height="36" rx="6"/>
-          <text class="t-sm" x="622" y="86" text-anchor="middle">resource</text>
-          <rect class="box" x="398" y="112" width="140" height="36" rx="6"/>
-          <text class="t-sm" x="468" y="134" text-anchor="middle">action</text>
-          <rect class="box" x="552" y="112" width="140" height="36" rx="6"/>
-          <text class="t-sm" x="622" y="134" text-anchor="middle">environment</text>
+        <g data-s="3" data-calm="attributes">
+          ${doc(384, 36, 320, 132)}
+          <text class="t-b" x="398" y="56">Attributes</text>
         </g>
-        <line class="flow" data-s="4" x1="544" y1="160" x2="544" y2="190" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="box" x="424" y="192" width="240" height="112" rx="8"/>
-          ${icon('scale', 440, 206)}
-          <text class="t-b" x="472" y="224">Policy engine</text>
-          <text class="t-sm t-mut" x="472" y="242">every request</text>
-          <text class="t-sm" x="440" y="268">e.g. allow if finance AND</text>
-          <text class="t-sm" x="440" y="286">managed AND business hours</text>
+        <g data-s="3" data-note="call-out">
+          ${[['subject', 398, 64], ['resource', 552, 64], ['action', 398, 104], ['environment', 552, 104]].map(([t, x, y]) => `
+            <rect class="box" x="${x}" y="${y}" width="140" height="32" rx="6"/>
+            <text class="t-sm" x="${x + 70}" y="${y + 20}" text-anchor="middle">${t}</text>`).join('')}
+        </g>
+        <line class="flow" data-s="4" data-calm="attributes-policy-engine" x1="544" y1="170" x2="544" y2="198" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="policy-engine">
+          <rect class="box" x="424" y="200" width="240" height="104" rx="8"/>
+          ${icon('scale', 440, 214)}
+          <text class="t-b" x="472" y="232">Policy engine</text>
+          <text class="t-sm t-mut" x="472" y="250">every request</text>
+          <text class="t-sm" x="440" y="272">e.g. allow if finance AND</text>
+          <text class="t-sm" x="440" y="290">managed AND business hours</text>
         </g>
 
         ${badge(1, 180, 115, '1')}
-        ${badge(2, 180, 219, '2')}
-        ${badge(3, 686, 50, '3')}
-        ${badge(4, 644, 212, '4')}
+        ${badge(2, 268, 192, '2')}
+        ${badge(3, 660, 52, '3')}
+        ${badge(4, 564, 184, '4')}
       </svg>`,
 
     opa: () => `
@@ -5881,58 +5888,60 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     ldap: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Apps bind to the directory tree by distinguished name to authenticate a user and read the group memberships that drive their permissions.">
-        <g data-s="1 4 5">
-          <rect class="zone" x="208" y="16" width="304" height="224" rx="10"/>
-          <text class="t-sm t-mut" x="220" y="34">directory</text>
-          <rect class="box" x="300" y="40" width="120" height="32" rx="6"/>
-          <text class="t-sm t-b" x="360" y="60" text-anchor="middle">root</text>
-          <line class="flow" x1="360" y1="72" x2="260" y2="100"/>
-          <line class="flow" x1="360" y1="72" x2="360" y2="100"/>
-          <line class="flow" x1="360" y1="72" x2="460" y2="100"/>
-          <line class="flow" x1="360" y1="132" x2="360" y2="164"/>
-          <rect class="box" x="320" y="100" width="80" height="32" rx="6"/>
-          <text class="t-sm" x="360" y="120" text-anchor="middle">users</text>
-          <rect class="box" x="420" y="100" width="80" height="32" rx="6"/>
-          <text class="t-sm" x="460" y="120" text-anchor="middle">computers</text>
+        <g data-s="1 4 5" data-calm="directory">
+          ${cyl(208, 16, 304, 232)}
+          <text class="t-b" x="224" y="56">Directory</text>
         </g>
-        <g data-s="1 3">
-          <rect class="box" x="220" y="100" width="80" height="32" rx="6"/>
-          <text class="t-sm" x="260" y="120" text-anchor="middle">groups</text>
+        <g data-s="1 4 5" data-note="call-out">
+          <rect class="box" x="320" y="44" width="80" height="32" rx="6"/>
+          <text class="t-sm t-b" x="360" y="64" text-anchor="middle">root</text>
+          <line class="flow" x1="360" y1="76" x2="260" y2="104"/>
+          <line class="flow" x1="360" y1="76" x2="360" y2="104"/>
+          <line class="flow" x1="360" y1="76" x2="460" y2="104"/>
+          <line class="flow" x1="360" y1="136" x2="360" y2="164"/>
+          <rect class="box" x="320" y="104" width="80" height="32" rx="6"/>
+          <text class="t-sm" x="360" y="124" text-anchor="middle">users</text>
+          <rect class="box" x="420" y="104" width="80" height="32" rx="6"/>
+          <text class="t-sm" x="460" y="124" text-anchor="middle">computers</text>
         </g>
-        <g data-s="1 2 3">
-          <rect class="box" x="300" y="164" width="200" height="56" rx="6"/>
-          <text class="t-sm t-b" x="316" y="186">a user entry</text>
-          <text class="t-sm t-mut" x="316" y="204">DN + attributes</text>
+        <g data-s="1 3" data-note="call-out">
+          <rect class="box" x="220" y="104" width="80" height="32" rx="6"/>
+          <text class="t-sm" x="260" y="124" text-anchor="middle">groups</text>
         </g>
-        <g data-s="2 3">
+        <g data-s="1 2 3" data-note="call-out">
+          <rect class="box" x="300" y="164" width="200" height="48" rx="6"/>
+          <text class="t-sm t-b" x="316" y="184">a user entry</text>
+          <text class="t-sm t-mut" x="316" y="201">DN + attributes</text>
+        </g>
+        <g data-s="2 3" data-calm="app">
           <rect class="box" x="24" y="96" width="152" height="112" rx="8"/>
           ${icon('app-window', 40, 110)}
           <text class="t-b" x="72" y="128">App</text>
           <text class="t-sm t-mut" x="40" y="164">maps groups</text>
           <text class="t-sm t-mut" x="40" y="180">to permissions</text>
         </g>
-        <line class="flow" data-s="2" x1="178" y1="194" x2="298" y2="194" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="270" y="186" text-anchor="middle">bind</text>
-        <line class="flow" data-s="3" x1="252" y1="134" x2="178" y2="148" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
+        <line class="flow" data-s="2" data-calm="app-directory" x1="178" y1="188" x2="298" y2="188" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="270" y="180" text-anchor="middle">bind</text>
+        <line class="flow" data-s="3" data-calm="app-directory" x1="252" y1="138" x2="178" y2="152" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="560" y="24" width="136" height="100" rx="8"/>
           ${icon('network', 576, 38)}
           <text class="t-b" x="608" y="56">Built on it</text>
           <text class="t-sm t-mut" x="576" y="84">RADIUS, SAML,</text>
           <text class="t-sm t-mut" x="576" y="100">SCIM, IdPs</text>
         </g>
-        <line class="flow" data-s="4" x1="514" y1="74" x2="558" y2="74" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
+        <line class="flow" data-s="4" data-note="call-out" x1="514" y1="74" x2="558" y2="74" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-note="call-out">
           <rect class="box" x="560" y="156" width="136" height="84" rx="12"/>
           ${icon('skull', 576, 170)}
           <text class="t-b" x="608" y="188">Attacker</text>
           <text class="t-sm t-mut" x="576" y="214">owns the estate</text>
         </g>
-        <line class="flow-bad" data-s="5" x1="558" y1="198" x2="514" y2="198" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="5" data-note="call-out" x1="558" y1="198" x2="514" y2="198" marker-end="url(#ah-bad)"/>
 
-        ${badge(1, 496, 32, '1')}
-        ${badge(2, 234, 194, '2')}
-        ${badge(3, 215, 141, '3')}
+        ${badge(1, 480, 56, '1')}
+        ${badge(2, 234, 188, '2')}
+        ${badge(3, 228, 146, '3')}
         ${badge(4, 536, 74, '4')}
         ${badge(5, 536, 198, '5')}
       </svg>`,
@@ -9851,6 +9860,137 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "The authorisation server returns an authorisation code.", "direction": "destination-to-source" },
             { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "To swap the code for tokens, the client presents the code with the original verifier, which the server re-hashes and compares." },
             { "relationship-unique-id": "client-server", "sequence-number": 5, "description": "The authorisation server returns tokens for the code.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    oidc: {
+      "nodes": [
+        { "unique-id": "app", "node-type": "system", "name": "App", "description": "An app, which with OAuth 2.0 alone gets only an access token for APIs and with OpenID Connect also receives an ID Token that attests who the user is." },
+        { "unique-id": "provider", "node-type": "service", "name": "OpenID Provider", "description": "An OpenID Provider, which issues an ID Token alongside the usual access token, so OpenID Connect adds authentication to OAuth 2.0, which on its own only handles authorisation." },
+        { "unique-id": "userinfo", "node-type": "service", "name": "UserInfo", "description": "The UserInfo endpoint, which apps can call for profile details like name and email." },
+        { "unique-id": "id-token", "node-type": "data-asset", "name": "ID Token", "description": "An ID Token, a signed JWT carrying claims such as who the user is (sub), who issued the ID Token (iss) and who the ID Token is for (aud); a client that skips validating the ID Token's signature, issuer, audience and expiry gets none of these guarantees." }
+      ],
+      "relationships": [
+        { "unique-id": "app-provider", "description": "The app sends the OpenID Provider a request, whose openid scope turns a plain OAuth exchange into an OIDC one, and receives the usual access token for APIs.",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "provider" } } } },
+        { "unique-id": "provider-id-token", "description": "The OpenID Provider issues the ID Token alongside the usual access token.",
+          "relationship-type": { "connects": { "source": { "node": "provider" }, "destination": { "node": "id-token" } } } },
+        { "unique-id": "id-token-app", "description": "The ID Token, a signed JWT, passes to the app.",
+          "relationship-type": { "connects": { "source": { "node": "id-token" }, "destination": { "node": "app" } } } },
+        { "unique-id": "provider-userinfo", "description": "The UserInfo endpoint is part of the OpenID Provider.",
+          "relationship-type": { "composed-of": { "container": "provider", "nodes": ["userinfo"] } } },
+        { "unique-id": "app-userinfo", "description": "The app calls the UserInfo endpoint for profile details like name and email.",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "userinfo" } } } }
+      ],
+      "flows": [
+        { "unique-id": "openid-connect", "name": "OpenID Connect",
+          "description": "OAuth grants an access token for APIs; OIDC adds a signed ID Token (a JWT) that attests who the user is.",
+          "transitions": [
+            { "relationship-unique-id": "app-provider", "sequence-number": 1, "description": "On its own, OAuth 2.0 only handles authorisation: in reply to the app's request, the app gets an access token for APIs.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "app-provider", "sequence-number": 2, "description": "Requesting the openid scope in that request turns a plain OAuth exchange into an OIDC one." },
+            { "relationship-unique-id": "provider-id-token", "sequence-number": 3, "description": "Alongside the access token, the OpenID Provider issues an ID Token." },
+            { "relationship-unique-id": "id-token-app", "sequence-number": 4, "description": "The ID Token, a signed JWT with claims such as who the user is (sub), who issued the ID Token (iss) and who the ID Token is for (aud), passes to the app." },
+            { "relationship-unique-id": "app-userinfo", "sequence-number": 5, "description": "The app can also call the UserInfo endpoint for profile details like name and email." }
+          ] }
+      ]
+    },
+    scim: {
+      "nodes": [
+        { "unique-id": "idp", "node-type": "service", "name": "Identity provider", "description": "An identity provider, which pushes joiners, movers and leavers to the apps that rely on the identity provider so every connected app stays in step automatically, granting access on day one and revoking access the moment someone leaves, which closes the security gap left by orphaned accounts after offboarding." },
+        { "unique-id": "app-1", "node-type": "service", "name": "App", "description": "A connected app that relies on the identity provider, whose user accounts SCIM keeps in step through the app's /Users and /Groups resources; SCIM removes accounts but does not end sessions or revoke tokens already issued, and coverage depends on each application implementing SCIM." },
+        { "unique-id": "app-2", "node-type": "service", "name": "App", "description": "A connected app that relies on the identity provider, whose user accounts SCIM keeps in step through the app's /Users and /Groups resources; SCIM removes accounts but does not end sessions or revoke tokens already issued, and coverage depends on each application implementing SCIM." },
+        { "unique-id": "app-3", "node-type": "service", "name": "App", "description": "A connected app that relies on the identity provider, whose user accounts SCIM keeps in step through the app's /Users and /Groups resources; SCIM removes accounts but does not end sessions or revoke tokens already issued, and coverage depends on each application implementing SCIM." }
+      ],
+      "relationships": [
+        { "unique-id": "idp-app-1", "description": "The identity provider pushes joiners, movers and leavers to the app over a simple REST and JSON API, chiefly create-read-update-delete operations on the app's /Users and /Groups resources.",
+          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "app-1" } } } },
+        { "unique-id": "idp-app-2", "description": "The identity provider pushes joiners, movers and leavers to the app over a simple REST and JSON API, chiefly create-read-update-delete operations on the app's /Users and /Groups resources.",
+          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "app-2" } } } },
+        { "unique-id": "idp-app-3", "description": "The identity provider pushes joiners, movers and leavers to the app over a simple REST and JSON API, chiefly create-read-update-delete operations on the app's /Users and /Groups resources.",
+          "relationship-type": { "connects": { "source": { "node": "idp" }, "destination": { "node": "app-3" } } } }
+      ],
+      "flows": [
+        { "unique-id": "account-lifecycle", "name": "Joiners, movers and leavers",
+          "description": "The identity provider pushes create / update / deactivate calls to each app's /Users and /Groups endpoints, keeping accounts in sync.",
+          "transitions": [
+            { "relationship-unique-id": "idp-app-1", "sequence-number": 1, "description": "When someone joins, moves or leaves, the identity provider pushes a create, update or deactivate call to a connected app." },
+            { "relationship-unique-id": "idp-app-2", "sequence-number": 2, "description": "The identity provider pushes the same call to a second connected app." },
+            { "relationship-unique-id": "idp-app-3", "sequence-number": 3, "description": "The identity provider pushes the call to a third connected app, so every connected app stays in step automatically." }
+          ] }
+      ]
+    },
+    mfa: {
+      "nodes": [
+        { "unique-id": "you", "node-type": "actor", "name": "You", "description": "You, the human who must give two or more independent proofs of identity: something you know (a password), something you have (a phone or security key) or something you are (a fingerprint), so a stolen password alone is not enough; for Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be." },
+        { "unique-id": "fake-site", "node-type": "service", "name": "Fake site", "description": "A fake site, a phishing page, into which a user can be tricked into typing an SMS code or a time-based one-time password (TOTP), so those older second factors can still be phished." },
+        { "unique-id": "passkey", "node-type": "data-asset", "name": "Passkey", "description": "A passkey, the consumer-friendly form of FIDO2 and WebAuthn: a discoverable FIDO credential, usually synced across your devices, that replaces the password entirely; the weak point moves to recovery, as a synced passkey is only as secure as the cloud account holding the passkey, and a recovery path that falls back to SMS or email reopens the phishing gap." },
+        { "unique-id": "real-site", "node-type": "service", "name": "Real site", "description": "The real site, to whose origin the public-key challenge is bound, so the credential cannot be replayed elsewhere." },
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, which with FIDO2 and WebAuthn exchanges with an authenticator a public-key challenge bound to the real site's origin." },
+        { "unique-id": "authenticator", "node-type": "system", "name": "Authenticator", "description": "An authenticator, which with FIDO2 and WebAuthn exchanges with the browser a public-key challenge bound to the real site's origin." }
+      ],
+      "relationships": [
+        { "unique-id": "you-fake-site", "description": "You can be tricked into typing an SMS code or a TOTP code into the fake site.",
+          "relationship-type": { "interacts": { "actor": "you", "nodes": ["fake-site"] } } },
+        { "unique-id": "passkey-authenticator", "description": "The passkey, usually synced across your devices, passes to the authenticator.",
+          "relationship-type": { "connects": { "source": { "node": "passkey" }, "destination": { "node": "authenticator" } } } },
+        { "unique-id": "browser-real-site", "description": "The browser passes the real site a proof of identity bound to the real site's origin.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "real-site" } } } },
+        { "unique-id": "browser-authenticator", "description": "The browser and the authenticator exchange a public-key challenge bound to the real site's origin.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "authenticator" } } } }
+      ],
+      "flows": [
+        { "unique-id": "phishing-resistant-mfa", "name": "Phishing-resistant MFA",
+          "description": "Several independent factors are verified together; a passkey is bound to the real site's origin, so a phishing page cannot replay it.",
+          "transitions": [
+            { "relationship-unique-id": "you-fake-site", "sequence-number": 1, "description": "Older second factors like SMS codes and TOTP apps can still be phished: you can be tricked into typing the code into a fake site." },
+            { "relationship-unique-id": "browser-authenticator", "sequence-number": 2, "description": "With FIDO2 and WebAuthn, the browser sends the authenticator its side of a public-key challenge bound to the real site's origin." },
+            { "relationship-unique-id": "browser-authenticator", "sequence-number": 3, "description": "The authenticator sends its side back.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "browser-real-site", "sequence-number": 4, "description": "The browser passes the real site a proof of identity bound to the real site's origin, so the credential cannot be replayed elsewhere." },
+            { "relationship-unique-id": "passkey-authenticator", "sequence-number": 5, "description": "A passkey, a discoverable FIDO credential usually synced across your devices, passes to the authenticator and replaces the password entirely." }
+          ] }
+      ]
+    },
+    rbac: {
+      "nodes": [
+        { "unique-id": "user", "node-type": "actor", "name": "User", "description": "A person, whom Role-Based Access Control assigns to roles once a system knows who the person is." },
+        { "unique-id": "role", "node-type": "data-asset", "name": "Role", "description": "A role, such as billing-admin or read-only-auditor, into which Role-Based Access Control groups permissions and to which RBAC assigns people, which is simple to reason about but coarse and prone to role explosion; RBAC is only as good as the data behind it, and stale group memberships grant stale access." },
+        { "unique-id": "permissions", "node-type": "data-asset", "name": "Permissions", "description": "The set of permissions a role groups." },
+        { "unique-id": "attributes", "node-type": "data-asset", "name": "Attributes", "description": "Attributes of the subject, resource, action and environment, over which Attribute-Based Access Control evaluates rules such as allow if department is finance AND the device is managed AND the time is business hours; ABAC is only as good as the data behind it, and stale attributes grant stale access." },
+        { "unique-id": "policy-engine", "node-type": "service", "name": "Policy engine", "description": "A policy engine, which in practice evaluates ABAC's rules at the decision point for every request, giving fine-grained, context-aware decisions at the cost of complexity; Zero Trust leans towards ABAC because trust should depend on live context, not a static role." }
+      ],
+      "relationships": [
+        { "unique-id": "user-role", "description": "Role-Based Access Control assigns the user to the role.",
+          "relationship-type": { "interacts": { "actor": "user", "nodes": ["role"] } } },
+        { "unique-id": "role-permissions", "description": "The role groups a set of permissions.",
+          "relationship-type": { "composed-of": { "container": "role", "nodes": ["permissions"] } } },
+        { "unique-id": "attributes-policy-engine", "description": "The attributes of the subject, resource, action and environment pass to the policy engine, which evaluates rules over the attributes.",
+          "relationship-type": { "connects": { "source": { "node": "attributes" }, "destination": { "node": "policy-engine" } } } }
+      ],
+      "flows": [
+        { "unique-id": "access-decision", "name": "Role and attribute decisions",
+          "description": "RBAC maps users to roles to permissions; ABAC evaluates attributes of subject, resource, action, and environment for a per-request decision.",
+          "transitions": [
+            { "relationship-unique-id": "user-role", "sequence-number": 1, "description": "Role-Based Access Control assigns the user to a role, such as billing-admin or read-only-auditor." },
+            { "relationship-unique-id": "attributes-policy-engine", "sequence-number": 2, "description": "In practice, a policy engine evaluates rules over the attributes of the subject, resource, action and environment at the decision point for every request." }
+          ] }
+      ]
+    },
+    ldap: {
+      "nodes": [
+        { "unique-id": "app", "node-type": "service", "name": "App", "description": "An application, which binds to the directory to authenticate a user and reads the user's group membership, which downstream systems map to permissions." },
+        { "unique-id": "directory", "node-type": "ldap", "name": "Directory", "description": "A directory, a hierarchical database of entries such as users, groups, computers and printers, each identified by a distinguished name and described by attributes, which LDAP queries and modifies; the directory is the source of truth that protocols like RADIUS, SAML and SCIM build on and that identity providers federate outward to the cloud, and Microsoft Active Directory, the dominant enterprise implementation, combines an LDAP directory with Kerberos authentication and policy to become the identity backbone of most corporate networks; because the directory holds the keys to every account, the directory is a prime target: compromise the directory and you own the estate." }
+      ],
+      "relationships": [
+        { "unique-id": "app-directory", "description": "The app binds to the directory to authenticate a user and reads the user's group membership.",
+          "protocol": "LDAP",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "directory" } } } }
+      ],
+      "flows": [
+        { "unique-id": "bind-and-read", "name": "Bind and read",
+          "description": "Apps bind to the directory tree by distinguished name to authenticate a user and read the group memberships that drive their permissions.",
+          "transitions": [
+            { "relationship-unique-id": "app-directory", "sequence-number": 1, "description": "The app binds to the directory to authenticate a user." },
+            { "relationship-unique-id": "app-directory", "sequence-number": 2, "description": "The app reads the user's group membership from the directory, which downstream systems map to permissions.", "direction": "destination-to-source" }
           ] }
       ]
     },
