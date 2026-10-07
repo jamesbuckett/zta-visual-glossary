@@ -5232,51 +5232,62 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     pki: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.">
-        <g data-s="1 2 4">
-          <rect class="box" x="64" y="16" width="280" height="64" rx="8"/>
-          ${icon('shield-check', 80, 30)}
-          <text class="t-b" x="112" y="48">Root CA</text>
-          <text class="t-sm t-mut" x="112" y="66">root of trust</text>
+      <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.">
+        <g data-s="1 2 4" data-calm="root-ca">
+          <rect class="box" x="24" y="16" width="176" height="60" rx="8"/>
+          ${icon('shield-check', 40, 34)}
+          <text class="t-b" x="72" y="42">Root CA</text>
+          <text class="t-sm t-mut" x="72" y="60">root of trust</text>
         </g>
-        <g data-s="2 3 4">
-          <rect class="box" x="64" y="118" width="280" height="64" rx="8"/>
-          ${icon('badge-check', 80, 132)}
-          <text class="t-b" x="112" y="150">Intermediate CA</text>
-          <text class="t-sm t-mut" x="112" y="168">signed by the root</text>
+        <g data-s="2 3" data-calm="intermediate-ca">
+          <rect class="box" x="24" y="124" width="176" height="60" rx="8"/>
+          ${icon('badge-check', 40, 142)}
+          <text class="t-b" x="72" y="159">Intermediate CA</text>
         </g>
-        <g data-s="3 4">
-          <rect class="box" x="64" y="220" width="280" height="64" rx="8"/>
-          ${icon('file-badge', 80, 234)}
-          <text class="t-b" x="112" y="252">Server certificate</text>
-          <text class="t-sm t-mut" x="112" y="270">binds key to name</text>
+        <g data-s="3" data-calm="server">
+          <rect class="box" x="24" y="232" width="176" height="60" rx="8"/>
+          ${icon('server', 40, 250)}
+          <text class="t-b" x="72" y="267">Server</text>
         </g>
-        <g data-s="1 4">
-          <rect class="box" x="470" y="220" width="220" height="64" rx="12"/>
-          ${icon('globe', 486, 234)}
-          <text class="t-b" x="518" y="252">Client</text>
-          <text class="t-sm t-mut" x="518" y="270">e.g. a browser</text>
+        <g data-s="2 4" data-calm="intermediate-certificate">
+          ${doc(248, 124, 216, 60)}
+          ${icon('file-badge', 260, 142)}
+          <text class="t-sm t-b" x="292" y="150">intermediate certificate</text>
+          <text class="t-sm t-mut" x="292" y="167">signed by the root CA</text>
+        </g>
+        <g data-s="3 4" data-calm="server-certificate">
+          ${doc(248, 232, 216, 60)}
+          ${icon('file-badge', 260, 250)}
+          <text class="t-sm t-b" x="292" y="258">server certificate</text>
+          <text class="t-sm t-mut" x="292" y="275">binds key to name</text>
+        </g>
+        <g data-s="1 4" data-calm="client">
+          <rect class="box" x="544" y="124" width="152" height="168" rx="8"/>
+          ${icon('globe', 560, 140)}
+          <text class="t-b" x="592" y="157">Client</text>
+          <text class="t-sm t-mut" x="592" y="175">e.g. a browser</text>
         </g>
 
-        <line class="flow" data-s="2" x1="150" y1="80" x2="150" y2="116" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="162" y="103">signs</text>
-        <line class="flow" data-s="3" x1="150" y1="182" x2="150" y2="218" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="162" y="205">signs</text>
+        <path class="flow" data-s="1 4" data-calm="root-ca-client" d="M202 46 H620 V122" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1 4" x="411" y="39" text-anchor="middle">already trusted</text>
 
-        <line class="flow" data-s="4" x1="468" y1="252" x2="346" y2="252" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="390" y="245" text-anchor="middle">verify</text>
-        <line class="flow" data-s="4" x1="260" y1="220" x2="260" y2="184" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="272" y="205">verify</text>
-        <line class="flow" data-s="4" x1="260" y1="118" x2="260" y2="82" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="272" y="103">verify</text>
+        <path class="flow" data-s="2" data-calm="root-ca-intermediate-certificate" d="M112 78 V100 H356 V122" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="136" y="94">signs</text>
+        <line class="flow" data-s="2" data-calm="intermediate-certificate-intermediate-ca" x1="246" y1="154" x2="202" y2="154" marker-end="url(#ah-mut)"/>
 
-        <path class="flow" data-s="1 4" d="M580 218 V48 H346" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1 4" x="463" y="41" text-anchor="middle">already trusted</text>
+        <path class="flow" data-s="3" data-calm="intermediate-ca-server-certificate" d="M112 186 V208 H356 V230" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="136" y="202">signs</text>
+        <line class="flow" data-s="3" data-calm="server-certificate-server" x1="246" y1="262" x2="202" y2="262" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 40, 48, '1')}
-        ${badge(2, 40, 150, '2')}
-        ${badge(3, 40, 252, '3')}
-        ${badge(4, 446, 252, '4')}
+        <line class="flow" data-s="4" data-calm="intermediate-certificate-client" x1="466" y1="154" x2="542" y2="154" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="490" y="146" text-anchor="middle">verify</text>
+        <line class="flow" data-s="4" data-calm="server-certificate-client" x1="466" y1="262" x2="542" y2="262" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="490" y="254" text-anchor="middle">verify</text>
+
+        ${badge(1, 226, 46, '1')}
+        ${badge(2, 300, 100, '2')}
+        ${badge(3, 300, 208, '3')}
+        ${badge(4, 676, 142, '4')}
       </svg>`,
 
     rbac: () => `
@@ -5592,54 +5603,62 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     vault: () => `
-      <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A workload authenticates to the vault, which checks policy and issues a short-lived, automatically-revoked secret — never a hard-coded password.">
-        <g data-s="1">
+      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A workload authenticates to the vault, which checks policy and issues a short-lived, automatically-revoked secret — never a hard-coded password.">
+        <g data-s="1" data-note="call-out">
           <rect class="box" x="24" y="16" width="172" height="60" rx="8"/>
           ${icon('file-text', 40, 32)}
           <text class="t-b" x="72" y="42">Hard-coded</text>
           <text class="t-sm bad" x="72" y="60">password: leaks</text>
         </g>
-        <g data-s="2 4">
+        <g data-s="2 4" data-calm="workload">
           <rect class="box" x="24" y="100" width="172" height="80" rx="8"/>
           ${icon('server', 40, 114)}
           <text class="t-b" x="72" y="132">Workload</text>
           <text class="t-sm t-mut" x="72" y="150">identity, often</text>
           <text class="t-sm t-mut" x="72" y="165">SPIFFE</text>
         </g>
-        <g data-s="2 3 4 5">
-          <rect class="box" x="268" y="40" width="184" height="200" rx="8"/>
-          ${icon('lock', 284, 54)}
-          <text class="t-b" x="316" y="72">Vault</text>
-          <text class="t-sm t-mut" x="316" y="90">central, encrypted</text>
+        <g data-s="3" data-calm="policy">
+          ${doc(268, 16, 184, 56)}
+          ${icon('scroll-text', 280, 32)}
+          <text class="t-sm t-b" x="312" y="40">fine-grained policy</text>
+          <text class="t-sm t-mut" x="312" y="57">who may have it</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="284" y="108" width="152" height="44" rx="6"/>
-          <text class="t-sm t-b" x="360" y="126" text-anchor="middle">policy check</text>
-          <text class="t-sm t-mut" x="360" y="142" text-anchor="middle">who may have it</text>
+        <g data-s="2 3 4 5" data-calm="vault">
+          <rect class="box" x="268" y="100" width="184" height="80" rx="8"/>
+          ${icon('lock', 284, 114)}
+          <text class="t-b" x="316" y="132">Vault</text>
+          <text class="t-sm t-mut" x="316" y="150">secrets manager</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="284" y="176" width="152" height="44" rx="6"/>
-          <text class="t-sm t-b" x="360" y="194" text-anchor="middle">audit log</text>
-          <text class="t-sm t-mut" x="360" y="210" text-anchor="middle">every access</text>
+        <g data-s="2" data-calm="secrets">
+          ${cyl(524, 100, 172, 80)}
+          <text class="t-sm t-b" x="610" y="140" text-anchor="middle">secrets</text>
+          <text class="t-sm t-mut" x="610" y="157" text-anchor="middle">central, encrypted</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="524" y="100" width="172" height="80" rx="8"/>
-          ${icon('database', 540, 114)}
-          <text class="t-b" x="572" y="132">Database</text>
-          <text class="t-sm t-mut" x="572" y="150">short-lived</text>
-          <text class="t-sm t-mut" x="572" y="165">login</text>
+        <g data-s="4" data-calm="dynamic-secret">
+          ${doc(216, 212, 192, 64)}
+          ${icon('key-round', 228, 228)}
+          <text class="t-sm t-b" x="260" y="236">dynamic secret</text>
+          <text class="t-sm t-mut" x="260" y="252">short-lived, revoked</text>
+          <text class="t-sm t-mut" x="260" y="267">automatically</text>
         </g>
-        <line class="flow" data-s="2" x1="198" y1="120" x2="266" y2="120" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="266" y1="160" x2="198" y2="160" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="454" y1="140" x2="522" y2="140" marker-end="url(#ah-mut)"/>
-        <path class="flow" data-s="4" d="M110 182 V262 H610 V182" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="360" y="256" text-anchor="middle">short-lived, revoked automatically</text>
+        <g data-s="5" data-calm="audit-log">
+          ${cyl(504, 212, 192, 64)}
+          <text class="t-sm t-b" x="600" y="246" text-anchor="middle">audit log</text>
+          <text class="t-sm t-mut" x="600" y="262" text-anchor="middle">every access</text>
+        </g>
+
+        <line class="flow" data-s="2" data-calm="workload-vault" x1="198" y1="140" x2="266" y2="140" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="vault-secrets" x1="454" y1="140" x2="522" y2="140" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="policy-vault" x1="360" y1="74" x2="360" y2="98" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="vault-dynamic-secret" x1="312" y1="182" x2="312" y2="210" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="4" data-calm="dynamic-secret-workload" d="M214 244 H110 V182" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="5" data-calm="vault-audit-log" d="M440 182 V244 H502" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 180, 30, '1')}
-        ${badge(2, 232, 120, '2')}
-        ${badge(3, 424, 120, '3')}
-        ${badge(4, 232, 160, '4')}
-        ${badge(5, 424, 188, '5')}
+        ${badge(2, 232, 140, '2')}
+        ${badge(3, 392, 86, '3')}
+        ${badge(4, 160, 244, '4')}
+        ${badge(5, 472, 244, '5')}
       </svg>`,
 
     nist207: () => `
@@ -5998,45 +6017,49 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     pqc: () => `
       <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A quantum computer breaks RSA / ECC key exchange; lattice-based ML-KEM is layered into the TLS handshake to keep it secure.">
-        <g data-s="1 2">
-          <rect class="box" x="24" y="16" width="200" height="76" rx="8"/>
-          ${icon('key-round', 40, 30)}
-          <text class="t-b" x="72" y="46">RSA and ECC</text>
-          <text class="t-sm t-mut" x="72" y="64">key exchange</text>
-          <text class="t-sm t-mut" x="72" y="80">and signatures</text>
+        <g data-note="struck-through">
+          <g data-s="1 2">
+            <rect class="box" x="24" y="16" width="200" height="76" rx="8"/>
+            ${icon('key-round', 40, 30)}
+            <text class="t-b" x="72" y="46">RSA and ECC</text>
+            <text class="t-sm t-mut" x="72" y="64">key exchange</text>
+            <text class="t-sm t-mut" x="72" y="80">and signatures</text>
+          </g>
+          <line class="stroke-bad" data-s="2" x1="182" y1="52" x2="206" y2="76" stroke-width="2.5"/>
+          <line class="stroke-bad" data-s="2" x1="206" y1="52" x2="182" y2="76" stroke-width="2.5"/>
         </g>
-        <line class="flow-bad" data-s="2" x1="270" y1="54" x2="226" y2="54" marker-end="url(#ah-bad)"/>
-        <g data-s="2">
+        <g data-s="2" data-note="call-out">
+          <line class="flow-bad" x1="270" y1="54" x2="226" y2="54" marker-end="url(#ah-bad)"/>
           <rect class="box" x="272" y="16" width="200" height="76" rx="8"/>
           ${icon('atom', 288, 30)}
           <text class="t-b" x="320" y="46">Quantum</text>
           <text class="t-sm t-mut" x="320" y="64">computer running</text>
           <text class="t-sm t-mut" x="320" y="80">Shor's algorithm</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="520" y="16" width="176" height="76" rx="8"/>
+        <g data-s="3" data-calm="adversary">
+          <rect class="box" x="520" y="16" width="176" height="76" rx="20"/>
           ${icon('skull', 536, 30)}
           <text class="t-b" x="568" y="46">Adversary</text>
           <text class="t-sm t-mut" x="568" y="64">records now,</text>
           <text class="t-sm t-mut" x="568" y="80">decrypts later</text>
         </g>
-        <line class="flow-bad" data-s="3" x1="628" y1="186" x2="628" y2="94" marker-end="url(#ah-bad)"/>
-        <g data-s="4">
+        <line class="flow-bad" data-s="3" data-calm="adversary-handshake" x1="628" y1="186" x2="628" y2="94" marker-end="url(#ah-bad)"/>
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="24" y="112" width="572" height="52" rx="8"/>
           ${icon('landmark', 40, 126)}
           <text class="t-b" x="72" y="134">NIST standards, August 2024</text>
           <text class="t-sm t-mut" x="72" y="152">FIPS 203 ML-KEM · FIPS 204 ML-DSA · FIPS 205 SLH-DSA</text>
         </g>
-        <g data-s="5">
-          <rect class="zone" x="24" y="188" width="672" height="84" rx="10"/>
+        <g data-s="5" data-calm="hybrid-handshake">
+          <rect class="box-soft" x="24" y="188" width="672" height="84" rx="10"/>
           <text class="t-sm t-b" x="40" y="206">hybrid TLS handshake</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-calm="classical-key-exchange">
           <rect class="box" x="40" y="216" width="300" height="44" rx="6"/>
           ${icon('key-round', 52, 226)}
           <text class="t-sm" x="84" y="242">classical key exchange</text>
         </g>
-        <g data-s="4 5">
+        <g data-s="4 5" data-calm="ml-kem-key-exchange">
           <rect class="box" x="364" y="216" width="316" height="44" rx="6"/>
           ${icon('lock', 376, 226)}
           <text class="t-sm" x="408" y="242">ML-KEM key exchange</text>
@@ -6160,51 +6183,52 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     tailscale: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh.">
-        <g data-s="1">
-          <rect class="box" x="24" y="16" width="176" height="60" rx="8"/>
+        <g data-s="1" data-calm="idp">
+          <rect class="box" x="24" y="16" width="172" height="60" rx="8"/>
           ${icon('users', 40, 34)}
           <text class="t-b" x="72" y="42">Your IdP</text>
           <text class="t-sm t-mut" x="72" y="60">existing identity</text>
         </g>
-        <line class="flow" data-s="1" x1="202" y1="46" x2="258" y2="46" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2">
-          <rect class="box" x="260" y="16" width="200" height="60" rx="8"/>
-          ${icon('server', 276, 34)}
-          <text class="t-b" x="308" y="42">Coordination</text>
-          <text class="t-sm t-mut" x="308" y="60">auth and keys</text>
+        <line class="flow" data-s="1" data-calm="coordination-idp" x1="198" y1="46" x2="234" y2="46" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 5" data-calm="coordination">
+          <rect class="box" x="236" y="16" width="216" height="60" rx="8"/>
+          ${icon('server', 252, 34)}
+          <text class="t-b" x="284" y="42">Coordination server</text>
+          <text class="t-sm t-mut" x="284" y="60">auth and keys</text>
         </g>
-        <line class="flow" data-s="2" x1="300" y1="78" x2="130" y2="148" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="420" y1="78" x2="590" y2="148" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="360" y1="78" x2="360" y2="222" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="acls-coordination" x1="490" y1="46" x2="454" y2="46" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="acls">
+          ${doc(492, 16, 204, 60)}
+          ${icon('list-checks', 504, 34)}
+          <text class="t-b" x="536" y="42">ACLs</text>
+          <text class="t-sm t-mut" x="536" y="60">identity, not location</text>
+        </g>
+        <line class="flow" data-s="2" data-calm="coordination-device-a" x1="300" y1="78" x2="130" y2="148" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="coordination-device-c" x1="420" y1="78" x2="590" y2="148" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="coordination-device-b" x1="360" y1="78" x2="360" y2="222" marker-end="url(#ah-mut)"/>
 
-        ${[['Device A', 24, 150], ['Device B', 280, 224], ['Device C', 536, 150]].map(([name, x, y]) => `
-          <g data-s="3">
-            <rect class="box" x="${x}" y="${y}" width="160" height="56" rx="12"/>
+        ${[['device-a', 'Device A', 24, 150], ['device-b', 'Device B', 280, 224], ['device-c', 'Device C', 536, 150]].map(([id, name, x, y]) => `
+          <g data-s="3" data-calm="${id}">
+            <rect class="box" x="${x}" y="${y}" width="160" height="56" rx="8"/>
             ${icon('laptop', x + 16, y + 16)}
             <text class="t-b" x="${x + 48}" y="${y + 33}">${name}</text>
           </g>`).join('')}
-        <line class="flow" data-s="3" x1="186" y1="178" x2="534" y2="178" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="150" y1="208" x2="278" y2="244" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="442" y1="262" x2="534" y2="262" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="616" y1="234" x2="616" y2="208" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
+        <line class="flow" data-s="3" data-calm="device-a-device-c" x1="186" y1="178" x2="534" y2="178" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="device-a-device-b" x1="150" y1="208" x2="278" y2="244" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="device-b-derp" x1="442" y1="262" x2="534" y2="262" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="derp-device-c" x1="616" y1="234" x2="616" y2="208" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="derp">
           <rect class="box" x="536" y="236" width="160" height="48" rx="8"/>
           ${icon('radio-tower', 552, 248)}
           <text class="t-b" x="584" y="258">DERP relay</text>
           <text class="t-sm t-mut" x="584" y="274">fallback</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="24" y="236" width="200" height="48" rx="8"/>
-          ${icon('list-checks', 40, 248)}
-          <text class="t-b" x="72" y="258">ACLs</text>
-          <text class="t-sm t-mut" x="72" y="274">identity, not location</text>
-        </g>
 
-        ${badge(1, 230, 46, '1')}
+        ${badge(1, 216, 24, '1')}
         ${badge(2, 360, 140, '2')}
         ${badge(3, 470, 178, '3')}
         ${badge(4, 488, 262, '4')}
-        ${badge(5, 118, 250, '5')}
+        ${badge(5, 472, 24, '5')}
       </svg>`,
 
     casb: () => `
@@ -6538,59 +6562,59 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     tpm: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Secure Boot has each startup stage verified and the TPM records what loaded, so a server can attest the device booted into a known-good state.">
+      <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Secure Boot has each startup stage verified and the TPM records what loaded, so a server can attest the device booted into a known-good state.">
         <text class="t-sm" data-s="1" x="292" y="18" text-anchor="middle">each stage is verified against trusted signatures</text>
-        ${[['binary', 'Firmware', 24], ['power', 'Bootloader', 216], ['monitor', 'OS', 408]].map(([ico, name, x]) => `
-          <g data-s="1 2">
+        ${[['firmware', 'binary', 'Firmware', 24], ['bootloader', 'power', 'Bootloader', 216], ['os', 'monitor', 'OS', 408]].map(([id, ico, name, x]) => `
+          <g data-s="1 2" data-calm="${id}">
             <rect class="box" x="${x}" y="28" width="152" height="56" rx="8"/>
             ${icon(ico, x + 16, 44)}
             <text class="t-b" x="${x + 48}" y="61">${name}</text>
           </g>`).join('')}
-        <line class="flow" data-s="1" x1="178" y1="56" x2="214" y2="56" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1" x1="370" y1="56" x2="406" y2="56" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="firmware-bootloader" x1="178" y1="56" x2="214" y2="56" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="bootloader-os" x1="370" y1="56" x2="406" y2="56" marker-end="url(#ah-mut)"/>
 
-        <g data-s="2 3 4">
-          <rect class="box" x="24" y="120" width="516" height="116" rx="8"/>
+        <g data-s="2 3 4" data-calm="tpm">
+          <rect class="box-soft" x="24" y="120" width="516" height="124" rx="8"/>
           ${icon('cpu', 40, 124)}
           <text class="t-b" x="72" y="142">TPM</text>
         </g>
-        <g data-s="2 4">
-          <rect class="box" x="40" y="156" width="252" height="68" rx="6"/>
-          <text class="t-b" x="56" y="178">PCRs</text>
-          <text class="t-sm t-mut" x="56" y="196">hashes of what</text>
-          <text class="t-sm t-mut" x="56" y="212">actually loaded</text>
+        <g data-s="2 4" data-calm="pcrs">
+          ${cyl(40, 150, 252, 78)}
+          <text class="t-b" x="56" y="180">PCRs</text>
+          <text class="t-sm t-mut" x="56" y="198">hashes of what</text>
+          <text class="t-sm t-mut" x="56" y="213">actually loaded</text>
         </g>
-        <line class="flow" data-s="2" x1="100" y1="86" x2="100" y2="154" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="292" y1="86" x2="200" y2="154" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="484" y1="86" x2="270" y2="154" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="308" y="156" width="216" height="68" rx="6"/>
-          ${icon('key-round', 320, 170)}
-          <text class="t-b" x="352" y="186">Keys</text>
-          <text class="t-sm t-mut" x="352" y="204">never leave</text>
-          <text class="t-sm t-mut" x="352" y="218">the hardware</text>
+        <line class="flow" data-s="2" data-calm="firmware-pcrs" x1="124" y1="86" x2="124" y2="149" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="bootloader-pcrs" x1="292" y1="86" x2="200" y2="148" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="os-pcrs" x1="484" y1="86" x2="270" y2="151" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="keys">
+          ${doc(308, 150, 208, 78)}
+          ${icon('key-round', 320, 166)}
+          <text class="t-b" x="352" y="182">Keys</text>
+          <text class="t-sm t-mut" x="352" y="200">never leave</text>
+          <text class="t-sm t-mut" x="352" y="215">the hardware</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-calm="server">
           <rect class="box" x="592" y="136" width="104" height="84" rx="8"/>
           ${icon('server', 608, 148)}
           <text class="t-b" x="608" y="190">Server</text>
           <text class="t-sm t-mut" x="608" y="208">remote</text>
         </g>
-        <line class="flow" data-s="4" x1="590" y1="164" x2="542" y2="164" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="server-tpm" x1="590" y1="164" x2="542" y2="164" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="566" y="158" text-anchor="middle">asks</text>
-        <line class="flow" data-s="4" x1="542" y1="196" x2="590" y2="196" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="server-tpm" x1="542" y1="196" x2="590" y2="196" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="566" y="214" text-anchor="middle">proof</text>
-        <g data-s="5">
-          <rect class="box" x="24" y="252" width="672" height="40" rx="8"/>
-          ${icon('shield-check', 40, 260)}
-          <text class="t-sm" x="72" y="277">underpins disk-encryption key release · device identity · device-posture checks</text>
+        <g data-s="5" data-note="footer">
+          <rect class="box" x="24" y="260" width="672" height="40" rx="8"/>
+          ${icon('shield-check', 40, 268)}
+          <text class="t-sm" x="72" y="285">underpins disk-encryption key release · device identity · device-posture checks</text>
         </g>
 
         ${badge(1, 196, 56, '1')}
-        ${badge(2, 100, 104, '2')}
-        ${badge(3, 508, 170, '3')}
+        ${badge(2, 124, 104, '2')}
+        ${badge(3, 488, 178, '3')}
         ${badge(4, 566, 180, '4')}
-        ${badge(5, 680, 272, '5')}
+        ${badge(5, 680, 280, '5')}
       </svg>`,
 
     sigstore: () => `
@@ -9484,6 +9508,189 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "client-server", "sequence-number": 2, "description": "Mutual TLS requires the client to present its certificate too, and each side verifies the other during the handshake." },
             { "relationship-unique-id": "client-server", "sequence-number": 3, "description": "Application data then flows from the client to the server." },
             { "relationship-unique-id": "client-server", "sequence-number": 4, "description": "Application data flows from the server to the client too.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    pki: {
+      "nodes": [
+        { "unique-id": "root-ca", "node-type": "service", "name": "Root CA", "description": "The root Certificate Authority, where trust starts, which signs the intermediate CA's X.509 certificate; get the root of trust wrong and everything built on it is compromised." },
+        { "unique-id": "intermediate-ca", "node-type": "service", "name": "Intermediate CA", "description": "An intermediate Certificate Authority, whose certificate the root CA signs and which in turn signs the server's certificate." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "The server, whose public key the server's certificate binds to the server's name." },
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client, a relying party such as a browser, which trusts the binding of key to identity without prior contact by verifying each signature and walking the chain up to a root the client already trusts; every padlock in a browser is a PKI trust decision." },
+        { "unique-id": "intermediate-certificate", "node-type": "data-asset", "name": "intermediate certificate", "description": "The intermediate CA's X.509 certificate, signed by the root CA to vouch that the intermediate CA's key belongs to the intermediate CA's name; certificates carry an expiry and can be revoked, and protocols like ACME automate issuance and renewal at scale." },
+        { "unique-id": "server-certificate", "node-type": "data-asset", "name": "server certificate", "description": "The server's X.509 certificate, signed by the intermediate CA to bind the server's public key to the server's name; certificates carry an expiry and can be revoked, and protocols like ACME automate issuance and renewal at scale." }
+      ],
+      "relationships": [
+        { "unique-id": "root-ca-client", "description": "The client already trusts the root CA, so the root CA is where the client's trust in the chain starts.",
+          "relationship-type": { "connects": { "source": { "node": "root-ca" }, "destination": { "node": "client" } } } },
+        { "unique-id": "root-ca-intermediate-certificate", "description": "The root CA signs the intermediate CA's X.509 certificate, vouching that the intermediate CA's key belongs to the intermediate CA's name.",
+          "relationship-type": { "connects": { "source": { "node": "root-ca" }, "destination": { "node": "intermediate-certificate" } } } },
+        { "unique-id": "intermediate-certificate-intermediate-ca", "description": "The intermediate CA's certificate passes to the intermediate CA, binding the intermediate CA's key to the intermediate CA's name.",
+          "relationship-type": { "connects": { "source": { "node": "intermediate-certificate" }, "destination": { "node": "intermediate-ca" } } } },
+        { "unique-id": "intermediate-ca-server-certificate", "description": "The intermediate CA signs the server's certificate, binding the server's public key to the server's name.",
+          "relationship-type": { "connects": { "source": { "node": "intermediate-ca" }, "destination": { "node": "server-certificate" } } } },
+        { "unique-id": "server-certificate-server", "description": "The server's certificate passes to the server, binding the server's public key to the server's name.",
+          "relationship-type": { "connects": { "source": { "node": "server-certificate" }, "destination": { "node": "server" } } } },
+        { "unique-id": "server-certificate-client", "description": "The client verifies the intermediate CA's signature on the server's certificate.",
+          "relationship-type": { "connects": { "source": { "node": "server-certificate" }, "destination": { "node": "client" } } } },
+        { "unique-id": "intermediate-certificate-client", "description": "The client verifies the root CA's signature on the intermediate CA's certificate.",
+          "relationship-type": { "connects": { "source": { "node": "intermediate-certificate" }, "destination": { "node": "client" } } } }
+      ],
+      "flows": [
+        { "unique-id": "chain-of-trust", "name": "Chain of trust",
+          "description": "A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.",
+          "transitions": [
+            { "relationship-unique-id": "root-ca-client", "sequence-number": 1, "description": "Trust starts at the root CA, which the client already trusts." },
+            { "relationship-unique-id": "root-ca-intermediate-certificate", "sequence-number": 2, "description": "The root CA signs the intermediate CA's X.509 certificate, vouching that the intermediate CA's key belongs to the intermediate CA's name." },
+            { "relationship-unique-id": "intermediate-ca-server-certificate", "sequence-number": 3, "description": "The intermediate CA in turn signs the server's certificate, binding the server's public key to the server's name." },
+            { "relationship-unique-id": "server-certificate-client", "sequence-number": 4, "description": "The client verifies the intermediate CA's signature on the server's certificate." },
+            { "relationship-unique-id": "intermediate-certificate-client", "sequence-number": 5, "description": "The client verifies the root CA's signature on the intermediate CA's certificate, walking the chain up to the root the client already trusts." }
+          ] }
+      ]
+    },
+    vault: {
+      "nodes": [
+        { "unique-id": "workload", "node-type": "service", "name": "Workload", "description": "A workload that needs credentials such as database passwords, API keys and certificates and, in a Zero Trust system, authenticates to the vault with a workload identity, often SPIFFE, to retrieve exactly the secrets the workload needs, just in time; hard-coding the credentials in config files or source control instead is a recipe for leaks." },
+        { "unique-id": "vault", "node-type": "service", "name": "Vault", "description": "A secrets manager such as HashiCorp Vault, which hands secrets out only to identities that prove they should have them, with every access authenticated, authorised and logged; centralising secrets also makes the vault a high-value target and a start-up dependency for every service that needs one." },
+        { "unique-id": "secrets", "node-type": "database", "name": "secrets", "description": "The credentials the vault stores centrally, encrypted, behind authentication and fine-grained policy." },
+        { "unique-id": "policy", "node-type": "data-asset", "name": "fine-grained policy", "description": "The fine-grained policy behind which the vault keeps its secrets, so that the vault hands a secret only to an identity that proves it should have the secret." },
+        { "unique-id": "dynamic-secret", "node-type": "data-asset", "name": "dynamic secret", "description": "A dynamic secret: rather than a long-lived shared password, a short-lived credential the vault generates on demand and revokes automatically, shrinking the window in which a leaked secret is useful." },
+        { "unique-id": "audit-log", "node-type": "database", "name": "audit log", "description": "The log of every access to the vault, giving an audit trail and fast rotation when something is exposed." }
+      ],
+      "relationships": [
+        { "unique-id": "workload-vault", "description": "The workload authenticates to the vault with the workload's identity, often SPIFFE, to retrieve exactly the secrets the workload needs.",
+          "relationship-type": { "connects": { "source": { "node": "workload" }, "destination": { "node": "vault" } } } },
+        { "unique-id": "vault-secrets", "description": "The vault stores the secrets centrally, encrypted.",
+          "relationship-type": { "connects": { "source": { "node": "vault" }, "destination": { "node": "secrets" } } } },
+        { "unique-id": "policy-vault", "description": "Fine-grained policy passes to the vault, which hands a secret only to identities that prove they should have that secret.",
+          "relationship-type": { "connects": { "source": { "node": "policy" }, "destination": { "node": "vault" } } } },
+        { "unique-id": "vault-dynamic-secret", "description": "The vault generates the short-lived credential on demand and revokes the credential automatically.",
+          "relationship-type": { "connects": { "source": { "node": "vault" }, "destination": { "node": "dynamic-secret" } } } },
+        { "unique-id": "dynamic-secret-workload", "description": "The short-lived credential passes to the workload just in time, in place of a long-lived shared password.",
+          "relationship-type": { "connects": { "source": { "node": "dynamic-secret" }, "destination": { "node": "workload" } } } },
+        { "unique-id": "vault-audit-log", "description": "The vault logs every access, each one authenticated and authorised.",
+          "relationship-type": { "connects": { "source": { "node": "vault" }, "destination": { "node": "audit-log" } } } }
+      ],
+      "flows": [
+        { "unique-id": "issue-dynamic-secret", "name": "A dynamic secret",
+          "description": "A workload authenticates to the vault, which checks policy and issues a short-lived, automatically-revoked secret, never a hard-coded password.",
+          "transitions": [
+            { "relationship-unique-id": "workload-vault", "sequence-number": 1, "description": "The workload authenticates to the vault with the workload's identity, often SPIFFE." },
+            { "relationship-unique-id": "policy-vault", "sequence-number": 2, "description": "The vault checks fine-grained policy, so the vault hands a secret only to an identity that proves it should have the secret." },
+            { "relationship-unique-id": "vault-dynamic-secret", "sequence-number": 3, "description": "Rather than handing out a long-lived shared password, the vault generates a short-lived credential on demand." },
+            { "relationship-unique-id": "dynamic-secret-workload", "sequence-number": 4, "description": "The short-lived credential passes to the workload, until the vault revokes the credential automatically." },
+            { "relationship-unique-id": "vault-audit-log", "sequence-number": 5, "description": "The vault logs the access, as the vault logs every access." }
+          ] }
+      ]
+    },
+    pqc: {
+      "nodes": [
+        { "unique-id": "adversary", "node-type": "actor", "name": "Adversary", "description": "Adversaries, who can record encrypted traffic today and decrypt the traffic once quantum hardware arrives, which is why long-lived secrets need protecting now." },
+        { "unique-id": "hybrid-handshake", "node-type": "handshake", "name": "hybrid TLS handshake", "description": "The TLS handshake in the hybrid rollout, where PQC key exchange is being layered alongside classical algorithms rather than replacing them overnight." },
+        { "unique-id": "classical-key-exchange", "node-type": "key-exchange", "name": "classical key exchange", "description": "Key exchange with the classical public-key cryptography, RSA and elliptic-curve, that secures today's internet and rests on maths a sufficiently large quantum computer could break with Shor's algorithm." },
+        { "unique-id": "ml-kem-key-exchange", "node-type": "key-exchange", "name": "ML-KEM key exchange", "description": "Key encapsulation with ML-KEM, from CRYSTALS-Kyber, which NIST finalised as FIPS 203 in August 2024 and which is based on structured lattices, a hard problem both classical and quantum computers struggle with; the new algorithms cost more, as larger keys and signatures mean more handshake data, and have far less cryptanalytic history than RSA and elliptic curves." }
+      ],
+      "relationships": [
+        { "unique-id": "adversary-handshake", "description": "Adversaries can record the encrypted traffic today and decrypt the traffic once quantum hardware arrives: harvest now, decrypt later.",
+          "relationship-type": { "interacts": { "actor": "adversary", "nodes": ["hybrid-handshake"] } } },
+        { "unique-id": "hybrid-handshake-key-exchanges", "description": "The hybrid TLS handshake layers ML-KEM key exchange alongside classical key exchange.",
+          "relationship-type": { "composed-of": { "container": "hybrid-handshake", "nodes": ["classical-key-exchange", "ml-kem-key-exchange"] } } }
+      ],
+      "flows": [
+        { "unique-id": "harvest-now-decrypt-later", "name": "Harvest now, decrypt later",
+          "description": "Adversaries can record encrypted traffic today and decrypt it once quantum hardware arrives, so long-lived secrets need protecting now.",
+          "transitions": [
+            { "relationship-unique-id": "adversary-handshake", "sequence-number": 1, "description": "Adversaries record the encrypted traffic today, to decrypt the traffic once quantum hardware arrives.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    tailscale: {
+      "nodes": [
+        { "unique-id": "idp", "node-type": "service", "name": "Your IdP", "description": "Your existing identity provider, through which the coordination server handles authentication." },
+        { "unique-id": "coordination", "node-type": "service", "name": "Coordination server", "description": "A central coordination server that handles authentication and key distribution, then steps out of the data path; the coordination server is a vendor dependency unless self-hosted with Headscale, an independent community project that reimplements the control server." },
+        { "unique-id": "device-a", "node-type": "system", "name": "Device A", "description": "A device in the tailnet, which connects directly to Device B and Device C over encrypted WireGuard tunnels." },
+        { "unique-id": "device-b", "node-type": "system", "name": "Device B", "description": "A device in the tailnet, which connects directly to Device A over an encrypted WireGuard tunnel and, where peer-to-peer connectivity is blocked, reaches Device C through a DERP relay server." },
+        { "unique-id": "device-c", "node-type": "system", "name": "Device C", "description": "A device in the tailnet, which connects directly to Device A over an encrypted WireGuard tunnel and, where peer-to-peer connectivity is blocked, reaches Device B through a DERP relay server." },
+        { "unique-id": "derp", "node-type": "service", "name": "DERP relay", "description": "One of Tailscale's DERP relay servers, the relay fallback that, with NAT traversal, makes peer-to-peer connectivity work even behind firewalls." },
+        { "unique-id": "acls", "node-type": "data-asset", "name": "ACLs", "description": "The coordination server's access-control lists, which govern by identity rather than network location which devices can connect, but have no say over what happens inside each application." }
+      ],
+      "relationships": [
+        { "unique-id": "coordination-idp", "description": "The coordination server handles authentication through your existing identity provider.",
+          "relationship-type": { "connects": { "source": { "node": "coordination" }, "destination": { "node": "idp" } } } },
+        { "unique-id": "coordination-device-a", "description": "The coordination server distributes keys to Device A, then steps out of the data path.",
+          "relationship-type": { "connects": { "source": { "node": "coordination" }, "destination": { "node": "device-a" } } } },
+        { "unique-id": "coordination-device-b", "description": "The coordination server distributes keys to Device B, then steps out of the data path.",
+          "relationship-type": { "connects": { "source": { "node": "coordination" }, "destination": { "node": "device-b" } } } },
+        { "unique-id": "coordination-device-c", "description": "The coordination server distributes keys to Device C, then steps out of the data path.",
+          "relationship-type": { "connects": { "source": { "node": "coordination" }, "destination": { "node": "device-c" } } } },
+        { "unique-id": "device-a-device-c", "description": "Device A and Device C connect directly to each other over an encrypted WireGuard tunnel, instead of backhauling through a central gateway.",
+          "relationship-type": { "connects": { "source": { "node": "device-a" }, "destination": { "node": "device-c" } } } },
+        { "unique-id": "device-a-device-b", "description": "Device A and Device B connect directly to each other over an encrypted WireGuard tunnel, instead of backhauling through a central gateway.",
+          "relationship-type": { "connects": { "source": { "node": "device-a" }, "destination": { "node": "device-b" } } } },
+        { "unique-id": "device-b-derp", "description": "Where peer-to-peer connectivity is blocked, traffic between Device B and Device C goes through the DERP relay server, Tailscale's relay fallback.",
+          "relationship-type": { "connects": { "source": { "node": "device-b" }, "destination": { "node": "derp" } } } },
+        { "unique-id": "derp-device-c", "description": "The DERP relay server carries the relayed traffic between Device C and Device B.",
+          "relationship-type": { "connects": { "source": { "node": "derp" }, "destination": { "node": "device-c" } } } },
+        { "unique-id": "acls-coordination", "description": "The access-control lists pass to the coordination server, whose ACLs govern which devices can connect by identity rather than network location.",
+          "relationship-type": { "connects": { "source": { "node": "acls" }, "destination": { "node": "coordination" } } } }
+      ],
+      "flows": [
+        { "unique-id": "coordinate-then-connect", "name": "Coordinate, then connect directly",
+          "description": "An identity-aware coordination server hands out keys, then steps aside; devices form direct WireGuard tunnels in a flat mesh.",
+          "transitions": [
+            { "relationship-unique-id": "coordination-idp", "sequence-number": 1, "description": "The coordination server handles authentication through your existing identity provider." },
+            { "relationship-unique-id": "coordination-idp", "sequence-number": 2, "description": "Your identity provider answers the coordination server.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "coordination-device-a", "sequence-number": 3, "description": "The coordination server distributes keys to Device A." },
+            { "relationship-unique-id": "coordination-device-b", "sequence-number": 4, "description": "The coordination server distributes keys to Device B." },
+            { "relationship-unique-id": "coordination-device-c", "sequence-number": 5, "description": "The coordination server distributes keys to Device C, then steps out of the data path." },
+            { "relationship-unique-id": "device-a-device-c", "sequence-number": 6, "description": "Traffic from Device A goes directly to Device C over an encrypted WireGuard tunnel." },
+            { "relationship-unique-id": "device-a-device-c", "sequence-number": 7, "description": "Traffic from Device C goes directly to Device A over the same tunnel.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "device-a-device-b", "sequence-number": 8, "description": "Traffic from Device A goes directly to Device B over an encrypted WireGuard tunnel." },
+            { "relationship-unique-id": "device-a-device-b", "sequence-number": 9, "description": "Traffic from Device B goes directly to Device A over the same tunnel.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "device-b-derp", "sequence-number": 10, "description": "Where peer-to-peer connectivity is blocked, traffic from Device B goes to the DERP relay server instead." },
+            { "relationship-unique-id": "derp-device-c", "sequence-number": 11, "description": "The DERP relay server passes the traffic on to Device C." },
+            { "relationship-unique-id": "derp-device-c", "sequence-number": 12, "description": "Traffic from Device C goes back through the DERP relay server.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "device-b-derp", "sequence-number": 13, "description": "The DERP relay server passes the traffic on to Device B.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    tpm: {
+      "nodes": [
+        { "unique-id": "firmware", "node-type": "boot-stage", "name": "Firmware", "description": "The firmware, a stage of startup whose hash measured boot records in the TPM as the firmware actually loads." },
+        { "unique-id": "bootloader", "node-type": "boot-stage", "name": "Bootloader", "description": "The bootloader, a stage of startup that Secure Boot verifies against trusted signatures, refusing to run a bootloader that has been tampered with." },
+        { "unique-id": "os", "node-type": "boot-stage", "name": "OS", "description": "The operating system, a stage of startup that Secure Boot verifies against trusted signatures and whose hash measured boot records in the TPM." },
+        { "unique-id": "tpm", "node-type": "chip", "name": "TPM", "description": "A Trusted Platform Module, a tamper-resistant chip on the motherboard and a hardware root of trust that moves the foundation of trust from software, which malware can subvert, down into silicon, underpinning disk-encryption key release, device identity and the device-posture checks Zero Trust relies on; a TPM attests what booted but cannot tell whether that software is free of vulnerabilities, and a TPM-only setup can still be bypassed by a skilled attacker with physical access to the board." },
+        { "unique-id": "pcrs", "node-type": "database", "name": "PCRs", "description": "The TPM's Platform Configuration Registers, where measured boot stores a hash of each component that actually loaded at boot." },
+        { "unique-id": "keys", "node-type": "data-asset", "name": "Keys", "description": "Cryptographic keys the TPM generates and stores, which never leave the hardware." },
+        { "unique-id": "server", "node-type": "service", "name": "Server", "description": "A remote server, which can ask the TPM to attest to the measured-boot record and so get cryptographic proof the device booted into a known-good state before the device is trusted." }
+      ],
+      "relationships": [
+        { "unique-id": "firmware-bootloader", "description": "Startup passes from the firmware to the bootloader, which Secure Boot has verified against trusted signatures.",
+          "relationship-type": { "connects": { "source": { "node": "firmware" }, "destination": { "node": "bootloader" } } } },
+        { "unique-id": "bootloader-os", "description": "Startup passes from the bootloader to the OS, which Secure Boot has verified against trusted signatures.",
+          "relationship-type": { "connects": { "source": { "node": "bootloader" }, "destination": { "node": "os" } } } },
+        { "unique-id": "firmware-pcrs", "description": "Measured boot records a hash of the firmware that actually loaded in the TPM's Platform Configuration Registers.",
+          "relationship-type": { "connects": { "source": { "node": "firmware" }, "destination": { "node": "pcrs" } } } },
+        { "unique-id": "bootloader-pcrs", "description": "Measured boot records a hash of the bootloader that actually loaded in the TPM's Platform Configuration Registers.",
+          "relationship-type": { "connects": { "source": { "node": "bootloader" }, "destination": { "node": "pcrs" } } } },
+        { "unique-id": "os-pcrs", "description": "Measured boot records a hash of the OS that actually loaded in the TPM's Platform Configuration Registers.",
+          "relationship-type": { "connects": { "source": { "node": "os" }, "destination": { "node": "pcrs" } } } },
+        { "unique-id": "tpm-parts", "description": "The TPM holds the Platform Configuration Registers and the cryptographic keys the TPM generates and stores, which never leave the hardware.",
+          "relationship-type": { "composed-of": { "container": "tpm", "nodes": ["pcrs", "keys"] } } },
+        { "unique-id": "server-tpm", "description": "The remote server asks the TPM to attest to the measured-boot record, and the TPM returns cryptographic proof that the device booted into a known-good state.",
+          "relationship-type": { "connects": { "source": { "node": "server" }, "destination": { "node": "tpm" } } } }
+      ],
+      "flows": [
+        { "unique-id": "verify-measure-attest", "name": "Verify, measure, attest",
+          "description": "Secure Boot has each startup stage verified and the TPM records what loaded, so a server can attest the device booted into a known-good state.",
+          "transitions": [
+            { "relationship-unique-id": "firmware-bootloader", "sequence-number": 1, "description": "Secure Boot has the bootloader verified against trusted signatures before startup passes to the bootloader, refusing to run a bootloader that has been tampered with." },
+            { "relationship-unique-id": "bootloader-os", "sequence-number": 2, "description": "Startup passes on to the OS, also verified against trusted signatures." },
+            { "relationship-unique-id": "firmware-pcrs", "sequence-number": 3, "description": "Measured boot records a hash of the firmware that actually loaded in the TPM's PCRs." },
+            { "relationship-unique-id": "bootloader-pcrs", "sequence-number": 4, "description": "Measured boot records a hash of the bootloader that actually loaded in the TPM's PCRs." },
+            { "relationship-unique-id": "os-pcrs", "sequence-number": 5, "description": "Measured boot records a hash of the OS that actually loaded in the TPM's PCRs." },
+            { "relationship-unique-id": "server-tpm", "sequence-number": 6, "description": "A remote server asks the TPM to attest to the measured-boot record in the PCRs." },
+            { "relationship-unique-id": "server-tpm", "sequence-number": 7, "description": "The TPM returns cryptographic proof that the device booted into a known-good state, before the device is trusted.", "direction": "destination-to-source" }
           ] }
       ]
     },
