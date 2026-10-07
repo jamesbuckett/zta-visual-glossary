@@ -194,6 +194,15 @@ corner of each node clear of title, sub-label, icon and badge, about 12 units hi
 word's width (`DATA ASSET` is the widest built-in; a custom type can be wider), or
 `npm run verify` reports `calm-type`.
 
+- A badge may move to free a corner, as long as it stays beside what it marks. That is
+  preferred to growing a node.
+- Siblings that were equal stay equal: when one node of a matched set (a row of hosts, the
+  heads of a sequence diagram, the segments of a token, three zones side by side) has to
+  grow, the set grows with it, or the corner is freed another way so none grows.
+- Siblings of one type and one outline size in a drawing take the same corner when a
+  corner is clear for all of them (the first in the usual order); first-fit per node
+  applies only when no corner is clear for the whole set.
+
 ### Relationship to mark
 
 | Relationship | Mark |
@@ -297,13 +306,22 @@ full-explainer disclosure.
   with no model gets no words.
 - For each node of `CALM[id]` it appends `<text class="calm-type">` to the node's
   `data-calm` group, holding the `node-type` uppercased with hyphens as spaces, so the word
-  dims with its node. It places the word inside the node's outline at the first corner
-  clear of every label, icon (taken as a 24 by 24 box at its translate, since `getBBox()`
-  ignores transforms) and badge in the drawing, of the outlines of other nodes (except a
-  container that holds this one) and of a document's fold: bottom-right, top-right,
-  bottom-left, top-left, with top-right first in a container (`zone`, `zone-accent`,
-  `box-soft`), whose own title sits top-left. A cylinder's word keeps below its top rim.
-  With no clear corner the word goes bottom-right anyway, and check (e) reports it.
+  dims with its node. It places the word inside the node's outline at a corner clear of
+  every label, icon (taken as a 24 by 24 box at its translate, since `getBBox()` ignores
+  transforms) and badge in the drawing, of the outlines of other nodes (except a container
+  that holds this one) and of a document's fold. Corners are tried bottom-right,
+  top-right, bottom-left, top-left, with top-right first in a container (`zone`,
+  `zone-accent`, `box-soft`), whose own title sits top-left.
+- Nodes with the same type word and the same outline (class, width and height) take the
+  same corner: the first in that order that is clear for all of them. Only when none is
+  does each take its own first clear corner.
+- The word sits 8 in from the outline's side, or 12 for a rounded outline (`rx` 16 or
+  more), whose curve cuts into the corner, with its baseline 14 below the top or 7 above
+  the bottom. On a cylinder the baseline sits 10 below the top rim, measured at the
+  deepest point of the rim over the word's width (the rim is half an ellipse 8 deep across
+  the outline), or 12 above the base.
+- With no clear corner the word goes bottom-right, in a container too, and check (e)
+  reports it.
 - The key line in the disclosure is unchanged.
 
 ## 4. Tooling and verification
@@ -410,7 +428,10 @@ check reports it:
   untagged box; a flow whose order contradicts the tour.
 - `verify.mjs --offline`, rule `calm-type`: a node whose box is too small for a clear
   corner in any font, so the result does not depend on the fallback font the offline run
-  measures in; and a page whose labelling is disabled, which reports "no type word".
+  measures in; a node whose corners are all blocked by one-character labels, one of them
+  starting about 2 units past the word's fixed right end, which reports "sits N units
+  beside" rather than an overlap; and a page whose labelling is disabled, which reports
+  "no type word".
 
 The fixtures are written before the checks, so each check is seen to fail first.
 

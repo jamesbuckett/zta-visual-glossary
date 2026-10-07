@@ -2188,7 +2188,14 @@ fix it.
    - Every modelled node carries its type word, drawn by the page from the model; leave
      one corner of each node clear of title, sub-label, icon and badge, about 12 units
      high and the word's width (`DATA ASSET` is the widest built-in; a custom type can be
-     wider), or `npm run verify` reports `calm-type`.
+     wider), or `npm run verify` reports `calm-type`. A badge may move to free a corner,
+     as long as it stays beside what it marks; prefer that to growing a node. Siblings
+     that were equal stay equal: when one node of a matched set (a row of hosts, the heads
+     of a sequence diagram, the segments of a token, three zones side by side) has to
+     grow, grow the set with it, or free the corner another way so none grows. Siblings of
+     one type and one outline size take the same corner when a corner is clear for all of
+     them (the first in the usual order); first-fit per node applies only when no corner
+     is clear for the whole set.
    - One `<g data-calm="<node id>">` per node, holding its outline, icon and labels. A
      container's group holds its outline and own label only; children are sibling groups
      drawn inside it. Never nest `data-calm`.

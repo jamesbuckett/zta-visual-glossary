@@ -3586,9 +3586,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="338" y="146">asks each level</text>
           <text class="t-sm t-mut" x="338" y="162">caches answers</text>
         </g>
-        ${[['root', 'Root servers', 'the top', 24, 2, 52], ['tld', 'TLD', 'top-level domain', 116, 3, 52], ['authoritative', 'Authoritative', 'for the domain', 208, 4, 64]].map(([id, name, sub, y, s, h]) => `
+        ${[['root', 'Root servers', 'the top', 24, 2], ['tld', 'TLD', 'top-level domain', 116, 3], ['authoritative', 'Authoritative', 'for the domain', 208, 4]].map(([id, name, sub, y, s]) => `
           <g data-s="${s}" data-calm="${id}">
-            <rect class="box" x="540" y="${y}" width="156" height="${h}" rx="8"/>
+            <rect class="box" x="540" y="${y}" width="156" height="64" rx="8"/>
             ${icon('server', 552, y + 14)}
             <text class="t-b" x="584" y="${y + 24}">${name}</text>
             <text class="t-sm t-mut" x="584" y="${y + 41}">${sub}</text>
@@ -3679,10 +3679,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     vlan: () => `
-      <svg class="dg" viewBox="0 0 720 312" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One switch, three isolated broadcast domains; traffic between them must pass through a router.">
-        ${[['guest-vlan', 'Guest VLAN', 'guest-devices', 'laptop', 'guest devices', 24, '2 3 4', 100], ['voice-vlan', 'Voice VLAN', 'voice-phones', 'phone', 'voice phones', 256, '2', 112], ['server-vlan', 'Server VLAN', 'servers', 'server', 'servers', 488, '2 3 4', 100]].map(([vid, name, did, ico, dev, x, s, h]) => `
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="One switch, three isolated broadcast domains; traffic between them must pass through a router.">
+        ${[['guest-vlan', 'Guest VLAN', 'guest-devices', 'laptop', 'guest devices', 24, '2 3 4'], ['voice-vlan', 'Voice VLAN', 'voice-phones', 'phone', 'voice phones', 256, '2'], ['server-vlan', 'Server VLAN', 'servers', 'server', 'servers', 488, '2 3 4']].map(([vid, name, did, ico, dev, x, s]) => `
           <g data-s="${s}" data-calm="${vid}">
-            <rect class="zone" x="${x}" y="16" width="208" height="${h}" rx="10"/>
+            <rect class="zone" x="${x}" y="16" width="208" height="100" rx="10"/>
             <text class="t-b" x="${x + 12}" y="36">${name}</text>
             <text class="t-sm t-mut" x="${x + 12}" y="52">broadcast domain</text>
           </g>
@@ -3691,37 +3691,37 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             ${icon(ico, x + 24, 70)}
             <text class="t-sm" x="${x + 56}" y="86">${dev}</text>
           </g>`).join('')}
-        <line class="flow" data-s="1 4" data-calm="guest-switch" x1="128" y1="106" x2="258" y2="170" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1" data-calm="voice-switch" x1="320" y1="106" x2="330" y2="170" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1 4" data-calm="servers-switch" x1="462" y1="170" x2="592" y2="106" marker-end="url(#ah-mut)"/>
-        <line class="flow-bad" data-s="3" data-note="call-out" x1="176" y1="148" x2="544" y2="148" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="3" x="450" y="142" text-anchor="middle">no direct path</text>
+        <line class="flow" data-s="1 4" data-calm="guest-switch" x1="128" y1="106" x2="258" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="voice-switch" x1="320" y1="106" x2="330" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 4" data-calm="servers-switch" x1="462" y1="158" x2="592" y2="106" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="3" data-note="call-out" x1="176" y1="136" x2="544" y2="136" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="3" x="450" y="130" text-anchor="middle">no direct path</text>
 
         <g data-s="1 4" data-calm="switch">
-          <rect class="box" x="200" y="172" width="320" height="52" rx="8"/>
-          ${icon('network', 216, 186)}
-          <text class="t-b" x="248" y="194">One physical switch</text>
-          <text class="t-sm t-mut" x="248" y="212">tags frames (802.1Q)</text>
+          <rect class="box" x="200" y="160" width="320" height="52" rx="8"/>
+          ${icon('network', 216, 174)}
+          <text class="t-b" x="248" y="182">One physical switch</text>
+          <text class="t-sm t-mut" x="248" y="200">tags frames (802.1Q)</text>
         </g>
-        <line class="flow" data-s="4" data-calm="switch-router" x1="340" y1="226" x2="340" y2="254" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" data-calm="switch-router" x1="380" y1="254" x2="380" y2="226" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="switch-router" x1="340" y1="214" x2="340" y2="242" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="switch-router" x1="380" y1="242" x2="380" y2="214" marker-end="url(#ah-mut)"/>
         <g data-s="4" data-calm="router">
-          <rect class="box" x="280" y="256" width="160" height="44" rx="8"/>
-          ${icon('router', 296, 266)}
-          <text class="t-b" x="328" y="283">Router</text>
+          <rect class="box" x="280" y="244" width="160" height="44" rx="8"/>
+          ${icon('router', 296, 254)}
+          <text class="t-b" x="328" y="271">Router</text>
         </g>
-        <text class="t-sm" data-s="4" x="452" y="283">traffic between VLANs</text>
+        <text class="t-sm" data-s="4" x="452" y="271">traffic between VLANs</text>
 
-        ${badge(1, 502, 188, '1')}
-        ${badge(2, 440, 34, '2')}
-        ${badge(3, 260, 148, '3')}
-        ${badge(4, 422, 272, '4')}
+        ${badge(1, 502, 176, '1')}
+        ${badge(2, 392, 34, '2')}
+        ${badge(3, 260, 136, '3')}
+        ${badge(4, 422, 260, '4')}
       </svg>`,
 
     jwt: () => `
-      <svg class="dg" viewBox="0 0 720 312" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Token anatomy — header, payload, and signature; the signature makes it tamper-evident.">
+      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Token anatomy — header, payload, and signature; the signature makes it tamper-evident.">
         <g data-calm="jwt">
-          <rect class="box-soft" x="24" y="16" width="672" height="124" rx="10"/>
+          <rect class="box-soft" x="24" y="16" width="672" height="132" rx="10"/>
           <text class="t-b" x="40" y="40">JSON Web Token</text>
         </g>
         <g data-s="1" data-calm="header">
@@ -3731,42 +3731,42 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <text class="t-b" x="194" y="92" text-anchor="middle">.</text>
         <g data-s="2 4" data-calm="payload">
-          ${doc(204, 56, 280, 56)}
+          ${doc(204, 56, 280, 68)}
           <text class="t-b" x="220" y="80">payload</text>
           <text class="t-sm t-mut" x="220" y="98">base64url</text>
         </g>
         <text class="t-b" x="494" y="92" text-anchor="middle">.</text>
         <g data-s="3" data-calm="signature">
-          ${doc(504, 56, 176, 56)}
+          ${doc(504, 56, 176, 68)}
           <text class="t-b" x="520" y="80">signature</text>
           <text class="t-sm t-mut" x="520" y="98">base64url</text>
         </g>
-        <line class="flow" data-s="2" data-note="call-out" x1="344" y1="114" x2="344" y2="154" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-note="call-out" x1="344" y1="126" x2="344" y2="162" marker-end="url(#ah-mut)"/>
         <g data-s="2" data-note="call-out">
-          <rect class="box" x="204" y="156" width="280" height="84" rx="8"/>
-          ${icon('list-checks', 220, 170)}
-          <text class="t-b" x="252" y="188">Claims</text>
-          <text class="t-sm t-mut" x="252" y="206">who you are, what you</text>
-          <text class="t-sm t-mut" x="252" y="222">may do, when it expires</text>
+          <rect class="box" x="204" y="164" width="280" height="84" rx="8"/>
+          ${icon('list-checks', 220, 178)}
+          <text class="t-b" x="252" y="196">Claims</text>
+          <text class="t-sm t-mut" x="252" y="214">who you are, what you</text>
+          <text class="t-sm t-mut" x="252" y="230">may do, when it expires</text>
         </g>
-        <line class="flow" data-s="3" data-note="call-out" x1="592" y1="114" x2="592" y2="154" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-note="call-out" x1="592" y1="126" x2="592" y2="162" marker-end="url(#ah-mut)"/>
         <g data-s="3" data-note="call-out">
-          <rect class="box" x="504" y="156" width="192" height="84" rx="8"/>
-          ${icon('shield-check', 520, 170)}
-          <text class="t-b" x="552" y="188">Verify</text>
-          <text class="t-sm t-mut" x="552" y="206">not tampered,</text>
-          <text class="t-sm t-mut" x="552" y="222">no database lookup</text>
+          <rect class="box" x="504" y="164" width="192" height="84" rx="8"/>
+          ${icon('shield-check', 520, 178)}
+          <text class="t-b" x="552" y="196">Verify</text>
+          <text class="t-sm t-mut" x="552" y="214">not tampered,</text>
+          <text class="t-sm t-mut" x="552" y="230">no database lookup</text>
         </g>
         <g data-s="4" data-note="footer">
-          <rect class="box" x="24" y="260" width="672" height="40" rx="8"/>
-          ${icon('eye', 40, 268)}
-          <text class="t-sm" x="72" y="285">readable, not encrypted: no secrets in the payload</text>
+          <rect class="box" x="24" y="268" width="672" height="40" rx="8"/>
+          ${icon('eye', 40, 276)}
+          <text class="t-sm" x="72" y="293">readable, not encrypted: no secrets in the payload</text>
         </g>
 
         ${badge(1, 168, 84, '1')}
         ${badge(2, 468, 84, '2')}
         ${badge(3, 664, 84, '3')}
-        ${badge(4, 680, 280, '4')}
+        ${badge(4, 680, 288, '4')}
       </svg>`,
 
     bgp: () => `
@@ -3821,12 +3821,12 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     nat: () => `
       <svg class="dg" viewBox="0 0 720 312" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Many private addresses are translated to one public address via the router's mapping table.">
         <g data-s="1" data-calm="private-network">
-          <rect class="zone" x="24" y="12" width="184" height="216" rx="10"/>
+          <rect class="zone" x="24" y="12" width="184" height="204" rx="10"/>
           <text class="t-sm t-mut" x="36" y="30">private network</text>
         </g>
-        ${[['host-a', 'Host A', 40, '1', 44], ['host-b', 'Host B', 100, '1', 56], ['host-c', 'Host C', 172, '1 4', 44]].map(([id, name, y, s, h]) => `
+        ${[['host-a', 'Host A', 40, '1'], ['host-b', 'Host B', 100, '1'], ['host-c', 'Host C', 160, '1 4']].map(([id, name, y, s]) => `
           <g data-s="${s}" data-calm="${id}">
-            <rect class="box" x="36" y="${y}" width="160" height="${h}" rx="8"/>
+            <rect class="box" x="36" y="${y}" width="160" height="44" rx="8"/>
             ${icon('laptop', 48, y + 10)}
             <text class="t-b" x="80" y="${y + 19}">${name}</text>
             <text class="t-sm t-mut" x="80" y="${y + 35}">private address</text>
@@ -3864,7 +3864,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="341" y="273" text-anchor="middle">maps replies back</text>
         </g>
 
-        ${badge(1, 180, 114, '1')}
+        ${badge(1, 208, 104, '1')}
         ${badge(2, 229, 122, '2')}
         ${badge(3, 488, 106, '3')}
         ${badge(4, 470, 146, '4')}
@@ -4338,9 +4338,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="1" data-calm="sensor-2-topic" x1="186" y1="164" x2="290" y2="160" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="229" y="128" text-anchor="middle">publish</text>
 
-        ${[['client-1', 40, 68], ['client-2', 136, 56]].map(([id, y, h]) => `
+        ${[['client-1', 40], ['client-2', 136]].map(([id, y]) => `
           <g data-s="2 3" data-calm="${id}">
-            <rect class="box" x="536" y="${y}" width="160" height="${h}" rx="8"/>
+            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
             ${icon('monitor', 552, y + 16)}
             <text class="t-b" x="584" y="${y + 25}">Client</text>
             <text class="t-sm t-mut" x="584" y="${y + 43}">subscriber</text>
@@ -4359,7 +4359,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
 
         ${badge(1, 229, 91, '1')}
-        ${badge(2, 680, 54, '2')}
+        ${badge(2, 680, 82, '2')}
         ${badge(3, 490, 152, '3')}
         ${badge(4, 680, 226, '4')}
       </svg>`,
@@ -4399,11 +4399,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     dhcp: () => `
       <svg class="dg" viewBox="0 0 720 310" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The DORA exchange — Discover, Offer, Request, Acknowledge — leases an address to a client.">
         <g data-s="1 3 4" data-calm="device">
-          <rect class="box" x="24" y="16" width="180" height="56" rx="8"/>
+          <rect class="box" x="24" y="16" width="180" height="68" rx="8"/>
           ${icon('smartphone', 40, 32)}
           <text class="t-b" x="72" y="41">New device</text>
           <text class="t-sm t-mut" x="72" y="59">just connected</text>
-          <line class="divider" x1="114" y1="74" x2="114" y2="236"/>
+          <line class="divider" x1="114" y1="86" x2="114" y2="236"/>
         </g>
         <g data-s="2 4 5" data-calm="dhcp-server">
           <rect class="box" x="516" y="16" width="180" height="68" rx="8"/>
@@ -5233,7 +5233,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     pki: () => `
-      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.">
+      <svg class="dg" viewBox="0 0 720 344" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A root CA signs an intermediate, which signs the server's certificate; the client verifies the chain up to a root it already trusts.">
         <g data-s="1 2" data-calm="root-ca">
           <rect class="box" x="24" y="16" width="176" height="60" rx="8"/>
           ${icon('shield-check', 40, 34)}
@@ -5241,50 +5241,50 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="72" y="60">root of trust</text>
         </g>
         <g data-s="2 3" data-calm="intermediate-ca">
-          <rect class="box" x="24" y="124" width="176" height="60" rx="8"/>
-          ${icon('badge-check', 40, 142)}
-          <text class="t-b" x="72" y="159">Intermediate CA</text>
+          <rect class="box" x="24" y="136" width="176" height="60" rx="8"/>
+          ${icon('badge-check', 40, 154)}
+          <text class="t-b" x="72" y="171">Intermediate CA</text>
         </g>
         <g data-s="3" data-calm="server">
-          <rect class="box" x="24" y="244" width="176" height="60" rx="8"/>
-          ${icon('server', 40, 262)}
-          <text class="t-b" x="72" y="279">Server</text>
+          <rect class="box" x="24" y="256" width="176" height="60" rx="8"/>
+          ${icon('server', 40, 274)}
+          <text class="t-b" x="72" y="291">Server</text>
         </g>
-        ${[['root-certificate', 'root certificate', 'for the root CA', 16, '1 4', 60], ['intermediate-certificate', 'intermediate certificate', 'for the intermediate CA', 124, '2 4', 72], ['server-certificate', 'server certificate', 'for the server', 244, '3 4', 60]].map(([id, name, sub, y, s, h]) => `
+        ${[['root-certificate', 'root certificate', 'for the root CA', 16, '1 4'], ['intermediate-certificate', 'intermediate certificate', 'for the intermediate CA', 136, '2 4'], ['server-certificate', 'server certificate', 'for the server', 256, '3 4']].map(([id, name, sub, y, s]) => `
           <g data-s="${s}" data-calm="${id}">
-            ${doc(248, y, 216, h)}
+            ${doc(248, y, 216, 72)}
             ${icon('file-badge', 260, y + 18)}
             <text class="t-sm t-b" x="292" y="${y + 26}">${name}</text>
             <text class="t-sm t-mut" x="292" y="${y + 43}">${sub}</text>
           </g>`).join('')}
         <g data-s="1 4" data-calm="client">
-          <rect class="box" x="544" y="124" width="152" height="60" rx="8"/>
-          ${icon('globe', 560, 142)}
-          <text class="t-b" x="592" y="150">Client</text>
-          <text class="t-sm t-mut" x="592" y="168">e.g. a browser</text>
+          <rect class="box" x="544" y="136" width="152" height="60" rx="8"/>
+          ${icon('globe', 560, 154)}
+          <text class="t-b" x="592" y="162">Client</text>
+          <text class="t-sm t-mut" x="592" y="180">e.g. a browser</text>
         </g>
 
         <line class="flow" data-s="1" data-calm="root-ca-root-certificate" x1="202" y1="46" x2="246" y2="46" marker-end="url(#ah-mut)"/>
-        <path class="flow" data-s="1 4" data-calm="root-certificate-client" d="M466 46 H620 V122" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="1 4" data-calm="root-certificate-client" d="M466 46 H620 V134" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1 4" x="543" y="39" text-anchor="middle">already trusted</text>
 
-        <path class="flow" data-s="2" data-calm="root-ca-intermediate-certificate" d="M112 78 V100 H356 V122" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="136" y="94">signs</text>
-        <line class="flow" data-s="2" data-calm="intermediate-certificate-intermediate-ca" x1="246" y1="154" x2="202" y2="154" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="2" data-calm="root-ca-intermediate-certificate" d="M112 78 V112 H356 V134" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="136" y="106">signs</text>
+        <line class="flow" data-s="2" data-calm="intermediate-certificate-intermediate-ca" x1="246" y1="166" x2="202" y2="166" marker-end="url(#ah-mut)"/>
 
-        <path class="flow" data-s="3" data-calm="intermediate-ca-server-certificate" d="M112 186 V220 H356 V242" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="136" y="214">signs</text>
-        <line class="flow" data-s="3" data-calm="server-certificate-server" x1="246" y1="274" x2="202" y2="274" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="3" data-calm="intermediate-ca-server-certificate" d="M112 198 V232 H356 V254" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="136" y="226">signs</text>
+        <line class="flow" data-s="3" data-calm="server-certificate-server" x1="246" y1="286" x2="202" y2="286" marker-end="url(#ah-mut)"/>
 
-        <line class="flow" data-s="4" data-calm="intermediate-certificate-client" x1="466" y1="154" x2="542" y2="154" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="504" y="146" text-anchor="middle">verify</text>
-        <path class="flow" data-s="4" data-calm="server-certificate-client" d="M466 274 H620 V186" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="543" y="266" text-anchor="middle">verify</text>
+        <line class="flow" data-s="4" data-calm="intermediate-certificate-client" x1="466" y1="166" x2="542" y2="166" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="504" y="158" text-anchor="middle">verify</text>
+        <path class="flow" data-s="4" data-calm="server-certificate-client" d="M466 286 H620 V198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="543" y="278" text-anchor="middle">verify</text>
 
-        ${badge(1, 620, 84, '1')}
-        ${badge(2, 300, 100, '2')}
-        ${badge(3, 300, 220, '3')}
-        ${badge(4, 620, 224, '4')}
+        ${badge(1, 620, 90, '1')}
+        ${badge(2, 300, 112, '2')}
+        ${badge(3, 300, 232, '3')}
+        ${badge(4, 620, 242, '4')}
       </svg>`,
 
     rbac: () => `
@@ -5639,7 +5639,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="260" y="279">automatically</text>
         </g>
         <g data-s="5" data-calm="audit-log">
-          ${cyl(504, 224, 192, 64)}
+          ${cyl(504, 224, 192, 76)}
           <text class="t-sm t-b" x="600" y="258" text-anchor="middle">audit log</text>
           <text class="t-sm t-mut" x="600" y="274" text-anchor="middle">every access</text>
         </g>
@@ -7831,7 +7831,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     alpaca: () => `
-      <svg class="dg" viewBox="0 0 720 348" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
+      <svg class="dg" viewBox="0 0 720 360" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The tool knows only a proxy address on loopback; Alpaca evaluates the PAC, tunnels the request, and answers the 407 with a credential the tool never had — and since the listener has no authentication of its own, any local process can use it too.">
         <g data-calm="machine">
           <rect class="zone" x="16" y="12" width="416" height="244" rx="10"/>
           <text class="t-sm t-mut" x="28" y="30">your machine</text>
@@ -7862,12 +7862,12 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow-bad" data-s="5" data-calm="process-alpaca" x1="218" y1="184" x2="246" y2="132" marker-end="url(#ah-bad)"/>
 
         <g data-s="2" data-calm="pac-file">
-          ${doc(248, 264, 160, 72)}
-          ${icon('file-code', 264, 282)}
-          <text class="t-b" x="296" y="290">PAC file</text>
-          <text class="t-sm t-mut" x="296" y="308">picks the route</text>
+          ${doc(248, 276, 160, 72)}
+          ${icon('file-code', 264, 294)}
+          <text class="t-b" x="296" y="302">PAC file</text>
+          <text class="t-sm t-mut" x="296" y="320">picks the route</text>
         </g>
-        <line class="flow" data-s="2" data-calm="pac-alpaca" x1="328" y1="262" x2="328" y2="138" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="pac-alpaca" x1="328" y1="274" x2="328" y2="138" marker-end="url(#ah-mut)"/>
 
         <g data-s="3 4" data-calm="upstream">
           <rect class="box" x="536" y="40" width="160" height="96" rx="8"/>
@@ -8007,9 +8007,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     envoy: () => `
-      <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.">
+      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A request enters a listener, runs a filter chain that can authenticate and authorise it, then leaves for a cluster — and every part of that configuration arrives live from a control plane over xDS.">
         <g data-s="4" data-calm="envoy">
-          <rect class="box-soft" x="152" y="36" width="408" height="136" rx="10"/>
+          <rect class="box-soft" x="152" y="36" width="408" height="148" rx="10"/>
           <text class="t-sm t-b" x="164" y="54">Envoy</text>
         </g>
         <g data-s="1" data-calm="client">
@@ -8045,23 +8045,23 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="636" y="124" text-anchor="middle">load balanced</text>
         </g>
 
-        <line class="flow" data-s="4" data-calm="control-plane-envoy" x1="360" y1="222" x2="360" y2="174" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="376" y="202">xDS over gRPC, live</text>
+        <line class="flow" data-s="4" data-calm="control-plane-envoy" x1="360" y1="234" x2="360" y2="186" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="376" y="214">xDS over gRPC, live</text>
         <g data-s="4 5" data-calm="control-plane">
-          <rect class="box" x="216" y="224" width="264" height="72" rx="8"/>
-          ${icon('cog', 232, 242)}
-          <text class="t-b" x="264" y="250">Control plane</text>
-          <text class="t-sm t-mut" x="264" y="268">LDS · RDS · CDS · EDS · SDS</text>
+          <rect class="box" x="216" y="236" width="264" height="72" rx="8"/>
+          ${icon('cog', 232, 254)}
+          <text class="t-b" x="264" y="262">Control plane</text>
+          <text class="t-sm t-mut" x="264" y="280">LDS · RDS · CDS · EDS · SDS</text>
         </g>
-        <text class="t-sm bad" data-s="5" x="496" y="248">can reroute traffic,</text>
-        <text class="t-sm bad" data-s="5" x="496" y="264">swap certificates,</text>
-        <text class="t-sm bad" data-s="5" x="496" y="280">disable authorisation</text>
+        <text class="t-sm bad" data-s="5" x="496" y="260">can reroute traffic,</text>
+        <text class="t-sm bad" data-s="5" x="496" y="276">swap certificates,</text>
+        <text class="t-sm bad" data-s="5" x="496" y="292">disable authorisation</text>
 
         ${badge(1, 128, 84, '1')}
         ${badge(2, 424, 76, '2')}
         ${badge(3, 532, 82, '3')}
-        ${badge(4, 360, 198, '4')}
-        ${badge(5, 464, 238, '5')}
+        ${badge(4, 360, 210, '4')}
+        ${badge(5, 464, 250, '5')}
       </svg>`,
 
     istio: () => `
@@ -8414,11 +8414,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <line class="divider" x1="104" y1="66" x2="104" y2="214"/>
         </g>
         <g data-s="1 3" data-calm="broker">
-          <rect class="box" x="536" y="16" width="160" height="60" rx="20"/>
+          <rect class="box" x="536" y="16" width="160" height="48" rx="20"/>
           ${icon('landmark', 552, 28)}
           <text class="t-b" x="584" y="38">Broker</text>
           <text class="t-sm t-mut" x="584" y="55">sell side</text>
-          <line class="divider" x1="616" y1="78" x2="616" y2="214"/>
+          <line class="divider" x1="616" y1="66" x2="616" y2="214"/>
         </g>
 
         <line class="flow" data-s="4" data-calm="fund-broker" x1="106" y1="84" x2="614" y2="84" marker-end="url(#ah-mut)"/>
@@ -8453,7 +8453,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
         ${badge(1, 124, 108, '1')}
         ${badge(2, 680, 244, '2')}
-        ${badge(3, 680, 40, '3')}
+        ${badge(3, 520, 40, '3')}
         ${badge(4, 124, 156, '4')}
         ${badge(5, 680, 288, '5')}
       </svg>`,
@@ -9861,13 +9861,16 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
   }
   // Every modelled node carries its CALM node type, read from the model, so
   // the drawing says what the model says. The word sits inside the node's
-  // group, so it dims with the node, and inside its outline, at the first
-  // corner clear of every label, icon and badge in the drawing and of other
-  // nodes' outlines: bottom-right, top-right, bottom-left, top-left, except
-  // that a container, whose own title sits top-left, tries top-right first.
-  // With no clear corner it goes bottom-right anyway, and verify.mjs reports
-  // it. Called once the view is shown, since geometry reads as zero while it
-  // is hidden, and again when web fonts finish loading, since it measures text.
+  // group, so it dims with the node, and inside its outline, at a corner
+  // clear of every label, icon and badge in the drawing, of other nodes'
+  // outlines and of a document's fold. Corners are tried bottom-right,
+  // top-right, bottom-left, top-left, except that a container, whose own
+  // title sits top-left, tries top-right first. Nodes of one type drawn at
+  // one size take the same corner, the first clear for all of them; only
+  // when none is, each takes its own first clear corner. With no clear
+  // corner the word goes bottom-right anyway, and verify.mjs reports it.
+  // Called once the view is shown, since geometry reads as zero while it is
+  // hidden, and again when web fonts finish loading, since it measures text.
   function labelCalmTypes(fig) {
     const m = CALM[fig.dataset.tour];
     const svg = fig.querySelector("svg.dg");
@@ -9886,32 +9889,51 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     // Badge numerals are measured as their badge.
     const taken = [...svg.querySelectorAll("text, .ico, .badge")]
       .filter((el) => !(el.tagName === "text" && el.closest(".badge"))).map(box);
+    const words = [];
     for (const n of m.nodes) {
       const g = svg.querySelector(`g[data-calm="${n["unique-id"]}"]`);
       const shape = g && [...g.querySelectorAll(SHAPES)].find((el) => !el.closest(".ico"));
       if (!shape) continue;
       const b = shape.getBBox();
-      const container = shape.matches(".zone, .zone-accent, .box-soft");
-      const cyl = shape.matches(".shape-cyl");
       const t = document.createElementNS(svg.namespaceURI, "text");
       t.setAttribute("class", "calm-type");
       t.textContent = n["node-type"].replace(/-/g, " ").toUpperCase();
       g.appendChild(t);
+      const w = t.getComputedTextLength();
+      // A rounded outline's curve cuts into its corners, so its word sits
+      // further in. A cylinder's word keeps 10 below its top rim, measured
+      // where the word runs (the rim is half an ellipse 8 deep), and 12
+      // above its base.
+      const pad = Number(shape.getAttribute("rx")) >= 16 ? 12 : 8;
+      const left = b.x + pad, right = b.x + b.width - pad - w;
+      const r = b.width / 2, cx = b.x + r;
+      const rim = (x) => b.y + 8 + 8 * Math.sqrt(1 - Math.min(1, (Math.max(0, x - cx, cx - x - w) / r) ** 2));
+      const cyl = shape.matches(".shape-cyl");
+      const top = (x) => (cyl ? rim(x) + 10 : b.y + 14), bottom = b.y + b.height - (cyl ? 12 : 7);
+      const br = [right, bottom], tr = [right, top(right)], bl = [left, bottom], tl = [left, top(left)];
+      const container = shape.matches(".zone, .zone-accent, .box-soft");
       // A container that holds this node is not in the way; a document's
-      // fold is. A cylinder's word keeps below its top rim.
+      // fold is.
       const fold = g.querySelector(".fold");
-      const avoid = taken.concat(
-        outlines.filter((el) => el !== shape).map(box).filter((o) => !within(b, o)),
-        fold ? [box(fold)] : []);
-      const w = t.getComputedTextLength(), h = 7, pad = 8;
-      const top = b.y + (cyl ? 24 : 14), bottom = b.y + b.height - (cyl ? 12 : 7);
-      const right = b.x + b.width - pad - w, left = b.x + pad;
-      const corners = [[right, bottom], [right, top], [left, bottom], [left, top]];
-      if (container) corners.unshift(corners.splice(1, 1)[0]);
-      const [x, y] = corners.find(([x, y]) => !avoid.some((o) => clash({ x, y: y - h, width: w, height: h }, o))) || corners[0];
-      t.setAttribute("x", x.toFixed(1));
-      t.setAttribute("y", y.toFixed(1));
-      taken.push(box(t));
+      words.push({
+        t, w, br,
+        corners: container ? [tr, br, bl, tl] : [br, tr, bl, tl],
+        avoid: outlines.filter((el) => el !== shape).map(box).filter((o) => !within(b, o)).concat(fold ? [box(fold)] : []),
+        set: [t.textContent, Math.round(b.width), Math.round(b.height), shape.getAttribute("class")].join("|"),
+      });
+    }
+    const clear = (o, [x, y]) => ![...taken, ...o.avoid].some((a) => clash({ x, y: y - 7, width: o.w, height: 7 }, a));
+    const put = (o, [x, y]) => {
+      o.t.setAttribute("x", x.toFixed(1));
+      o.t.setAttribute("y", y.toFixed(1));
+      taken.push(box(o.t));
+      o.done = true;
+    };
+    for (const o of words) {
+      if (o.done) continue;
+      const set = words.filter((p) => p.set === o.set && !p.done);
+      const k = [0, 1, 2, 3].find((i) => set.every((p) => clear(p, p.corners[i])));
+      for (const p of set) put(p, k === undefined ? p.corners.find((c) => clear(p, c)) || p.br : p.corners[k]);
     }
   }
   function setStep(fig, k) {

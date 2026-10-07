@@ -164,9 +164,19 @@ Every modelled node carries its type word, drawn by the page from the model; lea
 corner of each node clear of title, sub-label, icon and badge, about 12 units high and the
 word's width (`DATA ASSET` is the widest built-in; a custom type can be wider), or
 `npm run verify` reports `calm-type`. The page tries bottom-right, top-right, bottom-left,
-then top-left (top-right first in a container, whose title sits top-left), and keeps a
-cylinder's word below its top rim. To make room, give the node more height or move a
-sub-label; nothing else needs to move unless the extra height pushes it.
+then top-left (top-right first in a container, whose title sits top-left), sets the word
+12 in from the side of a rounded outline (8 otherwise), and keeps a cylinder's word clear
+of its top rim. Siblings of one type and one outline size in a drawing take the same
+corner when a corner is clear for all of them (the first in the usual order); first-fit
+per node applies only when no corner is clear for the whole set. To make room:
+
+- Move a badge to free a corner, as long as the badge stays beside what it marks. Prefer
+  that to growing a node.
+- Otherwise give the node more height or move a sub-label; nothing else moves unless the
+  extra height pushes it.
+- Siblings that were equal before stay equal: when one node of a matched set (a row of
+  hosts, the heads of a sequence diagram, the segments of a token, three zones side by
+  side) has to grow, grow the set with it, or free the corner another way so none grows.
 
 **Relationships.** Use `connects` (source to destination) between two nodes,
 `interacts` (actor to node) for a node typed `actor` and what it uses, `deployed-in` for a node that

@@ -192,6 +192,13 @@ const CASES = [
     () => page({ agentSize: 'width="80" height="32"', agentTitleY: '202' }), 'verify', 1, 'calm-type', /node "agent": its type word "SERVICE" overlaps "Agent"/],
   ['type words not drawn caught',
     () => swap(page(), 'function labelCalmTypes(fig) {', 'function labelCalmTypes(fig) { return;'), 'verify', 1, 'calm-type', /node "user" has no type word/],
+  // One-character labels block every corner of the user box. With none clear,
+  // the word's right end sits 12 inside the rounded outline, so a label from
+  // 10 inside is about 2 units beside it in any font: a near miss, not an
+  // overlap, and the label still ends inside the outline.
+  ['type word that only just misses a label caught',
+    () => page({ extra: [[130, 46], [44, 46], [44, 89], [154, 89]].map(([x, y]) => `<text class="t-sm" x="${x}" y="${y}">x</text>`).join('') }),
+    'verify', 1, 'calm-type', /node "user": its type word "ACTOR" sits [\d.]+ units beside "x"/],
 
   // The disclosure: what it shows, and what Copy, Download and print do.
   ['missing disclosure caught', () => swap(page(), '${calmHtml(e)}', ''), 'verify', 1, 'calm', /no "CALM model" disclosure/],
