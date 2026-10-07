@@ -4692,7 +4692,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-b" x="504" y="41">Other PEPs</text>
           <text class="t-sm t-mut" x="504" y="59">same central policy</text>
         </g>
-        <line class="flow" data-s="5" data-calm="pdp-other-peps" x1="394" y1="44" x2="454" y2="44" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="other-peps-pdp" x1="454" y1="44" x2="394" y2="44" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 148, 126, '1')}
         ${badge(2, 376, 160, '2')}
@@ -5131,7 +5131,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box-soft" x="24" y="104" width="160" height="136" rx="8"/>
           ${icon('laptop', 40, 114)}
           <text class="t-b" x="72" y="132">App</text>
-          <text class="t-sm t-mut" x="40" y="156">SDK or tunneler</text>
+          <text class="t-sm t-mut" x="72" y="156">SDK or tunneler</text>
         </g>
         <g data-s="1 3" data-calm="app-identity">
           ${doc(40, 180, 128, 48)}
@@ -5142,8 +5142,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box-soft" x="544" y="104" width="160" height="136" rx="8"/>
           ${icon('server', 560, 114)}
           <text class="t-b" x="592" y="132">Service</text>
-          <text class="t-sm t-mut" x="560" y="154">no inbound port</text>
-          <text class="t-sm t-mut" x="560" y="170">dials out</text>
+          <text class="t-sm t-mut" x="592" y="154">no inbound port</text>
+          <text class="t-sm t-mut" x="592" y="170">dials out</text>
         </g>
         <g data-s="1 3" data-calm="service-identity">
           ${doc(560, 180, 128, 48)}
@@ -8114,7 +8114,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-2" x1="424" y1="86" x2="528" y2="154" marker-end="url(#ah-mut)"/>
         <path class="flow" data-s="5" data-calm="istiod-ztunnel" d="M440 86 L584 150 V238" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="5" data-calm="istiod-waypoint" x1="460" y1="86" x2="640" y2="154" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="350" y="116" text-anchor="middle">SPIFFE ID</text>
+        <text class="t-sm" data-s="2" x="358" y="112" text-anchor="middle">SPIFFE ID</text>
 
         <g data-s="4" data-note="call-out">
           <rect class="zone" x="16" y="128" width="328" height="184" rx="10"/>
@@ -10285,11 +10285,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "nodes": [
         { "unique-id": "segment-a", "node-type": "network", "name": "segment", "description": "Segment A, isolation pushed right down to Workload A, permits only the flows Workload A needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
         { "unique-id": "workload-a", "node-type": "service", "name": "Workload A", "description": "Workload A, an individual workload or application isolated in a segment of its own." },
-        { "unique-id": "segment-b", "node-type": "network", "name": "segment", "description": "Segment B, isolation pushed right down to Workload B, permits only the flows Workload B needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "segment-b", "node-type": "network", "name": "segment", "description": "Segment B, isolation pushed right down to Workload B, permits only the flows Workload B needs under fine-grained policy; microsegmentation is usually enforced in software." },
         { "unique-id": "workload-b", "node-type": "service", "name": "Workload B", "description": "Workload B, an individual workload or application isolated in a segment of its own." },
-        { "unique-id": "segment-c", "node-type": "network", "name": "segment", "description": "Segment C, isolation pushed right down to Workload C, permits only the flows Workload C needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "segment-c", "node-type": "network", "name": "segment", "description": "Segment C, isolation pushed right down to Workload C, permits only the flows Workload C needs under fine-grained policy; microsegmentation is usually enforced in software." },
         { "unique-id": "workload-c", "node-type": "service", "name": "Workload C", "description": "Workload C, an individual workload or application isolated in a segment of its own." },
-        { "unique-id": "segment-d", "node-type": "network", "name": "segment", "description": "Segment D, isolation pushed right down to Workload D, permits only the flows Workload D needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "segment-d", "node-type": "network", "name": "segment", "description": "Segment D, isolation pushed right down to Workload D, permits only the flows Workload D needs under fine-grained policy; microsegmentation is usually enforced in software." },
         { "unique-id": "workload-d", "node-type": "service", "name": "Workload D", "description": "Workload D, a workload in a segment of its own on a host that has been compromised; lateral movement from Workload D is contained, because Workload D's segment permits nothing Workload D does not need." }
       ],
       "relationships": [
@@ -10305,11 +10305,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "workload-a" }, "destination": { "node": "workload-b" } } } },
         { "unique-id": "workload-b-workload-c", "description": "Traffic passes from Workload B to Workload C, a needed flow that the fine-grained policy permits.",
           "relationship-type": { "connects": { "source": { "node": "workload-b" }, "destination": { "node": "workload-c" } } } },
-        { "unique-id": "workload-d-segment-a", "description": "A lateral move from the compromised Workload D towards Workload A is blocked at segment A, because each segment permits only the flows the segment needs.",
+        { "unique-id": "workload-d-segment-a", "description": "A lateral move from the compromised Workload D towards Workload A is not a flow that segment A permits, because each segment permits only the flows the segment needs.",
           "relationship-type": { "connects": { "source": { "node": "workload-d" }, "destination": { "node": "segment-a" } } } },
-        { "unique-id": "workload-d-segment-b", "description": "A lateral move from the compromised Workload D towards Workload B is blocked at segment B, because each segment permits only the flows the segment needs.",
+        { "unique-id": "workload-d-segment-b", "description": "A lateral move from the compromised Workload D towards Workload B is not a flow that segment B permits, because each segment permits only the flows the segment needs.",
           "relationship-type": { "connects": { "source": { "node": "workload-d" }, "destination": { "node": "segment-b" } } } },
-        { "unique-id": "workload-d-segment-c", "description": "A lateral move from the compromised Workload D towards Workload C is blocked at segment C, because each segment permits only the flows the segment needs.",
+        { "unique-id": "workload-d-segment-c", "description": "A lateral move from the compromised Workload D towards Workload C is not a flow that segment C permits, because each segment permits only the flows the segment needs.",
           "relationship-type": { "connects": { "source": { "node": "workload-d" }, "destination": { "node": "segment-c" } } } }
       ],
       "flows": [
@@ -10318,9 +10318,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "transitions": [
             { "relationship-unique-id": "workload-a-workload-b", "sequence-number": 1, "description": "Traffic from Workload A reaches Workload B, a needed flow the fine-grained policy permits." },
             { "relationship-unique-id": "workload-b-workload-c", "sequence-number": 2, "description": "Traffic from Workload B reaches Workload C, a needed flow the fine-grained policy permits." },
-            { "relationship-unique-id": "workload-d-segment-a", "sequence-number": 3, "description": "Once Workload D's host is compromised, a lateral move towards Workload A is blocked at segment A." },
-            { "relationship-unique-id": "workload-d-segment-b", "sequence-number": 4, "description": "A lateral move from Workload D towards Workload B is blocked at segment B." },
-            { "relationship-unique-id": "workload-d-segment-c", "sequence-number": 5, "description": "A lateral move from Workload D towards Workload C is blocked at segment C, so the breach is contained." }
+            { "relationship-unique-id": "workload-d-segment-a", "sequence-number": 3, "description": "Once Workload D's host is compromised, a lateral move towards Workload A is not a flow that segment A permits." },
+            { "relationship-unique-id": "workload-d-segment-b", "sequence-number": 4, "description": "A lateral move from Workload D towards Workload B is not a flow that segment B permits." },
+            { "relationship-unique-id": "workload-d-segment-c", "sequence-number": 5, "description": "A lateral move from Workload D towards Workload C is not a flow that segment C permits, so the breach is contained." }
           ] }
       ]
     },
@@ -10339,8 +10339,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "pep" }, "destination": { "node": "pdp" } } } },
         { "unique-id": "pep-resource", "description": "An allowed request passes from the PEP to the resource.",
           "relationship-type": { "connects": { "source": { "node": "pep" }, "destination": { "node": "resource" } } } },
-        { "unique-id": "pdp-other-peps", "description": "The single central PDP governs the other PEPs consistently, with the same central policy.",
-          "relationship-type": { "connects": { "source": { "node": "pdp" }, "destination": { "node": "other-peps" } } } }
+        { "unique-id": "other-peps-pdp", "description": "The other PEPs consult the same single central PDP, which governs them consistently with the same central policy.",
+          "relationship-type": { "connects": { "source": { "node": "other-peps" }, "destination": { "node": "pdp" } } } }
       ],
       "flows": [
         { "unique-id": "intercept-and-decide", "name": "Intercept, decide, enforce",
@@ -10351,14 +10351,14 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "pep-pdp", "sequence-number": 3, "description": "The PDP evaluates the rules and returns an allow or deny.", "direction": "destination-to-source" },
             { "relationship-unique-id": "pep-resource", "sequence-number": 4, "description": "The PEP applies the answer: an allowed request reaches the resource." },
             { "relationship-unique-id": "subject-pep", "sequence-number": 5, "description": "A denied request does not reach the resource: the PEP turns the request back to the subject with a deny.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "pdp-other-peps", "sequence-number": 6, "description": "The same central PDP governs many other enforcement points consistently." }
+            { "relationship-unique-id": "other-peps-pdp", "sequence-number": 6, "description": "The other enforcement points consult the same central PDP, which governs them consistently." }
           ] }
       ]
     },
     openziti: {
       "nodes": [
         { "unique-id": "service-policy", "node-type": "data-asset", "name": "Service policy", "description": "The service policy, which allows a connection only when the policy explicitly grants an identity access to a named service, so every other connection is denied by default." },
-        { "unique-id": "app", "node-type": "system", "name": "App", "description": "An app, a participant that dials a named service across the mesh; apps can embed the SDK directly or sit behind a tunneler, and the price of OpenZiti is adoption: every application needs the SDK, a tunneler or an edge router in front of it." },
+        { "unique-id": "app", "node-type": "system", "name": "App", "description": "An app, a participant that dials a named service across the mesh; apps can embed the SDK directly or sit behind a tunneler, and the price of OpenZiti is adoption: every application needs the SDK, a tunneler or an edge router in front of the application." },
         { "unique-id": "app-identity", "node-type": "data-asset", "name": "X.509 identity", "description": "The app's X.509 identity, the identity every participant, whether app, device or service, carries." },
         { "unique-id": "edge-router-mesh", "node-type": "network", "name": "edge router mesh", "description": "The mesh of edge routers that a connection crosses, the fabric of OpenZiti, an open-source zero-trust networking overlay sponsored by NetFoundry that replaces network-perimeter trust with per-connection, identity-based access; unlike a VPN, being on the network grants nothing on its own, and the controller and edge routers become infrastructure to run." },
         { "unique-id": "edge-router-1", "node-type": "system", "name": "router", "description": "The first edge router in the mesh, the one the app connects to; every hop to and from the edge router is mutually authenticated with mTLS." },
@@ -10449,10 +10449,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     servicemesh: {
       "nodes": [
         { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane of a service mesh, which configures the sidecar proxies and distributes identities and certificates." },
-        { "unique-id": "data-plane", "node-type": "data-plane", "name": "data plane", "description": "The data plane, formed together by the sidecar proxies (Envoy in Istio; Linkerd ships its own Rust micro-proxy), which carries traffic; the trade-off of a service mesh is operational complexity and the latency of an extra network hop." },
-        { "unique-id": "service-a", "node-type": "workload", "name": "Service A", "description": "Service A, a workload whose application code no longer handles mutual TLS, retries, timeouts, load balancing or observability, which a service mesh moves into a dedicated infrastructure layer." },
+        { "unique-id": "data-plane", "node-type": "data-plane", "name": "data plane", "description": "The data plane, which carries traffic, formed together by the sidecar proxies (Envoy in Istio; Linkerd ships its own Rust micro-proxy); the trade-off of a service mesh is operational complexity and the latency of an extra network hop." },
+        { "unique-id": "service-a", "node-type": "workload", "name": "Service A", "description": "Service A, a workload whose application code no longer handles mutual TLS, retries, timeouts, load balancing or observability: a service mesh moves those concerns into a dedicated infrastructure layer." },
         { "unique-id": "sidecar-a", "node-type": "proxy", "name": "Sidecar", "description": "Service A's sidecar, a proxy deployed beside Service A and one of the proxies that together form the data plane." },
-        { "unique-id": "service-b", "node-type": "workload", "name": "Service B", "description": "Service B, a workload whose application code no longer handles mutual TLS, retries, timeouts, load balancing or observability, which a service mesh moves into a dedicated infrastructure layer." },
+        { "unique-id": "service-b", "node-type": "workload", "name": "Service B", "description": "Service B, a workload whose application code no longer handles mutual TLS, retries, timeouts, load balancing or observability: a service mesh moves those concerns into a dedicated infrastructure layer." },
         { "unique-id": "sidecar-b", "node-type": "proxy", "name": "Sidecar", "description": "Service B's sidecar, a proxy deployed beside Service B and one of the proxies that together form the data plane." }
       ],
       "relationships": [
@@ -10478,7 +10478,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "control-plane-sidecar-b", "sequence-number": 2, "description": "The control plane configures Service B's sidecar proxy and distributes identities and certificates." },
             { "relationship-unique-id": "service-a-sidecar-a", "sequence-number": 3, "description": "Service A's call flows into Service A's sidecar proxy, without a line of Service A's application code changing." },
             { "relationship-unique-id": "sidecar-a-sidecar-b", "sequence-number": 4, "description": "Service A's sidecar sends its side of the mutual TLS authentication to Service B's sidecar." },
-            { "relationship-unique-id": "sidecar-a-sidecar-b", "sequence-number": 5, "description": "Service B's sidecar sends its side back, so the hop is mutually authenticated and the call crosses encrypted.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "sidecar-a-sidecar-b", "sequence-number": 5, "description": "Service B's sidecar sends its side back, so the hop is mutually authenticated.", "direction": "destination-to-source" },
             { "relationship-unique-id": "sidecar-b-service-b", "sequence-number": 6, "description": "Service B's sidecar proxy passes the call on to Service B." }
           ] }
       ]
@@ -10566,7 +10566,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "ztunnel" } } } },
         { "unique-id": "istiod-waypoint", "description": "istiod pushes policy, and Envoy configuration translated from high-level intent, to the waypoint proxy, which is still Envoy.",
           "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "waypoint" } } } },
-        { "unique-id": "app-sidecar-envoy", "description": "The sidecar-mode app's traffic passes to the app's own Envoy sidecar over unencrypted loopback.",
+        { "unique-id": "app-sidecar-envoy", "description": "The sidecar-mode app's traffic passes to the app's own Envoy sidecar over unencrypted loopback, so the guarantee is that traffic is authenticated and encrypted between workloads, not from process to process.",
           "relationship-type": { "connects": { "source": { "node": "app-sidecar" }, "destination": { "node": "envoy" } } } },
         { "unique-id": "app-ambient-1-ztunnel", "description": "The first ambient-mode app's traffic passes to the node's ztunnel over unencrypted loopback.",
           "relationship-type": { "connects": { "source": { "node": "app-ambient-1" }, "destination": { "node": "ztunnel" } } } },
