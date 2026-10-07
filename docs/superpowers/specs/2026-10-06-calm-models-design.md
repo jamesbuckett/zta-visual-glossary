@@ -107,8 +107,15 @@ entry, so nothing is stored twice:
   `explainer` first, and its caption and tour steps where the explainer is silent. UK
   spelling.
 - Something a component reads and writes as it runs (a cache, a lookup table, an index, a
-  log) is a `database`; something made once and handed on or kept (a token, a
-  certificate, a manifest) is a `data-asset`.
+  log) is a `database`; something made once (a certificate, a manifest) is a `data-asset`. Whether an artefact is a node at all is a
+  separate question: it is one when it is what the term defines or exists to manage (a JWT, an
+  SVID, a SPIFFE ID, a SAML assertion, a vault's secrets, PKI's certificates), or when a party
+  holds it as its own (a key or verifier made for itself, a certificate or trust anchor it
+  reads, a policy or config the copy places nowhere). Anything one party issues, returns or
+  presents to another inside the exchange the tour narrates (a token, a code, a challenge, a
+  credential) is what the link carries and appears only in descriptions, however long it
+  lives or whether it can be revoked; and a thing named only inside a limitation stays in that
+  description.
 
 ### Relationships
 
@@ -138,7 +145,13 @@ entry, so nothing is stored twice:
 - A trust anchor the copy says a party holds is a `data-asset` that party reads. An
   artefact the copy places nowhere is a separate node joined by an arrow: `data-asset` if
   made once, `database` if written at run time. Instances of a class the copy names count
-  as named. A `call-out` may show the practice the subject replaces. Where the tour's order differs from the protocol's, the
+  as named. A `call-out` may show the practice the subject replaces.
+- An artefact is a node when it is what the term defines or exists to manage, or when a
+  party holds it as its own; anything one party issues, returns or presents to another
+  inside the narrated exchange (a token, a code, a challenge) is what the link carries,
+  however long it lives; a thing named only inside a limitation stays in that description
+  (batch 4 review: IdP's token is link content, SAML's assertion and OIDC's ID token are
+  nodes). Where the tour's order differs from the protocol's, the
   transition descriptions say the protocol's order.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
   `description` names it.

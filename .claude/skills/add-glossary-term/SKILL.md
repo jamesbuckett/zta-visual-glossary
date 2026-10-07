@@ -132,8 +132,16 @@ built-in `node-type` that honestly fits; otherwise use a custom kebab-case type 
   Kubernetes pod is a `pod`, not a `service`, because a Service is a different
   Kubernetes object.
 - Something a component reads and writes as it runs (a cache, a lookup table, an index,
-  a log) is a `database`. Something made once and then handed on or kept (a token, a
-  certificate, a manifest, a policy file) is a `data-asset`.
+  a log) is a `database`. Something made once (a certificate, a manifest, a policy file)
+  is a `data-asset`. Whether an artefact is a node at all is a
+  separate question: it is one when it is what the term defines or exists to manage (a JWT, an
+  SVID, a SPIFFE ID, a SAML assertion, a vault's secrets, PKI's certificates), or when a party
+  holds it as its own (a key or verifier made for itself, a certificate or trust anchor it
+  reads, a policy or config the copy places nowhere). Anything one party issues, returns or
+  presents to another inside the exchange the tour narrates (a token, a code, a challenge, a
+  credential) is what the link carries and appears only in descriptions, however long it
+  lives or whether it can be revoked; and a thing named only inside a limitation stays in that
+  description.
 
 You may add a node for something the old drawing only labelled, when the term's copy
 names it: a "private network" label becomes a zone around its hosts. Do not invent a node
