@@ -3989,50 +3989,50 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     zerotrust: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every request is verified at a policy gate — no implicit trust by network location.">
-        <g data-s="1">
+        <g data-s="1" data-calm="old-perimeter">
           <rect class="zone" x="16" y="16" width="220" height="132" rx="10"/>
           <text class="t-sm t-mut" x="28" y="34">old perimeter</text>
         </g>
-        <g data-s="1 2">
-          <rect class="box" x="32" y="48" width="188" height="72" rx="12"/>
-          ${icon('user', 48, 62)}
+        <g data-s="1 2" data-calm="inside">
+          <rect class="box" x="32" y="48" width="188" height="72" rx="8"/>
+          ${icon('monitor', 48, 62)}
           <text class="t-b" x="80" y="80">Inside</text>
           <text class="t-sm t-mut" x="80" y="98">no implicit trust</text>
         </g>
-        <g data-s="1 2">
-          <rect class="box" x="32" y="176" width="188" height="72" rx="12"/>
+        <g data-s="1 2" data-calm="outside">
+          <rect class="box" x="32" y="176" width="188" height="72" rx="8"/>
           ${icon('laptop', 48, 190)}
           <text class="t-b" x="80" y="208">Outside</text>
           <text class="t-sm t-mut" x="80" y="226">the same checks</text>
         </g>
-        <line class="flow" data-s="1 2" x1="222" y1="84" x2="290" y2="120" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1 2" x1="222" y1="212" x2="290" y2="176" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3 4">
+        <line class="flow" data-s="1 2" data-calm="inside-policy-gate" x1="222" y1="84" x2="290" y2="120" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 2" data-calm="outside-policy-gate" x1="222" y1="212" x2="290" y2="176" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4" data-calm="policy-gate">
           <rect class="box" x="292" y="48" width="160" height="200" rx="8"/>
           ${icon('shield-check', 308, 62)}
           <text class="t-b" x="340" y="80">Policy gate</text>
           <text class="t-sm t-mut" x="308" y="104">identity + context</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-note="call-out">
           ${[['authenticate', 120], ['authorise', 160], ['encrypt', 200]].map(([t, y]) => `
             <rect class="box" x="308" y="${y}" width="128" height="32" rx="4"/>
             <text class="t-sm" x="372" y="${y + 20}" text-anchor="middle">${t}</text>`).join('')}
         </g>
-        <path class="flow" data-s="4" d="M332 250 C332 282, 412 282, 412 250" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="4" data-note="self-loop" d="M332 250 C332 282, 412 282, 412 250" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="428" y="282">verified continuously</text>
 
         ${[24, 112, 200].map((y, i) => `
-          <g${i === 1 ? ' data-s="3"' : ''}>
-            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+          <g${i === 1 ? ' data-s="3" data-calm="resource"' : ' data-note="elided"'}>
+            <rect class="box" x="536" y="${y}" width="160" height="64" rx="8"/>
             ${icon('database', 552, y + 16)}
             <text class="t-b" x="584" y="${y + 25}">Resource</text>
             <text class="t-sm t-mut" x="584" y="${y + 43}">${i === 1 ? 'the one needed' : 'not needed'}</text>
           </g>`).join('')}
-        <line class="flow" data-s="3" x1="454" y1="140" x2="534" y2="140" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="policy-gate-resource" x1="454" y1="144" x2="534" y2="144" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 220, 30, '1')}
         ${badge(2, 436, 62, '2')}
-        ${badge(3, 494, 140, '3')}
+        ${badge(3, 494, 144, '3')}
         ${badge(4, 372, 274, '4')}
       </svg>`,
 
@@ -4623,79 +4623,79 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     microseg: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Per-workload segments permit only required flows, containing lateral movement after a breach.">
-        <g data-s="1">
-          <rect class="zone" x="16" y="12" width="688" height="256" rx="12"/>
+      <svg class="dg" viewBox="0 0 720 304" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Per-workload segments permit only required flows, containing lateral movement after a breach.">
+        <g data-s="1" data-note="call-out">
+          <rect class="zone" x="16" y="12" width="688" height="280" rx="12"/>
           <text class="t-sm t-mut" x="28" y="30">one flat internal network</text>
         </g>
-        ${[['A', 40, 40], ['B', 280, 40], ['C', 520, 40], ['D', 280, 164]].map(([n, x, y]) => `
-          <g data-s="2">
-            <rect class="zone" x="${x}" y="${y}" width="160" height="92" rx="8"/>
+        ${[['a', 'A', 40, 40], ['b', 'B', 280, 40], ['c', 'C', 520, 40], ['d', 'D', 280, 176]].map(([k, n, x, y]) => `
+          <g data-s="2" data-calm="segment-${k}">
+            <rect class="zone" x="${x}" y="${y}" width="160" height="104" rx="8"/>
             <text class="t-sm t-mut" x="${x + 12}" y="${y + 16}">segment</text>
           </g>
-          <g data-s="${n === 'D' ? '4' : '1 3'}">
-            <rect class="box" x="${x + 12}" y="${y + 24}" width="136" height="56" rx="8"/>
+          <g data-s="${n === 'D' ? '4' : '1 3'}" data-calm="workload-${k}">
+            <rect class="box" x="${x + 12}" y="${y + 24}" width="136" height="68" rx="8"/>
             ${icon('server', x + 24, y + 40)}
             <text class="t-b" x="${x + 56}" y="${y + 49}">Workload ${n}</text>
             <text class="t-sm ${n === 'D' ? 'bad' : 't-mut'}" x="${x + 56}" y="${y + 67}">${n === 'D' ? 'compromised' : 'isolated'}</text>
           </g>`).join('')}
-        <line class="flow-ok" data-s="3" x1="190" y1="92" x2="290" y2="92" marker-end="url(#ah-ok)"/>
-        <line class="flow-ok" data-s="3" x1="430" y1="92" x2="530" y2="92" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" data-s="4" x1="292" y1="186" x2="176" y2="136" marker-end="url(#ah-bad)"/>
-        <line class="flow-bad" data-s="4" x1="360" y1="186" x2="360" y2="138" marker-end="url(#ah-bad)"/>
-        <line class="flow-bad" data-s="4" x1="428" y1="186" x2="544" y2="136" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="4" x="460" y="228">lateral moves blocked</text>
+        <line class="flow-ok" data-s="3" data-calm="workload-a-workload-b" x1="190" y1="98" x2="290" y2="98" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="3" data-calm="workload-b-workload-c" x1="430" y1="98" x2="530" y2="98" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" data-s="4" data-calm="workload-d-segment-a" x1="292" y1="198" x2="176" y2="148" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="4" data-calm="workload-d-segment-b" x1="360" y1="198" x2="360" y2="150" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="4" data-calm="workload-d-segment-c" x1="428" y1="198" x2="544" y2="148" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="460" y="240">lateral moves blocked</text>
 
         ${badge(1, 688, 28, '1')}
-        ${badge(2, 188, 52, '2')}
-        ${badge(3, 240, 92, '3')}
-        ${badge(4, 234, 161, '4')}
+        ${badge(2, 124, 52, '2')}
+        ${badge(3, 240, 98, '3')}
+        ${badge(4, 234, 173, '4')}
       </svg>`,
 
     peppdp: () => `
       <svg class="dg" viewBox="0 0 720 196" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The enforcement point intercepts a request; the decision point evaluates policy and replies.">
-        <g data-s="1 4">
-          <rect class="box" x="24" y="112" width="140" height="64" rx="12"/>
-          ${icon('user', 40, 126)}
+        <g data-s="1 4" data-calm="subject">
+          <rect class="box" x="24" y="112" width="140" height="64" rx="8"/>
+          ${icon('laptop', 40, 126)}
           <text class="t-b" x="72" y="144">Subject</text>
         </g>
-        <line class="flow" data-s="1 2" x1="166" y1="132" x2="230" y2="132" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1 2" data-calm="subject-pep" x1="166" y1="132" x2="230" y2="132" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="198" y="124" text-anchor="middle">request</text>
-        <line class="flow-bad" data-s="4" x1="230" y1="160" x2="166" y2="160" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="4" data-calm="subject-pep" x1="230" y1="160" x2="166" y2="160" marker-end="url(#ah-bad)"/>
         <text class="t-sm bad" data-s="4" x="198" y="178" text-anchor="middle">deny</text>
-        <g data-s="2 3 4">
+        <g data-s="2 3 4" data-calm="pep">
           <rect class="box" x="232" y="112" width="160" height="64" rx="8"/>
           ${icon('shield', 248, 126)}
           <text class="t-b" x="280" y="144">PEP</text>
           <text class="t-sm t-mut" x="280" y="162">in the path</text>
         </g>
-        <g data-s="3 5">
+        <g data-s="3 5" data-calm="pdp">
           <rect class="box" x="232" y="16" width="160" height="56" rx="8"/>
           ${icon('scale', 248, 32)}
           <text class="t-b" x="280" y="41">PDP</text>
           <text class="t-sm t-mut" x="280" y="59">evaluates rules</text>
         </g>
-        <line class="flow" data-s="3" x1="296" y1="110" x2="296" y2="74" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="pep-pdp" x1="296" y1="110" x2="296" y2="74" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="286" y="96" text-anchor="end">ask</text>
-        <line class="flow" data-s="3" x1="328" y1="74" x2="328" y2="110" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="pep-pdp" x1="328" y1="74" x2="328" y2="110" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="340" y="96">allow or deny</text>
-        <line class="flow-ok" data-s="4" x1="394" y1="144" x2="554" y2="144" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="4" data-calm="pep-resource" x1="394" y1="144" x2="554" y2="144" marker-end="url(#ah-ok)"/>
         <text class="t-sm" data-s="4" x="474" y="136" text-anchor="middle">allow</text>
-        <g data-s="4">
+        <g data-s="4" data-calm="resource">
           <rect class="box" x="556" y="112" width="140" height="64" rx="8"/>
           ${icon('database', 572, 126)}
           <text class="t-b" x="604" y="144">Resource</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-calm="other-peps">
           <rect class="box" x="456" y="16" width="240" height="56" rx="8"/>
           ${icon('shield', 472, 32)}
           <text class="t-b" x="504" y="41">Other PEPs</text>
           <text class="t-sm t-mut" x="504" y="59">same central policy</text>
         </g>
-        <line class="flow" data-s="5" x1="394" y1="44" x2="454" y2="44" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="pdp-other-peps" x1="394" y1="44" x2="454" y2="44" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 148, 126, '1')}
-        ${badge(2, 376, 126, '2')}
+        ${badge(2, 376, 160, '2')}
         ${badge(3, 328, 92, '3')}
         ${badge(4, 520, 144, '4')}
         ${badge(5, 424, 44, '5')}
@@ -5106,55 +5106,63 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     openziti: () => `
-      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny).">
-        <g data-s="3">
-          <rect class="box" x="272" y="8" width="176" height="52" rx="8"/>
-          ${icon('cog', 288, 22)}
-          <text class="t-b" x="320" y="30">Controller</text>
-          <text class="t-sm t-mut" x="320" y="48">default deny</text>
+      <svg class="dg" viewBox="0 0 720 336" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny).">
+        <g data-s="3" data-calm="service-policy">
+          ${doc(248, 8, 224, 60)}
+          ${icon('scroll-text', 264, 22)}
+          <text class="t-b" x="296" y="34">Service policy</text>
+          <text class="t-sm t-mut" x="296" y="52">default deny</text>
         </g>
-        <line class="flow" data-s="3" x1="360" y1="62" x2="360" y2="82" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="zone" x="216" y="84" width="288" height="152" rx="10"/>
-          <text class="t-sm t-mut" x="228" y="102">edge router mesh</text>
+        <line class="flow" data-s="3" data-calm="service-policy-edge-router-mesh" x1="360" y1="70" x2="360" y2="94" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="edge-router-mesh">
+          <rect class="zone" x="216" y="96" width="288" height="180" rx="10"/>
+          <text class="t-sm t-mut" x="228" y="114">edge router mesh</text>
         </g>
-        ${[[236, 112], [388, 112], [312, 176]].map(([x, y]) => `
-          <g data-s="4">
-            <rect class="box" x="${x}" y="${y}" width="96" height="44" rx="6"/>
+        ${[['1', 236, 124], ['2', 388, 124], ['3', 312, 200]].map(([k, x, y]) => `
+          <g data-s="4" data-calm="edge-router-${k}">
+            <rect class="box" x="${x}" y="${y}" width="96" height="56" rx="6"/>
             ${icon('router', x + 10, y + 10)}
             <text class="t-sm" x="${x + 40}" y="${y + 27}">router</text>
           </g>`).join('')}
-        <line class="flow" data-s="4" x1="334" y1="134" x2="386" y2="134" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="300" y1="158" x2="330" y2="174" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="420" y1="158" x2="390" y2="174" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <g data-s="1 3">
-          <rect class="box" x="24" y="100" width="148" height="80" rx="12"/>
+        <line class="flow" data-s="4" data-calm="edge-router-1-edge-router-2" x1="334" y1="152" x2="386" y2="152" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="edge-router-1-edge-router-3" x1="300" y1="182" x2="330" y2="198" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="edge-router-2-edge-router-3" x1="420" y1="182" x2="390" y2="198" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3" data-calm="app">
+          <rect class="box-soft" x="24" y="104" width="160" height="136" rx="8"/>
           ${icon('laptop', 40, 114)}
           <text class="t-b" x="72" y="132">App</text>
-          <text class="t-sm t-mut" x="40" y="160">X.509 identity</text>
+          <text class="t-sm t-mut" x="40" y="156">SDK or tunneler</text>
         </g>
-        <line class="flow" data-s="3 4" x1="174" y1="134" x2="234" y2="134" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3">
-          <rect class="box" x="560" y="100" width="136" height="80" rx="8"/>
-          ${icon('server', 576, 114)}
-          <text class="t-b" x="608" y="132">Service</text>
-          <text class="t-sm t-mut" x="576" y="154">no inbound port</text>
-          <text class="t-sm t-mut" x="576" y="170">dials out</text>
+        <g data-s="1 3" data-calm="app-identity">
+          ${doc(40, 180, 128, 48)}
+          <text class="t-sm" x="52" y="208">X.509 identity</text>
         </g>
-        <line class="flow" data-s="2 4" x1="558" y1="134" x2="486" y2="134" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
-          <rect class="box" x="560" y="220" width="136" height="52" rx="12"/>
-          ${icon('skull', 576, 234)}
-          <text class="t-b" x="608" y="242">Scanner</text>
-          <text class="t-sm t-mut" x="576" y="264">no port found</text>
+        <line class="flow" data-s="3 4" data-calm="app-edge-router-1" x1="186" y1="152" x2="234" y2="152" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3" data-calm="service">
+          <rect class="box-soft" x="544" y="104" width="160" height="136" rx="8"/>
+          ${icon('server', 560, 114)}
+          <text class="t-b" x="592" y="132">Service</text>
+          <text class="t-sm t-mut" x="560" y="154">no inbound port</text>
+          <text class="t-sm t-mut" x="560" y="170">dials out</text>
         </g>
-        <line class="flow-bad" data-s="5" x1="628" y1="218" x2="628" y2="182" marker-end="url(#ah-bad)"/>
+        <g data-s="1 3" data-calm="service-identity">
+          ${doc(560, 180, 128, 48)}
+          <text class="t-sm" x="572" y="208">X.509 identity</text>
+        </g>
+        <line class="flow" data-s="2 4" data-calm="service-edge-router-2" x1="542" y1="152" x2="486" y2="152" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="scanner">
+          <rect class="box" x="544" y="268" width="160" height="56" rx="8"/>
+          ${icon('skull', 560, 280)}
+          <text class="t-b" x="592" y="294">Scanner</text>
+          <text class="t-sm t-mut" x="592" y="312">no port found</text>
+        </g>
+        <line class="flow-bad" data-s="5" data-calm="scanner-service" x1="640" y1="266" x2="640" y2="242" marker-end="url(#ah-bad)"/>
 
-        ${badge(1, 156, 114, '1')}
-        ${badge(2, 530, 134, '2')}
-        ${badge(3, 432, 22, '3')}
-        ${badge(4, 488, 100, '4')}
-        ${badge(5, 628, 200, '5')}
+        ${badge(1, 120, 126, '1')}
+        ${badge(2, 524, 152, '2')}
+        ${badge(3, 440, 30, '3')}
+        ${badge(4, 488, 260, '4')}
+        ${badge(5, 616, 254, '5')}
       </svg>`,
 
     scim: () => `
@@ -5357,45 +5365,45 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     opa: () => `
       <svg class="dg" viewBox="0 60 720 216" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites.">
-        <g data-s="1 3">
-          <rect class="box" x="24" y="96" width="152" height="80" rx="8"/>
+        <g data-s="1 3" data-calm="service">
+          <rect class="box" x="24" y="96" width="152" height="92" rx="8"/>
           ${icon('server', 40, 110)}
           <text class="t-b" x="72" y="128">Service</text>
           <text class="t-sm t-mut" x="40" y="160">asks a question</text>
         </g>
-        <line class="flow" data-s="1" x1="178" y1="116" x2="314" y2="116" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="service-opa" x1="178" y1="116" x2="314" y2="116" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="246" y="108" text-anchor="middle">can X do Y to Z?</text>
-        <line class="flow" data-s="3" x1="314" y1="152" x2="178" y2="152" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="service-opa" x1="314" y1="152" x2="178" y2="152" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="246" y="170" text-anchor="middle">decision</text>
-        <g data-s="1 2 3 4">
+        <g data-s="1 2 3 4" data-calm="opa">
           <rect class="box" x="316" y="72" width="160" height="120" rx="8"/>
           ${icon('scale', 332, 86)}
           <text class="t-b" x="364" y="104">OPA</text>
           <text class="t-sm t-mut" x="364" y="122">decision point</text>
         </g>
-        <g data-s="2 5">
-          <rect class="box" x="332" y="140" width="128" height="36" rx="4"/>
-          <text class="t-sm" x="396" y="162" text-anchor="middle">Rego rules</text>
+        <g data-s="2 5" data-note="call-out">
+          <rect class="box" x="332" y="136" width="128" height="36" rx="4"/>
+          <text class="t-sm" x="396" y="158" text-anchor="middle">Rego rules</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="536" y="96" width="160" height="72" rx="8"/>
+        <g data-s="5" data-calm="policy">
+          ${doc(536, 96, 160, 84)}
           ${icon('git-branch', 552, 110)}
           <text class="t-b" x="584" y="128">Policy</text>
           <text class="t-sm t-mut" x="584" y="146">as code</text>
           <text class="t-sm t-mut" x="584" y="160">versioned</text>
         </g>
-        <line class="flow" data-s="5" x1="534" y1="132" x2="478" y2="132" marker-end="url(#ah-mut)"/>
-        ${[['K8s admission', 24, 120, 356], ['CI pipelines', 236, 332, 396], ['API gateways', 448, 544, 436]].map(([t, x, x1, x2]) => `
-          <g data-s="4">
+        <line class="flow" data-s="5" data-calm="policy-opa" x1="534" y1="132" x2="478" y2="132" marker-end="url(#ah-mut)"/>
+        ${[['k8s-admission', 'K8s admission', 24, 120, 356], ['ci-pipelines', 'CI pipelines', 236, 332, 396], ['api-gateways', 'API gateways', 448, 544, 436]].map(([id, t, x, x1, x2]) => `
+          <g data-s="4" data-calm="${id}">
             <rect class="box" x="${x}" y="224" width="192" height="40" rx="6"/>
             <text class="t-sm" x="${x + 16}" y="248">${t}</text>
           </g>
-          <line class="flow" data-s="4" x1="${x1}" y1="222" x2="${x2}" y2="194" marker-end="url(#ah-mut)"/>`).join('')}
+          <line class="flow" data-s="4" data-calm="${id}-opa" x1="${x1}" y1="222" x2="${x2}" y2="194" marker-end="url(#ah-mut)"/>`).join('')}
 
         ${badge(1, 160, 110, '1')}
-        ${badge(2, 448, 158, '2')}
+        ${badge(2, 448, 154, '2')}
         ${badge(3, 296, 152, '3')}
-        ${badge(4, 200, 238, '4')}
+        ${badge(4, 238, 208, '4')}
         ${badge(5, 506, 132, '5')}
       </svg>`,
 
@@ -10234,6 +10242,199 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "immuta-warehouse", "sequence-number": 2, "description": "Immuta does not sit in the query path: Immuta compiles policy into the platform's own row access and column masking policies." },
             { "relationship-unique-id": "analyst-warehouse", "sequence-number": 3, "description": "The analyst queries the warehouse natively, at full engine speed." },
             { "relationship-unique-id": "warehouse-audit-log", "sequence-number": 4, "description": "On platforms with query audit, every query is logged with the query's user, the query's text and the tables the query touched, the audit artefact regulators actually ask for." }
+          ] }
+      ]
+    },
+    zerotrust: {
+      "nodes": [
+        { "unique-id": "old-perimeter", "node-type": "network", "name": "old perimeter", "description": "The internal network inside the old perimeter, which Zero Trust no longer treats as safe; Zero Trust is not a product to install: NIST describes the move as a journey, and most enterprises run in a hybrid zero-trust and perimeter mode while legacy systems catch up." },
+        { "unique-id": "inside", "node-type": "system", "name": "Inside", "description": "A requester inside the old perimeter, whose request Zero Trust treats the same as one from outside, with no implicit trust." },
+        { "unique-id": "outside", "node-type": "system", "name": "Outside", "description": "A requester outside the old perimeter, whose request gets the same checks as one from inside." },
+        { "unique-id": "policy-gate", "node-type": "service", "name": "Policy gate", "description": "The policy gate at which every request is authenticated and authorised based on identity and context, whether the request originates inside or outside the old perimeter; Zero Trust leans on strong identity, least-privilege access and continuous verification rather than a hard shell around a soft, trusted interior." },
+        { "unique-id": "resource", "node-type": "resource", "name": "Resource", "description": "The resource a verified request needs, and with least-privilege access the only resource the request reaches." }
+      ],
+      "relationships": [
+        { "unique-id": "old-perimeter-inside", "description": "The Inside requester sits on the internal network, inside the old perimeter.",
+          "relationship-type": { "deployed-in": { "container": "old-perimeter", "nodes": ["inside"] } } },
+        { "unique-id": "inside-policy-gate", "description": "A request from inside the old perimeter passes to the policy gate, to be authenticated, authorised and encrypted based on identity and context, with no implicit trust from the request's network location.",
+          "relationship-type": { "connects": { "source": { "node": "inside" }, "destination": { "node": "policy-gate" } } } },
+        { "unique-id": "outside-policy-gate", "description": "A request from outside the old perimeter passes to the policy gate, to be authenticated, authorised and encrypted based on identity and context, the same as a request from inside.",
+          "relationship-type": { "connects": { "source": { "node": "outside" }, "destination": { "node": "policy-gate" } } } },
+        { "unique-id": "policy-gate-resource", "description": "A verified request passes from the policy gate to only the resource the request needs.",
+          "relationship-type": { "connects": { "source": { "node": "policy-gate" }, "destination": { "node": "resource" } } } }
+      ],
+      "flows": [
+        { "unique-id": "verify-every-request", "name": "Verify every request",
+          "description": "Every request is verified at a policy gate, with no implicit trust by network location.",
+          "transitions": [
+            { "relationship-unique-id": "inside-policy-gate", "sequence-number": 1, "description": "A request from inside the old perimeter reaches the policy gate and is verified like any other, based on identity and context." },
+            { "relationship-unique-id": "outside-policy-gate", "sequence-number": 2, "description": "A request from outside the old perimeter reaches the policy gate and gets the same checks." },
+            { "relationship-unique-id": "policy-gate-resource", "sequence-number": 3, "description": "With least-privilege access, the verified request reaches only the resource the request needs." }
+          ] }
+      ]
+    },
+    microseg: {
+      "nodes": [
+        { "unique-id": "segment-a", "node-type": "network", "name": "segment", "description": "Segment A, isolation pushed right down to Workload A, permits only the flows Workload A needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "workload-a", "node-type": "service", "name": "Workload A", "description": "Workload A, an individual workload or application isolated in a segment of its own." },
+        { "unique-id": "segment-b", "node-type": "network", "name": "segment", "description": "Segment B, isolation pushed right down to Workload B, permits only the flows Workload B needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "workload-b", "node-type": "service", "name": "Workload B", "description": "Workload B, an individual workload or application isolated in a segment of its own." },
+        { "unique-id": "segment-c", "node-type": "network", "name": "segment", "description": "Segment C, isolation pushed right down to Workload C, permits only the flows Workload C needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "workload-c", "node-type": "service", "name": "Workload C", "description": "Workload C, an individual workload or application isolated in a segment of its own." },
+        { "unique-id": "segment-d", "node-type": "network", "name": "segment", "description": "Segment D, isolation pushed right down to Workload D, permits only the flows Workload D needs under fine-grained policy; microsegmentation is usually enforced in software, and the hard part is the policy: mapping the flows each workload needs takes discovery and upkeep, and one over-broad rule recreates the flat network." },
+        { "unique-id": "workload-d", "node-type": "service", "name": "Workload D", "description": "Workload D, a workload in a segment of its own on a host that has been compromised; lateral movement from Workload D is contained, because Workload D's segment permits nothing Workload D does not need." }
+      ],
+      "relationships": [
+        { "unique-id": "segment-a-workload-a", "description": "Workload A runs in segment A, isolation pushed right down to the individual workload.",
+          "relationship-type": { "deployed-in": { "container": "segment-a", "nodes": ["workload-a"] } } },
+        { "unique-id": "segment-b-workload-b", "description": "Workload B runs in segment B, isolation pushed right down to the individual workload.",
+          "relationship-type": { "deployed-in": { "container": "segment-b", "nodes": ["workload-b"] } } },
+        { "unique-id": "segment-c-workload-c", "description": "Workload C runs in segment C, isolation pushed right down to the individual workload.",
+          "relationship-type": { "deployed-in": { "container": "segment-c", "nodes": ["workload-c"] } } },
+        { "unique-id": "segment-d-workload-d", "description": "Workload D runs in segment D, isolation pushed right down to the individual workload.",
+          "relationship-type": { "deployed-in": { "container": "segment-d", "nodes": ["workload-d"] } } },
+        { "unique-id": "workload-a-workload-b", "description": "Traffic passes from Workload A to Workload B, a needed flow that the fine-grained policy permits.",
+          "relationship-type": { "connects": { "source": { "node": "workload-a" }, "destination": { "node": "workload-b" } } } },
+        { "unique-id": "workload-b-workload-c", "description": "Traffic passes from Workload B to Workload C, a needed flow that the fine-grained policy permits.",
+          "relationship-type": { "connects": { "source": { "node": "workload-b" }, "destination": { "node": "workload-c" } } } },
+        { "unique-id": "workload-d-segment-a", "description": "A lateral move from the compromised Workload D towards Workload A is blocked at segment A, because each segment permits only the flows the segment needs.",
+          "relationship-type": { "connects": { "source": { "node": "workload-d" }, "destination": { "node": "segment-a" } } } },
+        { "unique-id": "workload-d-segment-b", "description": "A lateral move from the compromised Workload D towards Workload B is blocked at segment B, because each segment permits only the flows the segment needs.",
+          "relationship-type": { "connects": { "source": { "node": "workload-d" }, "destination": { "node": "segment-b" } } } },
+        { "unique-id": "workload-d-segment-c", "description": "A lateral move from the compromised Workload D towards Workload C is blocked at segment C, because each segment permits only the flows the segment needs.",
+          "relationship-type": { "connects": { "source": { "node": "workload-d" }, "destination": { "node": "segment-c" } } } }
+      ],
+      "flows": [
+        { "unique-id": "only-needed-flows", "name": "Only needed flows",
+          "description": "Per-workload segments permit only required flows, containing lateral movement after a breach.",
+          "transitions": [
+            { "relationship-unique-id": "workload-a-workload-b", "sequence-number": 1, "description": "Traffic from Workload A reaches Workload B, a needed flow the fine-grained policy permits." },
+            { "relationship-unique-id": "workload-b-workload-c", "sequence-number": 2, "description": "Traffic from Workload B reaches Workload C, a needed flow the fine-grained policy permits." },
+            { "relationship-unique-id": "workload-d-segment-a", "sequence-number": 3, "description": "Once Workload D's host is compromised, a lateral move towards Workload A is blocked at segment A." },
+            { "relationship-unique-id": "workload-d-segment-b", "sequence-number": 4, "description": "A lateral move from Workload D towards Workload B is blocked at segment B." },
+            { "relationship-unique-id": "workload-d-segment-c", "sequence-number": 5, "description": "A lateral move from Workload D towards Workload C is blocked at segment C, so the breach is contained." }
+          ] }
+      ]
+    },
+    peppdp: {
+      "nodes": [
+        { "unique-id": "subject", "node-type": "system", "name": "Subject", "description": "A subject that makes an access attempt against a resource." },
+        { "unique-id": "pep", "node-type": "service", "name": "PEP", "description": "The Policy Enforcement Point, which in policy-based access control sits in the request path, intercepts each access attempt and applies the decision point's answer; each enforcement point must fail closed when the enforcement point cannot reach the decision point." },
+        { "unique-id": "pdp", "node-type": "service", "name": "PDP", "description": "The Policy Decision Point, which evaluates the rules and returns an allow or deny, a single central policy brain that, separated from enforcement, can govern many enforcement points consistently; the split puts the decision point on the critical path of every request, so the decision point must be fast and highly available." },
+        { "unique-id": "resource", "node-type": "resource", "name": "Resource", "description": "The resource the subject's access attempt is against, which an allowed request reaches and a denied one does not." },
+        { "unique-id": "other-peps", "node-type": "service", "name": "Other PEPs", "description": "Other Policy Enforcement Points, which the same central decision point governs consistently." }
+      ],
+      "relationships": [
+        { "unique-id": "subject-pep", "description": "The subject's access attempt passes to the PEP, which intercepts the attempt in the request path, and a denied request is turned back to the subject.",
+          "relationship-type": { "connects": { "source": { "node": "subject" }, "destination": { "node": "pep" } } } },
+        { "unique-id": "pep-pdp", "description": "The PEP asks the PDP for a decision, and the PDP returns an allow or deny.",
+          "relationship-type": { "connects": { "source": { "node": "pep" }, "destination": { "node": "pdp" } } } },
+        { "unique-id": "pep-resource", "description": "An allowed request passes from the PEP to the resource.",
+          "relationship-type": { "connects": { "source": { "node": "pep" }, "destination": { "node": "resource" } } } },
+        { "unique-id": "pdp-other-peps", "description": "The single central PDP governs the other PEPs consistently, with the same central policy.",
+          "relationship-type": { "connects": { "source": { "node": "pdp" }, "destination": { "node": "other-peps" } } } }
+      ],
+      "flows": [
+        { "unique-id": "intercept-and-decide", "name": "Intercept, decide, enforce",
+          "description": "The enforcement point intercepts a request; the decision point evaluates policy and replies.",
+          "transitions": [
+            { "relationship-unique-id": "subject-pep", "sequence-number": 1, "description": "A subject makes an access attempt against a resource, and the PEP in the request path intercepts the attempt." },
+            { "relationship-unique-id": "pep-pdp", "sequence-number": 2, "description": "The PEP asks the PDP for a decision." },
+            { "relationship-unique-id": "pep-pdp", "sequence-number": 3, "description": "The PDP evaluates the rules and returns an allow or deny.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "pep-resource", "sequence-number": 4, "description": "The PEP applies the answer: an allowed request reaches the resource." },
+            { "relationship-unique-id": "subject-pep", "sequence-number": 5, "description": "A denied request does not reach the resource: the PEP turns the request back to the subject with a deny.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "pdp-other-peps", "sequence-number": 6, "description": "The same central PDP governs many other enforcement points consistently." }
+          ] }
+      ]
+    },
+    openziti: {
+      "nodes": [
+        { "unique-id": "service-policy", "node-type": "data-asset", "name": "Service policy", "description": "The service policy, which allows a connection only when the policy explicitly grants an identity access to a named service, so every other connection is denied by default." },
+        { "unique-id": "app", "node-type": "system", "name": "App", "description": "An app, a participant that dials a named service across the mesh; apps can embed the SDK directly or sit behind a tunneler, and the price of OpenZiti is adoption: every application needs the SDK, a tunneler or an edge router in front of it." },
+        { "unique-id": "app-identity", "node-type": "data-asset", "name": "X.509 identity", "description": "The app's X.509 identity, the identity every participant, whether app, device or service, carries." },
+        { "unique-id": "edge-router-mesh", "node-type": "network", "name": "edge router mesh", "description": "The mesh of edge routers that a connection crosses, the fabric of OpenZiti, an open-source zero-trust networking overlay sponsored by NetFoundry that replaces network-perimeter trust with per-connection, identity-based access; unlike a VPN, being on the network grants nothing on its own, and the controller and edge routers become infrastructure to run." },
+        { "unique-id": "edge-router-1", "node-type": "system", "name": "router", "description": "The first edge router in the mesh, the one the app connects to; every hop to and from the edge router is mutually authenticated with mTLS." },
+        { "unique-id": "edge-router-2", "node-type": "system", "name": "router", "description": "The second edge router in the mesh, the one the service dials out to; every hop to and from the edge router is mutually authenticated with mTLS." },
+        { "unique-id": "edge-router-3", "node-type": "system", "name": "router", "description": "The third edge router in the mesh; every hop to and from the edge router is mutually authenticated with mTLS." },
+        { "unique-id": "service", "node-type": "service", "name": "Service", "description": "A named service that is dark: the service opens no inbound ports and dials out to the fabric, so the service is invisible to port scans and unreachable without authentication." },
+        { "unique-id": "service-identity", "node-type": "data-asset", "name": "X.509 identity", "description": "The service's X.509 identity, the identity every participant, whether app, device or service, carries." },
+        { "unique-id": "scanner", "node-type": "system", "name": "Scanner", "description": "A scanner, which finds no open port to reach on a dark service." }
+      ],
+      "relationships": [
+        { "unique-id": "app-carries-identity", "description": "The app carries an X.509 identity.",
+          "relationship-type": { "composed-of": { "container": "app", "nodes": ["app-identity"] } } },
+        { "unique-id": "service-carries-identity", "description": "The service carries an X.509 identity.",
+          "relationship-type": { "composed-of": { "container": "service", "nodes": ["service-identity"] } } },
+        { "unique-id": "edge-router-mesh-routers", "description": "The edge routers run in the mesh.",
+          "relationship-type": { "deployed-in": { "container": "edge-router-mesh", "nodes": ["edge-router-1", "edge-router-2", "edge-router-3"] } } },
+        { "unique-id": "service-policy-edge-router-mesh", "description": "The service policy governs connections across the mesh: a connection is allowed only when the policy explicitly grants an identity access to a named service.",
+          "relationship-type": { "connects": { "source": { "node": "service-policy" }, "destination": { "node": "edge-router-mesh" } } } },
+        { "unique-id": "app-edge-router-1", "description": "The app dials the named service through an edge router, over a hop mutually authenticated with mTLS.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "edge-router-1" } } } },
+        { "unique-id": "service-edge-router-2", "description": "The service dials out to the fabric through an edge router rather than opening an inbound port, and connections reach the service over that hop, mutually authenticated with mTLS.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "service" }, "destination": { "node": "edge-router-2" } } } },
+        { "unique-id": "edge-router-1-edge-router-2", "description": "A connection crosses from the first edge router to the second, a hop mutually authenticated with mTLS.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "edge-router-1" }, "destination": { "node": "edge-router-2" } } } },
+        { "unique-id": "edge-router-1-edge-router-3", "description": "A hop in the mesh joins the first and the third edge router, mutually authenticated with mTLS.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "edge-router-1" }, "destination": { "node": "edge-router-3" } } } },
+        { "unique-id": "edge-router-2-edge-router-3", "description": "A hop in the mesh joins the second and the third edge router, mutually authenticated with mTLS.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "edge-router-2" }, "destination": { "node": "edge-router-3" } } } },
+        { "unique-id": "scanner-service", "description": "A port scan from the scanner finds no open inbound port on the service, so the service stays invisible and unreachable without authentication.",
+          "relationship-type": { "connects": { "source": { "node": "scanner" }, "destination": { "node": "service" } } } }
+      ],
+      "flows": [
+        { "unique-id": "dial-a-dark-service", "name": "Dial a dark service",
+          "description": "Identities dial named, port-less services across an mTLS mesh; a service policy must explicitly allow each connection (default-deny).",
+          "transitions": [
+            { "relationship-unique-id": "service-edge-router-2", "sequence-number": 1, "description": "The service opens no inbound port: the service dials out to the fabric through an edge router." },
+            { "relationship-unique-id": "app-edge-router-1", "sequence-number": 2, "description": "The app dials the named service through an edge router." },
+            { "relationship-unique-id": "service-policy-edge-router-mesh", "sequence-number": 3, "description": "The connection is allowed only when the service policy explicitly grants the app's identity access to the named service." },
+            { "relationship-unique-id": "edge-router-1-edge-router-2", "sequence-number": 4, "description": "The connection crosses the mesh: the first edge router sends its side of the mutual mTLS authentication to the second." },
+            { "relationship-unique-id": "edge-router-1-edge-router-2", "sequence-number": 5, "description": "The second edge router sends its side back, so the hop is mutually authenticated.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "edge-router-1-edge-router-3", "sequence-number": 6, "description": "Every hop is mutually authenticated with mTLS: the first edge router sends its side to the third." },
+            { "relationship-unique-id": "edge-router-1-edge-router-3", "sequence-number": 7, "description": "The third edge router sends its side back.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "edge-router-2-edge-router-3", "sequence-number": 8, "description": "The second edge router sends its side to the third." },
+            { "relationship-unique-id": "edge-router-2-edge-router-3", "sequence-number": 9, "description": "The third edge router sends its side back.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "scanner-service", "sequence-number": 10, "description": "Being on the network grants nothing on its own: a scanner finds no open port on the service to reach." }
+          ] }
+      ]
+    },
+    opa: {
+      "nodes": [
+        { "unique-id": "service", "node-type": "system", "name": "Service", "description": "A service that asks OPA a policy question, with policy decisions decoupled from the service's own application logic; the service must query OPA and enforce the answer itself." },
+        { "unique-id": "opa", "node-type": "service", "name": "OPA", "description": "Open Policy Agent, a Cloud Native Computing Foundation (CNCF) graduated engine that decouples policy decisions from application logic, evaluates rules written in OPA's declarative Rego language and returns a structured decision, the canonical software implementation of a Zero Trust Policy Decision Point; OPA only decides: each service must query OPA and enforce the answer itself." },
+        { "unique-id": "policy", "node-type": "data-asset", "name": "Policy", "description": "Version-controlled policy as code, written as rules in OPA's declarative Rego language, in which organisations express authorisation once rather than scattering if-statements through every app; policies have to be written and tested in Rego, an unfamiliar language for most teams." },
+        { "unique-id": "k8s-admission", "node-type": "system", "name": "K8s admission", "description": "Kubernetes admission, for which Gatekeeper packages OPA as a Kubernetes admission controller, a gate that checks each resource against policy whenever the resource is created or updated, before the resource is admitted to the cluster." },
+        { "unique-id": "ci-pipelines", "node-type": "system", "name": "CI pipelines", "description": "CI pipelines, for which the same OPA engine answers policy questions." },
+        { "unique-id": "api-gateways", "node-type": "system", "name": "API gateways", "description": "API gateways, for which the same OPA engine answers policy questions." }
+      ],
+      "relationships": [
+        { "unique-id": "service-opa", "description": "The service asks OPA a question, can subject X perform action Y on resource Z, sending JSON context, and OPA returns a structured decision.",
+          "relationship-type": { "connects": { "source": { "node": "service" }, "destination": { "node": "opa" } } } },
+        { "unique-id": "policy-opa", "description": "OPA evaluates the policy's rules, written in Rego.",
+          "relationship-type": { "connects": { "source": { "node": "policy" }, "destination": { "node": "opa" } } } },
+        { "unique-id": "k8s-admission-opa", "description": "Kubernetes admission asks OPA policy questions, with Gatekeeper packaging OPA as the admission controller.",
+          "relationship-type": { "connects": { "source": { "node": "k8s-admission" }, "destination": { "node": "opa" } } } },
+        { "unique-id": "ci-pipelines-opa", "description": "CI pipelines ask the same OPA engine policy questions.",
+          "relationship-type": { "connects": { "source": { "node": "ci-pipelines" }, "destination": { "node": "opa" } } } },
+        { "unique-id": "api-gateways-opa", "description": "API gateways ask the same OPA engine policy questions.",
+          "relationship-type": { "connects": { "source": { "node": "api-gateways" }, "destination": { "node": "opa" } } } }
+      ],
+      "flows": [
+        { "unique-id": "ask-and-decide", "name": "One policy brain, many call sites",
+          "description": "Each service ships its decision context to OPA, which evaluates Rego policy and returns allow or deny — one policy brain, many call sites.",
+          "transitions": [
+            { "relationship-unique-id": "service-opa", "sequence-number": 1, "description": "A service asks OPA a question, can subject X perform action Y on resource Z, sending JSON context." },
+            { "relationship-unique-id": "service-opa", "sequence-number": 2, "description": "OPA returns a structured decision, such as allow or deny.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "k8s-admission-opa", "sequence-number": 3, "description": "The same engine makes policy decisions for Kubernetes admission, as Gatekeeper." },
+            { "relationship-unique-id": "ci-pipelines-opa", "sequence-number": 4, "description": "The same engine makes policy decisions for CI pipelines." },
+            { "relationship-unique-id": "api-gateways-opa", "sequence-number": 5, "description": "The same engine makes policy decisions for API gateways." },
+            { "relationship-unique-id": "policy-opa", "sequence-number": 6, "description": "Organisations express authorisation once, as version-controlled policy as code, which OPA evaluates." }
           ] }
       ]
     },
