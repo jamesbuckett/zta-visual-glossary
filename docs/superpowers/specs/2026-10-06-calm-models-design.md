@@ -151,7 +151,11 @@ entry, so nothing is stored twice:
   inside the narrated exchange (a token, a code, a challenge) is what the link carries,
   however long it lives; a thing named only inside a limitation stays in that description
   (batch 4 review: IdP's token is link content, SAML's assertion and OIDC's ID token are
-  nodes). Where the tour's order differs from the protocol's, the
+  nodes).
+- An application takes its type from its role in the term's exchange: requester `system`,
+  answerer `service`. A connector may end on a labelled entry inside its node's outline.
+  A fan-out of one event to several instances is one transition and one connector per
+  instance, with the events as a lit list (batch 4 review). Where the tour's order differs from the protocol's, the
   transition descriptions say the protocol's order.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
   `description` names it.

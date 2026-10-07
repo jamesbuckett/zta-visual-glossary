@@ -127,7 +127,11 @@ built-in `node-type` that honestly fits; otherwise use a custom kebab-case type 
 `layer`. Three rules settle the common cases:
 
 - `actor` is for people and organisations only. A client machine or program is a
-  `system`, or a `webclient` if it is a browser or an app's user interface.
+  `system`, or a `webclient` if it is a browser or an app's user interface. An
+  application takes its type from its role in the term's exchange: the party that sends
+  the requests is a `system` (OIDC's relying app, an app binding to a directory), the party
+  that answers them is a `service` (an app the IdP provisions or issues to); where it does
+  both, the copy's own word decides.
 - When a built-in name collides with the term's own vocabulary, use a custom type. A
   Kubernetes pod is a `pod`, not a `service`, because a Service is a different
   Kubernetes object.
@@ -207,7 +211,10 @@ it makes sense on its own, as for nodes.
 
 **Flow.** Write one flow when the tour narrates traffic: if it lights any arrow, the
 model has a flow. List the transitions in the order the tour lights their connectors,
-numbered 1 to N. The flow follows the tour's order even where the tour is conceptual rather than
+numbered 1 to N. When one party fans the same event out to several instances (an IdP
+provisioning three apps), write one transition per instance and one connector each, and
+draw the events the steps narrate as a lit list beside the source rather than as a line per
+event. The flow follows the tour's order even where the tour is conceptual rather than
 chronological: a model mirrors how the term is explained, not a packet trace. A reply, or any traffic going back over the same link, is a transition
 with `"direction": "destination-to-source"`. Each transition needs a lit connector of its
 own, drawn in its direction; a connector lit at several steps can serve a transition at
@@ -226,8 +233,9 @@ the switch" lights three links and adds nothing to the flow.
 - A container's group holds its outline and its own label only. Its children are sibling
   groups drawn inside it. Never nest one `data-calm` in another.
 - Each connector is one `<line>` or `<path>` carrying `data-calm="<relationship id>"`,
-  drawn from one node's edge to the other's. Redraw a shared trunk as separate
-  full-length lines.
+  drawn from one node's edge to the other's, or to a labelled entry inside the node's
+  outline when that reads better (a bind landing on a directory entry). Redraw a shared
+  trunk as separate full-length lines.
 - `data-calm` and `data-s` go on the same element.
 - Anything else drawn with a `box`, `zone` or `flow` class is not part of the
   architecture and says so with `data-note` on it or its group. The value is one of six,
