@@ -157,6 +157,11 @@ entry, so nothing is stored twice:
   exchange (a public key and credential ID registered with a site) is what that link
   carries, even though the other party stores it; a key or certificate the holder keeps as
   its own and presents stays a node (batch 5 review).
+- A policy or set of rules is a node only when the copy treats it as a thing of its own
+  (authored, versioned, pushed, compiled, or given a default-deny of its own: OPA's policy,
+  Immuta's, OpenZiti's service policy); rules the copy names only as what a component
+  evaluates or applies (RBAC's engine, a PDP, a segment's rules) stay in that component's
+  description (batch 6 review).
 - An application takes its type from its role in the term's exchange: requester `system`,
   answerer `service`. A connector may end on a labelled entry inside its node's outline.
   A fan-out of one event to several instances is one transition and one connector per

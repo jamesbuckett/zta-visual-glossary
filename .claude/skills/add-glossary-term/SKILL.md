@@ -163,6 +163,10 @@ deployed in it, is a `call-out` zone named in the link's description, not a node
 `data-asset` that party reads, like any other certificate. An artefact the copy places
 nowhere, neither inside its holder nor handed on (a policy, an audit log), is a separate
 node joined by an arrow: a `data-asset` if made once, a `database` if written at run time.
+A policy or set of rules is such an artefact only when the copy treats it as a thing of its
+own (authored, versioned, pushed, compiled, or given a default-deny of its own: OPA's policy,
+Immuta's, OpenZiti's service policy); rules the copy names only as what a component evaluates
+or applies (RBAC's engine, a PDP, a segment's rules) stay in that component's description.
 
 The type sets the outline:
 
