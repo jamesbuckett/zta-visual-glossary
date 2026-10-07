@@ -5946,36 +5946,36 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     kerberos: () => `
       <svg class="dg" viewBox="0 0 720 290" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Authenticate once to the KDC for a ticket-granting ticket, then exchange it for per-service tickets — the password never travels.">
-        <g data-s="1 2 3 4">
-          <rect class="box" x="24" y="24" width="176" height="246" rx="12"/>
-          ${icon('user', 40, 38)}
+        <g data-s="1 2 3 4" data-calm="client">
+          <rect class="box" x="24" y="24" width="176" height="246" rx="8"/>
+          ${icon('laptop', 40, 38)}
           <text class="t-b" x="72" y="56">Client</text>
           <text class="t-sm t-mut" x="72" y="74">password is</text>
           <text class="t-sm t-mut" x="72" y="90">never sent</text>
         </g>
-        <g data-s="1 2 3">
+        <g data-s="1 2 3" data-calm="kdc">
           <rect class="box" x="508" y="24" width="188" height="166" rx="8"/>
           ${icon('key-round', 524, 38)}
           <text class="t-b" x="556" y="56">KDC</text>
           <text class="t-sm t-mut" x="556" y="74">Key Distribution</text>
           <text class="t-sm t-mut" x="556" y="90">Center</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-calm="service">
           <rect class="box" x="508" y="210" width="188" height="60" rx="8"/>
           ${icon('server', 524, 224)}
           <text class="t-b" x="556" y="242">Service</text>
           <text class="t-sm t-mut" x="556" y="260">verifies the ticket</text>
         </g>
 
-        <line class="flow" data-s="1" x1="202" y1="64" x2="506" y2="64" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="client-kdc" x1="202" y1="64" x2="506" y2="64" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="372" y="57" text-anchor="middle">authenticate once</text>
-        <line class="flow" data-s="2" x1="506" y1="104" x2="202" y2="104" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="client-kdc" x1="506" y1="104" x2="202" y2="104" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="372" y="97" text-anchor="middle">Ticket-Granting Ticket (TGT)</text>
-        <line class="flow" data-s="3" x1="202" y1="144" x2="506" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-kdc" x1="202" y1="144" x2="506" y2="144" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="372" y="137" text-anchor="middle">TGT</text>
-        <line class="flow" data-s="3" x1="506" y1="174" x2="202" y2="174" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-kdc" x1="506" y1="174" x2="202" y2="174" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="372" y="167" text-anchor="middle">service ticket</text>
-        <line class="flow" data-s="4" x1="202" y1="240" x2="506" y2="240" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="client-service" x1="202" y1="240" x2="506" y2="240" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="372" y="233" text-anchor="middle">service ticket</text>
 
         ${badge(1, 232, 64, '1')}
@@ -6380,41 +6380,41 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     pam: () => `
       <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Admins check out a vaulted credential through a recorded gateway; access is elevated just-in-time and revoked when the task ends.">
-        <g data-s="1 2 3">
-          <rect class="box" x="24" y="96" width="152" height="72" rx="12"/>
+        <g data-s="1 2 3" data-calm="admin">
+          <rect class="box" x="24" y="96" width="152" height="72" rx="20"/>
           ${icon('user', 40, 110)}
           <text class="t-b" x="72" y="128">Admin</text>
           <text class="t-sm t-mut" x="72" y="146">needs access</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="232" y="16" width="200" height="64" rx="8"/>
+        <g data-s="2" data-calm="vault">
+          <rect class="box" x="232" y="16" width="200" height="72" rx="8"/>
           ${icon('lock', 248, 32)}
           <text class="t-b" x="280" y="42">Credential vault</text>
           <text class="t-sm t-mut" x="280" y="60">check out, not know</text>
         </g>
-        <g data-s="3">
+        <g data-s="3" data-calm="gateway">
           <rect class="box" x="232" y="120" width="200" height="80" rx="8"/>
           ${icon('shield', 248, 134)}
           <text class="t-b" x="280" y="152">Gateway</text>
           <text class="t-sm t-mut" x="280" y="170">records keystrokes</text>
           <text class="t-sm t-mut" x="280" y="186">for audit</text>
         </g>
-        <g data-s="1 3 4">
+        <g data-s="1 3 4" data-calm="privileged">
           <rect class="box" x="520" y="120" width="176" height="80" rx="8"/>
-          ${icon('server', 536, 134)}
+          ${icon('key-round', 536, 134)}
           <text class="t-b" x="568" y="152">Privileged</text>
-          <text class="t-sm t-mut" x="568" y="170">root, domain</text>
-          <text class="t-sm t-mut" x="568" y="186">admin, cloud</text>
+          <text class="t-sm t-mut" x="536" y="174">root, domain</text>
+          <text class="t-sm t-mut" x="536" y="190">admin, cloud</text>
         </g>
-        <line class="flow" data-s="2" x1="178" y1="112" x2="230" y2="56" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="178" y1="150" x2="230" y2="160" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="434" y1="160" x2="518" y2="160" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="admin-vault" x1="178" y1="112" x2="230" y2="56" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="admin-gateway" x1="178" y1="150" x2="230" y2="160" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="gateway-privileged" x1="434" y1="160" x2="518" y2="160" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="486" y="152" text-anchor="middle">recorded</text>
         <g data-s="4">
           <text class="t-sm" x="232" y="236">elevated for a task</text>
           <text class="t-sm bad" x="696" y="236" text-anchor="end">revoked automatically</text>
         </g>
-        <line class="flow" data-s="4" x1="232" y1="248" x2="694" y2="248" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-note="becomes" x1="232" y1="248" x2="694" y2="248" marker-end="url(#ah-mut)"/>
         <text class="t-sm t-mut" data-s="4" x="464" y="272" text-anchor="middle">just-in-time: a specific task, a short window</text>
 
         ${badge(1, 680, 134, '1')}
@@ -6527,48 +6527,48 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     bola: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Same caller, same token — only the object ID changes; with no ownership check the API returns the victim's object.">
-        <g data-s="1 2 3">
-          <rect class="box" x="24" y="80" width="136" height="112" rx="12"/>
+        <g data-s="1 2 3" data-calm="caller">
+          <rect class="box" x="24" y="80" width="136" height="112" rx="20"/>
           ${icon('user', 40, 94)}
           <text class="t-b" x="72" y="112">Caller</text>
           <text class="t-sm t-mut" x="40" y="148">authenticated,</text>
           <text class="t-sm t-mut" x="40" y="164">same token</text>
         </g>
-        <line class="flow" data-s="2" x1="162" y1="112" x2="290" y2="112" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="caller-api" x1="162" y1="112" x2="290" y2="112" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="226" y="104" text-anchor="middle">GET /orders/1001</text>
-        <line class="flow-bad" data-s="3" x1="162" y1="172" x2="290" y2="172" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="3" data-calm="caller-api" x1="162" y1="172" x2="290" y2="172" marker-end="url(#ah-bad)"/>
         <text class="t-sm" data-s="3" x="226" y="164" text-anchor="middle">GET /orders/1002</text>
-        <g data-s="1 2 3 4">
+        <g data-s="1 2 3 4" data-calm="api">
           <rect class="box" x="292" y="40" width="160" height="200" rx="8"/>
           ${icon('server', 308, 54)}
           <text class="t-b" x="340" y="72">API</text>
           <text class="t-sm t-mut" x="340" y="90">authenticates</text>
           <text class="t-sm t-mut" x="340" y="106">the caller</text>
         </g>
-        <g data-s="3 4">
-          <rect class="box" x="304" y="168" width="136" height="56" rx="6"/>
-          <text class="t-sm t-b" x="316" y="190">is this yours?</text>
-          <text class="t-sm t-mut" x="316" y="208">missing here</text>
+        <g data-s="3 4" data-note="call-out">
+          <rect class="box" x="304" y="160" width="136" height="56" rx="6"/>
+          <text class="t-sm t-b" x="316" y="182">is this yours?</text>
+          <text class="t-sm t-mut" x="316" y="200">missing here</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="540" y="40" width="156" height="64" rx="8"/>
+        <g data-s="2" data-calm="order-1001">
+          ${doc(540, 40, 156, 72)}
           ${icon('file-text', 556, 56)}
           <text class="t-b" x="588" y="66">order 1001</text>
           <text class="t-sm t-mut" x="588" y="84">caller's own</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="540" y="176" width="156" height="64" rx="8"/>
-          ${icon('file-text', 556, 192)}
-          <text class="t-b" x="588" y="202">order 1002</text>
-          <text class="t-sm bad" x="588" y="220">another user's</text>
+        <g data-s="3" data-calm="order-1002">
+          ${doc(540, 168, 156, 72)}
+          ${icon('file-text', 556, 184)}
+          <text class="t-b" x="588" y="194">order 1002</text>
+          <text class="t-sm bad" x="588" y="212">another user's</text>
         </g>
-        <line class="flow" data-s="2" x1="454" y1="88" x2="538" y2="72" marker-end="url(#ah-mut)"/>
-        <line class="flow-bad" data-s="3" x1="454" y1="190" x2="538" y2="208" marker-end="url(#ah-bad)"/>
+        <line class="flow" data-s="2" data-calm="order-1001-api" x1="454" y1="88" x2="538" y2="72" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="3" data-calm="order-1002-api" x1="454" y1="190" x2="538" y2="208" marker-end="url(#ah-bad)"/>
 
         ${badge(1, 144, 94, '1')}
         ${badge(2, 496, 80, '2')}
         ${badge(3, 496, 199, '3')}
-        ${badge(4, 424, 208, '4')}
+        ${badge(4, 424, 200, '4')}
       </svg>`,
 
     tpm: () => `
@@ -7150,36 +7150,36 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     obo: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="API A exchanges the user's token for one scoped to API B, so the downstream hop authorises the real user — a forwarded token fails its audience check.">
-        <g data-s="1">
-          <rect class="box" x="24" y="112" width="148" height="64" rx="12"/>
+        <g data-s="1" data-calm="client">
+          <rect class="box" x="24" y="112" width="148" height="64" rx="8"/>
           ${icon('laptop', 40, 126)}
           <text class="t-b" x="72" y="144">Client</text>
           <text class="t-sm t-mut" x="72" y="162">user's token</text>
         </g>
-        <line class="flow" data-s="1" x1="174" y1="144" x2="234" y2="144" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3 4">
+        <line class="flow" data-s="1" data-calm="client-api-a" x1="174" y1="144" x2="234" y2="144" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4" data-calm="api-a">
           <rect class="box" x="236" y="112" width="160" height="64" rx="8"/>
           ${icon('server', 252, 126)}
           <text class="t-b" x="284" y="144">API A</text>
           <text class="t-sm t-mut" x="284" y="162">the middle tier</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="400" y="16" width="200" height="64" rx="8"/>
+        <g data-s="2" data-calm="authz">
+          <rect class="box" x="400" y="16" width="224" height="64" rx="8"/>
           ${icon('shield-check', 416, 32)}
-          <text class="t-b" x="448" y="42">Authorisation</text>
-          <text class="t-sm t-mut" x="448" y="60">server</text>
+          <text class="t-b" x="448" y="42">Authorisation server</text>
+          <text class="t-sm t-mut" x="448" y="60">token exchange</text>
         </g>
-        <line class="flow" data-s="2" x1="340" y1="110" x2="430" y2="82" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="api-a-authz" x1="340" y1="110" x2="430" y2="82" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="396" y="112">exchange</text>
-        <g data-s="3 4">
+        <g data-s="3 4" data-calm="api-b">
           <rect class="box" x="548" y="112" width="148" height="64" rx="8"/>
           ${icon('server', 564, 126)}
           <text class="t-b" x="596" y="144">API B</text>
           <text class="t-sm t-mut" x="596" y="162">audience check</text>
         </g>
-        <line class="flow" data-s="3" x1="398" y1="144" x2="546" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="api-a-api-b" x1="398" y1="144" x2="546" y2="144" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="462" y="136" text-anchor="middle">token scoped to B</text>
-        <path class="flow-bad" data-s="4" d="M316 178 V220 H626 V178" marker-end="url(#ah-bad)"/>
+        <path class="flow-bad" data-s="4" data-note="call-out" d="M316 178 V220 H626 V178" marker-end="url(#ah-bad)"/>
         <text class="t-sm bad" data-s="4" x="471" y="212" text-anchor="middle">forwarded token fails the audience check</text>
 
         ${badge(1, 204, 144, '1')}
@@ -7296,8 +7296,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     paseto: () => `
-      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The version segment fixes the cipher suite before parsing begins — JWT's alg header is a field the attacker can rewrite, and PASETO does not have one.">
-        <g data-s="1">
+      <svg class="dg" viewBox="0 0 720 308" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The version segment fixes the cipher suite before parsing begins — JWT's alg header is a field the attacker can rewrite, and PASETO does not have one.">
+        <g data-s="1" data-note="call-out">
           <text class="t-sm bad" x="96" y="18">alg: RS256 &#8594; HS256, or none</text>
           <text class="t-b" x="24" y="58">JWT</text>
           <rect class="box" x="96" y="28" width="140" height="48" rx="4"/>
@@ -7308,63 +7308,66 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="408" y="28" width="120" height="48" rx="4"/>
           <text class="t-sm" x="420" y="56">signature</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="call-out">
           <rect class="box" x="552" y="16" width="144" height="72" rx="8"/>
           <text class="t-b" x="568" y="38">Caveat</text>
           <text class="t-sm t-mut" x="568" y="58">never an RFC,</text>
           <text class="t-sm t-mut" x="568" y="74">trails JWT</text>
         </g>
 
-        <text class="t-b" x="24" y="142">PASETO</text>
-        <g data-s="2">
-          <rect class="box" x="96" y="112" width="100" height="48" rx="4"/>
-          <text class="t-sm t-b" x="108" y="132">version</text>
-          <text class="t-sm t-mut" x="108" y="150">v3 or v4</text>
+        <g data-calm="paseto">
+          <rect class="box-soft" x="24" y="100" width="672" height="100" rx="10"/>
+          <text class="t-b" x="36" y="157">PASETO</text>
         </g>
-        <text class="t-b" x="204" y="150" text-anchor="middle">.</text>
-        <g data-s="3">
-          <rect class="box" x="212" y="112" width="120" height="48" rx="4"/>
-          <text class="t-sm t-b" x="224" y="132">purpose</text>
-          <text class="t-sm t-mut" x="224" y="150">local or public</text>
+        <g data-s="2" data-calm="version">
+          ${doc(96, 120, 100, 64)}
+          <text class="t-sm t-b" x="108" y="142">version</text>
+          <text class="t-sm t-mut" x="108" y="160">v3 or v4</text>
         </g>
-        <text class="t-b" x="340" y="150" text-anchor="middle">.</text>
-        <g data-s="2 3 4">
-          <rect class="box" x="348" y="112" width="168" height="48" rx="4"/>
-          <text class="t-sm" x="360" y="140">payload</text>
+        <text class="t-b" x="204" y="166" text-anchor="middle">.</text>
+        <g data-s="3" data-calm="purpose">
+          ${doc(212, 120, 120, 64)}
+          <text class="t-sm t-b" x="224" y="142">purpose</text>
+          <text class="t-sm t-mut" x="224" y="160">local or public</text>
         </g>
-        <text class="t-b" x="524" y="150" text-anchor="middle">.</text>
-        <g data-s="4">
-          <rect class="box" x="532" y="112" width="164" height="48" rx="4"/>
-          <text class="t-sm t-b" x="544" y="132">footer</text>
-          <text class="t-sm t-mut" x="544" y="150">optional</text>
+        <text class="t-b" x="340" y="166" text-anchor="middle">.</text>
+        <g data-s="2 3 4" data-calm="payload">
+          ${doc(348, 120, 152, 64)}
+          <text class="t-sm" x="360" y="156">payload</text>
+        </g>
+        <text class="t-b" x="508" y="166" text-anchor="middle">.</text>
+        <g data-s="4" data-calm="footer">
+          ${doc(516, 120, 164, 64)}
+          <text class="t-sm t-b" x="528" y="142">footer</text>
+          <text class="t-sm t-mut" x="528" y="160">optional</text>
         </g>
 
-        <line class="flow" data-s="2" x1="146" y1="162" x2="146" y2="190" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
-          <rect class="box" x="96" y="192" width="180" height="76" rx="6"/>
-          <text class="t-sm t-b" x="108" y="212">whole cipher suite</text>
-          <text class="t-sm t-mut" x="108" y="230">fixed before parsing</text>
-          <text class="t-sm t-mut" x="108" y="246">no field to tamper</text>
+        <line class="flow" data-s="2" data-note="call-out" x1="146" y1="186" x2="146" y2="214" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-note="call-out">
+          <rect class="box" x="96" y="216" width="180" height="76" rx="6"/>
+          <text class="t-sm t-b" x="108" y="236">whole cipher suite</text>
+          <text class="t-sm t-mut" x="108" y="254">fixed before parsing</text>
+          <text class="t-sm t-mut" x="108" y="270">no field to tamper</text>
         </g>
-        <line class="flow" data-s="3" x1="272" y1="162" x2="340" y2="190" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="292" y="192" width="200" height="76" rx="6"/>
-          <text class="t-sm t-b" x="304" y="212">local: encrypted</text>
-          <text class="t-sm t-mut" x="304" y="230">public: signed,</text>
-          <text class="t-sm t-mut" x="304" y="246">readable by anyone</text>
+        <line class="flow" data-s="3" data-note="call-out" x1="272" y1="186" x2="340" y2="214" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-note="call-out">
+          <rect class="box" x="292" y="216" width="200" height="76" rx="6"/>
+          <text class="t-sm t-b" x="304" y="236">local: encrypted</text>
+          <text class="t-sm t-mut" x="304" y="254">public: signed,</text>
+          <text class="t-sm t-mut" x="304" y="270">readable by anyone</text>
         </g>
-        <line class="flow" data-s="4" x1="614" y1="162" x2="614" y2="190" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="box" x="508" y="192" width="188" height="76" rx="6"/>
-          <text class="t-sm t-b" x="520" y="212">authenticated,</text>
-          <text class="t-sm t-mut" x="520" y="230">left in the clear,</text>
-          <text class="t-sm t-mut" x="520" y="246">e.g. key identifiers</text>
+        <line class="flow" data-s="4" data-note="call-out" x1="598" y1="186" x2="598" y2="214" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-note="call-out">
+          <rect class="box" x="508" y="216" width="188" height="76" rx="6"/>
+          <text class="t-sm t-b" x="520" y="236">authenticated,</text>
+          <text class="t-sm t-mut" x="520" y="254">left in the clear,</text>
+          <text class="t-sm t-mut" x="520" y="270">e.g. key identifiers</text>
         </g>
 
         ${badge(1, 220, 42, '1')}
-        ${badge(2, 260, 206, '2')}
-        ${badge(3, 476, 206, '3')}
-        ${badge(4, 680, 206, '4')}
+        ${badge(2, 260, 230, '2')}
+        ${badge(3, 476, 230, '3')}
+        ${badge(4, 680, 230, '4')}
         ${badge(5, 680, 30, '5')}
       </svg>`,
 
@@ -9980,6 +9983,120 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "app-directory", "sequence-number": 1, "description": "The app binds to the directory to authenticate a user." },
             { "relationship-unique-id": "app-directory", "sequence-number": 2, "description": "The app reads the user's group membership from the directory, which downstream systems map to permissions.", "direction": "destination-to-source" }
           ] }
+      ]
+    },
+    kerberos: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "A client, which proves its identity to many services using time-limited, encrypted tickets instead of repeatedly sending a password, without the password ever crossing the network." },
+        { "unique-id": "kdc", "node-type": "service", "name": "KDC", "description": "The trusted Key Distribution Center, to which the client authenticates once and from which the client receives a Ticket-Granting Ticket and, in exchange for that TGT, a service ticket the target service can verify; Kerberos tickets expire quickly and rely on synchronised clocks, which is why Kerberos environments are sensitive to time drift, and attacks like pass-the-ticket and Kerberoasting target weaknesses in how tickets and service keys are handled." },
+        { "unique-id": "service", "node-type": "service", "name": "Service", "description": "A service the client reaches by presenting a service ticket, which the service verifies." }
+      ],
+      "relationships": [
+        { "unique-id": "client-kdc", "description": "The client authenticates once to the Key Distribution Center and receives a Ticket-Granting Ticket, then presents the TGT and receives a service ticket for one service, without the password crossing the network.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "kdc" } } } },
+        { "unique-id": "client-service", "description": "The client presents the service ticket, which the service verifies.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "service" } } } }
+      ],
+      "flows": [
+        { "unique-id": "ticket-exchange", "name": "Ticket exchange",
+          "description": "Authenticate once to the KDC for a Ticket-Granting Ticket, then exchange the TGT for per-service tickets, so the password never travels; this ticket exchange makes single sign-on across a Windows domain possible, and Kerberos is the authentication half of Active Directory.",
+          "transitions": [
+            { "relationship-unique-id": "client-kdc", "sequence-number": 1, "description": "The client authenticates once to the trusted Key Distribution Center, rather than sending the client's password to every service the client uses." },
+            { "relationship-unique-id": "client-kdc", "sequence-number": 2, "description": "In return the client receives a Ticket-Granting Ticket, a time-limited, encrypted ticket.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-kdc", "sequence-number": 3, "description": "To reach a service, the client presents the TGT." },
+            { "relationship-unique-id": "client-kdc", "sequence-number": 4, "description": "In exchange for the TGT, the client receives a service ticket for that one service.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-service", "sequence-number": 5, "description": "The client presents the service ticket, and the service verifies the ticket." }
+          ] }
+      ]
+    },
+    pam: {
+      "nodes": [
+        { "unique-id": "admin", "node-type": "actor", "name": "Admin", "description": "An admin, who checks out a vaulted privileged credential rather than knowing the credential, and whose sessions are brokered through a gateway that records keystrokes for audit." },
+        { "unique-id": "vault", "node-type": "service", "name": "Credential vault", "description": "The vault in which Privileged Access Management keeps the credentials of privileged accounts, so admins check the credentials out rather than knowing the credentials; PAM is also a frequent first target in a breach." },
+        { "unique-id": "gateway", "node-type": "service", "name": "Gateway", "description": "The gateway through which Privileged Access Management brokers sessions, recording keystrokes for audit, which provides the accountability trail regulators expect for sensitive systems." },
+        { "unique-id": "privileged", "node-type": "account", "name": "Privileged", "description": "A handful of privileged accounts, such as domain admins, root and cloud owners, which can do catastrophic damage and whose privileges Privileged Access Management increasingly elevates just-in-time, for a specific task and a short window, then automatically revokes, shrinking the standing attack surface; PAM protects only the accounts brought under PAM's control, and privileged credentials that were never onboarded stay outside PAM." }
+      ],
+      "relationships": [
+        { "unique-id": "admin-vault", "description": "The admin checks out a privileged credential from the vault rather than knowing the credential.",
+          "relationship-type": { "interacts": { "actor": "admin", "nodes": ["vault"] } } },
+        { "unique-id": "admin-gateway", "description": "The admin's session is brokered through the gateway.",
+          "relationship-type": { "interacts": { "actor": "admin", "nodes": ["gateway"] } } },
+        { "unique-id": "gateway-privileged", "description": "The gateway brokers the admin's session to the privileged account and records keystrokes for audit.",
+          "relationship-type": { "connects": { "source": { "node": "gateway" }, "destination": { "node": "privileged" } } } }
+      ],
+      "flows": [
+        { "unique-id": "privileged-session", "name": "Check out and broker",
+          "description": "Admins check out a vaulted credential through a recorded gateway; access is elevated just-in-time and revoked when the task ends.",
+          "transitions": [
+            { "relationship-unique-id": "admin-vault", "sequence-number": 1, "description": "The admin checks out a vaulted credential rather than knowing the credential." },
+            { "relationship-unique-id": "admin-gateway", "sequence-number": 2, "description": "Privileged Access Management brokers the admin's session through the gateway." },
+            { "relationship-unique-id": "gateway-privileged", "sequence-number": 3, "description": "The gateway passes the session on to the privileged account, recording keystrokes for audit, the accountability trail regulators expect." }
+          ] }
+      ]
+    },
+    bola: {
+      "nodes": [
+        { "unique-id": "caller", "node-type": "actor", "name": "Caller", "description": "The caller, whom the API authenticates, answering who the caller is; an attacker who keeps the same token and changes the ID in a request gets back another user's record." },
+        { "unique-id": "api", "node-type": "service", "name": "API", "description": "An API whose endpoint exposes objects by identifier and authenticates the caller but never checks that the caller is allowed to touch that specific object, the extremely common and easily exploited flaw that tops the OWASP API Security Top 10 (API1:2023); the fix is a server-side ownership or policy check on every request that takes a client-supplied identifier, ideally enforced at the data-access layer so no endpoint can forget the check, and unpredictable IDs such as UUIDs make guessing harder, but only the server-side ownership check prevents the attack." },
+        { "unique-id": "order-1001", "node-type": "data-asset", "name": "order 1001", "description": "Order 1001, the caller's own object, which the endpoint exposes by the identifier 1001." },
+        { "unique-id": "order-1002", "node-type": "data-asset", "name": "order 1002", "description": "Order 1002, another user's record, which the same endpoint exposes by the identifier 1002." }
+      ],
+      "relationships": [
+        { "unique-id": "caller-api", "description": "The caller sends the API requests that name an object by identifier, such as GET /orders/1001, with the same token each time, and the API hands back the object.",
+          "relationship-type": { "interacts": { "actor": "caller", "nodes": ["api"] } } },
+        { "unique-id": "order-1001-api", "description": "The API reads order 1001, the caller's own object, by the identifier in the request.",
+          "relationship-type": { "connects": { "source": { "node": "order-1001" }, "destination": { "node": "api" } } } },
+        { "unique-id": "order-1002-api", "description": "The API reads order 1002, another user's record, by the identifier in the request, because no one checks that the record is the caller's.",
+          "relationship-type": { "connects": { "source": { "node": "order-1002" }, "destination": { "node": "api" } } } }
+      ],
+      "flows": [
+        { "unique-id": "object-by-id", "name": "Object by identifier",
+          "description": "Same caller, same token, only the object ID changes; with no ownership check the API returns the victim's object.",
+          "transitions": [
+            { "relationship-unique-id": "caller-api", "sequence-number": 1, "description": "The authenticated caller requests the caller's own object by identifier: GET /orders/1001." },
+            { "relationship-unique-id": "order-1001-api", "sequence-number": 2, "description": "The API fetches order 1001, the caller's own object.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "caller-api", "sequence-number": 3, "description": "The attacker keeps the same token and changes the ID to 1002: GET /orders/1002." },
+            { "relationship-unique-id": "order-1002-api", "sequence-number": 4, "description": "With no check that the object is the caller's, the API fetches order 1002, another user's record, and hands the record back.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    obo: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "A client, which calls API A with the user's access token." },
+        { "unique-id": "api-a", "node-type": "service", "name": "API A", "description": "API A, the middle tier, which must call API B and, rather than calling API B as itself with a powerful service credential, carries the user's context forward through On-Behalf-Of token exchange." },
+        { "unique-id": "authz", "node-type": "service", "name": "Authorisation server", "description": "The authorisation server, which exchanges the access token API A received for a new one, audience-restricted to API B and scoped to what the user may do there; OAuth 2.0 Token Exchange (RFC 8693) standardises the pattern, distinguishing impersonation from delegation and recording the acting party in the token's act claim, and Microsoft's identity platform ships the same idea as its OBO flow; an over-permissive exchange policy lets a compromised middle tier obtain tokens for services the middle tier should never reach." },
+        { "unique-id": "api-b", "node-type": "service", "name": "API B", "description": "API B, which, given the exchanged token, authorises the real subject rather than a generic service account; forwarding the original token to API B breaks audience restriction, and calling API B with the middle tier's own credentials leaves API B unable to tell users apart, the confused-deputy setup." }
+      ],
+      "relationships": [
+        { "unique-id": "client-api-a", "description": "The client calls API A with the user's access token.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "api-a" } } } },
+        { "unique-id": "api-a-authz", "description": "API A presents the access token API A received to the authorisation server and receives in exchange a new token, audience-restricted to API B and scoped to what the user may do there; each exchange adds a round trip to the authorisation server.",
+          "relationship-type": { "connects": { "source": { "node": "api-a" }, "destination": { "node": "authz" } } } },
+        { "unique-id": "api-a-api-b", "description": "API A calls API B with the new token, so API B authorises the real subject rather than a generic service account.",
+          "relationship-type": { "connects": { "source": { "node": "api-a" }, "destination": { "node": "api-b" } } } }
+      ],
+      "flows": [
+        { "unique-id": "on-behalf-of", "name": "On-Behalf-Of token exchange",
+          "description": "API A exchanges the user's token for one scoped to API B, so the downstream hop authorises the real user; a forwarded token fails the audience check.",
+          "transitions": [
+            { "relationship-unique-id": "client-api-a", "sequence-number": 1, "description": "A client calls API A with the user's access token, and API A must now call API B." },
+            { "relationship-unique-id": "api-a-authz", "sequence-number": 2, "description": "Rather than calling API B as itself, API A presents the token API A received to the authorisation server." },
+            { "relationship-unique-id": "api-a-authz", "sequence-number": 3, "description": "The authorisation server exchanges the token for a new one, audience-restricted to API B and scoped to what the user may do there.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "api-a-api-b", "sequence-number": 4, "description": "API A calls API B with the new token, so API B authorises the real subject rather than a generic service account." }
+          ] }
+      ]
+    },
+    paseto: {
+      "nodes": [
+        { "unique-id": "paseto", "node-type": "data-asset", "name": "PASETO", "description": "A PASETO token, which reads version.purpose.payload plus an optional footer and has no field to tamper with, in a token format built as a direct answer to the ways JWT goes wrong in practice; the IETF draft expired, PASETO never became an RFC, usage trails JWT by orders of magnitude, and a JWT library pinned to exactly one algorithm closes the same holes." },
+        { "unique-id": "version", "node-type": "data-asset", "name": "version", "description": "The version, the first segment, which names the entire cipher suite before parsing begins: v3 for NIST-constrained environments (AES-256-CTR with HMAC-SHA-384, ECDSA over P-384) or v4 as the recommended default (XChaCha20 with keyed BLAKE2b, Ed25519)." },
+        { "unique-id": "purpose", "node-type": "data-asset", "name": "purpose", "description": "The purpose, one of two: local means the payload is encrypted under a shared symmetric key, and public means the payload is signed but not encrypted, so anyone can read the payload and anyone holding the public key can verify the payload." },
+        { "unique-id": "payload", "node-type": "data-asset", "name": "payload", "description": "The payload, encrypted under a shared symmetric key when the purpose is local, and signed but readable by anyone when the purpose is public." },
+        { "unique-id": "footer", "node-type": "data-asset", "name": "footer", "description": "An optional footer, authenticated but left in the clear for things like key identifiers." }
+      ],
+      "relationships": [
+        { "unique-id": "paseto-segments", "description": "A PASETO token reads version.purpose.payload, plus an optional footer.",
+          "relationship-type": { "composed-of": { "container": "paseto", "nodes": ["version", "purpose", "payload", "footer"] } } }
       ]
     },
   };
