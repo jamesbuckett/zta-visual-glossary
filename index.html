@@ -7555,54 +7555,54 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     cyberark: () => `
       <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The Vault holds the credential and the recording; PSM opens the session and injects the credential at the proxy, so the administrator gets access without ever seeing the password — which only holds if the direct route to the target is closed.">
-        <g data-s="3 4 5">
-          <rect class="box" x="24" y="112" width="140" height="64" rx="12"/>
+        <g data-s="3 4 5" data-calm="admin">
+          <rect class="box" x="24" y="112" width="140" height="64" rx="20"/>
           ${icon('user', 40, 126)}
           <text class="t-b" x="72" y="144">Admin</text>
           <text class="t-sm t-mut" x="72" y="162">never sees it</text>
         </g>
-        <g data-s="3">
+        <g data-s="3" data-calm="pvwa">
           <rect class="box" x="204" y="16" width="160" height="64" rx="8"/>
           ${icon('app-window', 220, 30)}
           <text class="t-b" x="252" y="44">PVWA</text>
           <text class="t-sm t-mut" x="252" y="62">request access</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-calm="psm">
           <rect class="box" x="204" y="112" width="160" height="64" rx="8"/>
           ${icon('shield', 220, 126)}
           <text class="t-b" x="252" y="144">PSM</text>
           <text class="t-sm t-mut" x="252" y="162">hardened proxy</text>
         </g>
-        <g data-s="1 2 4">
+        <g data-s="1 2 4" data-calm="vault">
           <rect class="box" x="404" y="16" width="160" height="64" rx="8"/>
           ${icon('lock', 420, 30)}
           <text class="t-b" x="452" y="44">Vault</text>
           <text class="t-sm t-mut" x="452" y="62">credentials</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-calm="cpm">
           <rect class="box" x="404" y="208" width="160" height="56" rx="8"/>
           ${icon('cog', 420, 224)}
           <text class="t-b" x="452" y="233">CPM</text>
           <text class="t-sm t-mut" x="452" y="251">on a schedule</text>
         </g>
-        <g data-s="2 4 5">
+        <g data-s="2 4 5" data-calm="target">
           <rect class="box" x="580" y="112" width="116" height="64" rx="8"/>
           ${icon('server', 592, 126)}
           <text class="t-b" x="624" y="144">Target</text>
           <text class="t-sm t-mut" x="592" y="168">RDP or SSH</text>
         </g>
-        <line class="flow" data-s="3" x1="166" y1="128" x2="202" y2="70" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="166" y1="144" x2="202" y2="144" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="366" y1="144" x2="578" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="admin-pvwa" x1="166" y1="128" x2="202" y2="70" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="admin-psm" x1="166" y1="144" x2="202" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="psm-target" x1="366" y1="144" x2="578" y2="144" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="452" y="136" text-anchor="middle">credential injected here</text>
-        <line class="flow" data-s="4" x1="340" y1="110" x2="420" y2="82" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="psm-vault" x1="300" y1="110" x2="420" y2="82" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="394" y="108">recording</text>
-        <line class="flow" data-s="2" x1="548" y1="206" x2="548" y2="82" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="566" y1="224" x2="620" y2="178" marker-end="url(#ah-mut)"/>
-        <path class="flow-bad" data-s="5" d="M94 178 V276 H638 V178" marker-end="url(#ah-bad)"/>
+        <line class="flow" data-s="2" data-calm="cpm-vault" x1="548" y1="206" x2="548" y2="82" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="cpm-target" x1="566" y1="224" x2="620" y2="178" marker-end="url(#ah-mut)"/>
+        <path class="flow-bad" data-s="5" data-note="call-out" d="M94 178 V276 H638 V178" marker-end="url(#ah-bad)"/>
         <text class="t-sm bad" data-s="5" x="250" y="270" text-anchor="middle">direct route around PSM</text>
 
-        ${badge(1, 548, 30, '1')}
+        ${badge(1, 548, 56, '1')}
         ${badge(2, 598, 197, '2')}
         ${badge(3, 184, 99, '3')}
         ${badge(4, 184, 144, '4')}
@@ -7668,182 +7668,182 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     fapi: () => `
-      <svg class="dg" viewBox="0 0 720 312" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="PAR keeps the authorisation request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API.">
-        <g data-s="1 2 3 4">
-          <rect class="box" x="24" y="16" width="160" height="224" rx="8"/>
+      <svg class="dg" viewBox="0 0 720 328" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="PAR keeps the authorisation request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API.">
+        <g data-s="1 2 3 4" data-calm="client">
+          <rect class="box-soft" x="24" y="16" width="160" height="232" rx="10"/>
           ${icon('app-window', 40, 30)}
           <text class="t-b" x="72" y="48">Client</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="40" y="176" width="128" height="48" rx="6"/>
-          ${icon('key-round', 48, 188)}
-          <text class="t-sm t-b" x="80" y="197">private key</text>
-          <text class="t-sm t-mut" x="80" y="213">mTLS or DPoP</text>
+        <g data-s="4" data-calm="private-key">
+          ${doc(40, 172, 128, 64)}
+          ${icon('key-round', 48, 184)}
+          <text class="t-sm t-b" x="80" y="193">private key</text>
+          <text class="t-sm t-mut" x="80" y="209">mTLS or DPoP</text>
         </g>
-        <g data-s="1 2 3">
-          <rect class="box" x="536" y="16" width="160" height="136" rx="8"/>
-          ${icon('shield-check', 552, 30)}
-          <text class="t-b" x="584" y="48">Authorisation</text>
-          <text class="t-sm t-mut" x="584" y="66">server</text>
+        <g data-s="1 2 3" data-calm="authz">
+          <rect class="box" x="472" y="16" width="224" height="168" rx="8"/>
+          ${icon('shield-check', 488, 30)}
+          <text class="t-b" x="520" y="48">Authorisation server</text>
         </g>
-        <line class="flow" data-s="1" x1="186" y1="40" x2="534" y2="40" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="33" text-anchor="middle">PAR: full request, back channel</text>
-        <line class="flow" data-s="1" x1="534" y1="72" x2="186" y2="72" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="65" text-anchor="middle">opaque request_uri</text>
-        <line class="flow" data-s="2" x1="186" y1="124" x2="274" y2="124" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
-          <rect class="box" x="276" y="96" width="168" height="56" rx="8"/>
-          ${icon('monitor', 292, 110)}
-          <text class="t-b" x="324" y="119">Browser</text>
-          <text class="t-sm t-mut" x="324" y="137">only the handle</text>
+        <line class="flow" data-s="1" data-calm="client-authz" x1="186" y1="40" x2="470" y2="40" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="352" y="33" text-anchor="middle">PAR: full request, back channel</text>
+        <line class="flow" data-s="1" data-calm="client-authz" x1="470" y1="72" x2="186" y2="72" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="352" y="65" text-anchor="middle">opaque request_uri</text>
+        <line class="flow" data-s="2" data-calm="client-browser" x1="186" y1="120" x2="234" y2="120" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-calm="browser">
+          <rect class="box" x="236" y="88" width="168" height="64" rx="20"/>
+          ${icon('monitor', 252, 102)}
+          <text class="t-b" x="284" y="111">Browser</text>
+          <text class="t-sm t-mut" x="284" y="129">only the handle</text>
         </g>
-        <line class="flow" data-s="2" x1="446" y1="124" x2="534" y2="124" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="534" y1="176" x2="186" y2="176" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="360" y="169" text-anchor="middle">code + iss, PKCE S256</text>
-        <line class="flow" data-s="4" x1="186" y1="212" x2="534" y2="212" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="360" y="205" text-anchor="middle">token bound to the client's key</text>
-        <g data-s="4">
-          <rect class="box" x="536" y="184" width="160" height="56" rx="8"/>
-          ${icon('server', 552, 200)}
-          <text class="t-b" x="584" y="209">API</text>
-          <text class="t-sm t-mut" x="584" y="227">checks the key</text>
+        <line class="flow" data-s="2" data-calm="browser-authz" x1="406" y1="120" x2="470" y2="120" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="client-authz" x1="470" y1="176" x2="186" y2="176" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="352" y="169" text-anchor="middle">code + iss, PKCE S256</text>
+        <line class="flow" data-s="4" data-calm="client-api" x1="186" y1="216" x2="470" y2="216" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="352" y="209" text-anchor="middle">token bound to the client's key</text>
+        <g data-s="4" data-calm="api">
+          <rect class="box" x="472" y="196" width="224" height="56" rx="8"/>
+          ${icon('server', 488, 212)}
+          <text class="t-b" x="520" y="221">API</text>
+          <text class="t-sm t-mut" x="520" y="239">checks the key</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="276" y="252" width="168" height="52" rx="12"/>
-          ${icon('skull', 292, 266)}
-          <text class="t-b" x="324" y="274">Attacker</text>
-          <text class="t-sm t-mut" x="324" y="292">token, no key</text>
+        <g data-s="4" data-calm="attacker">
+          <rect class="box" x="236" y="264" width="168" height="52" rx="20"/>
+          ${icon('skull', 252, 278)}
+          <text class="t-b" x="284" y="286">Attacker</text>
+          <text class="t-sm t-mut" x="284" y="304">token, no key</text>
         </g>
-        <path class="flow-bad" data-s="4" d="M446 278 H616 V242" marker-end="url(#ah-bad)"/>
-        <text class="t-sm bad" data-s="4" x="460" y="272">replay fails</text>
+        <path class="flow-bad" data-s="4" data-calm="attacker-api" d="M406 290 H584 V254" marker-end="url(#ah-bad)"/>
+        <text class="t-sm bad" data-s="4" x="420" y="284">replay fails</text>
 
         ${badge(1, 220, 40, '1')}
-        ${badge(2, 230, 124, '2')}
+        ${badge(2, 210, 120, '2')}
         ${badge(3, 220, 176, '3')}
-        ${badge(4, 220, 212, '4')}
+        ${badge(4, 220, 216, '4')}
       </svg>`,
 
     fido2: () => `
       <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Registration leaves the private key in the authenticator and only a public key with the site; at sign-in the authenticator signs a challenge, and for a look-alike origin it holds no credential at all.">
-        <g data-s="1 2 3">
-          <rect class="box" x="24" y="24" width="172" height="176" rx="12"/>
+        <g data-s="1 2 3" data-calm="authenticator">
+          <rect class="box-soft" x="24" y="24" width="172" height="176" rx="12"/>
           ${icon('fingerprint', 40, 38)}
           <text class="t-b" x="72" y="56">Authenticator</text>
         </g>
-        <g data-s="1 5">
-          <rect class="box" x="40" y="136" width="128" height="48" rx="6"/>
-          <text class="t-sm t-b" x="52" y="156">private key</text>
-          <text class="t-sm t-mut" x="52" y="172">never leaves</text>
+        <g data-s="1 5" data-calm="private-key">
+          ${doc(40, 124, 128, 60)}
+          <text class="t-sm t-b" x="52" y="146">private key</text>
+          <text class="t-sm t-mut" x="52" y="162">never leaves</text>
         </g>
-        <g data-s="1 2 3 4">
-          <rect class="box" x="268" y="24" width="172" height="176" rx="8"/>
+        <g data-s="1 2 3 4" data-calm="browser">
+          <rect class="box" x="268" y="24" width="172" height="176" rx="20"/>
           ${icon('app-window', 284, 38)}
           <text class="t-b" x="316" y="56">Browser</text>
           <text class="t-sm t-mut" x="284" y="152">WebAuthn, and</text>
           <text class="t-sm t-mut" x="284" y="168">CTAP to the key</text>
         </g>
-        <g data-s="1 2">
-          <rect class="box" x="536" y="24" width="160" height="104" rx="8"/>
+        <g data-s="1 2" data-calm="site">
+          <rect class="box" x="536" y="24" width="160" height="88" rx="8"/>
           ${icon('globe', 552, 38)}
           <text class="t-b" x="584" y="56">Real site</text>
-          <text class="t-sm t-mut" x="552" y="92">stores only</text>
-          <text class="t-sm t-mut" x="552" y="108">the public key</text>
+          <text class="t-sm t-mut" x="552" y="76">stores only</text>
+          <text class="t-sm t-mut" x="552" y="92">the public key</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="536" y="144" width="160" height="56" rx="8"/>
-          ${icon('skull', 552, 160)}
-          <text class="t-b" x="584" y="169">Look-alike</text>
-          <text class="t-sm bad" x="584" y="187">no credential</text>
+        <g data-s="4" data-calm="look-alike">
+          <rect class="box" x="536" y="128" width="160" height="64" rx="8"/>
+          ${icon('skull', 552, 142)}
+          <text class="t-b" x="584" y="153">Look-alike</text>
+          <text class="t-sm bad" x="584" y="171">no credential</text>
         </g>
-        <line class="flow" data-s="1" x1="198" y1="52" x2="266" y2="52" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1" x1="442" y1="52" x2="534" y2="52" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="browser-authenticator" x1="198" y1="52" x2="266" y2="52" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="browser-site" x1="442" y1="52" x2="534" y2="52" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="482" y="45" text-anchor="middle">public key</text>
-        <line class="flow" data-s="2" x1="534" y1="80" x2="442" y2="80" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="browser-site" x1="534" y1="80" x2="442" y2="80" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="482" y="73" text-anchor="middle">challenge</text>
-        <line class="flow" data-s="2" x1="442" y1="108" x2="534" y2="108" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="browser-site" x1="442" y1="108" x2="534" y2="108" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="482" y="101" text-anchor="middle">signature</text>
-        <line class="flow" data-s="3" x1="266" y1="80" x2="198" y2="80" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="browser-authenticator" x1="266" y1="80" x2="198" y2="80" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="232" y="73" text-anchor="middle">origin</text>
-        <line class="flow" data-s="2" x1="198" y1="108" x2="266" y2="108" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="browser-authenticator" x1="198" y1="108" x2="266" y2="108" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="232" y="101" text-anchor="middle">signature</text>
-        <line class="flow-bad" data-s="4" x1="534" y1="172" x2="442" y2="172" marker-end="url(#ah-bad)"/>
-        <g data-s="5">
+        <line class="flow-bad" data-s="4" data-calm="browser-look-alike" x1="534" y1="160" x2="442" y2="160" marker-end="url(#ah-bad)"/>
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="224" width="416" height="56" rx="8"/>
           ${icon('cloud', 40, 240)}
           <text class="t-b" x="72" y="248">Synced passkey</text>
           <text class="t-sm t-mut" x="72" y="266">private key moves into a cloud account</text>
         </g>
 
-        ${badge(1, 156, 146, '1')}
+        ${badge(1, 148, 152, '1')}
         ${badge(2, 524, 80, '2')}
-        ${badge(3, 424, 184, '3')}
-        ${badge(4, 488, 172, '4')}
+        ${badge(3, 290, 80, '3')}
+        ${badge(4, 488, 160, '4')}
         ${badge(5, 424, 238, '5')}
       </svg>`,
 
     immuta: () => `
-      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Policy is authored once against user attributes and compiled into each warehouse's own row and column controls, so the analyst queries the platform directly and the decision point stays in one place.">
-        <g data-s="3">
-          <rect class="box" x="24" y="24" width="172" height="60" rx="8"/>
-          ${icon('users', 40, 42)}
+      <svg class="dg" viewBox="0 0 720 332" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Policy is authored once against user attributes and compiled into each warehouse's own row and column controls, so the analyst queries the platform directly and the decision point stays in one place.">
+        <g data-s="3" data-calm="attributes">
+          ${doc(24, 24, 172, 64)}
+          ${icon('users', 40, 40)}
           <text class="t-b" x="72" y="50">Attributes</text>
           <text class="t-sm t-mut" x="72" y="68">Okta or AD</text>
         </g>
-        <g data-s="1">
-          <rect class="box" x="24" y="112" width="172" height="68" rx="8"/>
-          ${icon('list-checks', 40, 128)}
-          <text class="t-b" x="72" y="136">Native grants</text>
-          <text class="t-sm bad" x="72" y="154">a role per</text>
-          <text class="t-sm bad" x="72" y="169">combination</text>
+        <g data-s="1" data-note="call-out">
+          <rect class="box" x="24" y="144" width="172" height="68" rx="8"/>
+          ${icon('list-checks', 40, 160)}
+          <text class="t-b" x="72" y="168">Native grants</text>
+          <text class="t-sm bad" x="72" y="186">a role per</text>
+          <text class="t-sm bad" x="72" y="201">combination</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="24" y="208" width="172" height="60" rx="12"/>
-          ${icon('user', 40, 226)}
-          <text class="t-b" x="72" y="234">Analyst</text>
-          <text class="t-sm t-mut" x="72" y="252">queries natively</text>
+        <g data-s="4" data-calm="analyst">
+          <rect class="box" x="24" y="268" width="172" height="56" rx="20"/>
+          ${icon('user', 40, 284)}
+          <text class="t-b" x="72" y="292">Analyst</text>
+          <text class="t-sm t-mut" x="72" y="310">queries natively</text>
         </g>
-        <g data-s="2 3 4">
-          <rect class="box" x="264" y="24" width="192" height="148" rx="8"/>
+        <g data-s="2 3 4" data-calm="immuta">
+          <rect class="box-soft" x="264" y="24" width="192" height="176" rx="10"/>
           ${icon('scale', 280, 38)}
           <text class="t-b" x="312" y="56">Immuta</text>
           <text class="t-sm t-mut" x="312" y="74">decision point</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-note="call-out">
           <rect class="box" x="280" y="88" width="160" height="32" rx="4"/>
           <text class="t-sm" x="360" y="108" text-anchor="middle">columns tagged</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="280" y="128" width="160" height="32" rx="4"/>
-          <text class="t-sm" x="360" y="148" text-anchor="middle">policy on attributes</text>
+        <g data-s="3" data-calm="policy">
+          ${doc(280, 128, 160, 60)}
+          <text class="t-sm t-b" x="292" y="150">policy</text>
+          <text class="t-sm t-mut" x="292" y="166">on attributes</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="264" y="192" width="192" height="36" rx="6"/>
-          <text class="t-sm t-b" x="280" y="214">audit log</text>
-          <text class="t-sm t-mut" x="360" y="214">per query</text>
+        <g data-s="5" data-calm="audit-log">
+          ${cyl(264, 216, 192, 64)}
+          <text class="t-sm t-b" x="280" y="250">audit log</text>
+          <text class="t-sm t-mut" x="280" y="266">per query</text>
         </g>
-        <g data-s="4 5">
-          <rect class="box" x="520" y="24" width="176" height="244" rx="8"/>
-          ${icon('database', 536, 38)}
-          <text class="t-b" x="568" y="56">Warehouse</text>
-          <text class="t-sm t-mut" x="568" y="74">enforcement point</text>
+        <g data-s="4 5" data-calm="warehouse">
+          ${cyl(520, 24, 176, 288)}
+          ${icon('database', 536, 46)}
+          <text class="t-b" x="568" y="64">Warehouse</text>
+          <text class="t-sm t-mut" x="568" y="82">enforcement point</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="536" y="88" width="144" height="32" rx="4"/>
-          <text class="t-sm" x="608" y="108" text-anchor="middle">row filters</text>
-          <rect class="box" x="536" y="128" width="144" height="32" rx="4"/>
-          <text class="t-sm" x="608" y="148" text-anchor="middle">column masks</text>
+        <g data-s="4" data-note="call-out">
+          <rect class="box" x="536" y="100" width="144" height="32" rx="4"/>
+          <text class="t-sm" x="608" y="120" text-anchor="middle">row filters</text>
+          <rect class="box" x="536" y="140" width="144" height="32" rx="4"/>
+          <text class="t-sm" x="608" y="160" text-anchor="middle">column masks</text>
         </g>
-        <line class="flow" data-s="3" x1="198" y1="54" x2="262" y2="54" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="458" y1="124" x2="518" y2="124" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="198" y1="244" x2="518" y2="244" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="360" y="262" text-anchor="middle">direct, full engine speed</text>
-        <line class="flow" data-s="5" x1="518" y1="210" x2="458" y2="210" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="attributes-immuta" x1="198" y1="56" x2="262" y2="56" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="immuta-warehouse" x1="458" y1="136" x2="518" y2="136" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="analyst-warehouse" x1="198" y1="296" x2="518" y2="296" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="316" text-anchor="middle">direct, full engine speed</text>
+        <line class="flow" data-s="5" data-calm="warehouse-audit-log" x1="518" y1="248" x2="458" y2="248" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 180, 160, '1')}
+        ${badge(1, 180, 192, '1')}
         ${badge(2, 440, 72, '2')}
-        ${badge(3, 230, 54, '3')}
-        ${badge(4, 488, 124, '4')}
-        ${badge(5, 488, 210, '5')}
+        ${badge(3, 230, 56, '3')}
+        ${badge(4, 488, 136, '4')}
+        ${badge(5, 488, 248, '5')}
       </svg>`,
 
     alpaca: () => `
@@ -10097,6 +10097,144 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "relationships": [
         { "unique-id": "paseto-segments", "description": "A PASETO token reads version.purpose.payload, plus an optional footer.",
           "relationship-type": { "composed-of": { "container": "paseto", "nodes": ["version", "purpose", "payload", "footer"] } } }
+      ]
+    },
+    cyberark: {
+      "nodes": [
+        { "unique-id": "admin", "node-type": "actor", "name": "Admin", "description": "An administrator, who requests and checks out access in the portal and whose session the Privileged Session Manager opens from a hardened proxy, so the administrator gets access without ever seeing the password." },
+        { "unique-id": "pvwa", "node-type": "service", "name": "PVWA", "description": "Password Vault Web Access, the portal where people request and check out access." },
+        { "unique-id": "psm", "node-type": "service", "name": "PSM", "description": "The Privileged Session Manager, CyberArk's architectural core, which instead of handing the credential to the administrator's workstation opens the RDP or SSH session from a hardened proxy, injects the credential there and streams a recording back to the Vault, so the human never learns the password and every keystroke is auditable; a session broker protects only the targets that cannot be reached without going through the broker, so accounts that were never onboarded and direct network routes to the target hosts reinstate the risk the deployment was bought to remove." },
+        { "unique-id": "vault", "node-type": "service", "name": "Vault", "description": "The Digital Vault, a deliberately isolated, hardened server holding every privileged credential, which other components reach only over the Vault's own protocol on TCP 1858 and which is built so that ordinary operating-system administration of the host does not grant access to the contents; gathering every privileged credential in the estate into one system makes CyberArk both the most valuable target you own and a dependency administrators cannot work without, so the vault hardening, the separation of duties and the disaster-recovery replica have to be in place from the start, and the recordings the Vault holds make the session archive sensitive in its own right, because recorded keystrokes contain secrets." },
+        { "unique-id": "cpm", "node-type": "system", "name": "CPM", "description": "The Central Policy Manager, which connects out to managed systems to rotate, verify and reconcile passwords on a schedule, so a credential that leaks has a short useful life." },
+        { "unique-id": "target", "node-type": "system", "name": "Target", "description": "A target host, one of the managed systems, reached by an RDP or SSH session." }
+      ],
+      "relationships": [
+        { "unique-id": "admin-pvwa", "description": "The administrator requests and checks out access in Password Vault Web Access.",
+          "relationship-type": { "interacts": { "actor": "admin", "nodes": ["pvwa"] } } },
+        { "unique-id": "admin-psm", "description": "The administrator's session goes through the Privileged Session Manager rather than the credential going to the administrator's workstation.",
+          "relationship-type": { "interacts": { "actor": "admin", "nodes": ["psm"] } } },
+        { "unique-id": "psm-target", "description": "The Privileged Session Manager opens the RDP or SSH session to the target from a hardened proxy and injects the credential there, so the human never learns the password.",
+          "relationship-type": { "connects": { "source": { "node": "psm" }, "destination": { "node": "target" } } } },
+        { "unique-id": "psm-vault", "description": "The Privileged Session Manager reaches the Digital Vault over the Vault's own protocol for the credential the Vault holds, and streams a recording of the session back to the Vault.",
+          "relationship-type": { "connects": { "source": { "node": "psm" }, "destination": { "node": "vault" } } } },
+        { "unique-id": "cpm-vault", "description": "The Central Policy Manager reaches the Digital Vault, which holds every privileged credential, only over the Vault's own protocol on TCP 1858.",
+          "relationship-type": { "connects": { "source": { "node": "cpm" }, "destination": { "node": "vault" } } } },
+        { "unique-id": "cpm-target", "description": "The Central Policy Manager connects out to the managed system to rotate, verify and reconcile the system's passwords on a schedule.",
+          "relationship-type": { "connects": { "source": { "node": "cpm" }, "destination": { "node": "target" } } } }
+      ],
+      "flows": [
+        { "unique-id": "brokered-session", "name": "Vault, rotate, broker",
+          "description": "The Vault holds the credential and the recording; PSM opens the session and injects the credential at the proxy, so the administrator gets access without ever seeing the password, which only holds if the direct route to the target is closed.",
+          "transitions": [
+            { "relationship-unique-id": "cpm-target", "sequence-number": 1, "description": "The Central Policy Manager connects out to the managed system to rotate, verify and reconcile the password on a schedule, so a leaked credential has a short useful life." },
+            { "relationship-unique-id": "cpm-vault", "sequence-number": 2, "description": "The Central Policy Manager reaches the Digital Vault only over the Vault's own protocol, as every other component does." },
+            { "relationship-unique-id": "admin-pvwa", "sequence-number": 3, "description": "The administrator requests and checks out access in Password Vault Web Access, the portal." },
+            { "relationship-unique-id": "admin-psm", "sequence-number": 4, "description": "Instead of the credential going to the administrator's workstation, the administrator's session goes through the Privileged Session Manager." },
+            { "relationship-unique-id": "psm-vault", "sequence-number": 5, "description": "The credential the Privileged Session Manager injects comes from the Digital Vault, which holds every privileged credential.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "psm-target", "sequence-number": 6, "description": "The Privileged Session Manager opens the RDP or SSH session from a hardened proxy and injects the credential there, so the human never learns the password." },
+            { "relationship-unique-id": "psm-vault", "sequence-number": 7, "description": "The Privileged Session Manager streams a recording of the session back to the Digital Vault, so every keystroke is auditable." }
+          ] }
+      ]
+    },
+    fapi: {
+      "nodes": [
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The OAuth client, which under FAPI 2.0, the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, pushes the full authorisation request over a client-authenticated back channel, authenticates with mTLS or private_key_jwt so there are no shared secrets, and holds the key the client's access tokens are bound to." },
+        { "unique-id": "private-key", "node-type": "data-asset", "name": "private key", "description": "The private key the client holds, matching the mTLS client certificate or the DPoP (Demonstrating Proof-of-Possession) key that access tokens must be bound to, so an attacker who lifts a token cannot spend the token without the matching private key; mTLS or DPoP means real key management in the client." },
+        { "unique-id": "authz", "node-type": "service", "name": "Authorisation server", "description": "The authorisation server, which receives the full authorisation request over the back channel and returns an opaque request_uri, and whose authorisation response must carry the iss parameter from RFC 9207, which closes the mix-up attack that appears once a client talks to more than one authorisation server." },
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, which carries only the opaque request_uri handle, leaving nothing in the URL to tamper with or to leak through referrers, history and logs." },
+        { "unique-id": "api", "node-type": "service", "name": "API", "description": "An API exposing high-value data, for which FAPI 2.0 is written, the specification naming e-health and e-government alongside finance, and at which a token replayed by someone without the matching private key fails." },
+        { "unique-id": "attacker", "node-type": "actor", "name": "Attacker", "description": "An attacker who lifts a token from a log, a proxy or a compromised resource server but cannot spend the token without the matching private key." }
+      ],
+      "relationships": [
+        { "unique-id": "client-parts", "description": "The client holds the private key the client's access tokens are bound to.",
+          "relationship-type": { "composed-of": { "container": "client", "nodes": ["private-key"] } } },
+        { "unique-id": "client-authz", "description": "The client sends the full authorisation request to the authorisation server over a client-authenticated back channel and gets back an opaque request_uri, and the authorisation response the client later receives carries the iss parameter, with PKCE using S256 required; Pushed Authorization Requests add a round trip before the user sees a consent screen, a cost that, with key management, is why adoption clusters in regulated ecosystems that were told to implement FAPI 2.0 rather than spreading on merit.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "authz" } } } },
+        { "unique-id": "client-browser", "description": "The client hands the browser only the opaque request_uri, a handle, rather than the authorisation request itself.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "browser" } } } },
+        { "unique-id": "browser-authz", "description": "The browser carries only the request_uri handle to the authorisation server, leaving nothing in the URL to tamper with or to leak.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "authz" } } } },
+        { "unique-id": "client-api", "description": "The client calls the API with an access token bound to the client's mTLS client certificate or DPoP key.",
+          "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "api" } } } },
+        { "unique-id": "attacker-api", "description": "The attacker replays a lifted token at the API, where the replay fails without the matching private key.",
+          "relationship-type": { "interacts": { "actor": "attacker", "nodes": ["api"] } } }
+      ],
+      "flows": [
+        { "unique-id": "fapi-2", "name": "FAPI 2.0 profile",
+          "description": "PAR keeps the authorisation request off the front channel; the access token is bound to a key the client holds, so the same token replayed by someone else fails at the API.",
+          "transitions": [
+            { "relationship-unique-id": "client-authz", "sequence-number": 1, "description": "The client sends the full authorisation request to the authorisation server over a client-authenticated back channel, a Pushed Authorization Request." },
+            { "relationship-unique-id": "client-authz", "sequence-number": 2, "description": "The authorisation server returns an opaque request_uri.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-browser", "sequence-number": 3, "description": "The client hands the browser only that handle." },
+            { "relationship-unique-id": "browser-authz", "sequence-number": 4, "description": "The browser carries only the handle to the authorisation server, leaving nothing in the URL to tamper with or to leak through referrers, history and logs." },
+            { "relationship-unique-id": "client-authz", "sequence-number": 5, "description": "The authorisation response carries the iss parameter, which closes the mix-up attack between authorisation servers, and PKCE with S256 is required.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "client-api", "sequence-number": 6, "description": "The client calls the API with an access token bound to an mTLS client certificate or a DPoP key." },
+            { "relationship-unique-id": "attacker-api", "sequence-number": 7, "description": "An attacker who lifts the token replays the token at the API, and the replay fails without the matching private key." }
+          ] }
+      ]
+    },
+    fido2: {
+      "nodes": [
+        { "unique-id": "authenticator", "node-type": "system", "name": "Authenticator", "description": "An authenticator, either platform (Touch ID or Windows Hello, backed by a Secure Enclave or TPM) or roaming, meaning a security key, which at registration generates a key pair scoped to the site's Relying Party ID and keeps the private key, and at every later sign-in signs a challenge, but only for a credential whose RP ID matches the asking origin; user verification, a PIN or a biometric, separates a genuine second factor from a bare user-presence touch, and a signature counter lets a site notice a cloned authenticator." },
+        { "unique-id": "private-key", "node-type": "data-asset", "name": "private key", "description": "The private key of the key pair the authenticator generates at registration, which the authenticator keeps and which never leaves the device, the whole point of FIDO2; syncing a discoverable credential, a passkey, through iCloud Keychain or Google Password Manager made FIDO2 usable at consumer scale but moves the private key into a cloud account, so the guarantee becomes as strong as that account rather than as strong as the hardware, and device-bound credentials still exist for deployments that need the original property." },
+        { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, the client, whose WebAuthn API, the W3C browser API, a site calls to create and use credentials, and which speaks CTAP, the FIDO Alliance protocol, to an external authenticator over USB, NFC or Bluetooth." },
+        { "unique-id": "site", "node-type": "service", "name": "Real site", "description": "The real site, the relying party, which stores only the public key and the credential ID from registration and at every later sign-in sends a challenge to be signed, so breaching the relying party yields nothing replayable; attestation lets a high-assurance deployment insist on a certified authenticator model, though most consumer sites request none to avoid the privacy and enrolment friction." },
+        { "unique-id": "look-alike", "node-type": "service", "name": "Look-alike", "description": "A look-alike domain, for which there is no credential to offer, so there is nothing to phish; even an adversary-in-the-middle proxy that will relay a password and a one-time code gets nothing, because the signature the proxy needs would have to be over the wrong origin." }
+      ],
+      "relationships": [
+        { "unique-id": "authenticator-parts", "description": "The authenticator keeps the private key, which never leaves the device.",
+          "relationship-type": { "composed-of": { "container": "authenticator", "nodes": ["private-key"] } } },
+        { "unique-id": "browser-authenticator", "description": "The browser tells the authenticator which origin is asking, speaking CTAP to an external authenticator, and receives a public key and a credential ID at registration and a signature over the challenge at each later sign-in, which the authenticator gives only for a credential whose RP ID matches.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "authenticator" } } } },
+        { "unique-id": "browser-site", "description": "The browser passes the public key and the credential ID to the site to store at registration and, at each later sign-in, receives the site's challenge and returns the signature over the challenge.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "site" } } } },
+        { "unique-id": "browser-look-alike", "description": "On a look-alike domain the browser has no credential to offer, because the authenticator signs only for a credential whose RP ID matches the asking origin.",
+          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "look-alike" } } } }
+      ],
+      "flows": [
+        { "unique-id": "register-and-sign", "name": "Register, then sign",
+          "description": "Registration leaves the private key in the authenticator and only a public key with the site; at sign-in the authenticator signs a challenge, and for a look-alike origin the authenticator holds no credential at all.",
+          "transitions": [
+            { "relationship-unique-id": "browser-authenticator", "sequence-number": 1, "description": "At registration the authenticator generates a key pair scoped to the site's Relying Party ID, keeps the private key and hands back a public key and a credential ID.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "browser-site", "sequence-number": 2, "description": "The public key and the credential ID pass to the site, which stores only those." },
+            { "relationship-unique-id": "browser-site", "sequence-number": 3, "description": "At every later sign-in the site sends a challenge.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "browser-authenticator", "sequence-number": 4, "description": "The authenticator returns a signature over the challenge, for the origin the browser has named.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "browser-site", "sequence-number": 5, "description": "The browser returns the signature to the site." },
+            { "relationship-unique-id": "browser-authenticator", "sequence-number": 6, "description": "Before the authenticator signs, the browser tells the authenticator which origin is asking, and the authenticator will only sign for a credential whose RP ID matches." },
+            { "relationship-unique-id": "browser-look-alike", "sequence-number": 7, "description": "On a look-alike domain there is no credential to offer, so the look-alike gets nothing to phish, even as an adversary-in-the-middle proxy.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    immuta: {
+      "nodes": [
+        { "unique-id": "attributes", "node-type": "data-asset", "name": "Attributes", "description": "The requesting user's attributes, pulled from Okta or Active Directory, against which policy is written once rather than against roles." },
+        { "unique-id": "immuta", "node-type": "system", "name": "Immuta", "description": "Immuta, a commercial control plane for who may read what inside a data platform and, in this glossary's vocabulary, a Policy Decision Point for data, which addresses role explosion by separating the decision from the enforcement: data sources are registered and classified, with sensitive columns tagged as personal or health data, and Immuta does not sit in the query path; the same machinery is now aimed at AI agents, treating an agent as a subject with attributes so retrieval runs under the asking identity; Immuta can only express what the underlying platform can enforce, so behaviour differs by connector and the abstraction leaks, and with native catalogues such as Unity Catalog and Snowflake's own governance features covering the straightforward cases, the case for a separate vendor now rests on breadth across several platforms at once, plus the authoring and audit layer." },
+        { "unique-id": "policy", "node-type": "data-asset", "name": "policy", "description": "Policy written once against attributes rather than roles: subscription policies decide who may see a table at all, and data policies mask columns or filter rows according to the requesting user's attributes, with masking ranging from hashing and regex replacement to rounding, reversible masking, and replacement with NULL or a constant." },
+        { "unique-id": "analyst", "node-type": "actor", "name": "Analyst", "description": "An analyst, who queries the warehouse natively at full engine speed." },
+        { "unique-id": "warehouse", "node-type": "database", "name": "Warehouse", "description": "The warehouse, the target platform such as Snowflake or Databricks and the Policy Enforcement Point, which enforces policy through the warehouse's own governance primitives, such as Snowflake row access policies and column masking policies; expressing the same rules through native grants alone means a role per combination, multiplied by every table, and the whole set goes stale the moment somebody changes team." },
+        { "unique-id": "audit-log", "node-type": "database", "name": "audit log", "description": "The audit log in which, on platforms with query audit, every query is logged with the query's user, the query's text and the tables the query touched, the audit artefact regulators actually ask for." }
+      ],
+      "relationships": [
+        { "unique-id": "attributes-immuta", "description": "The requesting user's attributes, pulled from Okta or Active Directory, pass to Immuta.",
+          "relationship-type": { "connects": { "source": { "node": "attributes" }, "destination": { "node": "immuta" } } } },
+        { "unique-id": "immuta-parts", "description": "Immuta holds policy written once against attributes rather than roles.",
+          "relationship-type": { "composed-of": { "container": "immuta", "nodes": ["policy"] } } },
+        { "unique-id": "immuta-warehouse", "description": "Immuta compiles the policies Immuta holds into the warehouse's own governance primitives, such as Snowflake row access policies and column masking policies or the Databricks equivalents, and writes the compiled policies through a managed schema inside the warehouse.",
+          "relationship-type": { "connects": { "source": { "node": "immuta" }, "destination": { "node": "warehouse" } } } },
+        { "unique-id": "analyst-warehouse", "description": "The analyst queries the warehouse natively, at full engine speed, and the policy still applies whether the query arrives from a BI tool, a notebook or a service account that never went near the console.",
+          "relationship-type": { "interacts": { "actor": "analyst", "nodes": ["warehouse"] } } },
+        { "unique-id": "warehouse-audit-log", "description": "On platforms with query audit, every query is logged with the query's user, the query's text and the tables the query touched.",
+          "relationship-type": { "connects": { "source": { "node": "warehouse" }, "destination": { "node": "audit-log" } } } }
+      ],
+      "flows": [
+        { "unique-id": "decide-once-enforce-natively", "name": "Decide once, enforce natively",
+          "description": "Policy is authored once against user attributes and compiled into each warehouse's own row and column controls, so the analyst queries the platform directly and the decision point stays in one place.",
+          "transitions": [
+            { "relationship-unique-id": "attributes-immuta", "sequence-number": 1, "description": "Policy is written once against attributes rather than roles, using the requesting user's attributes pulled from Okta or Active Directory." },
+            { "relationship-unique-id": "immuta-warehouse", "sequence-number": 2, "description": "Immuta does not sit in the query path: Immuta compiles policy into the platform's own row access and column masking policies." },
+            { "relationship-unique-id": "analyst-warehouse", "sequence-number": 3, "description": "The analyst queries the warehouse natively, at full engine speed." },
+            { "relationship-unique-id": "warehouse-audit-log", "sequence-number": 4, "description": "On platforms with query audit, every query is logged with the query's user, the query's text and the tables the query touched, the audit artefact regulators actually ask for." }
+          ] }
       ]
     },
   };
