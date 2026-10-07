@@ -4997,15 +4997,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           ${icon('app-window', 40, 38)}
           <text class="t-b" x="72" y="56">App</text>
         </g>
-        <g data-s="1 2 3 4" data-calm="provider">
-          <rect class="box-soft" x="520" y="24" width="176" height="216" rx="8"/>
+        <g data-s="1 2 3" data-calm="provider">
+          <rect class="box" x="520" y="24" width="176" height="136" rx="8"/>
           ${icon('shield-check', 536, 38)}
           <text class="t-b" x="568" y="56">OpenID Provider</text>
         </g>
         <g data-s="4" data-calm="userinfo">
-          <rect class="box" x="536" y="176" width="152" height="44" rx="8"/>
-          <text class="t-sm t-b" x="548" y="194">UserInfo</text>
-          <text class="t-sm t-mut" x="548" y="210">name, email</text>
+          <rect class="box" x="520" y="176" width="176" height="64" rx="8"/>
+          <text class="t-b" x="536" y="202">UserInfo</text>
+          <text class="t-sm t-mut" x="536" y="220">name, email</text>
         </g>
         <line class="flow" data-s="2" data-calm="app-provider" x1="202" y1="68" x2="518" y2="68" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="360" y="61" text-anchor="middle">request with the openid scope</text>
@@ -5022,13 +5022,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <line class="flow" data-s="3" data-calm="id-token-app" x1="254" y1="148" x2="202" y2="148" marker-end="url(#ah-mut)"/>
 
-        <line class="flow" data-s="4" data-calm="app-userinfo" x1="202" y1="198" x2="534" y2="198" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="360" y="191" text-anchor="middle">UserInfo call</text>
+        <line class="flow" data-s="4" data-calm="app-userinfo" x1="202" y1="204" x2="518" y2="204" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="197" text-anchor="middle">UserInfo call</text>
 
         ${badge(1, 472, 100, '1')}
         ${badge(2, 248, 68, '2')}
         ${badge(3, 492, 148, '3')}
-        ${badge(4, 248, 198, '4')}
+        ${badge(4, 248, 204, '4')}
       </svg>`,
 
     websockets: () => `
@@ -5211,22 +5211,20 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-b" x="336" y="124">Fake site</text>
           <text class="t-sm t-mut" x="336" y="140">phishing page</text>
         </g>
-        <g data-s="3 4" data-calm="passkey">
-          ${doc(536, 100, 160, 64)}
-          ${icon('key-round', 548, 112)}
-          <text class="t-b" x="580" y="124">Passkey</text>
-          <text class="t-sm t-mut" x="580" y="140">usually synced</text>
+        <g data-s="3 4" data-note="call-out">
+          <rect class="box" x="536" y="100" width="160" height="64" rx="8"/>
+          ${icon('key-round', 552, 112)}
+          <text class="t-b" x="584" y="124">Passkey</text>
+          <text class="t-sm t-mut" x="584" y="140">usually synced</text>
         </g>
-        <line class="flow" data-s="4" data-calm="passkey-authenticator" x1="616" y1="166" x2="616" y2="194" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="628" y="184">synced</text>
 
-        <g data-s="3" data-calm="real-site">
+        <g data-s="3" data-note="call-out">
           <rect class="box" x="24" y="196" width="160" height="64" rx="8"/>
           ${icon('globe', 40, 208)}
           <text class="t-b" x="72" y="220">Real site</text>
           <text class="t-sm t-mut" x="72" y="236">its own origin</text>
         </g>
-        <line class="flow-ok" data-s="3" data-calm="browser-real-site" x1="286" y1="228" x2="186" y2="228" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="3" data-note="call-out" x1="286" y1="228" x2="186" y2="228" marker-end="url(#ah-ok)"/>
         <text class="t-sm" data-s="3" x="236" y="221" text-anchor="middle">origin-bound</text>
         <g data-s="3" data-calm="browser">
           <rect class="box" x="288" y="196" width="160" height="64" rx="20"/>
@@ -5237,7 +5235,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <text class="t-sm bad" data-s="3" x="364" y="184" text-anchor="end">cannot be replayed here</text>
         <line class="flow" data-s="3" data-calm="browser-authenticator" x1="450" y1="228" x2="534" y2="228" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="492" y="221" text-anchor="middle">challenge</text>
-        <g data-s="3 4" data-calm="authenticator">
+        <g data-s="3" data-calm="authenticator">
           <rect class="box" x="536" y="196" width="160" height="64" rx="8"/>
           ${icon('smartphone', 552, 208)}
           <text class="t-b" x="584" y="220">Authenticator</text>
@@ -5247,7 +5245,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         ${badge(1, 216, 30, '1')}
         ${badge(2, 224, 132, '2')}
         ${badge(3, 492, 246, '3')}
-        ${badge(4, 596, 180, '4')}
+        ${badge(4, 680, 116, '4')}
       </svg>`,
 
     pki: () => `
@@ -9866,7 +9864,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     oidc: {
       "nodes": [
         { "unique-id": "app", "node-type": "system", "name": "App", "description": "An app, which with OAuth 2.0 alone gets only an access token for APIs and with OpenID Connect also receives an ID Token that attests who the user is." },
-        { "unique-id": "provider", "node-type": "service", "name": "OpenID Provider", "description": "An OpenID Provider, which issues an ID Token alongside the usual access token, so OpenID Connect adds authentication to OAuth 2.0, which on its own only handles authorisation." },
+        { "unique-id": "provider", "node-type": "service", "name": "OpenID Provider", "description": "An OpenID Provider, which issues an ID Token alongside the usual access token; OpenID Connect adds authentication to OAuth 2.0, which on its own only handles authorisation." },
         { "unique-id": "userinfo", "node-type": "service", "name": "UserInfo", "description": "The UserInfo endpoint, which apps can call for profile details like name and email." },
         { "unique-id": "id-token", "node-type": "data-asset", "name": "ID Token", "description": "An ID Token, a signed JWT carrying claims such as who the user is (sub), who issued the ID Token (iss) and who the ID Token is for (aud); a client that skips validating the ID Token's signature, issuer, audience and expiry gets none of these guarantees." }
       ],
@@ -9877,8 +9875,6 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "provider" }, "destination": { "node": "id-token" } } } },
         { "unique-id": "id-token-app", "description": "The ID Token, a signed JWT, passes to the app.",
           "relationship-type": { "connects": { "source": { "node": "id-token" }, "destination": { "node": "app" } } } },
-        { "unique-id": "provider-userinfo", "description": "The UserInfo endpoint is part of the OpenID Provider.",
-          "relationship-type": { "composed-of": { "container": "provider", "nodes": ["userinfo"] } } },
         { "unique-id": "app-userinfo", "description": "The app calls the UserInfo endpoint for profile details like name and email.",
           "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "userinfo" } } } }
       ],
@@ -9921,21 +9917,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     mfa: {
       "nodes": [
-        { "unique-id": "you", "node-type": "actor", "name": "You", "description": "You, the human who must give two or more independent proofs of identity: something you know (a password), something you have (a phone or security key) or something you are (a fingerprint), so a stolen password alone is not enough; for Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be." },
+        { "unique-id": "you", "node-type": "actor", "name": "You", "description": "You, the human who must give two or more independent proofs of identity: something you know (a password), something you have (a phone or security key) or something you are (a fingerprint), so a stolen password alone is not enough; for Zero Trust, phishing-resistant MFA is the strongest signal that the human really is who they claim to be, but the weak point moves to recovery: a synced passkey is only as secure as the cloud account holding the passkey, and a recovery path that falls back to SMS or email reopens the phishing gap." },
         { "unique-id": "fake-site", "node-type": "service", "name": "Fake site", "description": "A fake site, a phishing page, into which a user can be tricked into typing an SMS code or a time-based one-time password (TOTP), so those older second factors can still be phished." },
-        { "unique-id": "passkey", "node-type": "data-asset", "name": "Passkey", "description": "A passkey, the consumer-friendly form of FIDO2 and WebAuthn: a discoverable FIDO credential, usually synced across your devices, that replaces the password entirely; the weak point moves to recovery, as a synced passkey is only as secure as the cloud account holding the passkey, and a recovery path that falls back to SMS or email reopens the phishing gap." },
-        { "unique-id": "real-site", "node-type": "service", "name": "Real site", "description": "The real site, to whose origin the public-key challenge is bound, so the credential cannot be replayed elsewhere." },
         { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, which with FIDO2 and WebAuthn exchanges with an authenticator a public-key challenge bound to the real site's origin." },
         { "unique-id": "authenticator", "node-type": "system", "name": "Authenticator", "description": "An authenticator, which with FIDO2 and WebAuthn exchanges with the browser a public-key challenge bound to the real site's origin." }
       ],
       "relationships": [
         { "unique-id": "you-fake-site", "description": "You can be tricked into typing an SMS code or a TOTP code into the fake site.",
           "relationship-type": { "interacts": { "actor": "you", "nodes": ["fake-site"] } } },
-        { "unique-id": "passkey-authenticator", "description": "The passkey, usually synced across your devices, passes to the authenticator.",
-          "relationship-type": { "connects": { "source": { "node": "passkey" }, "destination": { "node": "authenticator" } } } },
-        { "unique-id": "browser-real-site", "description": "The browser passes the real site a proof of identity bound to the real site's origin.",
-          "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "real-site" } } } },
-        { "unique-id": "browser-authenticator", "description": "The browser and the authenticator exchange a public-key challenge bound to the real site's origin.",
+        { "unique-id": "browser-authenticator", "description": "The browser and the authenticator exchange a public-key challenge bound to the real site's origin, so the credential cannot be replayed elsewhere.",
           "relationship-type": { "connects": { "source": { "node": "browser" }, "destination": { "node": "authenticator" } } } }
       ],
       "flows": [
@@ -9944,15 +9934,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "transitions": [
             { "relationship-unique-id": "you-fake-site", "sequence-number": 1, "description": "Older second factors like SMS codes and TOTP apps can still be phished: you can be tricked into typing the code into a fake site." },
             { "relationship-unique-id": "browser-authenticator", "sequence-number": 2, "description": "With FIDO2 and WebAuthn, the browser sends the authenticator its side of a public-key challenge bound to the real site's origin." },
-            { "relationship-unique-id": "browser-authenticator", "sequence-number": 3, "description": "The authenticator sends its side back.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "browser-real-site", "sequence-number": 4, "description": "The browser passes the real site a proof of identity bound to the real site's origin, so the credential cannot be replayed elsewhere." },
-            { "relationship-unique-id": "passkey-authenticator", "sequence-number": 5, "description": "A passkey, a discoverable FIDO credential usually synced across your devices, passes to the authenticator and replaces the password entirely." }
+            { "relationship-unique-id": "browser-authenticator", "sequence-number": 3, "description": "The authenticator sends its side back, so the credential cannot be replayed elsewhere.", "direction": "destination-to-source" }
           ] }
       ]
     },
     rbac: {
       "nodes": [
-        { "unique-id": "user", "node-type": "actor", "name": "User", "description": "A person, whom Role-Based Access Control assigns to roles once a system knows who the person is." },
+        { "unique-id": "user", "node-type": "actor", "name": "User", "description": "A person whom Role-Based Access Control assigns to roles; once a system knows who a person is, the system must decide what the person may do, and RBAC is one of the two dominant models for that decision." },
         { "unique-id": "role", "node-type": "data-asset", "name": "Role", "description": "A role, such as billing-admin or read-only-auditor, into which Role-Based Access Control groups permissions and to which RBAC assigns people, which is simple to reason about but coarse and prone to role explosion; RBAC is only as good as the data behind it, and stale group memberships grant stale access." },
         { "unique-id": "permissions", "node-type": "data-asset", "name": "Permissions", "description": "The set of permissions a role groups." },
         { "unique-id": "attributes", "node-type": "data-asset", "name": "Attributes", "description": "Attributes of the subject, resource, action and environment, over which Attribute-Based Access Control evaluates rules such as allow if department is finance AND the device is managed AND the time is business hours; ABAC is only as good as the data behind it, and stale attributes grant stale access." },
@@ -9977,7 +9965,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     ldap: {
       "nodes": [
-        { "unique-id": "app", "node-type": "service", "name": "App", "description": "An application, which binds to the directory to authenticate a user and reads the user's group membership, which downstream systems map to permissions." },
+        { "unique-id": "app", "node-type": "system", "name": "App", "description": "An application, which binds to the directory to authenticate a user and reads the user's group membership, which downstream systems map to permissions." },
         { "unique-id": "directory", "node-type": "ldap", "name": "Directory", "description": "A directory, a hierarchical database of entries such as users, groups, computers and printers, each identified by a distinguished name and described by attributes, which LDAP queries and modifies; the directory is the source of truth that protocols like RADIUS, SAML and SCIM build on and that identity providers federate outward to the cloud, and Microsoft Active Directory, the dominant enterprise implementation, combines an LDAP directory with Kerberos authentication and policy to become the identity backbone of most corporate networks; because the directory holds the keys to every account, the directory is a prime target: compromise the directory and you own the estate." }
       ],
       "relationships": [
