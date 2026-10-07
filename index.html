@@ -10675,9 +10675,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "hq-or-cloud", "node-type": "network", "name": "HQ or cloud", "description": "The far end of the branch's transports across the wide-area network." }
       ],
       "relationships": [
-        { "unique-id": "controller-branch", "description": "The central controller manages the branch and steers each application over the best available path among the branch's transports, by policy and live link quality.",
+        { "unique-id": "controller-branch", "description": "At the branch, the central controller replaces rigid, device-by-device WAN configuration with centralised management, and steers each application over the best available path among the branch's transports, by policy and live link quality.",
           "relationship-type": { "connects": { "source": { "node": "controller" }, "destination": { "node": "branch" } } } },
-        { "unique-id": "controller-hq-or-cloud", "description": "The central controller manages the far end of the branch's transports too, in place of device-by-device WAN configuration.",
+        { "unique-id": "controller-hq-or-cloud", "description": "At the far end of the branch's transports too, the central controller replaces rigid, device-by-device WAN configuration with centralised management.",
           "relationship-type": { "connects": { "source": { "node": "controller" }, "destination": { "node": "hq-or-cloud" } } } },
         { "unique-id": "branch-mpls", "description": "The branch's traffic can cross a private MPLS circuit, an expensive private line.",
           "relationship-type": { "connects": { "source": { "node": "branch" }, "destination": { "node": "hq-or-cloud" } } } },
@@ -10690,8 +10690,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "best-path-per-app", "name": "Best path per app",
           "description": "A central controller steers each app over the best of several transport links by policy.",
           "transitions": [
-            { "relationship-unique-id": "controller-branch", "sequence-number": 1, "description": "The central controller manages the branch, in place of rigid, device-by-device WAN configuration." },
-            { "relationship-unique-id": "controller-hq-or-cloud", "sequence-number": 2, "description": "The central controller manages the far end of the branch's transports the same way." },
+            { "relationship-unique-id": "controller-branch", "sequence-number": 1, "description": "At the branch, the central controller replaces rigid, device-by-device WAN configuration with centralised management." },
+            { "relationship-unique-id": "controller-hq-or-cloud", "sequence-number": 2, "description": "At the far end of the branch's transports, the central controller likewise replaces rigid, device-by-device WAN configuration with centralised management." },
             { "relationship-unique-id": "branch-broadband", "sequence-number": 3, "description": "An application's traffic goes over the path the controller judges best by policy and live link quality, here broadband." }
           ] }
       ]
