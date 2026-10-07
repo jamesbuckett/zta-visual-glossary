@@ -5408,46 +5408,48 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     servicemesh: () => `
-      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default.">
-        <g data-s="3">
+      <svg class="dg" viewBox="0 0 720 304" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default.">
+        <g data-s="3" data-calm="control-plane">
           <rect class="box" x="236" y="16" width="248" height="56" rx="8"/>
           ${icon('cog', 252, 32)}
           <text class="t-b" x="284" y="41">Control plane</text>
           <text class="t-sm t-mut" x="284" y="59">config and identity</text>
         </g>
-        ${[['Service A', 24, 40, 192], ['Service B', 400, 544, 416]].map(([name, zx, sx, px]) => `
-          <rect class="zone" x="${zx}" y="100" width="296" height="112" rx="10"/>
-          <text class="t-sm t-mut" x="${zx + 12}" y="208">workload</text>
-          <g data-s="1">
-            <rect class="box" x="${sx}" y="128" width="136" height="68" rx="8"/>
+        <g data-s="2 5" data-calm="data-plane">
+          <rect class="box-soft" x="184" y="96" width="352" height="136" rx="10"/>
+          <text class="t-sm t-b" x="196" y="114">data plane</text>
+        </g>
+        ${[['a', 'Service A', 24, 200], ['b', 'Service B', 560, 408]].map(([k, name, sx, px]) => `
+          <g data-s="1 4" data-calm="service-${k}">
+            <rect class="box" x="${sx}" y="128" width="136" height="76" rx="8"/>
             ${icon('server', sx + 12, 142)}
             <text class="t-b" x="${sx + 44}" y="160">${name}</text>
             <text class="t-sm t-mut" x="${sx + 44}" y="178">app code</text>
           </g>
-          <g data-s="2 3 4 5">
-            <rect class="box" x="${px}" y="128" width="112" height="68" rx="8"/>
+          <g data-s="2 3 4 5" data-calm="sidecar-${k}">
+            <rect class="box" x="${px}" y="128" width="112" height="76" rx="8"/>
             ${icon('shield', px + 10, 142)}
             <text class="t-b" x="${px + 40}" y="160">Sidecar</text>
             <text class="t-sm t-mut" x="${px + 40}" y="178">proxy</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" x1="178" y1="162" x2="190" y2="162" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="530" y1="162" x2="542" y2="162" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="300" y1="74" x2="256" y2="126" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="420" y1="74" x2="464" y2="126" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="306" y1="162" x2="414" y2="162" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="360" y="150" text-anchor="middle">mTLS</text>
-        <text class="t-sm bad" data-s="5" x="360" y="196" text-anchor="middle">extra hop</text>
-        <g data-s="1">
-          <rect class="box" x="24" y="232" width="672" height="44" rx="8"/>
-          ${icon('layers', 40, 242)}
-          <text class="t-sm" x="72" y="259">out of app code: mTLS · retries · timeouts · load balancing · observability</text>
+        <line class="flow" data-s="2 4" data-calm="service-a-sidecar-a" x1="162" y1="166" x2="198" y2="166" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 4" data-calm="sidecar-b-service-b" x1="522" y1="166" x2="558" y2="166" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="control-plane-sidecar-a" x1="330" y1="74" x2="296" y2="126" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="control-plane-sidecar-b" x1="390" y1="74" x2="424" y2="126" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="sidecar-a-sidecar-b" x1="314" y1="166" x2="406" y2="166" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="360" y="154" text-anchor="middle">mTLS</text>
+        <text class="t-sm bad" data-s="5" x="360" y="198" text-anchor="middle">extra hop</text>
+        <g data-s="1" data-note="footer">
+          <rect class="box" x="24" y="248" width="672" height="44" rx="8"/>
+          ${icon('layers', 40, 258)}
+          <text class="t-sm" x="72" y="275">out of app code: mTLS · retries · timeouts · load balancing · observability</text>
         </g>
 
-        ${badge(1, 680, 254, '1')}
-        ${badge(2, 236, 114, '2')}
-        ${badge(3, 278, 100, '3')}
-        ${badge(4, 336, 162, '4')}
-        ${badge(5, 360, 214, '5')}
+        ${badge(1, 680, 270, '1')}
+        ${badge(2, 280, 112, '2')}
+        ${badge(3, 323, 84, '3')}
+        ${badge(4, 330, 166, '4')}
+        ${badge(5, 360, 216, '5')}
       </svg>`,
 
     edr: () => `
@@ -5680,24 +5682,24 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     nist207: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="NIST 800-207's control plane: a Policy Engine decides via the trust algorithm, a Policy Administrator enacts it, and the data-path PEP enforces.">
         <text class="t-sm t-mut" x="24" y="30">control plane</text>
-        <g data-s="2 3">
-          <rect class="zone" x="200" y="12" width="320" height="116" rx="10"/>
-          <text class="t-sm t-mut" x="212" y="30">Policy Decision Point</text>
+        <g data-s="2 3" data-calm="pdp">
+          <rect class="box-soft" x="176" y="12" width="352" height="116" rx="10"/>
+          <text class="t-sm t-mut" x="188" y="30">Policy Decision Point</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="216" y="40" width="140" height="72" rx="8"/>
-          ${icon('scale', 228, 54)}
-          <text class="t-b" x="260" y="72">Engine</text>
-          <text class="t-sm t-mut" x="228" y="100">trust algorithm</text>
+        <g data-s="2" data-calm="policy-engine">
+          <rect class="box" x="192" y="40" width="152" height="72" rx="8"/>
+          ${icon('scale', 204, 54)}
+          <text class="t-b" x="236" y="72">Engine</text>
+          <text class="t-sm t-mut" x="236" y="90">trust algorithm</text>
         </g>
-        <line class="flow" data-s="3" x1="358" y1="76" x2="370" y2="76" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="372" y="40" width="136" height="72" rx="8"/>
-          ${icon('cog', 384, 54)}
-          <text class="t-b" x="416" y="72">Admin</text>
-          <text class="t-sm t-mut" x="384" y="100">executes it</text>
+        <line class="flow" data-s="3" data-calm="policy-engine-policy-administrator" x1="346" y1="76" x2="358" y2="76" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="policy-administrator">
+          <rect class="box" x="360" y="40" width="152" height="72" rx="8"/>
+          ${icon('cog', 372, 54)}
+          <text class="t-b" x="404" y="72">Admin</text>
+          <text class="t-sm t-mut" x="404" y="90">executes it</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="call-out">
           <rect class="box" x="544" y="12" width="152" height="116" rx="8"/>
           ${icon('list-checks', 560, 26)}
           <text class="t-b" x="592" y="44">7 tenets</text>
@@ -5708,33 +5710,33 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <line class="divider" x1="16" y1="146" x2="704" y2="146"/>
         <text class="t-sm t-mut" x="24" y="166">data plane</text>
-        <g data-s="1">
-          <rect class="box" x="24" y="176" width="160" height="64" rx="12"/>
-          ${icon('user', 40, 190)}
+        <g data-s="1" data-calm="subject">
+          <rect class="box" x="24" y="176" width="160" height="64" rx="8"/>
+          ${icon('laptop', 40, 190)}
           <text class="t-b" x="72" y="208">Subject</text>
           <text class="t-sm t-mut" x="72" y="226">asks for access</text>
         </g>
-        <line class="flow" data-s="1" x1="186" y1="208" x2="278" y2="208" marker-end="url(#ah-mut)"/>
-        <g data-s="1 3 4">
+        <line class="flow" data-s="1" data-calm="subject-pep" x1="186" y1="208" x2="278" y2="208" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3 4" data-calm="pep">
           <rect class="box" x="280" y="176" width="160" height="64" rx="8"/>
           ${icon('shield', 296, 190)}
           <text class="t-b" x="328" y="208">PEP</text>
           <text class="t-sm t-mut" x="328" y="226">in the data path</text>
         </g>
-        <line class="flow" data-s="2" x1="320" y1="174" x2="300" y2="114" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="430" y1="114" x2="400" y2="174" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="pep-policy-engine" x1="320" y1="174" x2="300" y2="114" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="policy-administrator-pep" x1="430" y1="114" x2="400" y2="174" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="424" y="162">enact</text>
-        <line class="flow-ok" data-s="4" x1="442" y1="208" x2="534" y2="208" marker-end="url(#ah-ok)"/>
+        <line class="flow-ok" data-s="4" data-calm="pep-resource" x1="442" y1="208" x2="534" y2="208" marker-end="url(#ah-ok)"/>
         <text class="t-sm" data-s="4" x="488" y="200" text-anchor="middle">if told</text>
-        <g data-s="1 4">
+        <g data-s="1 4" data-calm="resource">
           <rect class="box" x="536" y="176" width="160" height="64" rx="8"/>
           ${icon('database', 552, 190)}
           <text class="t-b" x="584" y="208">Resource</text>
         </g>
 
-        ${badge(1, 168, 190, '1')}
-        ${badge(2, 340, 54, '2')}
-        ${badge(3, 492, 54, '3')}
+        ${badge(1, 232, 208, '1')}
+        ${badge(2, 328, 54, '2')}
+        ${badge(3, 496, 54, '3')}
         ${badge(4, 488, 222, '4')}
         ${badge(5, 680, 26, '5')}
       </svg>`,
@@ -6696,7 +6698,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     ztna: () => `
       <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.">
-        <g data-s="1">
+        <g data-s="1" data-note="call-out">
           <text class="t-sm t-b" x="24" y="44">VPN</text>
           <rect class="box" x="72" y="20" width="152" height="40" rx="12"/>
           ${icon('user', 84, 28)}
@@ -6705,39 +6707,41 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm" x="328" y="45">the whole network</text>
           <text class="t-sm bad" x="684" y="45" text-anchor="end">free to roam</text>
         </g>
-        <line class="flow-bad" data-s="1" x1="226" y1="40" x2="310" y2="40" marker-end="url(#ah-bad)"/>
+        <line class="flow-bad" data-s="1" data-note="call-out" x1="226" y1="40" x2="310" y2="40" marker-end="url(#ah-bad)"/>
         <line class="divider" x1="16" y1="84" x2="704" y2="84"/>
         <text class="t-sm t-b" x="24" y="108">ZTNA</text>
-        <g data-s="2 3">
-          <rect class="box" x="24" y="140" width="160" height="80" rx="12"/>
-          ${icon('laptop', 40, 154)}
+        <g data-s="2 3" data-calm="user">
+          <rect class="box" x="24" y="140" width="176" height="80" rx="20"/>
+          ${icon('user', 40, 154)}
           <text class="t-b" x="72" y="172">User</text>
-          <text class="t-sm t-mut" x="40" y="198">identity + device</text>
+          <text class="t-sm t-mut" x="72" y="190">identity + device</text>
         </g>
-        <line class="flow" data-s="2 3" x1="186" y1="180" x2="262" y2="180" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3 4">
+        <line class="flow" data-s="2 3" data-calm="user-broker" x1="202" y1="180" x2="262" y2="180" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4" data-calm="broker">
           <rect class="box" x="264" y="100" width="192" height="172" rx="8"/>
           ${icon('shield-check', 280, 114)}
           <text class="t-b" x="312" y="132">Broker</text>
           <text class="t-sm t-mut" x="312" y="150">every request</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-note="call-out">
           <rect class="box" x="280" y="168" width="160" height="32" rx="4"/>
           <text class="t-sm" x="360" y="188" text-anchor="middle">identity</text>
           <rect class="box" x="280" y="212" width="160" height="32" rx="4"/>
           <text class="t-sm" x="360" y="232" text-anchor="middle">device posture</text>
         </g>
-        <g data-s="3 4">
+        <g data-s="3 4" data-calm="app">
           <rect class="box" x="536" y="100" width="160" height="56" rx="8"/>
           ${icon('app-window', 552, 116)}
           <text class="t-b" x="584" y="125">App</text>
           <text class="t-sm t-mut" x="584" y="143">the one needed</text>
         </g>
         ${[168, 224].map((y) => `
-          <rect class="box" x="536" y="${y}" width="160" height="48" rx="8"/>
-          <text class="t-sm t-mut" x="552" y="${y + 29}">other apps: hidden</text>`).join('')}
-        <line class="flow" data-s="3" x1="458" y1="116" x2="534" y2="116" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="534" y1="144" x2="458" y2="144" marker-end="url(#ah-mut)"/>
+          <g data-note="elided">
+            <rect class="box" x="536" y="${y}" width="160" height="48" rx="8"/>
+            <text class="t-sm t-mut" x="552" y="${y + 29}">other apps: hidden</text>
+          </g>`).join('')}
+        <line class="flow" data-s="3" data-calm="app-broker" x1="458" y1="116" x2="534" y2="116" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="app-broker" x1="534" y1="144" x2="458" y2="144" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="496" y="168" text-anchor="middle">outbound</text>
 
         ${badge(1, 268, 40, '1')}
@@ -8089,36 +8093,37 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     istio: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.">
-        <g data-s="1 2 3">
+      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.">
+        <g data-s="1 2 3" data-calm="istiod">
           <rect class="box" x="232" y="16" width="232" height="68" rx="8"/>
           ${icon('cog', 248, 30)}
           <text class="t-b" x="280" y="48">istiod</text>
           <text class="t-sm t-mut" x="280" y="66">discovery, config, CA</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="496" y="12" width="200" height="80" rx="8"/>
+        <g data-s="3" data-calm="policy">
+          ${doc(496, 12, 200, 92)}
           <text class="t-sm t-b" x="508" y="30">policy</text>
           <text class="t-sm t-mut" x="508" y="48">PeerAuthentication</text>
           <text class="t-sm t-mut" x="508" y="64">RequestAuthentication</text>
           <text class="t-sm t-mut" x="508" y="80">AuthorizationPolicy</text>
         </g>
-        <line class="flow" data-s="3" x1="494" y1="50" x2="466" y2="50" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2 4" x1="290" y1="86" x2="200" y2="126" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2 5" x1="410" y1="86" x2="520" y2="126" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="policy-istiod" x1="494" y1="50" x2="466" y2="50" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 4" data-calm="istiod-app-sidecar" x1="300" y1="86" x2="120" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-1" x1="408" y1="86" x2="436" y2="154" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 5" data-calm="istiod-app-ambient-2" x1="448" y1="86" x2="532" y2="154" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="350" y="116" text-anchor="middle">SPIFFE ID</text>
 
-        <g data-s="4">
-          <rect class="zone" x="16" y="128" width="328" height="160" rx="10"/>
-          <text class="t-sm t-mut" x="28" y="146">sidecar mode</text>
+        <g data-s="4" data-note="call-out">
+          <rect class="zone" x="16" y="128" width="328" height="176" rx="10"/>
+          <text class="t-sm t-mut" x="332" y="146" text-anchor="end">sidecar mode</text>
         </g>
-        <g data-s="1 4">
+        <g data-s="1 4" data-calm="app-sidecar">
           <rect class="box" x="32" y="160" width="136" height="68" rx="8"/>
           ${icon('app-window', 44, 174)}
           <text class="t-b" x="76" y="192">app</text>
         </g>
-        <line class="flow" data-s="4" x1="170" y1="194" x2="190" y2="194" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
+        <line class="flow" data-s="4" data-calm="app-sidecar-envoy" x1="170" y1="194" x2="190" y2="194" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="envoy">
           <rect class="box" x="192" y="160" width="136" height="68" rx="8"/>
           ${icon('shield', 204, 174)}
           <text class="t-b" x="236" y="192">Envoy</text>
@@ -8126,35 +8131,35 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <text class="t-sm t-mut" data-s="4" x="32" y="264">one proxy in every pod</text>
 
-        <g data-s="5">
-          <rect class="zone" x="376" y="128" width="328" height="160" rx="10"/>
-          <text class="t-sm t-mut" x="388" y="146">ambient mode</text>
+        <g data-s="5" data-note="call-out">
+          <rect class="zone" x="376" y="128" width="328" height="176" rx="10"/>
+          <text class="t-sm t-mut" x="692" y="146" text-anchor="end">ambient mode</text>
         </g>
-        ${[392, 488].map((x) => `
-          <g data-s="1 5">
-            <rect class="box" x="${x}" y="156" width="88" height="44" rx="8"/>
-            ${icon('app-window', x + 8, 166)}
-            <text class="t-b" x="${x + 40}" y="183">app</text>
+        ${[['1', 392], ['2', 488]].map(([k, x]) => `
+          <g data-s="1 5" data-calm="app-ambient-${k}">
+            <rect class="box" x="${x}" y="156" width="88" height="60" rx="8"/>
+            ${icon('app-window', x + 8, 170)}
+            <text class="t-b" x="${x + 40}" y="187">app</text>
           </g>
-          <line class="flow" data-s="5" x1="${x + 44}" y1="202" x2="${x + 44}" y2="222" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="5">
-          <rect class="box" x="592" y="156" width="96" height="44" rx="8"/>
-          <text class="t-sm t-b" x="604" y="174">waypoint</text>
-          <text class="t-sm t-mut" x="604" y="190">L7 only</text>
+          <line class="flow" data-s="5" data-calm="app-ambient-${k}-ztunnel" x1="${x + 44}" y1="218" x2="${x + 44}" y2="238" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5" data-calm="waypoint">
+          <rect class="box" x="592" y="156" width="96" height="60" rx="8"/>
+          <text class="t-sm t-b" x="604" y="178">waypoint</text>
+          <text class="t-sm t-mut" x="604" y="194">L7 only</text>
         </g>
-        <line class="flow" data-s="5" x1="640" y1="222" x2="640" y2="202" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
-          <rect class="box" x="392" y="224" width="296" height="48" rx="8"/>
-          ${icon('network', 404, 236)}
-          <text class="t-b" x="436" y="246">ztunnel</text>
-          <text class="t-sm t-mut" x="436" y="262">per node: L3/L4, HBONE</text>
+        <line class="flow" data-s="5" data-calm="ztunnel-waypoint" x1="640" y1="238" x2="640" y2="218" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="ztunnel">
+          <rect class="box" x="392" y="240" width="296" height="48" rx="8"/>
+          ${icon('network', 404, 252)}
+          <text class="t-b" x="436" y="262">ztunnel</text>
+          <text class="t-sm t-mut" x="436" y="278">per node: L3/L4, HBONE</text>
         </g>
 
-        ${badge(1, 448, 30, '1')}
-        ${badge(2, 245, 106, '2')}
-        ${badge(3, 680, 26, '3')}
+        ${badge(1, 448, 70, '1')}
+        ${badge(2, 240, 110, '2')}
+        ${badge(3, 664, 32, '3')}
         ${badge(4, 312, 174, '4')}
-        ${badge(5, 672, 238, '5')}
+        ${badge(5, 672, 254, '5')}
       </svg>`,
 
     lora: () => `
@@ -10435,6 +10440,144 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "ci-pipelines-opa", "sequence-number": 4, "description": "The same engine makes policy decisions for CI pipelines." },
             { "relationship-unique-id": "api-gateways-opa", "sequence-number": 5, "description": "The same engine makes policy decisions for API gateways." },
             { "relationship-unique-id": "policy-opa", "sequence-number": 6, "description": "Organisations express authorisation once, as version-controlled policy as code, which OPA evaluates." }
+          ] }
+      ]
+    },
+    servicemesh: {
+      "nodes": [
+        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane of a service mesh, which configures the sidecar proxies and distributes identities and certificates." },
+        { "unique-id": "data-plane", "node-type": "data-plane", "name": "data plane", "description": "The data plane, formed together by the sidecar proxies (Envoy in Istio; Linkerd ships its own Rust micro-proxy), which carries traffic; the trade-off of a service mesh is operational complexity and the latency of an extra network hop." },
+        { "unique-id": "service-a", "node-type": "workload", "name": "Service A", "description": "Service A, a workload whose application code no longer handles mutual TLS, retries, timeouts, load balancing or observability, which a service mesh moves into a dedicated infrastructure layer." },
+        { "unique-id": "sidecar-a", "node-type": "proxy", "name": "Sidecar", "description": "Service A's sidecar, a proxy deployed beside Service A and one of the proxies that together form the data plane." },
+        { "unique-id": "service-b", "node-type": "workload", "name": "Service B", "description": "Service B, a workload whose application code no longer handles mutual TLS, retries, timeouts, load balancing or observability, which a service mesh moves into a dedicated infrastructure layer." },
+        { "unique-id": "sidecar-b", "node-type": "proxy", "name": "Sidecar", "description": "Service B's sidecar, a proxy deployed beside Service B and one of the proxies that together form the data plane." }
+      ],
+      "relationships": [
+        { "unique-id": "data-plane-proxies", "description": "Together the sidecar proxies form the data plane.",
+          "relationship-type": { "composed-of": { "container": "data-plane", "nodes": ["sidecar-a", "sidecar-b"] } } },
+        { "unique-id": "control-plane-sidecar-a", "description": "Configuration, identities and certificates pass from the control plane to Service A's sidecar proxy.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "sidecar-a" } } } },
+        { "unique-id": "control-plane-sidecar-b", "description": "Configuration, identities and certificates pass from the control plane to Service B's sidecar proxy.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "sidecar-b" } } } },
+        { "unique-id": "service-a-sidecar-a", "description": "Service A's calls flow into Service A's sidecar proxy, deployed beside Service A.",
+          "relationship-type": { "connects": { "source": { "node": "service-a" }, "destination": { "node": "sidecar-a" } } } },
+        { "unique-id": "sidecar-a-sidecar-b", "description": "Service A's call crosses from Service A's sidecar to Service B's over a mutually authenticated, policy-checked hop, so the service-to-service (east-west) traffic is encrypted.",
+          "protocol": "mTLS",
+          "relationship-type": { "connects": { "source": { "node": "sidecar-a" }, "destination": { "node": "sidecar-b" } } } },
+        { "unique-id": "sidecar-b-service-b", "description": "Service B's sidecar proxy passes the call on to Service B.",
+          "relationship-type": { "connects": { "source": { "node": "sidecar-b" }, "destination": { "node": "service-b" } } } }
+      ],
+      "flows": [
+        { "unique-id": "mtls-on-every-hop", "name": "mTLS on every hop",
+          "description": "A sidecar proxy beside each service forms the data plane; a control plane hands out identity and config, so every hop is mTLS by default.",
+          "transitions": [
+            { "relationship-unique-id": "control-plane-sidecar-a", "sequence-number": 1, "description": "The control plane configures Service A's sidecar proxy and distributes identities and certificates." },
+            { "relationship-unique-id": "control-plane-sidecar-b", "sequence-number": 2, "description": "The control plane configures Service B's sidecar proxy and distributes identities and certificates." },
+            { "relationship-unique-id": "service-a-sidecar-a", "sequence-number": 3, "description": "Service A's call flows into Service A's sidecar proxy, without a line of Service A's application code changing." },
+            { "relationship-unique-id": "sidecar-a-sidecar-b", "sequence-number": 4, "description": "Service A's sidecar sends its side of the mutual TLS authentication to Service B's sidecar." },
+            { "relationship-unique-id": "sidecar-a-sidecar-b", "sequence-number": 5, "description": "Service B's sidecar sends its side back, so the hop is mutually authenticated and the call crosses encrypted.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "sidecar-b-service-b", "sequence-number": 6, "description": "Service B's sidecar proxy passes the call on to Service B." }
+          ] }
+      ]
+    },
+    nist207: {
+      "nodes": [
+        { "unique-id": "pdp", "node-type": "service", "name": "Policy Decision Point", "description": "The Policy Decision Point, one of the logical components that NIST Special Publication 800-207, the vendor-neutral reference architecture published in 2020 that turned Zero Trust from a slogan into a defined model, names to enforce its seven tenets; SP 800-207 describes an architecture and stops short of implementation: products, protocols and migration order are left to each organisation." },
+        { "unique-id": "policy-engine", "node-type": "service", "name": "Engine", "description": "The Policy Engine, one of the Policy Decision Point's two parts, which runs the trust algorithm to grant or deny." },
+        { "unique-id": "policy-administrator", "node-type": "service", "name": "Admin", "description": "The Policy Administrator, the Policy Decision Point's other part, which executes the Policy Engine's decision." },
+        { "unique-id": "subject", "node-type": "system", "name": "Subject", "description": "A subject that requests access to a resource, where no asset is trusted by network location and access is per-session and least-privilege." },
+        { "unique-id": "pep", "node-type": "service", "name": "PEP", "description": "The Policy Enforcement Point, which sits in the data path and lets traffic through only when told." },
+        { "unique-id": "resource", "node-type": "resource", "name": "Resource", "description": "The resource the subject requests access to." }
+      ],
+      "relationships": [
+        { "unique-id": "pdp-parts", "description": "The Policy Decision Point splits into two parts: a Policy Engine and a Policy Administrator.",
+          "relationship-type": { "composed-of": { "container": "pdp", "nodes": ["policy-engine", "policy-administrator"] } } },
+        { "unique-id": "subject-pep", "description": "The subject's request for access to a resource reaches the PEP in the data path.",
+          "relationship-type": { "connects": { "source": { "node": "subject" }, "destination": { "node": "pep" } } } },
+        { "unique-id": "pep-policy-engine", "description": "The access request passes from the PEP to the Policy Engine, to be granted or denied.",
+          "relationship-type": { "connects": { "source": { "node": "pep" }, "destination": { "node": "policy-engine" } } } },
+        { "unique-id": "policy-engine-policy-administrator", "description": "The Policy Engine's decision to grant or deny passes to the Policy Administrator.",
+          "relationship-type": { "connects": { "source": { "node": "policy-engine" }, "destination": { "node": "policy-administrator" } } } },
+        { "unique-id": "policy-administrator-pep", "description": "The Policy Administrator executes the decision by telling the PEP whether to let the traffic through.",
+          "relationship-type": { "connects": { "source": { "node": "policy-administrator" }, "destination": { "node": "pep" } } } },
+        { "unique-id": "pep-resource", "description": "Traffic passes from the PEP to the resource only when the PEP has been told to let the traffic through.",
+          "relationship-type": { "connects": { "source": { "node": "pep" }, "destination": { "node": "resource" } } } }
+      ],
+      "flows": [
+        { "unique-id": "decide-enact-enforce", "name": "Decide, enact, enforce",
+          "description": "A Policy Engine runs the trust algorithm to grant or deny, a Policy Administrator executes that decision, and the Policy Enforcement Point in the data path lets traffic through only when told.",
+          "transitions": [
+            { "relationship-unique-id": "subject-pep", "sequence-number": 1, "description": "A subject requests access to a resource, and the request reaches the PEP." },
+            { "relationship-unique-id": "pep-policy-engine", "sequence-number": 2, "description": "The request passes to the Policy Engine, which runs the trust algorithm to grant or deny." },
+            { "relationship-unique-id": "policy-engine-policy-administrator", "sequence-number": 3, "description": "The Policy Engine's decision passes to the Policy Administrator." },
+            { "relationship-unique-id": "policy-administrator-pep", "sequence-number": 4, "description": "The Policy Administrator executes the decision, telling the PEP whether to let the traffic through." },
+            { "relationship-unique-id": "pep-resource", "sequence-number": 5, "description": "Told to, the PEP lets the traffic through to the resource." }
+          ] }
+      ]
+    },
+    ztna: {
+      "nodes": [
+        { "unique-id": "user", "node-type": "actor", "name": "User", "description": "A user, whose identity and device posture are verified on every request before access to any application is granted." },
+        { "unique-id": "broker", "node-type": "service", "name": "Broker", "description": "The broker, behind which applications sit, which brokers access to one specific application at a time after verifying user identity and device posture on every request, and keeps everything else invisible: authenticate, authorise, then connect, and only to what the user needs; ZTNA covers only the applications onboarded to the broker: legacy protocols and server-initiated traffic often still need a VPN alongside ZTNA." },
+        { "unique-id": "app", "node-type": "service", "name": "App", "description": "The one application the user needs, which sits behind the broker and is never exposed to the open internet, the idea known as a software-defined perimeter." }
+      ],
+      "relationships": [
+        { "unique-id": "user-broker", "description": "The user's request reaches the broker, which verifies the user's identity and device posture on every request.",
+          "relationship-type": { "interacts": { "actor": "user", "nodes": ["broker"] } } },
+        { "unique-id": "app-broker", "description": "The connection between the app and the broker is established outbound from the app, so there is no inbound port to attack, and the broker brokers access to the app one application at a time.",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "broker" } } } }
+      ],
+      "flows": [
+        { "unique-id": "authenticate-authorise-connect", "name": "Authenticate, authorise, then connect",
+          "description": "Instead of a VPN onto the whole network, a broker grants per-app access after verifying identity and device — everything else stays hidden.",
+          "transitions": [
+            { "relationship-unique-id": "user-broker", "sequence-number": 1, "description": "The user makes a request, and the broker verifies the user's identity and device posture." },
+            { "relationship-unique-id": "app-broker", "sequence-number": 2, "description": "Over the connection the app has established outbound, the broker grants access to the one application the user needs.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "app-broker", "sequence-number": 3, "description": "The connection runs outbound from the app to the broker, so the app is never exposed to the open internet and there is no inbound port to attack." }
+          ] }
+      ]
+    },
+    istio: {
+      "nodes": [
+        { "unique-id": "istiod", "node-type": "control-plane", "name": "istiod", "description": "istiod, the single binary into which the control plane of Istio, the reference implementation of the service mesh idea, long ago collapsed, which does service discovery, translates high-level intent into Envoy configuration and acts as the mesh's certificate authority; the standing complaint about Istio is complexity: a mesh is another distributed system, with its own upgrade cadence and failure modes." },
+        { "unique-id": "policy", "node-type": "data-asset", "name": "policy", "description": "The policy resources across which Istio splits enforcement, and which istiod pushes to the data plane: PeerAuthentication turns mTLS on as STRICT or leaves mTLS PERMISSIVE during migration, RequestAuthentication validates end-user JWTs, and AuthorizationPolicy, matched on principals, namespaces, methods, paths and token claims and evaluated CUSTOM first, then DENY, then ALLOW, is the rule that actually decides; if no ALLOW policy exists for a workload at all, the request is permitted, so default-deny is something you configure rather than inherit." },
+        { "unique-id": "app-sidecar", "node-type": "workload", "name": "app", "description": "An application workload in sidecar mode, with an Envoy proxy running beside the workload." },
+        { "unique-id": "envoy", "node-type": "proxy", "name": "Envoy", "description": "The Envoy proxy that runs beside each workload as a sidecar in sidecar mode; the sidecar model taxes every pod with a proxy's memory and every call with an extra hop." },
+        { "unique-id": "app-ambient-1", "node-type": "workload", "name": "app", "description": "A meshed application workload in ambient mode, whose traffic the node's ztunnel carries." },
+        { "unique-id": "app-ambient-2", "node-type": "workload", "name": "app", "description": "A meshed application workload in ambient mode, whose traffic the node's ztunnel carries." },
+        { "unique-id": "waypoint", "node-type": "proxy", "name": "waypoint", "description": "A waypoint proxy, which in ambient mode runs per namespace or service only where L7 rules are actually wanted, still Envoy but living outside the application pods." },
+        { "unique-id": "ztunnel", "node-type": "daemonset", "name": "ztunnel", "description": "ztunnel, the base of ambient mode's data plane: a per-node DaemonSet written in Rust that deliberately handles only L3 and L4 (mTLS, authentication, L4 authorisation, telemetry), never parses application HTTP, and carries traffic in HBONE, an HTTP CONNECT tunnel multiplexed over HTTP/2 inside mTLS, by convention on port 15008; ambient mode moves the blast radius rather than removing it: a shared per-node ztunnel holds the keys for every meshed pod on its node, so compromising a node now reaches further than compromising one sidecar would." }
+      ],
+      "relationships": [
+        { "unique-id": "policy-istiod", "description": "The policy resources, PeerAuthentication, RequestAuthentication and AuthorizationPolicy, pass to istiod.",
+          "relationship-type": { "connects": { "source": { "node": "policy" }, "destination": { "node": "istiod" } } } },
+        { "unique-id": "istiod-app-sidecar", "description": "istiod issues the sidecar-mode workload an X.509 certificate whose subject alternative name carries a SPIFFE ID, spiffe://<trust-domain>/ns/<namespace>/sa/<serviceaccount>, derived from the Kubernetes service account, and rotates the certificate automatically.",
+          "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "app-sidecar" } } } },
+        { "unique-id": "istiod-app-ambient-1", "description": "istiod issues the first ambient-mode workload an X.509 certificate whose subject alternative name carries a SPIFFE ID, spiffe://<trust-domain>/ns/<namespace>/sa/<serviceaccount>, derived from the Kubernetes service account, and rotates the certificate automatically.",
+          "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "app-ambient-1" } } } },
+        { "unique-id": "istiod-app-ambient-2", "description": "istiod issues the second ambient-mode workload an X.509 certificate whose subject alternative name carries a SPIFFE ID, spiffe://<trust-domain>/ns/<namespace>/sa/<serviceaccount>, derived from the Kubernetes service account, and rotates the certificate automatically.",
+          "relationship-type": { "connects": { "source": { "node": "istiod" }, "destination": { "node": "app-ambient-2" } } } },
+        { "unique-id": "app-sidecar-envoy", "description": "The sidecar-mode app's traffic passes to the app's own Envoy sidecar over unencrypted loopback.",
+          "relationship-type": { "connects": { "source": { "node": "app-sidecar" }, "destination": { "node": "envoy" } } } },
+        { "unique-id": "app-ambient-1-ztunnel", "description": "The first ambient-mode app's traffic passes to the node's ztunnel over unencrypted loopback.",
+          "relationship-type": { "connects": { "source": { "node": "app-ambient-1" }, "destination": { "node": "ztunnel" } } } },
+        { "unique-id": "app-ambient-2-ztunnel", "description": "The second ambient-mode app's traffic passes to the node's ztunnel over unencrypted loopback.",
+          "relationship-type": { "connects": { "source": { "node": "app-ambient-2" }, "destination": { "node": "ztunnel" } } } },
+        { "unique-id": "ztunnel-waypoint", "description": "Where L7 rules are wanted, the ztunnel carries traffic in HBONE up to a waypoint proxy.",
+          "relationship-type": { "connects": { "source": { "node": "ztunnel" }, "destination": { "node": "waypoint" } } } }
+      ],
+      "flows": [
+        { "unique-id": "identity-policy-data-plane", "name": "Identity, policy and two data-plane modes",
+          "description": "istiod issues every workload a SPIFFE identity and pushes policy to the data plane — Envoy sidecars, or in ambient mode a per-node ztunnel carrying HBONE with waypoint proxies only where L7 rules are needed.",
+          "transitions": [
+            { "relationship-unique-id": "istiod-app-sidecar", "sequence-number": 1, "description": "istiod issues the sidecar-mode workload an X.509 certificate carrying a SPIFFE ID derived from the workload's Kubernetes service account, and rotates the certificate automatically." },
+            { "relationship-unique-id": "istiod-app-ambient-1", "sequence-number": 2, "description": "istiod issues the first ambient-mode workload an X.509 certificate carrying a SPIFFE ID, and rotates the certificate automatically." },
+            { "relationship-unique-id": "istiod-app-ambient-2", "sequence-number": 3, "description": "istiod issues the second ambient-mode workload an X.509 certificate carrying a SPIFFE ID, and rotates the certificate automatically." },
+            { "relationship-unique-id": "policy-istiod", "sequence-number": 4, "description": "The policy resources, PeerAuthentication, RequestAuthentication and AuthorizationPolicy, reach istiod." },
+            { "relationship-unique-id": "app-sidecar-envoy", "sequence-number": 5, "description": "In sidecar mode, the app's traffic passes to the Envoy proxy running beside the app." },
+            { "relationship-unique-id": "app-ambient-1-ztunnel", "sequence-number": 6, "description": "In ambient mode, the first app's traffic passes to the node's ztunnel." },
+            { "relationship-unique-id": "app-ambient-2-ztunnel", "sequence-number": 7, "description": "The second app's traffic passes to the same per-node ztunnel." },
+            { "relationship-unique-id": "ztunnel-waypoint", "sequence-number": 8, "description": "Only where L7 rules are wanted, the ztunnel carries traffic in HBONE up to a waypoint proxy." }
           ] }
       ]
     },
