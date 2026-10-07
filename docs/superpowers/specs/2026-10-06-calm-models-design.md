@@ -118,6 +118,12 @@ entry, so nothing is stored twice:
 | `deployed-in` | A node that runs inside another: a pod in a worker node |
 | `composed-of` | A node that is a part of another: a header in a token |
 
+- Direction follows the data: a component that produces a `data-asset` is the source and
+  the asset the destination; an asset is the source for a component that reads it; a
+  `database` is the destination of whatever reads or writes it. A fetch or lookup drawn
+  the other way is a `destination-to-source` transition.
+- A relationship's description says what passes between its two nodes, in one sentence.
+  The term's limitations belong to the node they are about, not to a link.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
   `description` names it.
 - A request and its reply are one relationship. The reply is a flow transition with

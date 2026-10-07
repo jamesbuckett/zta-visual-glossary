@@ -2158,7 +2158,8 @@ Before you change anything, capture the batch as it stands:
 node $S/capture.mjs "$PWD" $S/captures-<batch>-before <ids…>
 ```
 
-After the batch, capture it again into `$S/captures-<batch>` and read every image with
+After the batch, and after the second pass below, capture it again into
+`$S/captures-<batch>` and read every image with
 the Read tool: per term, `<id>-light.png` and `<id>-dark.png` (the tour card, every part
 visible) and `<id>-calm-light.png` (the open disclosure). For each term check:
 
@@ -2171,11 +2172,14 @@ visible) and `<id>-calm-light.png` (the open disclosure). For each term check:
 
 ### Second pass
 
+Do this before the after-captures, so the disclosure captures show the final JSON.
 Re-read each model against its explainer: qualifiers such as "usually", "can" and "most"
 survive, as they do in takeaways; no description claims more than the explainer
 says or leans on "it"; each node type is the honest one; each `data-note` is on something
 that is not a component or a relationship; each transition has a lit arrow of its own;
-each tour step still lights what its text describes.
+each tour step still lights what its text describes. When a drawing is restructured,
+light a hub node only at the steps whose text is about it or about traffic that touches
+it; a hub lit at every step leaves the tour no contrast.
 
 ### Official CLI
 

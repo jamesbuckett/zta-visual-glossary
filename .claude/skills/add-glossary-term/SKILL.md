@@ -154,10 +154,15 @@ The type sets the outline:
 **Relationships.** Use `connects` (source to destination) between two nodes,
 `interacts` (actor to node) for a node typed `actor` and what it uses, `deployed-in` for a node that
 runs inside another, `composed-of` for a node that is a part of another. A request and
-its reply are one relationship. Set `protocol` only if it is one of CALM's twelve (HTTP,
+its reply are one relationship. Direction follows the data: a component that writes or
+produces a `data-asset` is the source and the asset the destination; an asset is the
+source for a component that reads it; a `database` is the destination of whatever reads
+or writes it, as a store is to its clients. Draw the arrow the same way, and make a
+lookup or fetch request drawn the other way a `destination-to-source` transition. Set `protocol` only if it is one of CALM's twelve (HTTP,
 HTTPS, FTP, SFTP, JDBC, WebSocket, SocketIO, LDAP, AMQP, TLS, mTLS, TCP); otherwise name
 the protocol in the description, unless the term is itself that protocol. Every node must appear in at least one relationship. A
-node is a container through one of the two kinds, never both. Write each description so
+node is a container through one of the two kinds, never both. A relationship's description says what passes between its two nodes, in one sentence;
+the term's limitations belong to the node they are about, not to a link. Write each description so
 it makes sense on its own, as for nodes.
 
 **Flow.** Write one flow when the tour narrates traffic: if it lights any arrow, the
