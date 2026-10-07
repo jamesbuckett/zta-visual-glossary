@@ -1781,6 +1781,66 @@ All three fixture suites replace WireGuard's model, and two replace its drawing,
 - [ ] **Step 6:** Commit `feat: redraw the secure channel and crypto diagrams to their CALM models` (`index.html`, and `glossary.txt` if it changed), with the trailer.
 - [ ] **Step 7:** Stop for James's review with the batch summary: reworded captions or steps, every `data-note` and its reason, every stretch model, any suspected explainer error. Push only if asked.
 
+### Task 8b: Type words on every modelled node
+
+James asked during batch 3 (2026-10-07) for ACTOR, WEBCLIENT, SERVICE, SYSTEM, NETWORK and
+the rest to be shown on the nodes they apply to, and accepted the prototype: the word is read
+from the term's model when the diagram renders, so every modelled term carries it with no
+per-term authoring; compact nodes get room in a tidy pass; a verify check keeps later batches
+honest; multi-word types read with a space (`DATA ASSET`). The prototype (code and ten
+captures) is in the session scratchpad under `proto/apply.mjs`; it is the reference, read
+and adapted, not pasted blind. Runs after Task 8's review closes, before Task 9.
+
+- [ ] **Step 1: Page.** One CSS rule beside the other `.dg` text classes:
+      `.dg .calm-type { font-size: 9px; fill: var(--text-muted); letter-spacing: .08em; }`.
+      One function, `labelCalmTypes(fig)`, called from `showDetail()` once the detail view
+      is unhidden (geometry reads as zero while it is hidden). For each node of
+      `CALM[id]`: find its `[data-calm]` group and its outline (`rect` or `path`), append
+      `<text class="calm-type">` holding the node type uppercased with hyphens as spaces,
+      and place it at the first corner clear of the node's own children (title, sub-labels,
+      the icon as a 24 by 24 box at its translate), other nodes' outlines and every badge:
+      bottom-right, top-right, bottom-left, top-left; top-right first in a container
+      (`zone`, `zone-accent`, `box-soft`), whose own title sits top-left; a cylinder keeps
+      clear of its rims (about 20 from the top, 12 from the bottom). With no clear corner,
+      bottom-right anyway: the check in step 2 reports it. The word sits inside the node's
+      group, so it dims with its node, and inside the outline, so it never crosses a border.
+      The key line in the disclosure stays as it is.
+- [ ] **Step 2: Check.** A new rule `calm-type` in `verify.mjs` check (e): for a term with a
+      model, every node's group holds exactly one `.calm-type` text, its content is the node's
+      type word, it lies inside the node's outline, and it overlaps no other text or icon in
+      the drawing (screen-space boxes, as the other geometry checks measure). The report names
+      the node and what the word overlaps. Confirm the existing clearance and collision checks
+      see the word as a label too.
+- [ ] **Step 3: Fixtures.** `test/calm-fixtures.mjs` gains two cases: a drawing whose node
+      leaves no clear corner (make the box too small for any corner, so the result does not
+      depend on the fallback font the offline run measures in) fails `verify` with rule
+      `calm-type` and a message naming the overlap; a page whose labelling is disabled (swap
+      the function's name) fails with `calm-type` and "no type word". `npm run test:calm`
+      exits 0 with both.
+- [ ] **Step 4: Tidy pass.** `npm run verify` lists every `calm-type` overlap across the
+      modelled terms (36 at this point). For each, give the node room, about 12 units more
+      height or a shorter sub-label line, so one corner is clear; every connector still
+      lands on its node, the viewBox stays 720 wide, nothing else in the drawing moves unless
+      the extra height pushes it. `npm run verify <id>` exits 0 per touched term. Capture every
+      modelled term, light and dark, into one directory, and read every image: the word
+      legible in both themes, in a sensible corner, nothing crowded or clipped.
+- [ ] **Step 5: Docs.** Skill step 2b, after the shape table: every modelled node carries its
+      type word, drawn by the page from the model; leave one corner of each node clear of
+      title, sub-label, icon and badge, about 12 units high and the word's width (`DATA ASSET`
+      is the widest built-in), or `npm run verify` reports `calm-type`. The same sentence in
+      the plan's batch-procedure appendix under "Per term" and in the spec's section 2 (with
+      the CSS and the call in section 3, the rule in section 4 check (e), the two fixtures in
+      section 4 Fixtures). CLAUDE.md's `verify.mjs` paragraph gains "and that every node's
+      type word sits clear".
+- [ ] **Step 6: Gates and commit.** `npm test`, `npm run test:calm`, `npm run test:tour`,
+      `npm run test:takeaways`, `npm run verify` (all 105), `npm run glossary` (105), each
+      exit 0 read directly. One commit, `feat: label every modelled node with its CALM type`
+      (`index.html`, `verify.mjs`, `test/calm-fixtures.mjs`, the skill, the spec, this plan's
+      appendix, `CLAUDE.md`), with the trailer.
+- [ ] **Step 7:** Report: the list of nodes the tidy pass touched and how, the two fixture
+      names, the capture directory, every gate's exit code. The batch 3 review page is built
+      from these captures, so James sees the words there.
+
 ### Task 9: Identity & Access, part 1 (10)
 
 Ids: `saml radius spiffe idp pkce oidc scim mfa rbac ldap`

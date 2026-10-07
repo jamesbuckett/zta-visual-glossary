@@ -32,6 +32,7 @@ SVG; what changes is that each one is drawn from, and checked against, a model.
 | Branching | Commits go to `main`, as with the tours and takeaways work. Nothing is pushed until James asks |
 | Pilot review, 6 October 2026 | Actors at `rx="20"`; `actor` for people and organisations only; a custom type where a built-in name collides; a transition each way for a two-way arrow; six `data-note` values; thin models stay |
 | Batch 1 review, 6 October 2026 | The flow is a sub-story of the tour: a lit connector need not be a transition. Caption and steps are valid sources where the explainer is silent. A run-time store is a `database`, a made-once artefact a `data-asset`. A drawn label the copy names may become a node. |
+| Type words on nodes (James, 2026-10-07, mid-batch 3) | Every modelled node carries its CALM type word, drawn by the page from the model at render time (small, muted, uppercase, in the first corner of the outline clear of the node's own title, sub-label, icon and badge; `DATA ASSET` with a space). Compact nodes get room in a tidy pass, and `verify.mjs` reports a word that overlaps text (`calm-type`). The shapes and the key line stay. Plan Task 8b |
 
 Facts about the 1.2 schema that shape the design, read from
 `calm/release/1.2/meta/core.json` and `flow.json` in `finos/architecture-as-code`:
