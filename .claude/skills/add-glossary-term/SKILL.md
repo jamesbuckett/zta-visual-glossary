@@ -151,7 +151,9 @@ You may add a node for something the old drawing only labelled, when the term's 
 names it: a "private network" label becomes a zone around its hosts. Do not invent a node
 the copy does not name. Instances of a class the copy names (your devices as Device A, B and
 C; each startup stage as Firmware and OS) count as named, provided each description claims
-only what the copy says of the class. An artefact the copy says stays inside its holder (a key sealed
+only what the copy says of the class. An endpoint the copy's named links require but never
+names (the far end of SD-WAN's transports, NAT's public side) stays a node, typed by what
+it is and described only as the far end of those links in the copy's words. An artefact the copy says stays inside its holder (a key sealed
 in a TPM) is a `composed-of` part drawn inside it; one that is presented, shared, fetched
 or handed on (a certificate, a public key, a config file) is a separate `data-asset`
 joined to its holder by an arrow. The two halves of a key pair are judged separately: the half

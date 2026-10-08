@@ -146,6 +146,9 @@ entry, so nothing is stored twice:
   artefact the copy places nowhere is a separate node joined by an arrow: `data-asset` if
   made once, `database` if written at run time. Instances of a class the copy names count
   as named. A `call-out` may show the practice the subject replaces.
+- An endpoint the copy's named links require but never names (the far end of SD-WAN's
+  transports, NAT's public side) stays a node, typed by what it is and described only as
+  the far end of those links in the copy's words.
 - An artefact is a node when it is what the term defines or exists to manage, or when a
   party holds it as its own; anything one party issues, returns or presents to another
   inside the narrated exchange (a token, a code, a challenge) is what the link carries,
