@@ -5798,39 +5798,39 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     apigateway: () => `
       <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.">
-        <g data-s="1">
-          <rect class="box" x="24" y="96" width="152" height="72" rx="12"/>
-          ${icon('users', 40, 110)}
+        <g data-s="1" data-calm="clients">
+          <rect class="box" x="24" y="96" width="152" height="72" rx="8"/>
+          ${icon('laptop', 40, 110)}
           <text class="t-b" x="72" y="128">Clients</text>
           <text class="t-sm t-mut" x="72" y="146">north-south</text>
         </g>
-        <line class="flow" data-s="1" x1="178" y1="120" x2="234" y2="120" marker-end="url(#ah-mut)"/>
-        <line class="flow-bad" data-s="3" x1="178" y1="152" x2="234" y2="152" marker-end="url(#ah-bad)"/>
+        <line class="flow" data-s="1" data-calm="clients-api-gateway" x1="178" y1="120" x2="234" y2="120" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="3" data-calm="clients-api-gateway" x1="178" y1="152" x2="234" y2="152" marker-end="url(#ah-bad)"/>
         <text class="t-sm bad" data-s="3" x="24" y="196">abusive: rejected</text>
-        <g data-s="1 2 3 4 5">
+        <g data-s="1 2 3 4 5" data-calm="api-gateway">
           <rect class="box" x="236" y="16" width="220" height="240" rx="8"/>
           ${icon('route', 252, 30)}
           <text class="t-b" x="284" y="48">API gateway</text>
           <text class="t-sm t-mut" x="284" y="66">reverse proxy</text>
         </g>
-        ${[['TLS, OAuth, API keys', 84, '2'], ['rate limits, quotas', 128, '3'], ['route, version', 172, '4'], ['aggregate, transform', 212, '4']].map(([t, y, s]) => `
-          <g data-s="${s}">
+        ${[['TLS, OAuth, API keys', 84, '2'], ['rate limits, quotas', 124, '3'], ['route, version', 164, '4'], ['aggregate, transform', 204, '4']].map(([t, y, s]) => `
+          <g data-s="${s}" data-note="call-out">
             <rect class="box" x="252" y="${y}" width="188" height="32" rx="4"/>
             <text class="t-sm" x="264" y="${y + 20}">${t}</text>
           </g>`).join('')}
-        ${[32, 112, 192].map((y) => `
-          <g data-s="4">
+        ${[['service-1', 32, 84], ['service-2', 112, 140], ['service-3', 192, 196]].map(([id, y, from]) => `
+          <g data-s="4" data-calm="${id}">
             <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
             ${icon('server', 552, y + 16)}
             <text class="t-b" x="584" y="${y + 25}">Service</text>
             <text class="t-sm t-mut" x="584" y="${y + 43}">business logic</text>
           </g>
-          <line class="flow" data-s="4" x1="458" y1="${y + 28 > 140 ? 196 : (y + 28 < 140 ? 84 : 140)}" x2="534" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
+          <line class="flow" data-s="4" data-calm="api-gateway-${id}" x1="458" y1="${from}" x2="534" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
         <text class="t-sm bad" data-s="5" x="346" y="278" text-anchor="middle">too much logic: a bottleneck, a single point of failure</text>
 
         ${badge(1, 206, 120, '1')}
         ${badge(2, 424, 100, '2')}
-        ${badge(3, 424, 144, '3')}
+        ${badge(3, 424, 140, '3')}
         ${badge(4, 496, 140, '4')}
         ${badge(5, 440, 30, '5')}
       </svg>`,
@@ -6246,32 +6246,32 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     casb: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud.">
-        <g data-s="1">
-          <rect class="box" x="24" y="100" width="152" height="72" rx="12"/>
+        <g data-s="1" data-calm="users">
+          <rect class="box" x="24" y="100" width="152" height="72" rx="20"/>
           ${icon('users', 40, 114)}
           <text class="t-b" x="72" y="132">Users</text>
           <text class="t-sm t-mut" x="72" y="150">anywhere</text>
         </g>
-        <line class="flow" data-s="1" x1="178" y1="136" x2="234" y2="136" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3 4">
+        <line class="flow" data-s="1" data-calm="users-casb" x1="178" y1="136" x2="234" y2="136" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4" data-calm="casb">
           <rect class="box" x="236" y="16" width="220" height="252" rx="8"/>
           ${icon('shield-check', 252, 30)}
           <text class="t-b" x="284" y="48">CASB</text>
           <text class="t-sm t-mut" x="284" y="66">broker</text>
         </g>
         ${[['which apps are used', 84, '2'], ['access, data policy', 128, '3'], ['risky configs, DLP', 172, '3'], ['inline proxy or API', 220, '4']].map(([t, y, s]) => `
-          <g data-s="${s}">
+          <g data-s="${s}" data-note="call-out">
             <rect class="box" x="252" y="${y}" width="188" height="32" rx="4"/>
             <text class="t-sm" x="264" y="${y + 20}">${t}</text>
           </g>`).join('')}
-        ${[['SaaS app', 'sanctioned', 32, '1'], ['SaaS app', 'sanctioned', 112, '1'], ['Shadow IT', 'unsanctioned', 192, '1 2']].map(([name, sub, y, s]) => `
-          <g data-s="${s}">
-            <rect class="box" x="536" y="${y}" width="160" height="56" rx="8"/>
+        ${[['saas-app-1', 'SaaS app', 'sanctioned', 32, '1'], ['saas-app-2', 'SaaS app', 'sanctioned', 112, '1'], ['shadow-it', 'Shadow IT', 'unsanctioned', 192, '1 2']].map(([id, name, sub, y, s]) => `
+          <g data-s="${s}" data-calm="${id}">
+            <rect class="box" x="536" y="${y}" width="160" height="64" rx="8"/>
             ${icon('cloud', 552, y + 16)}
             <text class="t-b" x="584" y="${y + 25}">${name}</text>
             <text class="t-sm ${sub === 'unsanctioned' ? 'bad' : 't-mut'}" x="584" y="${y + 43}">${sub}</text>
           </g>
-          <line class="flow" data-s="1" x1="458" y1="${y + 28}" x2="534" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
+          <line class="flow" data-s="1" data-calm="casb-${id}" x1="458" y1="${y + 28}" x2="534" y2="${y + 28}" marker-end="url(#ah-mut)"/>`).join('')}
 
         ${badge(1, 206, 136, '1')}
         ${badge(2, 680, 206, '2')}
@@ -6745,42 +6745,42 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     dpu: () => `
       <svg class="dg" viewBox="0 0 720 376" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.">
-        <g data-s="1">
-          <rect class="box" x="410" y="12" width="220" height="40" rx="8"/>
+        <g data-s="1" data-calm="network">
+          <rect class="zone" x="410" y="12" width="220" height="40" rx="10"/>
           ${icon('network', 426, 20)}
           <text class="t-b" x="458" y="37">Network</text>
         </g>
-        <line class="flow" data-s="1" x1="520" y1="52" x2="520" y2="132" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="1" x="538" y="80">all traffic</text>
 
-        <g data-s="1 2 3">
-          <rect class="box" x="40" y="100" width="640" height="124" rx="10"/>
+        <g data-s="1 2 3" data-calm="dpu">
+          <rect class="box-soft" x="40" y="100" width="640" height="124" rx="10"/>
           <text class="t-b" x="56" y="122">DPU</text>
           <text class="t-sm t-mut" x="92" y="122">on the network card</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-calm="cpu-cores">
           <rect class="box" x="60" y="134" width="280" height="78" rx="8"/>
           ${icon('cpu', 76, 146)}
           <text class="t-b" x="108" y="164">Own CPU cores</text>
           <text class="t-sm t-mut" x="108" y="182">typically Arm, own OS</text>
           <text class="t-sm t-mut" x="108" y="199">host cannot see or control</text>
         </g>
-        <g data-s="1 3 4">
+        <g data-s="1 3 4" data-calm="security-policy">
           <rect class="box" x="380" y="134" width="280" height="78" rx="8"/>
           ${icon('shield', 396, 146)}
           <text class="t-b" x="428" y="164">Security policy</text>
           <text class="t-sm t-mut" x="428" y="182">microsegmentation, encryption</text>
           <text class="t-sm t-mut" x="428" y="199">intrusion detection, keys</text>
         </g>
+        <line class="flow" data-s="1" data-calm="network-security-policy" x1="520" y1="52" x2="520" y2="132" marker-end="url(#ah-mut)"/>
 
         <line class="divider" data-s="2 4" x1="40" y1="248" x2="680" y2="248"/>
         <text class="t-sm t-mut" data-s="2 4" x="680" y="242" text-anchor="end">trust boundary</text>
 
-        <line class="flow" data-s="1" x1="520" y1="212" x2="520" y2="314" marker-end="url(#ah-mut)"/>
-        <line class="flow-bad" data-s="4" x1="420" y1="314" x2="420" y2="254" marker-end="url(#ah-bad)"/>
+        <line class="flow" data-s="1" data-calm="security-policy-host" x1="520" y1="212" x2="520" y2="314" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="4" data-note="struck-through" x1="420" y1="314" x2="420" y2="254" marker-end="url(#ah-bad)"/>
         <text class="t-sm" data-s="4" x="408" y="280" text-anchor="end">attacker cannot reach the DPU</text>
 
-        <g data-s="1 4">
+        <g data-s="1 4" data-calm="host">
           <rect class="box" x="40" y="316" width="640" height="48" rx="8"/>
           ${icon('server', 56, 328)}
           <text class="t-b" x="88" y="345">Host</text>
@@ -6788,102 +6788,109 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
 
         ${badge(1, 520, 76, '1')}
-        ${badge(2, 322, 152, '2')}
+        ${badge(2, 322, 194, '2')}
         ${badge(3, 642, 152, '3')}
         ${badge(4, 420, 300, '4')}
       </svg>`,
 
     bluefield: () => `
-      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust.">
-        <g data-s="1">
-          <rect class="box" x="24" y="52" width="120" height="56" rx="12"/>
+      <svg class="dg" viewBox="0 0 720 352" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust.">
+        <g data-s="1" data-calm="network">
+          <rect class="zone" x="24" y="52" width="120" height="56" rx="10"/>
           ${icon('globe', 36, 68)}
           <text class="t-b" x="68" y="85">Network</text>
         </g>
-        <line class="flow" data-s="1" x1="146" y1="80" x2="182" y2="80" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="zone" x="168" y="16" width="528" height="220" rx="10"/>
+        <g data-s="3" data-calm="bluefield">
+          <rect class="box-soft" x="168" y="16" width="528" height="256" rx="10"/>
           <text class="t-sm t-mut" x="180" y="34">BlueField DPU</text>
         </g>
-        <g data-s="1">
+        <g data-s="1" data-calm="connectx">
           <rect class="box" x="184" y="48" width="160" height="64" rx="8"/>
           ${icon('network', 200, 62)}
           <text class="t-b" x="232" y="80">ConnectX</text>
           <text class="t-sm t-mut" x="232" y="98">network ASIC</text>
         </g>
-        <g data-s="2">
+        <line class="flow" data-s="1" data-calm="network-connectx" x1="146" y1="80" x2="182" y2="80" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-calm="arm-cores">
           <rect class="box" x="360" y="48" width="320" height="64" rx="8"/>
           ${icon('cpu', 376, 62)}
           <text class="t-b" x="408" y="80">Arm cores</text>
           <text class="t-sm t-mut" x="408" y="98">own Linux, memory; BF-3: 16 cores</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="184" y="124" width="160" height="56" rx="8"/>
+        <g data-s="2" data-calm="accelerators">
+          <rect class="box" x="184" y="124" width="160" height="72" rx="8"/>
           <text class="t-b" x="200" y="144">Accelerators</text>
           <text class="t-sm t-mut" x="200" y="162">crypto, storage,</text>
           <text class="t-sm t-mut" x="200" y="175">compression</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="360" y="124" width="320" height="56" rx="8"/>
+        <g data-s="4" data-calm="root-of-trust">
+          <rect class="box" x="360" y="124" width="320" height="72" rx="8"/>
           ${icon('shield-check', 376, 140)}
           <text class="t-b" x="408" y="149">Root of trust</text>
           <text class="t-sm t-mut" x="408" y="167">DICE measured boot, attestation</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="184" y="192" width="496" height="36" rx="6"/>
-          ${icon('lock', 196, 198)}
-          <text class="t-sm" x="228" y="214">IPsec/TLS at line rate · DOCA Argus host introspection</text>
+        <g data-s="5" data-calm="ipsec-tls">
+          <rect class="box" x="184" y="208" width="160" height="56" rx="8"/>
+          ${icon('lock', 196, 224)}
+          <text class="t-b" x="228" y="233">IPsec/TLS</text>
+          <text class="t-sm t-mut" x="228" y="251">line rate</text>
         </g>
-        <line class="flow" data-s="3" x1="300" y1="238" x2="300" y2="262" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="312" y="254">PCIe: isolated</text>
-        <line class="flow" data-s="5" x1="560" y1="230" x2="560" y2="262" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="5" x="572" y="254">reads the host</text>
-        <g data-s="3 5">
-          <rect class="box" x="168" y="264" width="528" height="44" rx="8"/>
-          ${icon('server', 184, 274)}
-          <text class="t-b" x="216" y="291">Host</text>
-          <text class="t-sm t-mut" x="272" y="291">its CPU and OS, separate from the card</text>
+        <g data-s="5" data-calm="doca-argus">
+          <rect class="box" x="360" y="208" width="320" height="56" rx="8"/>
+          ${icon('scan-eye', 376, 224)}
+          <text class="t-b" x="408" y="233">DOCA Argus</text>
+          <text class="t-sm t-mut" x="408" y="251">agentless host introspection</text>
+        </g>
+        <line class="flow" data-s="3" data-calm="bluefield-host" x1="300" y1="274" x2="300" y2="298"/>
+        <text class="t-sm" data-s="3" x="312" y="290">PCIe: isolated</text>
+        <line class="flow" data-s="5" data-calm="doca-argus-host" x1="560" y1="266" x2="560" y2="298" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="572" y="290">reads the host</text>
+        <g data-s="3 5" data-calm="host">
+          <rect class="box" x="168" y="300" width="528" height="44" rx="8"/>
+          ${icon('server', 184, 310)}
+          <text class="t-b" x="216" y="327">Host</text>
+          <text class="t-sm t-mut" x="272" y="327">its CPU and OS, separate from the card</text>
         </g>
 
-        ${badge(1, 164, 80, '1')}
-        ${badge(2, 664, 62, '2')}
-        ${badge(3, 680, 30, '3')}
+        ${badge(1, 328, 62, '1')}
+        ${badge(2, 664, 96, '2')}
+        ${badge(3, 282, 30, '3')}
         ${badge(4, 664, 138, '4')}
-        ${badge(5, 664, 210, '5')}
+        ${badge(5, 664, 222, '5')}
       </svg>`,
 
     supernic: () => `
       <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Built for AI's east-west traffic: each GPU gets line-rate RoCE Ethernet with the adaptive routing and congestion control that keep huge training jobs from stalling.">
-        ${[24, 200, 376, 552].map((x) => `
-          <g data-s="1">
+        ${[[1, 24], [2, 200], [3, 376], [4, 552]].map(([n, x]) => `
+          <g data-s="1" data-calm="gpu-${n}">
             <rect class="box" x="${x}" y="16" width="144" height="44" rx="8"/>
             ${icon('cpu', x + 12, 26)}
             <text class="t-b" x="${x + 44}" y="43">GPU</text>
           </g>
-          <line class="flow" data-s="1 2" x1="${x + 72}" y1="62" x2="${x + 72}" y2="72" marker-end="url(#ah-mut)"/>
-          <g data-s="2">
+          <line class="flow" data-s="1 2" data-calm="gpu-${n}-supernic-${n}" x1="${x + 72}" y1="62" x2="${x + 72}" y2="72" marker-end="url(#ah-mut)"/>
+          <g data-s="2" data-calm="supernic-${n}">
             <rect class="box" x="${x}" y="74" width="144" height="40" rx="6"/>
             <text class="t-sm t-b" x="${x + 12}" y="92">SuperNIC</text>
             <text class="t-sm t-mut" x="${x + 12}" y="107">RoCE, per GPU</text>
           </g>
-          <line class="flow" data-s="1 3" x1="${x + 72}" y1="116" x2="${x + 72}" y2="134"/>`).join('')}
-        <g data-s="1 3">
-          <rect class="box" x="24" y="136" width="672" height="44" rx="8"/>
+          <line class="flow" data-s="1 3" data-calm="supernic-${n}-fabric" x1="${x + 72}" y1="116" x2="${x + 72}" y2="134"/>`).join('')}
+        <g data-s="1 3" data-calm="fabric">
+          <rect class="zone" x="24" y="136" width="672" height="44" rx="10"/>
           ${icon('network', 36, 146)}
           <text class="t-sm t-b" x="68" y="155">Spectrum-X Ethernet fabric</text>
           <text class="t-sm t-mut" x="68" y="170">adaptive routing, congestion control: east-west</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="24" y="200" width="328" height="52" rx="8"/>
           <text class="t-sm t-b" x="40" y="220">BlueField-3 SuperNIC</text>
           <text class="t-sm t-mut" x="40" y="238">a slim DPU, eight Arm cores</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="368" y="200" width="328" height="52" rx="8"/>
           <text class="t-sm t-b" x="384" y="220">ConnectX-8/9 SuperNIC</text>
           <text class="t-sm t-mut" x="384" y="238">pure adapter, no separate OS</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="264" width="672" height="40" rx="8"/>
           ${icon('lock', 36, 272)}
           <text class="t-sm" x="68" y="289">encrypts in flight at line rate</text>
@@ -6891,7 +6898,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
 
         ${badge(1, 152, 30, '1')}
-        ${badge(2, 152, 94, '2')}
+        ${badge(2, 152, 102, '2')}
         ${badge(3, 680, 150, '3')}
         ${badge(4, 680, 214, '4')}
         ${badge(5, 680, 284, '5')}
@@ -10717,6 +10724,167 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "network-firewall-waf", "sequence-number": 1, "description": "A benign request passes the network firewall and reaches the WAF, which inspects the request at layer 7." },
             { "relationship-unique-id": "waf-app", "sequence-number": 2, "description": "The benign request reaches the application." },
             { "relationship-unique-id": "network-firewall-waf", "sequence-number": 3, "description": "An exploit attempt such as SQL injection, cross-site scripting or path traversal passes the network firewall, which sees only ports and addresses, and the WAF drops the attempt." }
+          ] }
+      ]
+    },
+    apigateway: {
+      "nodes": [
+        { "unique-id": "clients", "node-type": "system", "name": "Clients", "description": "The clients, between which and a fleet of backend services an API gateway sits, presenting one coherent entry point for client-to-backend (north-south) traffic." },
+        { "unique-id": "api-gateway", "node-type": "service", "name": "API gateway", "description": "An API gateway, a reverse proxy that sits between clients and a fleet of backend services, presenting one coherent entry point and handling the concerns no individual service should reimplement: an API gateway terminates TLS, validates OAuth tokens and API keys, enforces rate limits and quotas, routes and versions requests, and aggregates or transforms responses, so the services behind the gateway stay small and focused on business logic; by centralising authentication and throttling, an API gateway is also a natural Zero Trust enforcement point at the application edge, and in microservice and gRPC architectures the standard pattern for client-to-backend (north-south) traffic; push too much logic into an API gateway, though, and the gateway becomes a bottleneck and a single point of failure." },
+        { "unique-id": "service-1", "node-type": "service", "name": "Service", "description": "A backend service, one of the fleet behind the API gateway, which stays small and focused on business logic." },
+        { "unique-id": "service-2", "node-type": "service", "name": "Service", "description": "A backend service, one of the fleet behind the API gateway, which stays small and focused on business logic." },
+        { "unique-id": "service-3", "node-type": "service", "name": "Service", "description": "A backend service, one of the fleet behind the API gateway, which stays small and focused on business logic." }
+      ],
+      "relationships": [
+        { "unique-id": "clients-api-gateway", "description": "The clients' calls reach the API gateway, the one coherent entry point, over TLS that the API gateway terminates; the gateway rejects unauthenticated or abusive traffic before the traffic ever reaches a service.",
+          "protocol": "TLS",
+          "relationship-type": { "connects": { "source": { "node": "clients" }, "destination": { "node": "api-gateway" } } } },
+        { "unique-id": "api-gateway-service-1", "description": "The API gateway routes and versions requests to the first backend service, and aggregates or transforms the responses.",
+          "relationship-type": { "connects": { "source": { "node": "api-gateway" }, "destination": { "node": "service-1" } } } },
+        { "unique-id": "api-gateway-service-2", "description": "The API gateway routes and versions requests to the second backend service, and aggregates or transforms the responses.",
+          "relationship-type": { "connects": { "source": { "node": "api-gateway" }, "destination": { "node": "service-2" } } } },
+        { "unique-id": "api-gateway-service-3", "description": "The API gateway routes and versions requests to the third backend service, and aggregates or transforms the responses.",
+          "relationship-type": { "connects": { "source": { "node": "api-gateway" }, "destination": { "node": "service-3" } } } }
+      ],
+      "flows": [
+        { "unique-id": "one-front-door", "name": "One front door",
+          "description": "Clients hit one gateway that authenticates, rate-limits, and routes each call to the right backend service behind it.",
+          "transitions": [
+            { "relationship-unique-id": "clients-api-gateway", "sequence-number": 1, "description": "A client's call reaches the API gateway, which terminates TLS and validates OAuth tokens and API keys." },
+            { "relationship-unique-id": "clients-api-gateway", "sequence-number": 2, "description": "The API gateway enforces rate limits and quotas, rejecting unauthenticated or abusive traffic before the traffic ever reaches a service." },
+            { "relationship-unique-id": "api-gateway-service-1", "sequence-number": 3, "description": "The API gateway routes and versions a request to the right backend service, here the first." },
+            { "relationship-unique-id": "api-gateway-service-2", "sequence-number": 4, "description": "The API gateway routes and versions another request to the second backend service." },
+            { "relationship-unique-id": "api-gateway-service-3", "sequence-number": 5, "description": "The API gateway routes and versions another request to the third backend service." }
+          ] }
+      ]
+    },
+    casb: {
+      "nodes": [
+        { "unique-id": "users", "node-type": "actor", "name": "Users", "description": "The users, whose work has moved to SaaS, and between whom and the cloud apps a Cloud Access Security Broker sits." },
+        { "unique-id": "casb", "node-type": "service", "name": "CASB", "description": "A Cloud Access Security Broker, which restores the choke point a corporate network used to give security teams by sitting between users and cloud apps, as a proxy in the traffic path or via API integration with the SaaS provider; a CASB shows which cloud services are actually being used, including unsanctioned shadow IT, enforces access and data policies, detects risky configurations and applies data-loss-prevention controls to information moving in and out, and is one of the core components of a Secure Access Service Edge / Security Service Edge stack, alongside secure web gateways and ZTNA, with the goal of consistent governance over data that now lives in dozens of third-party clouds; inline proxying gives real-time control but can break apps, and API mode is gentler but after-the-fact." },
+        { "unique-id": "saas-app-1", "node-type": "service", "name": "SaaS app", "description": "A sanctioned SaaS app, one of the cloud apps that work has moved to, with a CASB sitting between the app and the users." },
+        { "unique-id": "saas-app-2", "node-type": "service", "name": "SaaS app", "description": "A sanctioned SaaS app, one of the cloud apps that work has moved to, with a CASB sitting between the app and the users." },
+        { "unique-id": "shadow-it", "node-type": "service", "name": "Shadow IT", "description": "An unsanctioned cloud service, shadow IT, which a CASB shows is actually being used." }
+      ],
+      "relationships": [
+        { "unique-id": "users-casb", "description": "The users' traffic to cloud apps passes the CASB when the CASB sits as a proxy in the traffic path.",
+          "relationship-type": { "interacts": { "actor": "users", "nodes": ["casb"] } } },
+        { "unique-id": "casb-saas-app-1", "description": "The CASB sits between the users and the first sanctioned SaaS app, as a proxy in the traffic path or via API integration with the SaaS provider, enforcing access and data policies and applying data-loss-prevention controls to information moving in and out.",
+          "relationship-type": { "connects": { "source": { "node": "casb" }, "destination": { "node": "saas-app-1" } } } },
+        { "unique-id": "casb-saas-app-2", "description": "The CASB sits between the users and the second sanctioned SaaS app, as a proxy in the traffic path or via API integration with the SaaS provider, enforcing access and data policies and applying data-loss-prevention controls to information moving in and out.",
+          "relationship-type": { "connects": { "source": { "node": "casb" }, "destination": { "node": "saas-app-2" } } } },
+        { "unique-id": "casb-shadow-it", "description": "The CASB sits between the users and the unsanctioned cloud service as well, and shows that the shadow IT is actually being used.",
+          "relationship-type": { "connects": { "source": { "node": "casb" }, "destination": { "node": "shadow-it" } } } }
+      ],
+      "flows": [
+        { "unique-id": "broker-in-between", "name": "A broker in between",
+          "description": "User traffic to SaaS passes a broker that reveals shadow IT, enforces access policy, and applies data controls in or out of the cloud.",
+          "transitions": [
+            { "relationship-unique-id": "users-casb", "sequence-number": 1, "description": "The users' traffic to cloud apps reaches the CASB, which sits between users and cloud apps." },
+            { "relationship-unique-id": "casb-saas-app-1", "sequence-number": 2, "description": "The CASB passes the traffic on to a sanctioned SaaS app, enforcing access and data policies and applying data-loss-prevention controls to information moving in and out." },
+            { "relationship-unique-id": "casb-saas-app-2", "sequence-number": 3, "description": "Traffic to a second sanctioned SaaS app passes the CASB the same way." },
+            { "relationship-unique-id": "casb-shadow-it", "sequence-number": 4, "description": "Traffic to an unsanctioned cloud service passes the CASB too, which shows that the shadow IT is actually being used." }
+          ] }
+      ]
+    },
+    dpu: {
+      "nodes": [
+        { "unique-id": "network", "node-type": "network", "name": "Network", "description": "The network, whose traffic passes through the DPU before the traffic ever reaches the host." },
+        { "unique-id": "dpu", "node-type": "chip", "name": "DPU", "description": "A Data Processing Unit, a system-on-chip that fuses a high-speed network interface with the DPU's own general-purpose CPU cores (typically Arm) and hardware accelerators, so the data-centre infrastructure work (packet switching, encryption, storage virtualisation, telemetry, firewalling) runs on the card instead of stealing host CPU cycles; NVIDIA frames the DPU as the third pillar of computing after the CPU and GPU, the DPU is the hardware foundation for putting a zero-trust enforcement point on every server, and NVIDIA BlueField, AWS Nitro, Intel IPU and AMD Pensando are the leading implementations; the enforcement is only as trustworthy as the DPU's own firmware and software, a new privileged attack surface, and a DPU adds cost and vendor-specific tooling to every server." },
+        { "unique-id": "cpu-cores", "node-type": "processor", "name": "Own CPU cores", "description": "The DPU's own general-purpose CPU cores, typically Arm; that the cores run their own operating system in a domain the host cannot see or control is what separates a DPU from an ordinary SmartNIC." },
+        { "unique-id": "security-policy", "node-type": "service", "name": "Security policy", "description": "The security policy that executes out-of-band on the DPU: the microsegmentation, line-rate encryption, intrusion detection and keys living on the DPU, which stay intact even if the host OS is completely compromised, because the enforcement an attacker would want to disable sits on a separate processor the attacker cannot reach." },
+        { "unique-id": "host", "node-type": "system", "name": "Host", "description": "The host CPU and OS, which traffic reaches only after passing through the DPU, and which cannot see or control the DPU's own domain." }
+      ],
+      "relationships": [
+        { "unique-id": "dpu-parts", "description": "The DPU's own CPU cores and the security policy that executes out-of-band both live on the DPU, a separate processor from the host.",
+          "relationship-type": { "composed-of": { "container": "dpu", "nodes": ["cpu-cores", "security-policy"] } } },
+        { "unique-id": "network-security-policy", "description": "Traffic from the network passes through the DPU's security policy before the traffic ever reaches the host.",
+          "relationship-type": { "connects": { "source": { "node": "network" }, "destination": { "node": "security-policy" } } } },
+        { "unique-id": "security-policy-host", "description": "Traffic that has passed through the DPU's security policy reaches the host.",
+          "relationship-type": { "connects": { "source": { "node": "security-policy" }, "destination": { "node": "host" } } } }
+      ],
+      "flows": [
+        { "unique-id": "dpu-first", "name": "Through the DPU first",
+          "description": "Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.",
+          "transitions": [
+            { "relationship-unique-id": "network-security-policy", "sequence-number": 1, "description": "Traffic from the network passes through the DPU, where security policy executes out-of-band, before the traffic ever reaches the host." },
+            { "relationship-unique-id": "security-policy-host", "sequence-number": 2, "description": "The traffic then reaches the host." }
+          ] }
+      ]
+    },
+    bluefield: {
+      "nodes": [
+        { "unique-id": "network", "node-type": "network", "name": "Network", "description": "The network, the far end of the link to the BlueField chip's ConnectX network ASIC." },
+        { "unique-id": "bluefield", "node-type": "chip", "name": "BlueField DPU", "description": "BlueField, NVIDIA's DPU product line and the concrete silicon behind the concept, each chip pairing an NVIDIA ConnectX network ASIC with a cluster of Arm cores running their own Linux, onboard memory, and accelerators for crypto, compression and storage; BlueField-3, the current production generation, delivers 400 Gb/s and 16 Arm cores, BlueField-4, announced in late 2025, scales to 800 Gb/s for the AI-factory era and is in early availability rather than general release, and BlueField is programmed with the DOCA framework; the dependency is concentration: firmware, DOCA services and the update path all come from one vendor." },
+        { "unique-id": "connectx", "node-type": "nic", "name": "ConnectX", "description": "The NVIDIA ConnectX network ASIC that each BlueField chip pairs with the chip's Arm cores and accelerators." },
+        { "unique-id": "arm-cores", "node-type": "processor", "name": "Arm cores", "description": "A cluster of Arm cores running their own Linux, which each BlueField chip pairs with onboard memory (16 Arm cores on BlueField-3); the Arm subsystem is isolated from the host across PCIe, so operators run infrastructure and security services directly on the card." },
+        { "unique-id": "accelerators", "node-type": "accelerator", "name": "Accelerators", "description": "The BlueField chip's accelerators for crypto, compression and storage." },
+        { "unique-id": "root-of-trust", "node-type": "root-of-trust", "name": "Root of trust", "description": "A hardware root of trust with DICE-based measured boot and remote attestation, which proves the card and the card's software are unmodified." },
+        { "unique-id": "ipsec-tls", "node-type": "service", "name": "IPsec/TLS", "description": "Line-rate IPsec/TLS on the card, which encrypts traffic at wire speed with no host CPU cost." },
+        { "unique-id": "doca-argus", "node-type": "service", "name": "DOCA Argus", "description": "DOCA Argus, which performs agentless host introspection from the DPU: detection that host-resident malware cannot hide from and, once the card is in zero-trust (restricted) mode rather than the card's host-trusted default, cannot disable." },
+        { "unique-id": "host", "node-type": "system", "name": "Host", "description": "The host, with a CPU and OS separate from the card, from which the BlueField's Arm subsystem is isolated across PCIe." }
+      ],
+      "relationships": [
+        { "unique-id": "bluefield-parts", "description": "Each BlueField chip pairs a ConnectX network ASIC with Arm cores and accelerators, is anchored by a hardware root of trust, and runs line-rate IPsec/TLS and DOCA Argus directly on the card.",
+          "relationship-type": { "composed-of": { "container": "bluefield", "nodes": ["connectx", "arm-cores", "accelerators", "root-of-trust", "ipsec-tls", "doca-argus"] } } },
+        { "unique-id": "network-connectx", "description": "Traffic from the network reaches the BlueField chip's ConnectX network ASIC.",
+          "relationship-type": { "connects": { "source": { "node": "network" }, "destination": { "node": "connectx" } } } },
+        { "unique-id": "bluefield-host", "description": "The BlueField card sits across PCIe from the host, with the card's Arm subsystem isolated from the host.",
+          "relationship-type": { "connects": { "source": { "node": "bluefield" }, "destination": { "node": "host" } } } },
+        { "unique-id": "doca-argus-host", "description": "DOCA Argus reads the host's processes and memory from the DPU to catch reverse shells, injected code and hidden processes.",
+          "relationship-type": { "connects": { "source": { "node": "doca-argus" }, "destination": { "node": "host" } } } }
+      ],
+      "flows": [
+        { "unique-id": "traffic-and-introspection", "name": "Network traffic and host introspection",
+          "description": "A ConnectX NIC plus Arm cores and accelerators running their own OS — BlueField hosts networking, storage, and security on the card, anchored by a hardware root of trust.",
+          "transitions": [
+            { "relationship-unique-id": "network-connectx", "sequence-number": 1, "description": "Traffic from the network reaches the ConnectX network ASIC each BlueField chip starts with." },
+            { "relationship-unique-id": "doca-argus-host", "sequence-number": 2, "description": "DOCA Argus reads the host's processes and memory to catch malware hiding on the host." }
+          ] }
+      ]
+    },
+    supernic: {
+      "nodes": [
+        { "unique-id": "gpu-1", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-2", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-3", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-4", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "supernic-1", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's class of network accelerator built for the east-west, GPU-to-GPU traffic of large AI clusters rather than the broad infrastructure offload a DPU targets: where a DPU is an infrastructure computer, a SuperNIC is a throughput engine and a pillar of NVIDIA's Spectrum-X Ethernet platform, delivering 400 Gb/s to 1.6 Tb/s of RDMA (remote direct memory access) over Converged Ethernet (RoCE) per GPU; the name covers two structurally different products, the BlueField-3 SuperNIC, a slimmed-down DPU with eight Arm cores, and the ConnectX-8/9 SuperNICs, pure network adapters with no separate operating system; either way the remit is performance over policy, so a SuperNIC's zero-trust story is thinner than a full DPU's, since the agentless host-introspection service, DOCA Argus, runs only on BlueField in DPU mode, though SuperNICs still encrypt traffic in flight at line rate." },
+        { "unique-id": "supernic-2", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's network accelerator for east-west, GPU-to-GPU traffic, delivering 400 Gb/s to 1.6 Tb/s of RDMA over Converged Ethernet (RoCE) per GPU." },
+        { "unique-id": "supernic-3", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's network accelerator for east-west, GPU-to-GPU traffic, delivering 400 Gb/s to 1.6 Tb/s of RDMA over Converged Ethernet (RoCE) per GPU." },
+        { "unique-id": "supernic-4", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's network accelerator for east-west, GPU-to-GPU traffic, delivering 400 Gb/s to 1.6 Tb/s of RDMA over Converged Ethernet (RoCE) per GPU." },
+        { "unique-id": "fabric", "node-type": "network", "name": "Spectrum-X Ethernet fabric", "description": "The Ethernet fabric of NVIDIA's Spectrum-X platform, which carries the east-west traffic between GPUs; adaptive routing and congestion control, part of the Spectrum-X platform, let thousands of GPUs exchange gradients without the network becoming the bottleneck." }
+      ],
+      "relationships": [
+        { "unique-id": "gpu-1-supernic-1", "description": "The first GPU's east-west, GPU-to-GPU traffic goes through the first SuperNIC, one SuperNIC per GPU.",
+          "relationship-type": { "connects": { "source": { "node": "gpu-1" }, "destination": { "node": "supernic-1" } } } },
+        { "unique-id": "supernic-1-fabric", "description": "The first SuperNIC carries the first GPU's traffic onto the Spectrum-X Ethernet fabric as RDMA over Converged Ethernet (RoCE), at 400 Gb/s to 1.6 Tb/s.",
+          "relationship-type": { "connects": { "source": { "node": "supernic-1" }, "destination": { "node": "fabric" } } } },
+        { "unique-id": "gpu-2-supernic-2", "description": "The second GPU's east-west, GPU-to-GPU traffic goes through the second SuperNIC, one SuperNIC per GPU.",
+          "relationship-type": { "connects": { "source": { "node": "gpu-2" }, "destination": { "node": "supernic-2" } } } },
+        { "unique-id": "supernic-2-fabric", "description": "The second SuperNIC carries the second GPU's traffic onto the Spectrum-X Ethernet fabric as RDMA over Converged Ethernet (RoCE), at 400 Gb/s to 1.6 Tb/s.",
+          "relationship-type": { "connects": { "source": { "node": "supernic-2" }, "destination": { "node": "fabric" } } } },
+        { "unique-id": "gpu-3-supernic-3", "description": "The third GPU's east-west, GPU-to-GPU traffic goes through the third SuperNIC, one SuperNIC per GPU.",
+          "relationship-type": { "connects": { "source": { "node": "gpu-3" }, "destination": { "node": "supernic-3" } } } },
+        { "unique-id": "supernic-3-fabric", "description": "The third SuperNIC carries the third GPU's traffic onto the Spectrum-X Ethernet fabric as RDMA over Converged Ethernet (RoCE), at 400 Gb/s to 1.6 Tb/s.",
+          "relationship-type": { "connects": { "source": { "node": "supernic-3" }, "destination": { "node": "fabric" } } } },
+        { "unique-id": "gpu-4-supernic-4", "description": "The fourth GPU's east-west, GPU-to-GPU traffic goes through the fourth SuperNIC, one SuperNIC per GPU.",
+          "relationship-type": { "connects": { "source": { "node": "gpu-4" }, "destination": { "node": "supernic-4" } } } },
+        { "unique-id": "supernic-4-fabric", "description": "The fourth SuperNIC carries the fourth GPU's traffic onto the Spectrum-X Ethernet fabric as RDMA over Converged Ethernet (RoCE), at 400 Gb/s to 1.6 Tb/s.",
+          "relationship-type": { "connects": { "source": { "node": "supernic-4" }, "destination": { "node": "fabric" } } } }
+      ],
+      "flows": [
+        { "unique-id": "east-west", "name": "East-west, GPU to GPU",
+          "description": "Built for AI's east-west traffic: each GPU gets line-rate RoCE Ethernet with the adaptive routing and congestion control that keep huge training jobs from stalling.",
+          "transitions": [
+            { "relationship-unique-id": "gpu-1-supernic-1", "sequence-number": 1, "description": "The first GPU's east-west traffic goes to the first SuperNIC." },
+            { "relationship-unique-id": "supernic-1-fabric", "sequence-number": 2, "description": "The first SuperNIC delivers the traffic onto the Spectrum-X Ethernet fabric as RoCE." },
+            { "relationship-unique-id": "gpu-2-supernic-2", "sequence-number": 3, "description": "The second GPU's east-west traffic goes to the second SuperNIC." },
+            { "relationship-unique-id": "supernic-2-fabric", "sequence-number": 4, "description": "The second SuperNIC delivers the traffic onto the Spectrum-X Ethernet fabric as RoCE." },
+            { "relationship-unique-id": "gpu-3-supernic-3", "sequence-number": 5, "description": "The third GPU's east-west traffic goes to the third SuperNIC." },
+            { "relationship-unique-id": "supernic-3-fabric", "sequence-number": 6, "description": "The third SuperNIC delivers the traffic onto the Spectrum-X Ethernet fabric as RoCE." },
+            { "relationship-unique-id": "gpu-4-supernic-4", "sequence-number": 7, "description": "The fourth GPU's east-west traffic goes to the fourth SuperNIC." },
+            { "relationship-unique-id": "supernic-4-fabric", "sequence-number": 8, "description": "The fourth SuperNIC delivers the traffic onto the Spectrum-X Ethernet fabric as RoCE." }
           ] }
       ]
     },
