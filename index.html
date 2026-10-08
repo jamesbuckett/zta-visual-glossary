@@ -4268,9 +4268,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-b" x="596" y="47">Response</text>
         </g>
         <g data-s="2" data-calm="database">
-          ${cyl(552, 208, 144, 68)}
-          ${icon('database', 564, 228)}
-          <text class="t-b" x="596" y="245">Database</text>
+          ${cyl(552, 216, 144, 52)}
+          ${icon('database', 564, 224)}
+          <text class="t-b" x="596" y="241">Database</text>
         </g>
         <g data-s="5" data-note="call-out">
           <rect class="box" x="24" y="216" width="312" height="52" rx="8"/>
@@ -6141,7 +6141,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="4" data-calm="ebpf-b-pod-b" x1="590" y1="206" x2="590" y2="182" marker-end="url(#ah-mut)"/>
 
         <g data-s="4" data-calm="policy">
-          ${doc(260, 116, 200, 84)}
+          ${doc(260, 116, 200, 96)}
           ${icon('list-checks', 276, 130)}
           <text class="t-b" x="308" y="148">Policy</text>
           <text class="t-sm t-mut" x="308" y="166">identity to identity</text>
@@ -6792,7 +6792,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <g data-s="1 3 4" data-calm="security-policy">
           <rect class="box" x="380" y="134" width="280" height="78" rx="8"/>
           ${icon('shield', 396, 146)}
-          <text class="t-b" x="428" y="164">Security policy</text>
+          <text class="t-b" x="428" y="164">Enforcement</text>
           <text class="t-sm t-mut" x="428" y="182">microsegmentation, encryption</text>
           <text class="t-sm t-mut" x="428" y="199">intrusion detection</text>
         </g>
@@ -7004,7 +7004,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="236" y="12" width="248" height="52" rx="8"/>
           ${icon('cog', 252, 26)}
           <text class="t-b" x="284" y="34">Controller</text>
-          <text class="t-sm t-mut" x="284" y="52">OpenFlow, OVSDB</text>
+          <text class="t-sm t-mut" x="284" y="52">OpenFlow</text>
         </g>
         <g data-calm="host">
           <rect class="zone" x="16" y="84" width="504" height="216" rx="10"/>
@@ -7513,11 +7513,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="324" y="198">holds credentials</text>
         </g>
         <g data-s="4" data-calm="metrics-server">
-          <rect class="box" x="276" y="236" width="200" height="72" rx="8"/>
-          ${icon('server', 292, 250)}
-          <text class="t-b" x="324" y="268">Metrics server</text>
-          <text class="t-sm t-mut" x="324" y="286">external</text>
-          <text class="t-sm t-mut" x="324" y="301">metrics API</text>
+          <rect class="box" x="150" y="236" width="200" height="72" rx="8"/>
+          ${icon('server', 166, 250)}
+          <text class="t-b" x="198" y="268">Metrics server</text>
+          <text class="t-sm t-mut" x="198" y="286">external</text>
+          <text class="t-sm t-mut" x="198" y="301">metrics API</text>
         </g>
         <g data-s="1 3 4" data-calm="workload">
           <rect class="box" x="524" y="20" width="172" height="72" rx="8"/>
@@ -7538,7 +7538,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="3" data-calm="operator-event-source" x1="226" y1="44" x2="274" y2="44" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="3" data-calm="operator-workload" x1="478" y1="56" x2="522" y2="56" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="500" y="46" text-anchor="middle">0 to 1</text>
-        <line class="flow" data-s="4" data-calm="metrics-server-hpa" x1="478" y1="272" x2="522" y2="272" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="metrics-server-hpa" x1="352" y1="272" x2="522" y2="272" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="4" data-calm="hpa-workload" x1="610" y1="234" x2="610" y2="94" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="620" y="168">1 to N</text>
         <line class="flow" data-s="5" data-calm="triggerauthentication-operator" x1="376" y1="146" x2="376" y2="94" marker-end="url(#ah-mut)"/>
@@ -7547,7 +7547,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         ${badge(1, 208, 76, '1')}
         ${badge(2, 250, 122, '2')}
         ${badge(3, 250, 44, '3')}
-        ${badge(4, 500, 252, '4')}
+        ${badge(4, 437, 252, '4')}
         ${badge(5, 356, 120, '5')}
       </svg>`,
 
@@ -8020,60 +8020,60 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     calico: () => `
-      <svg class="dg" viewBox="0 0 720 318" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
+      <svg class="dg" viewBox="0 0 720 298" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
         ${[['a', 'Node A', 24, 200, 36], ['b', 'Node B', 404, 416, 536]].map(([n, name, zx, px, fx]) => `
           <g data-calm="node-${n}">
-            <rect class="zone" x="${zx}" y="16" width="292" height="128" rx="10"/>
+            <rect class="zone" x="${zx}" y="16" width="292" height="110" rx="10"/>
             <text class="t-sm t-mut" x="${zx + 12}" y="34">${name}</text>
           </g>
           <g data-s="1 2" data-calm="pod-${n}">
-            <rect class="box" x="${px}" y="44" width="104" height="84" rx="8"/>
+            <rect class="box" x="${px}" y="44" width="104" height="66" rx="8"/>
             ${icon('box', px + 12, 58)}
             <text class="t-b" x="${px + 44}" y="72">Pod</text>
             <text class="t-sm t-mut" x="${px + 44}" y="90">own IP</text>
           </g>
           <g data-s="3" data-calm="felix-${n}">
-            <rect class="box" x="${fx}" y="44" width="148" height="84" rx="8"/>
+            <rect class="box" x="${fx}" y="44" width="148" height="66" rx="8"/>
             ${icon('cog', fx + 12, 58)}
             <text class="t-b" x="${fx + 44}" y="72">Felix</text>
             <text class="t-sm t-mut" x="${fx + 44}" y="90">routes, ACLs</text>
             <text class="t-sm t-mut" x="${fx + 44}" y="104">into the kernel</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" data-calm="pod-a-pod-b" x1="306" y1="86" x2="414" y2="86" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="108" text-anchor="middle">no tunnel</text>
-        <path class="flow" data-s="1" data-calm="node-a-node-b" d="M170 146 V168 H550 V146" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="162" text-anchor="middle">BGP: each node advertises its block</text>
+        <line class="flow" data-s="2" data-calm="pod-a-pod-b" x1="306" y1="77" x2="414" y2="77" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="100" text-anchor="middle">no tunnel</text>
+        <path class="flow" data-s="1" data-calm="node-a-node-b" d="M170 128 V150 H550 V128" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="144" text-anchor="middle">BGP: each node advertises its block</text>
 
-        <text class="t-sm t-mut" data-s="4" x="24" y="204">ACLs compile from tiers, evaluated in order</text>
+        <text class="t-sm t-mut" data-s="4" x="24" y="186">ACLs compile from tiers, evaluated in order</text>
         <g data-s="4" data-calm="platform-tier">
-          ${doc(24, 218, 200, 84)}
-          ${icon('building-2', 40, 232)}
-          <text class="t-b" x="72" y="246">Platform tier</text>
-          <text class="t-sm t-mut" x="72" y="264">global rules</text>
-          <text class="t-sm t-mut" x="72" y="278">high precedence</text>
+          ${doc(24, 200, 200, 84)}
+          ${icon('building-2', 40, 214)}
+          <text class="t-b" x="72" y="228">Platform tier</text>
+          <text class="t-sm t-mut" x="72" y="246">global rules</text>
+          <text class="t-sm t-mut" x="72" y="260">high precedence</text>
         </g>
-        <line class="flow" data-s="4" data-calm="platform-tier-default-tier" x1="226" y1="260" x2="262" y2="260" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="244" y="250" text-anchor="middle">Pass</text>
+        <line class="flow" data-s="4" data-calm="platform-tier-default-tier" x1="226" y1="242" x2="262" y2="242" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="244" y="232" text-anchor="middle">Pass</text>
         <g data-s="5" data-calm="default-tier">
-          ${doc(264, 218, 200, 84)}
-          ${icon('users', 280, 232)}
-          <text class="t-b" x="312" y="246">Default tier</text>
-          <text class="t-sm t-mut" x="312" y="264">developers' policies</text>
-          <text class="t-sm t-mut" x="312" y="278">order 1,000,000</text>
+          ${doc(264, 200, 200, 84)}
+          ${icon('users', 280, 214)}
+          <text class="t-b" x="312" y="228">Default tier</text>
+          <text class="t-sm t-mut" x="312" y="246">developers' policies</text>
+          <text class="t-sm t-mut" x="312" y="260">order 1,000,000</text>
         </g>
         <g data-s="5" data-note="call-out">
-          <rect class="box" x="504" y="218" width="192" height="84" rx="8"/>
-          ${icon('lock', 520, 232)}
-          <text class="t-b" x="552" y="246">RBAC per tier</text>
-          <text class="t-sm t-mut" x="552" y="264">developers cannot</text>
-          <text class="t-sm t-mut" x="552" y="278">override above</text>
+          <rect class="box" x="504" y="200" width="192" height="84" rx="8"/>
+          ${icon('lock', 520, 214)}
+          <text class="t-b" x="552" y="228">RBAC per tier</text>
+          <text class="t-sm t-mut" x="552" y="246">developers cannot</text>
+          <text class="t-sm t-mut" x="552" y="260">override above</text>
         </g>
 
-        ${badge(1, 170, 157, '1')}
-        ${badge(2, 330, 86, '2')}
-        ${badge(3, 668, 58, '3')}
-        ${badge(4, 198, 238, '4')}
-        ${badge(5, 438, 238, '5')}
+        ${badge(1, 200, 150, '1')}
+        ${badge(2, 330, 77, '2')}
+        ${badge(3, 560, 34, '3')}
+        ${badge(4, 198, 220, '4')}
+        ${badge(5, 438, 220, '5')}
       </svg>`,
 
     envoy: () => `
@@ -10836,23 +10836,23 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "network", "node-type": "network", "name": "Network", "description": "The network, whose traffic passes through the DPU before the traffic ever reaches the host." },
         { "unique-id": "dpu", "node-type": "chip", "name": "DPU", "description": "A Data Processing Unit, a system-on-chip that fuses a high-speed network interface with the DPU's own general-purpose CPU cores (typically Arm) and hardware accelerators, so the data-centre infrastructure work (packet switching, encryption, storage virtualisation, telemetry, firewalling) runs on the card instead of stealing host CPU cycles; NVIDIA frames the DPU as the third pillar of computing after the CPU and GPU, the DPU is the hardware foundation for putting a zero-trust enforcement point on every server, and NVIDIA BlueField, AWS Nitro, Intel IPU and AMD Pensando are the leading implementations; the enforcement is only as trustworthy as the DPU's own firmware and software, a new privileged attack surface, and a DPU adds cost and vendor-specific tooling to every server." },
         { "unique-id": "cpu-cores", "node-type": "processor", "name": "Own CPU cores", "description": "The DPU's own general-purpose CPU cores, typically Arm; that the cores run their own operating system in a domain the host cannot see or control is what separates a DPU from an ordinary SmartNIC." },
-        { "unique-id": "security-policy", "node-type": "service", "name": "Security policy", "description": "The security policy that executes out-of-band on the DPU: even if the host OS is completely compromised, the microsegmentation, line-rate encryption and intrusion detection living on the DPU stay intact, and the enforcement an attacker would want to disable sits on a separate processor the attacker cannot reach." },
+        { "unique-id": "security-policy", "node-type": "service", "name": "Enforcement", "description": "The enforcement that executes out-of-band on the DPU: even if the host OS is completely compromised, the microsegmentation, line-rate encryption and intrusion detection living on the DPU stay intact, and the enforcement an attacker would want to disable sits on a separate processor the attacker cannot reach." },
         { "unique-id": "keys", "node-type": "data-asset", "name": "Keys", "description": "The keys living on the DPU, which stay intact even if the host OS is completely compromised." },
         { "unique-id": "host", "node-type": "system", "name": "Host", "description": "The host CPU and OS, which traffic reaches only after passing through the DPU, and which cannot see or control the DPU's own domain." }
       ],
       "relationships": [
-        { "unique-id": "dpu-parts", "description": "The DPU's own CPU cores, the security policy that executes out-of-band and the keys all live on the DPU, a separate processor from the host.",
+        { "unique-id": "dpu-parts", "description": "The DPU's own CPU cores, the enforcement that executes out-of-band and the keys all live on the DPU, a separate processor from the host.",
           "relationship-type": { "composed-of": { "container": "dpu", "nodes": ["cpu-cores", "security-policy", "keys"] } } },
-        { "unique-id": "network-security-policy", "description": "Traffic from the network passes through the DPU's security policy before the traffic ever reaches the host.",
+        { "unique-id": "network-security-policy", "description": "Traffic from the network passes through the DPU's enforcement before the traffic ever reaches the host.",
           "relationship-type": { "connects": { "source": { "node": "network" }, "destination": { "node": "security-policy" } } } },
-        { "unique-id": "security-policy-host", "description": "Traffic that has passed through the DPU's security policy reaches the host.",
+        { "unique-id": "security-policy-host", "description": "Traffic that has passed through the DPU's enforcement reaches the host.",
           "relationship-type": { "connects": { "source": { "node": "security-policy" }, "destination": { "node": "host" } } } }
       ],
       "flows": [
         { "unique-id": "dpu-first", "name": "Through the DPU first",
           "description": "Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.",
           "transitions": [
-            { "relationship-unique-id": "network-security-policy", "sequence-number": 1, "description": "Traffic from the network passes through the DPU, where security policy executes out-of-band, before the traffic ever reaches the host." },
+            { "relationship-unique-id": "network-security-policy", "sequence-number": 1, "description": "Traffic from the network passes through the DPU, where the enforcement executes out-of-band, before the traffic ever reaches the host." },
             { "relationship-unique-id": "security-policy-host", "sequence-number": 2, "description": "The traffic then reaches the host." }
           ] }
       ]
@@ -11099,7 +11099,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     react: {
       "nodes": [
-        { "unique-id": "root", "node-type": "component", "name": "Root", "description": "The root of the tree of reusable components that React lets you build a user interface as, holding state; each component's output is a function of the component's state and props, React's declarative model (describe what the UI should look like, not the steps to mutate the UI) made React the dominant front-end approach, and React covers only the view layer: routing and data fetching come from a framework or other libraries you must choose." },
+        { "unique-id": "root", "node-type": "component", "name": "Root", "description": "The root of the tree of reusable components that React lets you build a user interface as, which renders from state; each component's output is a function of the component's state and props. React's declarative model (describe what the UI should look like, not the steps to mutate the UI) made React the dominant front-end approach, and React covers only the view layer: routing and data fetching come from a framework or other libraries you must choose." },
         { "unique-id": "child-1", "node-type": "component", "name": "Child", "description": "A reusable child component in the tree, which gets data from the root as props and whose output is a function of the child's state and props." },
         { "unique-id": "child-2", "node-type": "component", "name": "Child", "description": "A reusable child component in the tree, which gets data from the root as props and whose output is a function of the child's state and props." },
         { "unique-id": "virtual-dom", "node-type": "data-asset", "name": "Virtual DOM", "description": "A lightweight virtual representation of the DOM, which React diffs when state changes so that only what changed is patched." },
@@ -11206,7 +11206,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "relationship-type": { "connects": { "source": { "node": "metrics-server" }, "destination": { "node": "hpa" } } } },
         { "unique-id": "hpa-workload", "description": "From one replica upward, the HPA scales the workload, so the familiar scaling behaviour still applies.",
           "relationship-type": { "connects": { "source": { "node": "hpa" }, "destination": { "node": "workload" } } } },
-        { "unique-id": "triggerauthentication-operator", "description": "TriggerAuthentication supplies the credential each scaler needs for every poll, keeping that credential out of the ScaledObject, which makes the operator the single place where every tenant's credentials pile up.",
+        { "unique-id": "triggerauthentication-operator", "description": "TriggerAuthentication supplies the credential each scaler needs for every poll, keeping that credential out of the ScaledObject.",
           "relationship-type": { "connects": { "source": { "node": "triggerauthentication" }, "destination": { "node": "operator" } } } }
       ],
       "flows": [
@@ -11230,7 +11230,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "verifier", "node-type": "service", "name": "Verifier", "description": "The verifier, from which eBPF's safety comes: before a program is accepted, the verifier statically analyses the program across every execution path to prove three things, that the program terminates, that the program never reads uninitialised memory or steps outside the program's bounds, and that the program's complexity stays inside what the analysis can carry, permitting loops only where the exit condition provably becomes true; the verifier proves memory safety and termination, not benignity: loading a program is a privileged operation for good reason, and an attacker who reaches CAP_BPF or CAP_SYS_ADMIN gains a kernel-resident foothold that conventional tooling is poorly placed to see, a documented rootkit technique rather than a theoretical one." },
         { "unique-id": "jit", "node-type": "service", "name": "JIT", "description": "JIT compilation, which only once the verifier has accepted a program compiles the program to native instructions, so the program runs at roughly the speed of compiled kernel code rather than in an interpreter." },
         { "unique-id": "hook", "node-type": "hook", "name": "Hook", "description": "A defined hook at which the kernel runs the program: a packet arriving at the driver (XDP), traffic control on an interface, a kernel function entry or return (kprobe), a static tracepoint, a socket operation, or a security hook (BPF LSM)." },
-        { "unique-id": "maps", "node-type": "database", "name": "Maps", "description": "Maps, which fix eBPF programs holding no state of their own: hash tables, arrays, LRU caches, ring buffers and longest-prefix-match tries, readable and writable both from the program and from a user-space agent, which is how counters, policy tables and event streams cross the boundary." }
+        { "unique-id": "maps", "node-type": "database", "name": "Maps", "description": "Maps, which make up for eBPF programs holding no state of their own: hash tables, arrays, LRU caches, ring buffers and longest-prefix-match tries, readable and writable both from the program and from a user-space agent, which is how counters, policy tables and event streams cross the boundary." }
       ],
       "relationships": [
         { "unique-id": "kernel-parts", "description": "The kernel holds the verifier and the JIT compilation a program passes through, the defined hooks at which the kernel runs the program, and the maps through which counters, policy tables and event streams cross the boundary with user space.",
@@ -11348,13 +11348,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "relationships": [
         { "unique-id": "node-a-felix-pod", "description": "A Felix agent and a pod run on Node A.",
           "relationship-type": { "deployed-in": { "container": "node-a", "nodes": ["felix-a", "pod-a"] } } },
-        { "unique-id": "node-b-pod-felix", "description": "A pod and a Felix agent run on Node B.",
-          "relationship-type": { "deployed-in": { "container": "node-b", "nodes": ["pod-b", "felix-b"] } } },
+        { "unique-id": "node-b-felix-pod", "description": "A Felix agent and a pod run on Node B.",
+          "relationship-type": { "deployed-in": { "container": "node-b", "nodes": ["felix-b", "pod-b"] } } },
         { "unique-id": "node-a-node-b", "description": "Each node's BGP daemon advertises the node's block of the pod address space to the other node.",
           "relationship-type": { "connects": { "source": { "node": "node-a" }, "destination": { "node": "node-b" } } } },
         { "unique-id": "pod-a-pod-b", "description": "A pod's packet crosses the wire from the pod on Node A to the pod on Node B carrying the pod's own source and destination address with nothing wrapped around the packet, which keeps the network legible (existing routers, firewalls and flow collectors see real endpoints rather than an opaque VXLAN blob) and costs no encapsulation overhead; where the underlay will not carry pod routes, which is most cloud VPCs, Calico falls back to a VXLAN or IP-in-IP overlay, optionally only across subnet boundaries so the common case stays native; Calico's WireGuard encryption is node-to-node rather than pod-to-pod: the host-to-host hop is protected, the pod-to-host segment on each machine is not, so root on a node still reads plaintext.",
           "relationship-type": { "connects": { "source": { "node": "pod-a" }, "destination": { "node": "pod-b" } } } },
-        { "unique-id": "platform-tier-default-tier", "description": "Tiers are evaluated by order, and the platform tier, evaluated first, can Pass a packet down to the default tier.",
+        { "unique-id": "platform-tier-default-tier", "description": "Tiers are evaluated by order, and the platform tier, evaluated before the default tier, can Pass a packet down to the default tier.",
           "relationship-type": { "connects": { "source": { "node": "platform-tier" }, "destination": { "node": "default-tier" } } } }
       ],
       "flows": [
@@ -11364,7 +11364,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "node-a-node-b", "sequence-number": 1, "description": "Node A's BGP daemon advertises Node A's block of the pod address space to Node B." },
             { "relationship-unique-id": "node-a-node-b", "sequence-number": 2, "description": "Node B's BGP daemon advertises Node B's block to Node A.", "direction": "destination-to-source" },
             { "relationship-unique-id": "pod-a-pod-b", "sequence-number": 3, "description": "The pod's packet crosses the wire carrying the pod's own source and destination address, with nothing wrapped around the packet." },
-            { "relationship-unique-id": "platform-tier-default-tier", "sequence-number": 4, "description": "The platform tier, evaluated first, can Pass a packet down to the default tier." }
+            { "relationship-unique-id": "platform-tier-default-tier", "sequence-number": 4, "description": "The platform tier, evaluated before the default tier, can Pass a packet down to the default tier." }
           ] }
       ]
     },
