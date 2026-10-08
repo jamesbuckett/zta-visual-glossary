@@ -6026,47 +6026,48 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     soar: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.">
         <g data-s="1" data-calm="siem">
-          <rect class="box" x="24" y="112" width="148" height="64" rx="8"/>
-          ${icon('activity', 40, 122)}
-          <text class="t-b" x="72" y="140">SIEM</text>
-          <text class="t-sm t-mut" x="72" y="158">alerts</text>
+          <rect class="box" x="24" y="16" width="168" height="56" rx="8"/>
+          ${icon('activity', 40, 30)}
+          <text class="t-b" x="72" y="38">SIEM</text>
+          <text class="t-sm t-mut" x="72" y="56">alerts</text>
         </g>
-        <g data-s="1" data-calm="soar">
-          <rect class="box-soft" x="232" y="8" width="220" height="284" rx="8"/>
-          ${icon('workflow', 244, 16)}
-          <text class="t-b" x="276" y="34">SOAR</text>
+        <line class="flow" data-s="1" data-calm="siem-soar" x1="108" y1="74" x2="108" y2="118" marker-end="url(#ah-mut)"/>
+        <g data-s="1 5" data-calm="soar">
+          <rect class="box" x="24" y="120" width="168" height="56" rx="8"/>
+          ${icon('workflow', 40, 136)}
+          <text class="t-b" x="72" y="153">SOAR</text>
         </g>
+        <line class="flow" data-s="5" data-calm="human-soar" x1="108" y1="178" x2="108" y2="222" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="human">
+          <rect class="box" x="24" y="224" width="168" height="56" rx="20"/>
+          ${icon('user', 40, 238)}
+          <text class="t-sm t-b" x="72" y="246">Human</text>
+          <text class="t-sm t-mut" x="72" y="264">destructive only</text>
+        </g>
+        <line class="flow" data-s="2" data-calm="soar-playbook" x1="194" y1="148" x2="238" y2="148" marker-end="url(#ah-mut)"/>
         <g data-s="1 2 3 4" data-calm="playbook">
-          ${doc(244, 48, 196, 236)}
-          ${icon('list-checks', 256, 58)}
-          <text class="t-b" x="288" y="76">Playbook</text>
+          ${doc(240, 16, 192, 264)}
+          ${icon('list-checks', 256, 28)}
+          <text class="t-b" x="288" y="46">Playbook</text>
         </g>
-        ${[['enrich', 92, '2'], ['decide', 152, '3'], ['act', 212, '4 5']].map(([t, y, s], i) => `
+        ${[['enrich', 72, '2'], ['decide', 136, '3'], ['act', 200, '4 5']].map(([t, y, s], i) => `
           <g data-s="${s}" data-note="call-out">
-            <rect class="box" x="256" y="${y}" width="168" height="44" rx="6"/>
-            <text class="t-sm t-b" x="340" y="${y + 27}" text-anchor="middle">${t}</text>
+            <rect class="box" x="252" y="${y}" width="168" height="44" rx="6"/>
+            <text class="t-sm t-b" x="336" y="${y + 27}" text-anchor="middle">${t}</text>
           </g>
-          ${i < 2 ? `<line class="flow" data-s="${i === 0 ? 3 : 4}" data-note="call-out" x1="340" y1="${y + 46}" x2="340" y2="${y + 58}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
-        <line class="flow" data-s="1" data-calm="siem-soar" x1="174" y1="144" x2="230" y2="144" marker-end="url(#ah-mut)"/>
-        ${[['isolate a host', 24], ['disable an account', 80], ['block an IP', 136], ['open a case', 192]].map(([t, y]) => `
+          ${i < 2 ? `<line class="flow" data-s="${i === 0 ? 3 : 4}" data-note="call-out" x1="336" y1="${y + 46}" x2="336" y2="${y + 62}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+        ${[['isolate a host', 32], ['disable an account', 96], ['block an IP', 160], ['open a case', 224]].map(([t, y]) => `
           <g data-s="4" data-note="call-out">
             <rect class="box" x="512" y="${y}" width="184" height="44" rx="8"/>
             <text class="t-sm" x="528" y="${y + 27}">${t}</text>
           </g>
-          <line class="flow" data-s="4" data-note="call-out" x1="426" y1="234" x2="510" y2="${y + 22}" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="5" data-calm="human">
-          <rect class="box" x="512" y="248" width="184" height="44" rx="20"/>
-          ${icon('user', 524, 258)}
-          <text class="t-sm t-b" x="556" y="268">Human</text>
-          <text class="t-sm t-mut" x="556" y="284">approves destructive</text>
-        </g>
-        <line class="flow" data-s="5" data-calm="human-playbook" x1="426" y1="246" x2="510" y2="268" marker-end="url(#ah-mut)"/>
+          <line class="flow" data-s="4" data-note="call-out" x1="422" y1="222" x2="510" y2="${y + 22}" marker-end="url(#ah-mut)"/>`).join('')}
 
-        ${badge(1, 202, 144, '1')}
-        ${badge(2, 408, 106, '2')}
-        ${badge(3, 408, 166, '3')}
-        ${badge(4, 408, 226, '4')}
-        ${badge(5, 470, 256, '5')}
+        ${badge(1, 128, 96, '1')}
+        ${badge(2, 404, 86, '2')}
+        ${badge(3, 404, 150, '3')}
+        ${badge(4, 404, 214, '4')}
+        ${badge(5, 128, 200, '5')}
       </svg>`,
 
     pqc: () => `
@@ -11517,24 +11518,25 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     soar: {
       "nodes": [
         { "unique-id": "siem", "node-type": "service", "name": "SIEM", "description": "A SIEM, one of the tools an analyst would otherwise click through, on top of whose detection SOAR sits and from which SOAR picks up each alert." },
-        { "unique-id": "soar", "node-type": "service", "name": "SOAR", "description": "SOAR, which exists to automate the repetitive triage toil of security teams that drown in alerts: SOAR connects to the tools an analyst would otherwise click through (SIEM, EDR, threat intelligence, ticketing, firewalls) and runs codified playbooks; by orchestrating across systems, SOAR cuts response time for routine alerts from hours of manual work to minutes or less and frees analysts for the judgement calls machines cannot make; SOAR is the automation-and-response layer that sits on top of SIEM detection in a security operations centre (SOC), and SOAR's risk is automating a wrong decision at machine speed." },
+        { "unique-id": "soar", "node-type": "service", "name": "SOAR", "description": "SOAR, which exists to automate the repetitive triage toil of security teams that drown in alerts: SOAR connects to the tools an analyst would otherwise click through (SIEM, EDR, threat intelligence, ticketing, firewalls) and runs codified playbooks; by orchestrating across systems, SOAR cuts response time for routine alerts from hours of manual work to minutes or less and frees analysts for the judgement calls machines cannot make; SOAR is the automation-and-response layer that sits on top of SIEM detection in a security operations centre (SOC), and SOAR's risk is automating a wrong decision at machine speed, so playbooks gate destructive actions behind human approval." },
         { "unique-id": "playbook", "node-type": "data-asset", "name": "Playbook", "description": "A codified playbook, which SOAR runs to enrich an alert, drawing on tools such as threat intelligence, decide whether the alert is real, and take action across the tools (isolate a host, disable an account, block an IP, open a case); playbooks gate destructive actions behind human approval." },
-        { "unique-id": "human", "node-type": "actor", "name": "Human", "description": "A human, behind whose approval playbooks gate destructive actions." }
+        { "unique-id": "human", "node-type": "actor", "name": "Human", "description": "A human, behind whose approval SOAR's playbooks gate destructive actions." }
       ],
       "relationships": [
         { "unique-id": "siem-soar", "description": "Each alert from SIEM detection passes to SOAR.",
           "relationship-type": { "connects": { "source": { "node": "siem" }, "destination": { "node": "soar" } } } },
-        { "unique-id": "soar-playbook", "description": "SOAR runs the codified playbook.",
-          "relationship-type": { "composed-of": { "container": "soar", "nodes": ["playbook"] } } },
-        { "unique-id": "human-playbook", "description": "The playbook gates a destructive action behind the human's approval.",
-          "relationship-type": { "interacts": { "actor": "human", "nodes": ["playbook"] } } }
+        { "unique-id": "soar-playbook", "description": "SOAR runs the codified playbook, which enriches the alert, decides whether the alert is real and acts across tools.",
+          "relationship-type": { "connects": { "source": { "node": "soar" }, "destination": { "node": "playbook" } } } },
+        { "unique-id": "human-soar", "description": "SOAR's playbooks gate destructive actions behind the human's approval.",
+          "relationship-type": { "interacts": { "actor": "human", "nodes": ["soar"] } } }
       ],
       "flows": [
         { "unique-id": "alert-to-action", "name": "Alert to action",
           "description": "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.",
           "transitions": [
             { "relationship-unique-id": "siem-soar", "sequence-number": 1, "description": "An alert from SIEM detection arrives, and SOAR picks the alert up." },
-            { "relationship-unique-id": "human-playbook", "sequence-number": 2, "description": "Before a destructive action, the playbook waits for human approval.", "direction": "destination-to-source" }
+            { "relationship-unique-id": "soar-playbook", "sequence-number": 2, "description": "SOAR runs the codified playbook, which enriches the alert, drawing on tools such as threat intelligence." },
+            { "relationship-unique-id": "human-soar", "sequence-number": 3, "description": "Before a destructive action, SOAR waits for human approval.", "direction": "destination-to-source" }
           ] }
       ]
     },
