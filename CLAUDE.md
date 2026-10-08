@@ -1,8 +1,8 @@
 # CLAUDE.md
 
 A browsable visual glossary of IT, AI, networking and security terms. Everything ships in
-one self-contained `index.html` — markup, styles, the `TERMS` data array, and
-hand-authored inline SVG diagrams. No build step and no runtime dependencies; the
+one self-contained `index.html` — markup, styles, the `TERMS` data array,
+hand-authored inline SVG diagrams, and the `CALM` models behind them. No build step and no runtime dependencies; the
 `.mjs` files at the root are tooling, not part of the page.
 
 ## Adding or editing a term
@@ -29,6 +29,12 @@ verification loop.
   depends on survive the compression. `validate.mjs` checks only the count, the title
   length, the 30-word cap and word-for-word copies; the rest are review rules, so re-read
   each card against the explainer.
+- **Every diagram has a CALM model and matches it.** The model in `CALM` is written from
+  the explainer in the FINOS CALM 1.2 format; the drawing's shapes, connectors and
+  containment follow it, tagged with `data-calm`. Anything drawn that is not a component
+  or a relationship is marked `data-note`. A model claims only what the explainer says.
+  `verify.mjs` checks the match; whether the model is a fair reading of the explainer is
+  a review rule.
 - **Sources must be verified live**, and authoritative: NIST / IETF / the standards body
   itself preferred, a vendor glossary acceptable. When WebFetch returns 404 or an empty
   body for a site that ought to be authoritative (`eur-lex.europa.eu`,

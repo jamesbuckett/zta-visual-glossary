@@ -126,7 +126,7 @@ const page = (o, m = GOOD) => withModel(withDiagram(withTour(base, STEPS), svg(o
 const CASES = [
   // [name, build, checker, expected exit, rule expected in the report, message fragment]
   ['good model validates', () => withModel(base, GOOD), 'validate', 0, null],
-  ['term without a model accepted during migration', () => withModel(base, null), 'validate', 0, null],
+  ['term without a model rejected', () => withModel(base, null), 'validate', 1, 'calm-data', /no CALM model/],
   ['model for an unknown term id rejected', () => withModel(base, GOOD, 'not-a-term'), 'validate', 1, 'calm-data', /not a term/],
   ['node without a description rejected', () => withModel(base, model((m) => { delete m.nodes[0].description; })), 'validate', 1, 'calm-data', /schema/],
   ['extra top-level key rejected', () => withModel(base, model((m) => { m.metadata = {}; })), 'validate', 1, 'calm-data', /only nodes, relationships and flows/],
@@ -151,7 +151,7 @@ const CASES = [
 
   // Check (e): the drawing against its model.
   ['good drawing verifies', () => page(), 'verify', 0, null],
-  ['term without a model verifies during migration', () => withModel(base, null), 'verify', 0, null],
+  ['term without a model caught by verify', () => withModel(base, null), 'verify', 1, 'calm', /no CALM model/],
   ['node not drawn caught', () => page({ storeTag: '' }), 'verify', 1, 'calm', /drawn 0 times/],
   ['title that differs from the name caught', () => page({ storeName: 'Storage' }), 'verify', 1, 'calm', /no label reading "Store"/],
   ['database drawn as a plain box caught',

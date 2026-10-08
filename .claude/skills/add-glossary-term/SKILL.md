@@ -363,4 +363,6 @@ Two commits, direct to `main`, both with the `Co-Authored-By` trailer:
 1. `feat: add <Term> to the glossary` — `index.html`, `README.md`, `glossary.txt`
 2. `chore: refresh screenshots for the <term> entry` — `screenshots/`
 
+The term's CALM model and its data-calm tags are part of commit 1.
+
 Push only when James asks.

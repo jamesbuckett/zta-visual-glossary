@@ -9,7 +9,7 @@
 
 ## About
 
-Explains 105 IT, AI, networking, and security terms on one self-contained HTML page. Each entry pairs a short TL;DR, a custom inline-SVG diagram you can step through part by part, and flash-card takeaways with the full explainer one click away — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar (on wide screens), filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
+Explains 105 IT, AI, networking, and security terms on one self-contained HTML page. Each entry pairs a short TL;DR, a custom inline-SVG diagram you can step through part by part, flash-card takeaways with the full explainer one click away, and a CALM model of the diagram to view or download — so concepts like TLS, mTLS, SPIFFE/SPIRE, and microsegmentation are something you can see, not just read. Browse the full set from a sticky A–Z table-of-contents sidebar (on wide screens), filter with search, or jump straight to any term. No build step and no dependencies: open `index.html` in a browser or visit the [live page](https://zta-visual-glossary.vercel.app).
 
 ## Usage
 
@@ -39,8 +39,9 @@ screenshot.mjs   # Playwright capture across desktop / tablet / mobile viewports
 verify.mjs       # renders every term and checks its diagram geometry (npm run verify)
 validate.mjs     # static linter enforcing the style-guide design rules
 _terms.mjs       # shared reader for the TERMS / tag arrays in index.html
+_calm.mjs        # checks the CALM models against the vendored CALM 1.2 schema
 _launch.mjs      # shared Chromium launcher used by the tooling
-test/            # fixtures proving validate/verify catch broken tours and takeaway tiles (npm run test:tour, npm run test:takeaways)
+test/            # fixtures proving validate/verify catch broken tours, takeaways and CALM models, plus the vendored CALM schema (npm run test:tour, npm run test:takeaways, npm run test:calm)
 docs/            # design specs and plans
 screenshots/     # generated preview images
 ```

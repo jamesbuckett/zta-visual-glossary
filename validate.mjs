@@ -158,7 +158,7 @@ if (html.includes('const TERMS = [')) {
   let models = null;
   try { models = extractObject(html, 'CALM'); } catch (e) { err('data-parse', `CALM: ${e.message}`); }
   if (models) {
-    for (const f of await checkModels(models, terms.map((t) => t.id), { requireAll: false })) err(f.rule, f.msg);
+    for (const f of await checkModels(models, terms.map((t) => t.id), { requireAll: true })) err(f.rule, f.msg);
   }
 }
 

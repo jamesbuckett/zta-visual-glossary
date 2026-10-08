@@ -157,6 +157,11 @@ for (const d of DIAGRAM_IDS) {
 for (const t of TERMS) {
   if (!Array.isArray(t.takeaways) || t.takeaways.length === 0) err('takeaways', `${t.id}: no takeaways — every term has tiles`);
 }
+// Checked here for the same reason: without a model the detail view cannot
+// render its disclosure.
+for (const t of TERMS) {
+  if (!CALM[t.id]) err('calm', `${t.id}: no CALM model — every term has one`);
+}
 
 // -----------------------------------------------------------------------------
 // Which terms to render
@@ -891,7 +896,7 @@ for (const t of targets) {
     await page.setViewportSize({ width: 1440, height: 1200 });
   }
 
-  // Check (e). A term without a model is skipped until every term has one.
+  // Check (e). A term without a model was reported by the static check.
   const model = CALM[t.id];
   if (model) {
     checkDrawing(t.id, model, await page.evaluate(CALM_PROBE));
