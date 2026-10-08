@@ -137,7 +137,10 @@ built-in `node-type` that honestly fits; otherwise use a custom kebab-case type 
   Kubernetes object.
 - Something a component reads and writes as it runs (a cache, a lookup table, an index,
   a log) is a `database`. Something made once (a certificate, a manifest, a policy file)
-  is a `data-asset`. Whether an artefact is a node at all is a
+  is a `data-asset`. The line between them is persistence: a `database` outlives the
+  component's runs and is read and written by them; a representation a component builds
+  afresh and hands on each time it runs (React's virtual DOM, a rendered template) is a
+  `data-asset`. Whether an artefact is a node at all is a
   separate question: it is one when it is what the term defines or exists to manage (a JWT, an
   SVID, a SPIFFE ID, a SAML assertion, a vault's secrets, PKI's certificates), or when a party
   holds it as its own (a key or verifier made for itself, a certificate or trust anchor it
@@ -252,6 +255,8 @@ the switch" lights three links and adds nothing to the flow.
   and `verify.mjs` rejects any other:
   - `call-out`: a box or arrow that explains a part of the drawing, including the practice
     the subject replaces (a hard-coded password beside a vault)
+    A request box with no named sender is a `call-out`, because a request is what a link carries and a node for its sender would be invented (WAF's Benign and
+    Exploit, Django's Request).
   - `footer`: a strip of text under the drawing, usually the limitation
   - `elided`: a row or box standing for things the explainer does not name
   - `self-loop`: a line from a component back to itself

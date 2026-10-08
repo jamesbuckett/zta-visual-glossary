@@ -107,7 +107,10 @@ entry, so nothing is stored twice:
   `explainer` first, and its caption and tour steps where the explainer is silent. UK
   spelling.
 - Something a component reads and writes as it runs (a cache, a lookup table, an index, a
-  log) is a `database`; something made once (a certificate, a manifest) is a `data-asset`. Whether an artefact is a node at all is a
+  log) is a `database`; something made once (a certificate, a manifest) is a `data-asset`. The line between them is persistence: a `database` outlives the
+  component's runs and is read and written by them; a representation a component builds
+  afresh and hands on each time it runs (React's virtual DOM, a rendered template) is a
+  `data-asset`. Whether an artefact is a node at all is a
   separate question: it is one when it is what the term defines or exists to manage (a JWT, an
   SVID, a SPIFFE ID, a SAML assertion, a vault's secrets, PKI's certificates), or when a party
   holds it as its own (a key or verifier made for itself, a certificate or trust anchor it
@@ -145,7 +148,9 @@ entry, so nothing is stored twice:
 - A trust anchor the copy says a party holds is a `data-asset` that party reads. An
   artefact the copy places nowhere is a separate node joined by an arrow: `data-asset` if
   made once, `database` if written at run time. Instances of a class the copy names count
-  as named. A `call-out` may show the practice the subject replaces.
+  as named. A `call-out` may show the practice the subject replaces. A request box with no named sender is a `call-out`, because a request is
+  what a link carries and a node for its sender would be invented (WAF's Benign and Exploit,
+  Django's Request).
 - An endpoint the copy's named links require but never names (the far end of SD-WAN's
   transports, NAT's public side) stays a node, typed by what it is and described only as
   the far end of those links in the copy's words.
