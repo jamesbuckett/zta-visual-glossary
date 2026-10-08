@@ -12384,6 +12384,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     const text = box.querySelector(".calm-json").textContent;
     if (btn.hasAttribute("data-calm-copy")) {
       const status = box.querySelector(".calm-status");
+      // Cleared first, so a second press changes the live region and is announced.
+      status.textContent = "";
       Promise.resolve().then(() => navigator.clipboard.writeText(text)).then(
         () => { status.textContent = "Copied"; },
         () => { status.textContent = "Copy failed"; });
@@ -12393,7 +12395,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     a.href = URL.createObjectURL(new Blob([text + "\n"], { type: "application/json" }));
     a.download = `${box.dataset.term}.calm.json`;
     a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 0);
+    // WebKit reads the blob after click() returns: release it late, as FileSaver.js does.
+    setTimeout(() => URL.revokeObjectURL(a.href), 40000);
   }
 
   function detailHtml(e) {
