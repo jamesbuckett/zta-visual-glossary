@@ -153,11 +153,28 @@ const CASES = [
   ['good drawing verifies', () => page(), 'verify', 0, null],
   ['term without a model caught by verify', () => withModel(base, null), 'verify', 1, 'calm', /no CALM model/],
   ['node not drawn caught', () => page({ storeTag: '' }), 'verify', 1, 'calm', /drawn 0 times/],
+  ['node drawn twice caught',
+    () => page({ extra: '<g data-calm="agent"><rect class="box" x="560" y="180" width="120" height="56" rx="8"/><text class="t-b" x="580" y="214">Agent</text></g>' }),
+    'verify', 1, 'calm', /node "agent" is drawn 2 times, want once/],
   ['title that differs from the name caught', () => page({ storeName: 'Storage' }), 'verify', 1, 'calm', /no label reading "Store"/],
   ['database drawn as a plain box caught',
     () => page({ storeShape: '<rect class="box" x="540" y="28" width="140" height="72" rx="8"/>' }), 'verify', 1, 'calm', /drawn as a square box, want a cylinder/],
+  ['database drawn as a document caught',
+    () => page({ storeShape: '${doc(540, 28, 140, 72)}' }), 'verify', 1, 'calm', /node "store" \(database\) is drawn as a document, want a cylinder/],
+  ['deployed-in container drawn as a solid container caught',
+    () => swap(page(), '<rect class="zone" x="260" y="150" width="240" height="110" rx="10"/>', '<rect class="box-soft" x="260" y="150" width="240" height="110" rx="10"/>'),
+    'verify', 1, 'calm', /node "host" \(system\) is drawn as a solid container, want a dashed zone/],
   ['connector tagged with an unknown relationship caught', () => page({ agentAppTag: 'agent-nowhere' }), 'verify', 1, 'calm', /"agent-nowhere" is not in the model/],
+  // Containment is drawn by nesting, so a connector may not stand for it.
+  ['connector tagged with a containment relationship caught',
+    () => page({ extra: '<line class="flow" data-calm="host-agent" x1="422" y1="208" x2="498" y2="208"/>' }),
+    'verify', 1, 'calm', /"host-agent" is a deployed-in relationship/],
   ['connector ending on the wrong node caught', () => page({ askEnd: '220' }), 'verify', 1, 'calm', /does not run between/],
+  // validate.mjs cannot see the drawing, so an interacts node that no
+  // connector reaches is verify's to report.
+  ['interacts naming a node no connector reaches caught',
+    () => page({}, model((m) => { relType(m, 'user-app').interacts.nodes.push('store'); })),
+    'verify', 1, 'calm', /relationship "user-app" has no connector reaching "store"/],
   ['child outside its container caught', () => page({ hostWidth: '30' }), 'verify', 1, 'calm', /outside its container/],
   ['untagged box caught', () => page({ extra: '<rect class="box" x="560" y="180" width="120" height="56" rx="8"/>' }), 'verify', 1, 'calm', /untagged/],
   ['untagged flow caught', () => page({ extra: '<line class="flow" x1="620" y1="150" x2="620" y2="250"/>' }), 'verify', 1, 'calm', /untagged/],
@@ -184,6 +201,11 @@ const CASES = [
   ['flow order that contradicts the tour caught', () => page({ agentAppStep: '1' }), 'verify', 1, 'calm', /flow order contradicts the tour/],
   ['reverse connector with no reverse transition caught',
     () => page({}, model((m) => { m.flows[0].transitions.pop(); })), 'verify', 1, 'calm', /against the relationship's direction/],
+  // A lone marker-start means the line was drawn from its head: read
+  // tail to head, the agent's report still runs agent to app.
+  ['backwards line with only marker-start accepted',
+    () => swap(page(), 'data-calm="agent-app" x1="350" y1="178" x2="350" y2="98" marker-end="url(#ah-mut)"', 'data-calm="agent-app" x1="350" y1="98" x2="350" y2="178" marker-start="url(#ah-mut)"'),
+    'verify', 0, null],
   ['lit connectors with no flow caught', () => page({}, model((m) => { delete m.flows; })), 'verify', 1, 'calm', /has no flow/],
 
   // Type words: the page draws each node's type in a clear corner. A box only

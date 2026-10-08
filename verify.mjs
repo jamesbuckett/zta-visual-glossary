@@ -23,7 +23,8 @@
 //   (e) CALM model — for a term with a model: every node drawn once, under
 //       its name, in the outline its type calls for; every connects and
 //       interacts relationship drawn as a connector between the right two
-//       nodes; every contained node inside its container; the flow in the
+//       nodes; every contained node inside its container, and no connector
+//       standing for a containment relationship; the flow in the
 //       tour's order; and no box, zone or flow left untagged; and every
 //       node's type word (rule calm-type) present, inside its outline, and
 //       clear of every other label, icon and badge
@@ -476,6 +477,9 @@ function checkDrawing(id, model, d) {
   for (const c of d.connectors) {
     if (nodeIds.has(c.id)) bad(`"${c.id}" is a node, but its data-calm is on a connector`);
     else if (!rels.has(c.id)) bad(`data-calm="${c.id}" is not in the model`);
+    else if (['deployed-in', 'composed-of'].includes(rels.get(c.id).kind)) {
+      bad(`"${c.id}" is a ${rels.get(c.id).kind} relationship, but its data-calm is on a connector — containment is drawn by nesting the child inside its container`);
+    }
   }
 
   // Nodes: drawn once, under their name, in the outline their type calls for.
