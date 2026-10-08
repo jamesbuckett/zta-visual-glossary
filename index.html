@@ -6108,111 +6108,115 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     cilium: () => `
       <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy.">
-        <g data-s="2">
-          <rect class="box" x="260" y="16" width="200" height="60" rx="8"/>
-          ${icon('cog', 276, 34)}
-          <text class="t-b" x="308" y="42">Control plane</text>
-          <text class="t-sm t-mut" x="308" y="60">labels to identity</text>
+        <g data-s="2" data-calm="control-plane">
+          <rect class="box" x="236" y="16" width="248" height="60" rx="8"/>
+          ${icon('cog', 252, 34)}
+          <text class="t-b" x="284" y="42">Control plane</text>
+          <text class="t-sm t-mut" x="284" y="60">labels to identity</text>
         </g>
-        <line class="flow" data-s="2" x1="300" y1="78" x2="200" y2="98" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="420" y1="78" x2="520" y2="98" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="control-plane-node-a" x1="300" y1="78" x2="200" y2="98" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="control-plane-node-b" x1="420" y1="78" x2="520" y2="98" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="360" y="96" text-anchor="middle">mapping, cluster-wide</text>
 
-        ${[['Node A', 24, 'sends'], ['Node B', 484, 'decides here']].map(([name, x, sub], i) => `
-          <rect class="zone" x="${x}" y="100" width="212" height="176" rx="10"/>
-          <text class="t-sm t-mut" x="${x + 12}" y="118">${name}</text>
-          <g data-s="1">
+        ${[['a', 'Node A', 24, 'sends', '3 5'], ['b', 'Node B', 484, 'decides here', '4 5']].map(([n, name, x, sub, s]) => `
+          <g data-calm="node-${n}">
+            <rect class="zone" x="${x}" y="100" width="212" height="176" rx="10"/>
+            <text class="t-sm t-mut" x="${x + 12}" y="118">${name}</text>
+          </g>
+          <g data-s="1" data-calm="pod-${n}">
             <rect class="box" x="${x + 16}" y="128" width="180" height="52" rx="8"/>
             ${icon('box', x + 28, 142)}
             <text class="t-b" x="${x + 60}" y="151">Pod</text>
             <text class="t-sm t-mut" x="${x + 60}" y="168">labels, not IP</text>
           </g>
-          <g data-s="${i ? '4 5' : '3 5'}">
+          <g data-s="${s}" data-calm="ebpf-${n}">
             <rect class="box" x="${x + 16}" y="208" width="180" height="52" rx="8"/>
             ${icon('binary', x + 28, 222)}
             <text class="t-b" x="${x + 60}" y="231">eBPF</text>
             <text class="t-sm t-mut" x="${x + 60}" y="248">${sub}</text>
           </g>`).join('')}
-        <line class="flow" data-s="3" x1="130" y1="182" x2="130" y2="206" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="222" y1="234" x2="498" y2="234" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="pod-a-ebpf-a" x1="130" y1="182" x2="130" y2="206" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="ebpf-a-ebpf-b" x1="222" y1="234" x2="498" y2="234" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="372" y="226" text-anchor="middle">packet carries identity</text>
-        <line class="flow" data-s="4" x1="590" y1="206" x2="590" y2="182" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="ebpf-b-pod-b" x1="590" y1="206" x2="590" y2="182" marker-end="url(#ah-mut)"/>
 
-        <g data-s="4">
-          <rect class="box" x="260" y="116" width="200" height="84" rx="8"/>
+        <g data-s="4" data-calm="policy">
+          ${doc(260, 116, 200, 84)}
           ${icon('list-checks', 276, 130)}
           <text class="t-b" x="308" y="148">Policy</text>
           <text class="t-sm t-mut" x="308" y="166">identity to identity</text>
           <text class="t-sm t-mut" x="308" y="182">L7 via Envoy</text>
           <text class="t-sm t-mut" x="308" y="195">per node</text>
         </g>
-        <line class="flow" data-s="4" x1="462" y1="158" x2="498" y2="158" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="policy-ebpf-b" x1="462" y1="170" x2="524" y2="206" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 204, 142, '1')}
-        ${badge(2, 444, 30, '2')}
+        ${badge(1, 206, 166, '1')}
+        ${badge(2, 468, 62, '2')}
         ${badge(3, 250, 234, '3')}
-        ${badge(4, 444, 130, '4')}
-        ${badge(5, 664, 222, '5')}
+        ${badge(4, 436, 138, '4')}
+        ${badge(5, 664, 246, '5')}
       </svg>`,
 
     ebpf: () => `
-      <svg class="dg" viewBox="0 0 720 232" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.">
+      <svg class="dg" viewBox="0 0 720 268" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.">
         <text class="t-sm t-mut" x="696" y="28" text-anchor="end">user space</text>
-        <g data-s="1">
-          <rect class="box" x="24" y="16" width="180" height="64" rx="8"/>
+        <g data-s="1" data-calm="program">
+          ${doc(24, 16, 180, 64)}
           ${icon('file-code', 40, 30)}
           <text class="t-b" x="72" y="44">eBPF program</text>
           <text class="t-sm t-mut" x="72" y="62">bytecode</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-calm="agent">
           <rect class="box" x="496" y="40" width="200" height="56" rx="8"/>
           ${icon('monitor', 512, 56)}
           <text class="t-b" x="544" y="64">Agent</text>
           <text class="t-sm t-mut" x="544" y="82">reads, writes maps</text>
         </g>
-        <line class="divider" x1="16" y1="112" x2="704" y2="112"/>
-        <text class="t-sm t-mut" x="696" y="130" text-anchor="end">kernel</text>
+        <g data-calm="kernel">
+          <rect class="box-soft" x="16" y="120" width="688" height="132" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="138">kernel</text>
+        </g>
+        <g data-s="2" data-calm="verifier">
+          <rect class="box" x="24" y="152" width="180" height="88" rx="8"/>
+          ${icon('shield-check', 40, 166)}
+          <text class="t-b" x="72" y="182">Verifier</text>
+          <text class="t-sm t-mut" x="72" y="200">every path checked</text>
+          <text class="t-sm t-mut" x="72" y="215">safe, terminates</text>
+        </g>
+        <g data-s="3" data-calm="jit">
+          <rect class="box" x="232" y="152" width="120" height="88" rx="8"/>
+          <text class="t-b" x="292" y="182" text-anchor="middle">JIT</text>
+          <text class="t-sm t-mut" x="292" y="200" text-anchor="middle">native code</text>
+          <text class="t-sm t-mut" x="292" y="215" text-anchor="middle">kernel speed</text>
+        </g>
+        <g data-s="4" data-calm="hook">
+          <rect class="box" x="380" y="152" width="168" height="88" rx="8"/>
+          ${icon('anchor', 396, 166)}
+          <text class="t-b" x="428" y="182">Hook</text>
+          <text class="t-sm t-mut" x="428" y="200">XDP · tc · kprobe</text>
+          <text class="t-sm t-mut" x="428" y="215">tracepoint · LSM</text>
+        </g>
+        <g data-s="5" data-calm="maps">
+          ${cyl(576, 152, 120, 88)}
+          ${icon('database', 588, 168)}
+          <text class="t-b" x="620" y="182">Maps</text>
+          <text class="t-sm t-mut" x="620" y="200">shared</text>
+          <text class="t-sm t-mut" x="620" y="215">state</text>
+        </g>
 
-        <line class="flow" data-s="1" x1="114" y1="82" x2="114" y2="142" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="134" y="132">bpf()</text>
-        <g data-s="2">
-          <rect class="box" x="24" y="144" width="180" height="72" rx="8"/>
-          ${icon('shield-check', 40, 158)}
-          <text class="t-b" x="72" y="174">Verifier</text>
-          <text class="t-sm t-mut" x="72" y="192">every path checked</text>
-          <text class="t-sm t-mut" x="72" y="207">safe, terminates</text>
-        </g>
-        <line class="flow" data-s="3" x1="206" y1="180" x2="230" y2="180" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="232" y="144" width="120" height="72" rx="8"/>
-          <text class="t-b" x="292" y="174" text-anchor="middle">JIT</text>
-          <text class="t-sm t-mut" x="292" y="192" text-anchor="middle">native code</text>
-          <text class="t-sm t-mut" x="292" y="207" text-anchor="middle">kernel speed</text>
-        </g>
-        <line class="flow" data-s="4" x1="354" y1="180" x2="378" y2="180" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="box" x="380" y="144" width="168" height="72" rx="8"/>
-          ${icon('anchor', 396, 158)}
-          <text class="t-b" x="428" y="174">Hook</text>
-          <text class="t-sm t-mut" x="428" y="192">XDP · tc · kprobe</text>
-          <text class="t-sm t-mut" x="428" y="207">tracepoint · LSM</text>
-        </g>
-        <line class="flow" data-s="5" x1="550" y1="180" x2="574" y2="180" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
-          <rect class="box" x="576" y="144" width="120" height="72" rx="8"/>
-          ${icon('database', 588, 158)}
-          <text class="t-b" x="620" y="174">Maps</text>
-          <text class="t-sm t-mut" x="620" y="192">shared</text>
-          <text class="t-sm t-mut" x="620" y="207">state</text>
-        </g>
-        <line class="flow" data-s="5" x1="636" y1="142" x2="636" y2="98" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="5" x="618" y="132" text-anchor="end">counters, policy, events</text>
+        <line class="flow" data-s="1" data-calm="program-verifier" x1="114" y1="82" x2="114" y2="150" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="126" y="140">bpf()</text>
+        <line class="flow" data-s="3" data-calm="verifier-jit" x1="206" y1="196" x2="230" y2="196" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="jit-hook" x1="354" y1="196" x2="378" y2="196" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="hook-maps" x1="550" y1="196" x2="574" y2="196" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="agent-maps" x1="636" y1="98" x2="636" y2="150" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="624" y="140" text-anchor="end">counters, policy, events</text>
 
-        ${badge(1, 114, 112, '1')}
-        ${badge(2, 188, 158, '2')}
-        ${badge(3, 336, 158, '3')}
-        ${badge(4, 532, 158, '4')}
-        ${badge(5, 680, 158, '5')}
+        ${badge(1, 114, 100, '1')}
+        ${badge(2, 188, 166, '2')}
+        ${badge(3, 336, 166, '3')}
+        ${badge(4, 532, 166, '4')}
+        ${badge(5, 680, 184, '5')}
       </svg>`,
 
     tailscale: () => `
@@ -8016,58 +8020,60 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     calico: () => `
-      <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
-        ${[['Node A', 24, 36, 156], ['Node B', 404, 580, 416]].map(([name, zx, px, fx]) => `
-          <rect class="zone" x="${zx}" y="16" width="292" height="110" rx="10"/>
-          <text class="t-sm t-mut" x="${zx + 12}" y="34">${name}</text>
-          <g data-s="1 2">
-            <rect class="box" x="${px}" y="44" width="104" height="66" rx="8"/>
+      <svg class="dg" viewBox="0 0 720 318" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.">
+        ${[['a', 'Node A', 24, 200, 36], ['b', 'Node B', 404, 416, 536]].map(([n, name, zx, px, fx]) => `
+          <g data-calm="node-${n}">
+            <rect class="zone" x="${zx}" y="16" width="292" height="128" rx="10"/>
+            <text class="t-sm t-mut" x="${zx + 12}" y="34">${name}</text>
+          </g>
+          <g data-s="1 2" data-calm="pod-${n}">
+            <rect class="box" x="${px}" y="44" width="104" height="84" rx="8"/>
             ${icon('box', px + 12, 58)}
             <text class="t-b" x="${px + 44}" y="72">Pod</text>
             <text class="t-sm t-mut" x="${px + 44}" y="90">own IP</text>
           </g>
-          <g data-s="3">
-            <rect class="box" x="${fx}" y="44" width="148" height="66" rx="8"/>
+          <g data-s="3" data-calm="felix-${n}">
+            <rect class="box" x="${fx}" y="44" width="148" height="84" rx="8"/>
             ${icon('cog', fx + 12, 58)}
             <text class="t-b" x="${fx + 44}" y="72">Felix</text>
             <text class="t-sm t-mut" x="${fx + 44}" y="90">routes, ACLs</text>
             <text class="t-sm t-mut" x="${fx + 44}" y="104">into the kernel</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" x1="306" y1="77" x2="414" y2="77" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="360" y="100" text-anchor="middle">no tunnel</text>
-        <path class="flow" data-s="1" d="M170 128 V150 H550 V128" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="360" y="144" text-anchor="middle">BGP: each node advertises its block</text>
+        <line class="flow" data-s="2" data-calm="pod-a-pod-b" x1="306" y1="86" x2="414" y2="86" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="360" y="108" text-anchor="middle">no tunnel</text>
+        <path class="flow" data-s="1" data-calm="node-a-node-b" d="M170 146 V168 H550 V146" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="360" y="162" text-anchor="middle">BGP: each node advertises its block</text>
 
-        <text class="t-sm t-mut" data-s="4" x="24" y="186">ACLs compile from tiers, evaluated in order</text>
-        <g data-s="4">
-          <rect class="box" x="24" y="200" width="200" height="66" rx="8"/>
-          ${icon('building-2', 40, 214)}
-          <text class="t-b" x="72" y="228">Platform tier</text>
-          <text class="t-sm t-mut" x="72" y="246">global rules</text>
-          <text class="t-sm t-mut" x="72" y="260">high precedence</text>
+        <text class="t-sm t-mut" data-s="4" x="24" y="204">ACLs compile from tiers, evaluated in order</text>
+        <g data-s="4" data-calm="platform-tier">
+          ${doc(24, 218, 200, 84)}
+          ${icon('building-2', 40, 232)}
+          <text class="t-b" x="72" y="246">Platform tier</text>
+          <text class="t-sm t-mut" x="72" y="264">global rules</text>
+          <text class="t-sm t-mut" x="72" y="278">high precedence</text>
         </g>
-        <line class="flow" data-s="4" x1="226" y1="236" x2="262" y2="236" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="244" y="226" text-anchor="middle">Pass</text>
-        <g data-s="5">
-          <rect class="box" x="264" y="200" width="200" height="66" rx="8"/>
-          ${icon('users', 280, 214)}
-          <text class="t-b" x="312" y="228">Default tier</text>
-          <text class="t-sm t-mut" x="312" y="246">developers' policies</text>
-          <text class="t-sm t-mut" x="312" y="260">order 1,000,000</text>
+        <line class="flow" data-s="4" data-calm="platform-tier-default-tier" x1="226" y1="260" x2="262" y2="260" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="244" y="250" text-anchor="middle">Pass</text>
+        <g data-s="5" data-calm="default-tier">
+          ${doc(264, 218, 200, 84)}
+          ${icon('users', 280, 232)}
+          <text class="t-b" x="312" y="246">Default tier</text>
+          <text class="t-sm t-mut" x="312" y="264">developers' policies</text>
+          <text class="t-sm t-mut" x="312" y="278">order 1,000,000</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="504" y="200" width="192" height="66" rx="8"/>
-          ${icon('lock', 520, 214)}
-          <text class="t-b" x="552" y="228">RBAC per tier</text>
-          <text class="t-sm t-mut" x="552" y="246">developers cannot</text>
-          <text class="t-sm t-mut" x="552" y="260">override above</text>
+        <g data-s="5" data-note="call-out">
+          <rect class="box" x="504" y="218" width="192" height="84" rx="8"/>
+          ${icon('lock', 520, 232)}
+          <text class="t-b" x="552" y="246">RBAC per tier</text>
+          <text class="t-sm t-mut" x="552" y="264">developers cannot</text>
+          <text class="t-sm t-mut" x="552" y="278">override above</text>
         </g>
 
-        ${badge(1, 170, 139, '1')}
-        ${badge(2, 330, 77, '2')}
-        ${badge(3, 548, 58, '3')}
-        ${badge(4, 208, 214, '4')}
-        ${badge(5, 448, 214, '5')}
+        ${badge(1, 170, 157, '1')}
+        ${badge(2, 330, 86, '2')}
+        ${badge(3, 668, 58, '3')}
+        ${badge(4, 198, 238, '4')}
+        ${badge(5, 438, 238, '5')}
       </svg>`,
 
     envoy: () => `
@@ -8527,75 +8533,77 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     amps: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A publisher's message is routed by content to matching subscribers and kept in the State of the World; a query-and-subscribe reads the current state, then streams updates.">
-        <g data-s="1">
-          <rect class="box" x="24" y="64" width="132" height="96" rx="12"/>
-          ${icon('send', 40, 76)}
-          <text class="t-b" x="72" y="94">Publisher</text>
-          <text class="t-sm t-mut" x="40" y="124">Ticker: IBM</text>
-          <text class="t-sm t-mut" x="40" y="144">Price: 125</text>
+      <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A publisher's message is routed by content to matching subscribers and kept in the State of the World; a query-and-subscribe reads the current state, then streams updates.">
+        <g data-calm="amps">
+          <rect class="box-soft" x="184" y="16" width="264" height="236" rx="10"/>
+          <text class="t-b" x="200" y="38">AMPS</text>
+          <text class="t-sm t-mut" x="244" y="38">60East server</text>
         </g>
-        <line class="flow" data-s="1" x1="158" y1="114" x2="240" y2="114" marker-end="url(#ah-mut)"/>
-
-        <rect class="zone" x="184" y="16" width="264" height="220" rx="10"/>
-        <text class="t-b" x="200" y="38">AMPS</text>
-        <text class="t-sm t-mut" x="244" y="38">60East server</text>
-        <g data-s="4">
-          <rect class="box" x="200" y="52" width="232" height="52" rx="6"/>
-          <text class="t-sm" x="216" y="72">transaction log</text>
-          <text class="t-sm t-mut" x="216" y="92">replay · queues · replication</text>
+        <g data-s="4" data-calm="transaction-log">
+          ${cyl(200, 48, 232, 68)}
+          <text class="t-sm" x="216" y="84">transaction log</text>
+          <text class="t-sm t-mut" x="216" y="102">replay · queues · replication</text>
         </g>
-        <g data-s="2 3">
-          <rect class="box" x="200" y="124" width="232" height="96" rx="6"/>
-          <text class="t-sm" x="216" y="144">State of the World (SOW)</text>
-          <text class="t-sm t-mut" x="216" y="166">key</text>
-          <text class="t-sm t-mut" x="288" y="166">latest</text>
-          <text class="t-sm" x="216" y="186">IBM</text>
-          <text class="t-sm" x="288" y="186">125</text>
-          <text class="t-sm" x="216" y="206">MSFT</text>
-          <text class="t-sm" x="288" y="206">410</text>
+        <g data-s="2 3" data-calm="sow">
+          ${cyl(200, 128, 232, 108)}
+          <text class="t-sm" x="216" y="152">State of the World (SOW)</text>
+          <text class="t-sm t-mut" x="216" y="172">key</text>
+          <text class="t-sm t-mut" x="288" y="172">latest</text>
+          <text class="t-sm" x="216" y="190">IBM</text>
+          <text class="t-sm" x="288" y="190">125</text>
+          <text class="t-sm" x="216" y="208">MSFT</text>
+          <text class="t-sm" x="288" y="208">410</text>
         </g>
 
-        <g data-s="1">
-          <rect class="box" x="528" y="24" width="168" height="52" rx="12"/>
-          ${icon('monitor', 544, 38)}
-          <text class="t-b" x="576" y="46">Subscriber 1</text>
-          <text class="t-sm t-mut" x="576" y="64">Ticker = 'IBM'</text>
+        <g data-s="1" data-calm="publisher">
+          <rect class="box" x="24" y="72" width="132" height="104" rx="8"/>
+          ${icon('send', 40, 84)}
+          <text class="t-b" x="72" y="102">Publisher</text>
+          <text class="t-sm t-mut" x="40" y="132">Ticker: IBM</text>
+          <text class="t-sm t-mut" x="40" y="152">Price: 125</text>
         </g>
-        <line class="flow" data-s="1" x1="450" y1="50" x2="526" y2="50" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="488" y="43" text-anchor="middle">IBM 125</text>
+        <line class="flow" data-s="1" data-calm="publisher-amps" x1="158" y1="122" x2="240" y2="122" marker-end="url(#ah-mut)"/>
 
-        <g data-s="1">
-          <rect class="box" x="528" y="92" width="168" height="52" rx="12"/>
-          ${icon('monitor', 544, 106)}
-          <text class="t-b" x="576" y="114">Subscriber 2</text>
-          <text class="t-sm t-mut" x="576" y="132">Ticker = 'MSFT'</text>
+        <g data-s="1" data-calm="subscriber-1">
+          <rect class="box" x="528" y="16" width="168" height="64" rx="8"/>
+          ${icon('monitor', 544, 32)}
+          <text class="t-b" x="576" y="42">Subscriber 1</text>
+          <text class="t-sm t-mut" x="576" y="60">Ticker = 'IBM'</text>
         </g>
-        <line class="flow-bad" data-s="1" x1="450" y1="118" x2="484" y2="118"/>
-        <line class="stroke-bad" data-s="1" x1="490" y1="110" x2="506" y2="126" stroke-width="2"/>
-        <line class="stroke-bad" data-s="1" x1="506" y1="110" x2="490" y2="126" stroke-width="2"/>
-        <text class="t-sm t-mut" data-s="1" x="488" y="146" text-anchor="middle">no match</text>
+        <line class="flow" data-s="1" data-calm="amps-subscriber-1" x1="450" y1="48" x2="526" y2="48" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="488" y="41" text-anchor="middle">IBM 125</text>
 
-        <g data-s="3">
-          <rect class="box" x="528" y="160" width="168" height="68" rx="12"/>
-          ${icon('gauge', 544, 172)}
-          <text class="t-b" x="576" y="190">Dashboard</text>
-          <text class="t-sm t-mut" x="544" y="206">current state,</text>
-          <text class="t-sm t-mut" x="544" y="222">then live updates</text>
+        <g data-s="1" data-calm="subscriber-2">
+          <rect class="box" x="528" y="96" width="168" height="64" rx="8"/>
+          ${icon('monitor', 544, 112)}
+          <text class="t-b" x="576" y="122">Subscriber 2</text>
+          <text class="t-sm t-mut" x="576" y="140">Ticker = 'MSFT'</text>
         </g>
-        <line class="flow" data-s="3" x1="434" y1="194" x2="526" y2="194" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="1" data-calm="amps-subscriber-2" x1="450" y1="128" x2="526" y2="128"/>
+        <line class="stroke-bad" data-s="1" x1="480" y1="120" x2="496" y2="136" stroke-width="2"/>
+        <line class="stroke-bad" data-s="1" x1="496" y1="120" x2="480" y2="136" stroke-width="2"/>
+        <text class="t-sm t-mut" data-s="1" x="488" y="154" text-anchor="middle">no match</text>
 
-        <g data-s="5">
-          <rect class="box" x="24" y="252" width="672" height="36" rx="6"/>
-          <text class="t-sm bad" x="40" y="274">default: any username and password · every permission to any user</text>
-          <text class="t-sm t-mut" x="488" y="274">TLS identity not used</text>
+        <g data-s="3" data-calm="dashboard">
+          <rect class="box" x="528" y="176" width="168" height="68" rx="8"/>
+          ${icon('gauge', 544, 188)}
+          <text class="t-b" x="576" y="206">Dashboard</text>
+          <text class="t-sm t-mut" x="544" y="222">current state,</text>
+          <text class="t-sm t-mut" x="544" y="238">then live updates</text>
+        </g>
+        <line class="flow" data-s="3" data-calm="dashboard-sow" x1="434" y1="210" x2="526" y2="210" marker-end="url(#ah-mut)"/>
+
+        <g data-s="5" data-note="footer">
+          <rect class="box" x="24" y="268" width="672" height="36" rx="6"/>
+          <text class="t-sm bad" x="40" y="290">default: any username and password · every permission to any user</text>
+          <text class="t-sm t-mut" x="488" y="290">TLS identity not used</text>
         </g>
 
-        ${badge(1, 172, 114, '1')}
-        ${badge(2, 416, 144, '2')}
-        ${badge(3, 480, 194, '3')}
-        ${badge(4, 416, 72, '4')}
-        ${badge(5, 680, 270, '5')}
+        ${badge(1, 172, 122, '1')}
+        ${badge(2, 416, 154, '2')}
+        ${badge(3, 480, 210, '3')}
+        ${badge(4, 336, 78, '4')}
+        ${badge(5, 680, 286, '5')}
       </svg>`,
 
     har: () => `
@@ -11211,6 +11219,152 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "metrics-server-hpa", "sequence-number": 4, "description": "The metrics server publishes each scaler's reading through the external metrics API to the HPA." },
             { "relationship-unique-id": "hpa-workload", "sequence-number": 5, "description": "From one replica upward, an ordinary HPA does the scaling." },
             { "relationship-unique-id": "triggerauthentication-operator", "sequence-number": 6, "description": "TriggerAuthentication supplies the credential every poll needs, kept out of the ScaledObject." }
+          ] }
+      ]
+    },
+    ebpf: {
+      "nodes": [
+        { "unique-id": "program", "node-type": "data-asset", "name": "eBPF program", "description": "A small eBPF program, compiled to a bytecode and handed to the kernel through the bpf() system call: eBPF is the third option for changing what the Linux kernel does, where patching the kernel or shipping a module are both slow to land and easy to get catastrophically wrong; Cilium's data plane, Calico's eBPF mode, runtime security tooling and most of the newer profilers and tracers all run on eBPF; programs hold no state of their own, and portability is real work: which hooks and helpers exist, and what the verifier will accept, vary by kernel version, so programs lean on BTF type information to compile once and run everywhere, and you still end up writing for the verifier rather than for clarity." },
+        { "unique-id": "agent", "node-type": "system", "name": "Agent", "description": "A user-space agent, which reads and writes the maps." },
+        { "unique-id": "kernel", "node-type": "kernel", "name": "kernel", "description": "The Linux kernel, to which an eBPF program is handed through the bpf() system call and which runs the program at a defined hook." },
+        { "unique-id": "verifier", "node-type": "service", "name": "Verifier", "description": "The verifier, from which eBPF's safety comes: before a program is accepted, the verifier statically analyses the program across every execution path to prove three things, that the program terminates, that the program never reads uninitialised memory or steps outside the program's bounds, and that the program's complexity stays inside what the analysis can carry, permitting loops only where the exit condition provably becomes true; the verifier proves memory safety and termination, not benignity: loading a program is a privileged operation for good reason, and an attacker who reaches CAP_BPF or CAP_SYS_ADMIN gains a kernel-resident foothold that conventional tooling is poorly placed to see, a documented rootkit technique rather than a theoretical one." },
+        { "unique-id": "jit", "node-type": "service", "name": "JIT", "description": "JIT compilation, which only once the verifier has accepted a program compiles the program to native instructions, so the program runs at roughly the speed of compiled kernel code rather than in an interpreter." },
+        { "unique-id": "hook", "node-type": "hook", "name": "Hook", "description": "A defined hook at which the kernel runs the program: a packet arriving at the driver (XDP), traffic control on an interface, a kernel function entry or return (kprobe), a static tracepoint, a socket operation, or a security hook (BPF LSM)." },
+        { "unique-id": "maps", "node-type": "database", "name": "Maps", "description": "Maps, which fix eBPF programs holding no state of their own: hash tables, arrays, LRU caches, ring buffers and longest-prefix-match tries, readable and writable both from the program and from a user-space agent, which is how counters, policy tables and event streams cross the boundary." }
+      ],
+      "relationships": [
+        { "unique-id": "kernel-parts", "description": "The kernel holds the verifier and the JIT compilation a program passes through, the defined hooks at which the kernel runs the program, and the maps through which counters, policy tables and event streams cross the boundary with user space.",
+          "relationship-type": { "composed-of": { "container": "kernel", "nodes": ["verifier", "jit", "hook", "maps"] } } },
+        { "unique-id": "program-verifier", "description": "The program's bytecode is handed to the kernel through the bpf() system call, and the verifier analyses the bytecode before the program is accepted.",
+          "relationship-type": { "connects": { "source": { "node": "program" }, "destination": { "node": "verifier" } } } },
+        { "unique-id": "verifier-jit", "description": "Only a program the verifier has accepted is JIT-compiled to native instructions.",
+          "relationship-type": { "connects": { "source": { "node": "verifier" }, "destination": { "node": "jit" } } } },
+        { "unique-id": "jit-hook", "description": "The program, compiled to native instructions, is attached at a defined hook, where the kernel runs the program.",
+          "relationship-type": { "connects": { "source": { "node": "jit" }, "destination": { "node": "hook" } } } },
+        { "unique-id": "hook-maps", "description": "The program running at the hook reads and writes the maps, since programs hold no state of their own.",
+          "relationship-type": { "connects": { "source": { "node": "hook" }, "destination": { "node": "maps" } } } },
+        { "unique-id": "agent-maps", "description": "The user-space agent reads and writes the maps, which is how counters, policy tables and event streams cross the boundary.",
+          "relationship-type": { "connects": { "source": { "node": "agent" }, "destination": { "node": "maps" } } } }
+      ],
+      "flows": [
+        { "unique-id": "load-verify-attach", "name": "Load, verify, compile, attach",
+          "description": "A compiled eBPF program is checked by the verifier, JIT-compiled to native code, attached to a kernel hook, and shares state with user space through maps.",
+          "transitions": [
+            { "relationship-unique-id": "program-verifier", "sequence-number": 1, "description": "You hand the compiled bytecode to the kernel through the bpf() system call, where the verifier analyses the program before the program is accepted." },
+            { "relationship-unique-id": "verifier-jit", "sequence-number": 2, "description": "Only once the verifier has accepted the program is the program JIT-compiled to native instructions." },
+            { "relationship-unique-id": "jit-hook", "sequence-number": 3, "description": "The native code is attached at a defined hook, where the kernel runs the program." },
+            { "relationship-unique-id": "hook-maps", "sequence-number": 4, "description": "The program at the hook writes to the maps." },
+            { "relationship-unique-id": "agent-maps", "sequence-number": 5, "description": "The user-space agent reads from the maps.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "agent-maps", "sequence-number": 6, "description": "The user-space agent writes to the maps." },
+            { "relationship-unique-id": "hook-maps", "sequence-number": 7, "description": "The program at the hook reads from the maps: readable and writable from both sides, the maps are how counters, policy tables and event streams cross the boundary.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    amps: {
+      "nodes": [
+        { "unique-id": "amps", "node-type": "service", "name": "AMPS", "description": "AMPS, a commercial publish/subscribe engine from 60East Technologies, built for the low-latency, high-volume messaging of financial services, which AMPS's maker describes as combining a message bus, a queue and a database; the limitation is the defaults: out of the box AMPS requires a logon but accepts any username and password, AMPS's default entitlement module grants every permission to any user, and TLS, even mutual TLS, passes no identity to either check, so real access control means plugging in Kerberos, LDAP, OAuth or a custom entitlement module, which can then narrow each user down to individual messages and fields." },
+        { "unique-id": "transaction-log", "node-type": "database", "name": "transaction log", "description": "A transaction log, separate from the State of the World, which records messages for replay and underpins queues and replication." },
+        { "unique-id": "sow", "node-type": "database", "name": "State of the World (SOW)", "description": "AMPS's State of the World (SOW), which keeps the latest version of each record in a topic, so one query-and-subscribe command returns the current state and then streams updates from that exact moment, with nothing missed or doubled." },
+        { "unique-id": "publisher", "node-type": "system", "name": "Publisher", "description": "A publisher, whose message AMPS routes by content to matching subscribers and keeps in the State of the World; a payload can be JSON, FIX, XML, Protocol Buffers or raw binary." },
+        { "unique-id": "subscriber-1", "node-type": "system", "name": "Subscriber 1", "description": "A subscriber that filters on a message's content as well as the message's topic: every message where Ticker is IBM." },
+        { "unique-id": "subscriber-2", "node-type": "system", "name": "Subscriber 2", "description": "A second subscriber that filters on a message's content as well as the message's topic, with a filter the publisher's IBM message does not match." },
+        { "unique-id": "dashboard", "node-type": "system", "name": "Dashboard", "description": "A subscriber that issues one query-and-subscribe command, which returns the current state and then streams updates from that exact moment, with nothing missed or doubled." }
+      ],
+      "relationships": [
+        { "unique-id": "amps-parts", "description": "AMPS keeps the State of the World and, separately, a transaction log.",
+          "relationship-type": { "composed-of": { "container": "amps", "nodes": ["transaction-log", "sow"] } } },
+        { "unique-id": "publisher-amps", "description": "The publisher's message passes to AMPS, which routes the message by content to matching subscribers and keeps the message in the State of the World.",
+          "relationship-type": { "connects": { "source": { "node": "publisher" }, "destination": { "node": "amps" } } } },
+        { "unique-id": "amps-subscriber-1", "description": "AMPS routes to Subscriber 1 the messages that match Subscriber 1's filter on content, such as every message where Ticker is IBM.",
+          "relationship-type": { "connects": { "source": { "node": "amps" }, "destination": { "node": "subscriber-1" } } } },
+        { "unique-id": "amps-subscriber-2", "description": "AMPS routes to Subscriber 2 only the messages that match Subscriber 2's filter on content, which the publisher's IBM message does not.",
+          "relationship-type": { "connects": { "source": { "node": "amps" }, "destination": { "node": "subscriber-2" } } } },
+        { "unique-id": "dashboard-sow", "description": "The dashboard's one query-and-subscribe command returns the current state from the State of the World and then streams updates from that exact moment, with nothing missed or doubled.",
+          "relationship-type": { "connects": { "source": { "node": "dashboard" }, "destination": { "node": "sow" } } } }
+      ],
+      "flows": [
+        { "unique-id": "route-and-query", "name": "Route by content, query and subscribe",
+          "description": "A publisher's message is routed by content to matching subscribers and kept in the State of the World; a query-and-subscribe reads the current state, then streams updates.",
+          "transitions": [
+            { "relationship-unique-id": "publisher-amps", "sequence-number": 1, "description": "The publisher's message reaches AMPS." },
+            { "relationship-unique-id": "amps-subscriber-1", "sequence-number": 2, "description": "AMPS routes the message by content to Subscriber 1, whose filter, every message where Ticker is IBM, the message matches." },
+            { "relationship-unique-id": "dashboard-sow", "sequence-number": 3, "description": "In answer to one query-and-subscribe command, the State of the World returns the current state to the dashboard, and updates then stream from that exact moment, with nothing missed or doubled.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    cilium: {
+      "nodes": [
+        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane of Cilium, a Cloud Native Computing Foundation (CNCF) graduated Container Network Interface (CNI) plugin built on eBPF that writes policy about identities rather than addresses: in a cluster where pods are created and destroyed constantly an IP address identifies nothing durable, so the control plane collapses each pod's label set into a numeric security identity and distributes that mapping cluster-wide, and Cluster Mesh extends one identity space across clusters; the identity is only as good as the labels behind the identity: the identity is allocated by the control plane from Kubernetes metadata, not proved by a key, so whoever can set a pod's labels can choose which policies apply to the pod, and Cilium's ztunnel-based mTLS, the beta successor to Cilium's deprecated mutual authentication, adds certificate-backed workload authentication, but as a layer you turn on rather than the default." },
+        { "unique-id": "node-a", "node-type": "system", "name": "Node A", "description": "Node A, a node in the cluster, to which the control plane distributes the identity mapping and from which a pod's packet leaves carrying the pod's identity." },
+        { "unique-id": "pod-a", "node-type": "pod", "name": "Pod", "description": "A pod on Node A, one of the pods created and destroyed constantly, so the pod's IP address identifies nothing durable; Cilium's control plane collapses the pod's label set into a numeric security identity." },
+        { "unique-id": "ebpf-a", "node-type": "data-plane", "name": "eBPF", "description": "Node A's eBPF programs, part of Cilium's eBPF data plane, from which the pod's packet leaves carrying the pod's identity; the same eBPF data plane does the rest of the cluster's networking, replacing kube-proxy by rewriting service connections at the socket layer on connect() so there is no per-packet NAT on the hot path, and load-balancing north-south traffic at the driver with XDP, Maglev hashing and direct server return, while Hubble reads those same programs to produce a service map and per-flow records annotated with identity rather than IP, the observability story that usually sells Cilium; the data plane's reach is also the data plane's blast radius: Cilium's agent and eBPF programs sit in every node's kernel with the privilege to see and rewrite all pod traffic on that machine." },
+        { "unique-id": "node-b", "node-type": "system", "name": "Node B", "description": "Node B, the receiving node in the cluster, which can decide from the identity a packet carries, without a second lookup." },
+        { "unique-id": "pod-b", "node-type": "pod", "name": "Pod", "description": "A pod on Node B, another of the pods created and destroyed constantly, identified by the numeric security identity collapsed from the pod's label set rather than by the pod's IP address." },
+        { "unique-id": "ebpf-b", "node-type": "data-plane", "name": "eBPF", "description": "Node B's eBPF programs, part of Cilium's eBPF data plane, which enforce identity-to-identity policy in the kernel rather than in a sidecar proxy, able to decide from the identity the packet carries without a second lookup; as on every node, Cilium's agent and eBPF programs sit in Node B's kernel with the privilege to see and rewrite all pod traffic on that machine." },
+        { "unique-id": "policy", "node-type": "data-asset", "name": "Policy", "description": "Policy written between identities, a CiliumNetworkPolicy or the CiliumNetworkPolicy's cluster-scoped sibling, which names label selectors, so enforcement holds as the pods underneath churn; where Kubernetes' own NetworkPolicy stops at layer 4, Cilium keeps going: Cilium can admit only particular HTTP methods and paths, particular gRPC calls, or only DNS names matching a wildcard, with the HTTP and gRPC work handed to an Envoy instance per node and DNS to a proxy in Cilium's agent, rather than a sidecar per pod." }
+      ],
+      "relationships": [
+        { "unique-id": "node-a-pod-ebpf", "description": "A pod and Cilium's eBPF programs run on Node A, the eBPF programs in Node A's kernel.",
+          "relationship-type": { "deployed-in": { "container": "node-a", "nodes": ["pod-a", "ebpf-a"] } } },
+        { "unique-id": "node-b-pod-ebpf", "description": "A pod and Cilium's eBPF programs run on Node B, the eBPF programs in Node B's kernel.",
+          "relationship-type": { "deployed-in": { "container": "node-b", "nodes": ["pod-b", "ebpf-b"] } } },
+        { "unique-id": "control-plane-node-a", "description": "The control plane distributes the mapping from pod label sets to numeric security identities, cluster-wide, to Node A.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-a" } } } },
+        { "unique-id": "control-plane-node-b", "description": "The control plane distributes the mapping from pod label sets to numeric security identities, cluster-wide, to Node B.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-b" } } } },
+        { "unique-id": "pod-a-ebpf-a", "description": "The pod's packet passes into Node A's eBPF programs, and the pod's identity is carried with the packet; because Cilium's transparent encryption is node-to-node, this pod-to-node hop stays plaintext on the host.",
+          "relationship-type": { "connects": { "source": { "node": "pod-a" }, "destination": { "node": "ebpf-a" } } } },
+        { "unique-id": "ebpf-a-ebpf-b", "description": "The packet crosses from Node A to Node B carrying the sending pod's numeric security identity, so the receiving node can decide without a second lookup; transparent encryption between nodes is a configuration flag over IPsec or WireGuard.",
+          "relationship-type": { "connects": { "source": { "node": "ebpf-a" }, "destination": { "node": "ebpf-b" } } } },
+        { "unique-id": "policy-ebpf-b", "description": "Node B's eBPF programs enforce the policy written between identities.",
+          "relationship-type": { "connects": { "source": { "node": "policy" }, "destination": { "node": "ebpf-b" } } } },
+        { "unique-id": "ebpf-b-pod-b", "description": "Node B's eBPF programs, having decided from the identity the packet carries, pass the packet on to the pod on Node B; because Cilium's transparent encryption is node-to-node, this hop between node and pod stays plaintext on the host.",
+          "relationship-type": { "connects": { "source": { "node": "ebpf-b" }, "destination": { "node": "pod-b" } } } }
+      ],
+      "flows": [
+        { "unique-id": "identity-travels", "name": "Identity carried, decided at the receiver",
+          "description": "Cilium turns a pod's label set into a numeric security identity, then enforces identity-to-identity policy in eBPF programs in the kernel rather than in a sidecar proxy.",
+          "transitions": [
+            { "relationship-unique-id": "control-plane-node-a", "sequence-number": 1, "description": "The control plane distributes the mapping from label sets to numeric security identities to Node A." },
+            { "relationship-unique-id": "control-plane-node-b", "sequence-number": 2, "description": "The control plane distributes the same mapping to Node B, cluster-wide." },
+            { "relationship-unique-id": "pod-a-ebpf-a", "sequence-number": 3, "description": "The pod's packet passes into Node A's eBPF programs." },
+            { "relationship-unique-id": "ebpf-a-ebpf-b", "sequence-number": 4, "description": "The packet crosses to Node B carrying the sending pod's identity." },
+            { "relationship-unique-id": "policy-ebpf-b", "sequence-number": 5, "description": "Node B's eBPF programs enforce the policy, which names label selectors, against the identity the packet carries." },
+            { "relationship-unique-id": "ebpf-b-pod-b", "sequence-number": 6, "description": "Having decided without a second lookup, Node B's eBPF programs pass the packet on to the pod on Node B." }
+          ] }
+      ]
+    },
+    calico: {
+      "nodes": [
+        { "unique-id": "node-a", "node-type": "system", "name": "Node A", "description": "Node A, a node in the cluster that owns a block of the pod address space, on which a BGP daemon (BIRD, configured by confd from Calico's datastore) advertises the block to the other nodes or to the physical fabric." },
+        { "unique-id": "pod-a", "node-type": "pod", "name": "Pod", "description": "A pod on Node A, whose packet crosses the wire carrying the pod's own source and destination address." },
+        { "unique-id": "felix-a", "node-type": "service", "name": "Felix", "description": "Node A's Felix agent, one on every node, which does the programming for Calico, the Apache-2.0 Container Network Interface plugin created and still maintained by Tigera: inserting routes into the kernel FIB and access control rules into whichever data plane you chose, standard iptables, nftables, eBPF (which also replaces kube-proxy, preserves the client source IP and load-balances at connect time) or Windows HNS; Typha fans datastore updates out to the Felix agents so a large cluster does not batter the API server." },
+        { "unique-id": "node-b", "node-type": "system", "name": "Node B", "description": "Node B, another node in the cluster that owns a block of the pod address space, on which a BGP daemon advertises the block to the other nodes or to the physical fabric." },
+        { "unique-id": "pod-b", "node-type": "pod", "name": "Pod", "description": "A pod on Node B, whose own address the packet carries as the packet's destination." },
+        { "unique-id": "felix-b", "node-type": "service", "name": "Felix", "description": "Node B's Felix agent, which inserts routes into the kernel FIB and access control rules into the chosen data plane: iptables, nftables, eBPF or Windows HNS; WireGuard encryption is a flag in FelixConfiguration." },
+        { "unique-id": "platform-tier", "node-type": "data-asset", "name": "Platform tier", "description": "The platform tier, a high-precedence tier in which a platform team writes global rules: every policy lives in a tier, tiers are evaluated by order, and a tier can Pass a packet down to the next; Calico's policy engine, the reason Calico turns up in zero-trust designs, adds to Kubernetes' deliberately minimal NetworkPolicy (namespaced, pods only, allow-only, unordered) a projectcalico.org/v3 NetworkPolicy and a cluster-scoped GlobalNetworkPolicy, with explicit deny and log actions, an order field that makes precedence deterministic, richer match criteria and, through HostEndpoint, the same policy language applied to a node's own interfaces, to VMs and to bare metal; Calico resolves label selectors into IP sets and enforces on those, so a policy is only as trustworthy as the labels and the IPAM behind the policy, a weaker claim than the cryptographic workload identity SPIFFE and a service mesh provide, which is why the two are usually deployed together rather than chosen between." },
+        { "unique-id": "default-tier", "node-type": "data-asset", "name": "Default tier", "description": "The default tier, fixed at order 1,000,000, where developers' Kubernetes NetworkPolicies land and cannot override what sits above; Kubernetes RBAC applies per tier, turning that convention into an enforced boundary, which is the multi-team microsegmentation story flat NetworkPolicy cannot tell." }
+      ],
+      "relationships": [
+        { "unique-id": "node-a-felix-pod", "description": "A Felix agent and a pod run on Node A.",
+          "relationship-type": { "deployed-in": { "container": "node-a", "nodes": ["felix-a", "pod-a"] } } },
+        { "unique-id": "node-b-pod-felix", "description": "A pod and a Felix agent run on Node B.",
+          "relationship-type": { "deployed-in": { "container": "node-b", "nodes": ["pod-b", "felix-b"] } } },
+        { "unique-id": "node-a-node-b", "description": "Each node's BGP daemon advertises the node's block of the pod address space to the other node.",
+          "relationship-type": { "connects": { "source": { "node": "node-a" }, "destination": { "node": "node-b" } } } },
+        { "unique-id": "pod-a-pod-b", "description": "A pod's packet crosses the wire from the pod on Node A to the pod on Node B carrying the pod's own source and destination address with nothing wrapped around the packet, which keeps the network legible (existing routers, firewalls and flow collectors see real endpoints rather than an opaque VXLAN blob) and costs no encapsulation overhead; where the underlay will not carry pod routes, which is most cloud VPCs, Calico falls back to a VXLAN or IP-in-IP overlay, optionally only across subnet boundaries so the common case stays native; Calico's WireGuard encryption is node-to-node rather than pod-to-pod: the host-to-host hop is protected, the pod-to-host segment on each machine is not, so root on a node still reads plaintext.",
+          "relationship-type": { "connects": { "source": { "node": "pod-a" }, "destination": { "node": "pod-b" } } } },
+        { "unique-id": "platform-tier-default-tier", "description": "Tiers are evaluated by order, and the platform tier, evaluated first, can Pass a packet down to the default tier.",
+          "relationship-type": { "connects": { "source": { "node": "platform-tier" }, "destination": { "node": "default-tier" } } } }
+      ],
+      "flows": [
+        { "unique-id": "route-then-tiers", "name": "Advertise, route natively, evaluate tiers in order",
+          "description": "Calico routes the pod's own IP across the underlay with BGP rather than tunnelling it, and Felix programs each node's kernel with ACLs compiled from an ordered tier ladder the developer tier cannot override.",
+          "transitions": [
+            { "relationship-unique-id": "node-a-node-b", "sequence-number": 1, "description": "Node A's BGP daemon advertises Node A's block of the pod address space to Node B." },
+            { "relationship-unique-id": "node-a-node-b", "sequence-number": 2, "description": "Node B's BGP daemon advertises Node B's block to Node A.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "pod-a-pod-b", "sequence-number": 3, "description": "The pod's packet crosses the wire carrying the pod's own source and destination address, with nothing wrapped around the packet." },
+            { "relationship-unique-id": "platform-tier-default-tier", "sequence-number": 4, "description": "The platform tier, evaluated first, can Pass a packet down to the default tier." }
           ] }
       ]
     },
