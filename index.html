@@ -7292,7 +7292,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="40" y="96">imitates human</text>
           <text class="t-sm t-mut" x="40" y="112">demonstrations</text>
         </g>
-        <line class="flow" data-s="2" data-calm="labellers-fine-tuning" x1="226" y1="64" x2="258" y2="64" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-note="call-out" x1="226" y1="64" x2="258" y2="64" marker-end="url(#ah-mut)"/>
         <g data-s="2" data-calm="labellers">
           <rect class="box" x="260" y="36" width="200" height="56" rx="20"/>
           ${icon('users', 276, 52)}
@@ -7497,7 +7497,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="68" y="186">asks</text>
         </g>
         <line class="flow" data-s="2" data-calm="user-embedding-model" x1="162" y1="146" x2="370" y2="94" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="226" y="150">question</text>
+        <text class="t-sm" data-s="2" x="240" y="142">question</text>
         <line class="flow" data-s="2 3" data-calm="embedding-model-retrieval" x1="436" y1="94" x2="436" y2="130" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="3" data-calm="retrieval-index" x1="616" y1="94" x2="528" y2="130" marker-end="url(#ah-mut)"/>
         <g data-s="3" data-calm="retrieval">
@@ -8302,11 +8302,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="3" data-calm="w-layer" x1="374" y1="64" x2="410" y2="102" marker-end="url(#ah-mut)"/>
         <line class="flow" data-s="3" data-calm="b-layer" x1="374" y1="188" x2="410" y2="158" marker-end="url(#ah-mut)"/>
         <g data-s="3" data-calm="layer">
-          <rect class="box" x="412" y="92" width="120" height="76" rx="8"/>
+          <rect class="box" x="412" y="92" width="128" height="76" rx="8"/>
           <text class="t-b" x="424" y="128">Adapted layer</text>
           <text class="t-sm" x="424" y="146">Wx + BAx</text>
         </g>
-        <line class="flow" data-s="3" data-note="call-out" x1="534" y1="124" x2="558" y2="124" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-note="call-out" x1="542" y1="124" x2="558" y2="124" marker-end="url(#ah-mut)"/>
         <g data-s="3" data-note="call-out">
           <rect class="box" x="560" y="100" width="136" height="48" rx="8"/>
           <text class="t-b" x="576" y="129">output</text>
@@ -11853,8 +11853,6 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "reference", "node-type": "data-asset", "name": "Reference", "description": "The fine-tuned reference, from which a KL-divergence penalty measures how far the model has drifted." }
       ],
       "relationships": [
-        { "unique-id": "labellers-fine-tuning", "description": "After supervised fine-tuning, labellers are shown several candidate answers to the same prompt.",
-          "relationship-type": { "interacts": { "actor": "labellers", "nodes": ["fine-tuning"] } } },
         { "unique-id": "labellers-reward-model", "description": "The labellers' comparisons train a separate reward model to predict which output a human would prefer.",
           "relationship-type": { "interacts": { "actor": "labellers", "nodes": ["reward-model"] } } },
         { "unique-id": "reward-model-ppo", "description": "PPO optimises the model against the reward the reward model has learned.",
@@ -11868,11 +11866,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "three-stages", "name": "Three stages",
           "description": "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.",
           "transitions": [
-            { "relationship-unique-id": "labellers-fine-tuning", "sequence-number": 1, "description": "After supervised fine-tuning, labellers are shown several candidate answers to the same prompt and rank them.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "labellers-reward-model", "sequence-number": 2, "description": "The labellers' comparisons train a separate reward model to predict which output a human would prefer." },
-            { "relationship-unique-id": "reward-model-ppo", "sequence-number": 3, "description": "Reinforcement learning, classically PPO, optimises the model against that learned reward." },
-            { "relationship-unique-id": "fine-tuning-reference", "sequence-number": 4, "description": "The fine-tuned reference comes from supervised fine-tuning." },
-            { "relationship-unique-id": "reference-ppo", "sequence-number": 5, "description": "A KL-divergence penalty pins the model to the fine-tuned reference." }
+            { "relationship-unique-id": "labellers-reward-model", "sequence-number": 1, "description": "The labellers' comparisons train a separate reward model to predict which output a human would prefer." },
+            { "relationship-unique-id": "reward-model-ppo", "sequence-number": 2, "description": "Reinforcement learning, classically PPO, optimises the model against that learned reward." },
+            { "relationship-unique-id": "fine-tuning-reference", "sequence-number": 3, "description": "The fine-tuned reference comes from supervised fine-tuning." },
+            { "relationship-unique-id": "reference-ppo", "sequence-number": 4, "description": "A KL-divergence penalty pins the model to the fine-tuned reference." }
           ] }
       ]
     },
@@ -11948,7 +11945,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "relationships": [
         { "unique-id": "adapter-parts", "description": "The adapter is the pair of thin matrices A and B, whose product B times A is the update LoRA learns.",
           "relationship-type": { "composed-of": { "container": "adapter", "nodes": ["a", "b"] } } },
-        { "unique-id": "a-b", "description": "A's output passes to B, so the pair computes BAx, the product B times A applied to the input.",
+        { "unique-id": "a-b", "description": "B times A: the product of the two thin matrices is the update, applied to the input as BAx.",
           "relationship-type": { "connects": { "source": { "node": "a" }, "destination": { "node": "b" } } } },
         { "unique-id": "w-layer", "description": "The adapted layer computes Wx from the frozen pretrained matrix W.",
           "relationship-type": { "connects": { "source": { "node": "w" }, "destination": { "node": "layer" } } } },
@@ -11970,7 +11967,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "gpu", "node-type": "accelerator", "name": "one data-centre GPU", "description": "One data-centre GPU, the card QLoRA brings fine-tuning a 65B model down to, from more than 780 GB of GPU memory to under 48 GB, while matching 16-bit LoRA on the paper's benchmarks, parity with full 16-bit fine-tuning being shown only for models up to 3B; the paper's Guanaco models reached 99.3% of ChatGPT on the Vicuna benchmark after 24 hours on a single GPU." },
         { "unique-id": "base-model", "node-type": "data-asset", "name": "Base model", "description": "The frozen base model, which QLoRA, from Dettmers et al. in 2023, stores in 4 bits instead of the 16 at which the base still has to sit in GPU memory under LoRA, some 130 GB at 65 billion parameters: 4-bit NormalFloat (NF4) is a data type whose sixteen levels sit at the quantiles of a normal distribution, which is how pretrained weights are actually distributed, so the precision lands where the values are, and double quantisation then quantises the per-block scaling constants themselves, saving about another 0.37 bits per parameter, roughly 3 GB on a 65B model; the memory saving is bought with time: dequantising every layer on every step makes training slower than plain LoRA." },
         { "unique-id": "lora-adapters", "node-type": "data-asset", "name": "LoRA", "description": "The ordinary LoRA adapters QLoRA trains on top of the 4-bit base in 16-bit precision, the only weights updated; with QLoRA the cost of customising, or de-aligning, a large open-weight model fell to something an individual can afford, which strengthens the case for treating adapters and their training data as supply-chain artefacts, and an adapter learned against quantised weights drifts when merged into a 16-bit base or re-quantised for serving, a mismatch that has to be measured rather than assumed away." },
-        { "unique-id": "cpu-ram", "node-type": "resource", "name": "CPU RAM", "description": "CPU RAM, to which paged optimisers spill optimiser state when a long sequence spikes GPU use." }
+        { "unique-id": "cpu-ram", "node-type": "memory", "name": "CPU RAM", "description": "CPU RAM, to which paged optimisers spill optimiser state when a long sequence spikes GPU use." }
       ],
       "relationships": [
         { "unique-id": "gpu-base-model-lora-adapters", "description": "The 4-bit base and the 16-bit LoRA adapters sit in GPU memory, and fine-tuning a 65B model needs under 48 GB of GPU memory: one data-centre card.",
@@ -11991,7 +11988,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     coreweave: {
       "nodes": [
-        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane of CoreWeave Kubernetes Service, which CoreWeave runs, managing the GPU drivers and validating each node before the node joins a cluster; CoreWeave, a GPU-first cloud and one of the so-called neoclouds, built for training and serving AI models rather than for general enterprise workloads, began in 2017 as Atlantic Crypto, an Ethereum mining operation in New Jersey, renamed itself in 2019 after the 2018 crypto crash, started renting the company's NVIDIA GPUs out as cloud capacity, and listed on Nasdaq in March 2025; CoreWeave is a specialist: the managed databases, identity services and compliance catalogue that surround a hyperscaler workload are far thinner, so most organisations run CoreWeave alongside another cloud and inherit the job of joining identity, networking and logging across both; and CoreWeave is a concentrated bet: Microsoft supplied more than 60 per cent of CoreWeave's 2024 revenue, CoreWeave's expansion has been financed with debt secured against the GPUs themselves, and a customer's training capacity rides on that one provider's balance sheet." },
+        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane of CoreWeave Kubernetes Service, which CoreWeave runs; CoreWeave also manages the GPU drivers and validates each node before the node joins a cluster; CoreWeave, a GPU-first cloud and one of the so-called neoclouds, built for training and serving AI models rather than for general enterprise workloads, began in 2017 as Atlantic Crypto, an Ethereum mining operation in New Jersey, renamed itself in 2019 after the 2018 crypto crash, started renting the company's NVIDIA GPUs out as cloud capacity, and listed on Nasdaq in March 2025; CoreWeave is a specialist: the managed databases, identity services and compliance catalogue that surround a hyperscaler workload are far thinner, so most organisations run CoreWeave alongside another cloud and inherit the job of joining identity, networking and logging across both; and CoreWeave is a concentrated bet: Microsoft supplied more than 60 per cent of CoreWeave's 2024 revenue, CoreWeave's expansion has been financed with debt secured against the GPUs themselves, and a customer's training capacity rides on that one provider's balance sheet." },
         { "unique-id": "node-1", "node-type": "system", "name": "bare-metal node", "description": "A bare-metal node on which CoreWeave Kubernetes Service runs Kubernetes directly with no hypervisor, so a job gets the whole machine rather than a virtual slice of it; nodes are stateless and boot a clean OS image every time, which keeps a fleet of thousands of servers consistent, and the isolation a hypervisor would normally provide moves elsewhere, into dedicated single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server." },
         { "unique-id": "gpus-1", "node-type": "accelerator", "name": "GPUs", "description": "The node's NVIDIA GPUs: a job gets the whole machine rather than a virtual slice of it, and GPU-to-GPU traffic travels a separate fabric." },
         { "unique-id": "dpu-1", "node-type": "chip", "name": "BlueField DPU", "description": "An NVIDIA BlueField DPU, one in every server, which runs the networking and host security on the DPU's own Arm cores, out of reach of the workload: in zero-trust terms, enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls." },
@@ -12004,11 +12001,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "infiniband", "node-type": "network", "name": "InfiniBand fabric", "description": "A separate non-blocking fat-tree fabric, InfiniBand on most instances, with SHARP in-network reduction available but off by default, which GPU-to-GPU traffic travels because a large training run is limited as much by how fast gradients cross the network as by the GPUs themselves." }
       ],
       "relationships": [
-        { "unique-id": "control-plane-node-1", "description": "CoreWeave's control plane manages the node's GPU drivers and validates the node before the node joins a cluster.",
+        { "unique-id": "control-plane-node-1", "description": "CoreWeave, which runs the control plane, manages the node's GPU drivers and validates the node before the node joins a cluster.",
           "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-1" } } } },
-        { "unique-id": "control-plane-node-2", "description": "CoreWeave's control plane manages the node's GPU drivers and validates the node before the node joins a cluster.",
+        { "unique-id": "control-plane-node-2", "description": "CoreWeave, which runs the control plane, manages the node's GPU drivers and validates the node before the node joins a cluster.",
           "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-2" } } } },
-        { "unique-id": "control-plane-node-3", "description": "CoreWeave's control plane manages the node's GPU drivers and validates the node before the node joins a cluster.",
+        { "unique-id": "control-plane-node-3", "description": "CoreWeave, which runs the control plane, manages the node's GPU drivers and validates the node before the node joins a cluster.",
           "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-3" } } } },
         { "unique-id": "node-1-parts", "description": "The bare-metal node holds the node's GPUs and a BlueField DPU, one in every server.",
           "relationship-type": { "composed-of": { "container": "node-1", "nodes": ["gpus-1", "dpu-1"] } } },
@@ -12027,9 +12024,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "managed-bare-metal", "name": "Managed bare metal",
           "description": "CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.",
           "transitions": [
-            { "relationship-unique-id": "control-plane-node-1", "sequence-number": 1, "description": "CoreWeave's control plane manages the GPU drivers on bare-metal node 1 and validates the node before the node joins a cluster." },
-            { "relationship-unique-id": "control-plane-node-2", "sequence-number": 2, "description": "CoreWeave's control plane manages the GPU drivers on bare-metal node 2 and validates the node before the node joins a cluster." },
-            { "relationship-unique-id": "control-plane-node-3", "sequence-number": 3, "description": "CoreWeave's control plane manages the GPU drivers on bare-metal node 3 and validates the node before the node joins a cluster." },
+            { "relationship-unique-id": "control-plane-node-1", "sequence-number": 1, "description": "CoreWeave, which runs the control plane, manages the GPU drivers on bare-metal node 1 and validates the node before the node joins a cluster." },
+            { "relationship-unique-id": "control-plane-node-2", "sequence-number": 2, "description": "CoreWeave, which runs the control plane, manages the GPU drivers on bare-metal node 2 and validates the node before the node joins a cluster." },
+            { "relationship-unique-id": "control-plane-node-3", "sequence-number": 3, "description": "CoreWeave, which runs the control plane, manages the GPU drivers on bare-metal node 3 and validates the node before the node joins a cluster." },
             { "relationship-unique-id": "gpus-1-infiniband", "sequence-number": 4, "description": "GPU-to-GPU traffic from node 1's GPUs travels the separate non-blocking InfiniBand fabric." },
             { "relationship-unique-id": "gpus-2-infiniband", "sequence-number": 5, "description": "GPU-to-GPU traffic from node 2's GPUs travels the separate non-blocking InfiniBand fabric." },
             { "relationship-unique-id": "gpus-3-infiniband", "sequence-number": 6, "description": "GPU-to-GPU traffic from node 3's GPUs travels the separate non-blocking InfiniBand fabric." }
