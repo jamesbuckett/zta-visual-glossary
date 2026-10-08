@@ -4117,38 +4117,41 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     docker: () => `
       <svg class="dg" viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An image is a stack of read-only layers; containers share the host kernel.">
-        <g data-s="1">
-          <rect class="zone" x="24" y="24" width="220" height="236" rx="10"/>
+        <g data-s="1" data-calm="image">
+          <rect class="box-soft" x="24" y="24" width="220" height="236" rx="10"/>
           ${icon('layers', 36, 36)}
           <text class="t-b" x="68" y="54">Image</text>
-          ${[['application', 88], ['what it needs', 136], ['base layer', 184]].map(([t, y]) => `
-            <rect class="box" x="36" y="${y}" width="196" height="40" rx="6"/>
-            <text class="t-sm" x="52" y="${y + 25}">${t}</text>
-            <text class="t-sm t-mut" x="220" y="${y + 25}" text-anchor="end">read-only</text>`).join('')}
-          <text class="t-sm t-mut" x="36" y="248">stacked, cacheable</text>
         </g>
-        ${[['Host 1', 24, '2 3', '3'], ['Host 2', 156, '4', '4']].map(([name, y, cs, ks]) => `
-          <rect class="zone" x="300" y="${y}" width="396" height="104" rx="10"/>
-          <text class="t-sm t-mut" x="312" y="${y + 20}">${name}</text>
-          <g data-s="${cs}">
+        ${[['layer-application', 'application', 88], ['layer-needs', 'what it needs', 136], ['layer-base', 'base layer', 184]].map(([id, t, y]) => `
+          <g data-s="1" data-calm="${id}">
+            ${doc(36, y, 196, 40)}
+            <text class="t-sm" x="52" y="${y + 25}">${t}</text>
+          </g>`).join('')}
+        <text class="t-sm t-mut" data-s="1" x="36" y="248">stacked, cacheable, read-only</text>
+        ${[['1', 24, '2 3', '3'], ['2', 156, '4', '4']].map(([n, y, cs, ks]) => `
+          <g data-calm="host-${n}">
+            <rect class="zone" x="300" y="${y}" width="396" height="104" rx="10"/>
+            <text class="t-sm t-mut" x="312" y="${y + 20}">Host ${n}</text>
+          </g>
+          <g data-s="${cs}" data-calm="container-${n}">
             <rect class="box" x="316" y="${y + 28}" width="170" height="64" rx="8"/>
             ${icon('box', 332, y + 48)}
-            <text class="t-b" x="364" y="${y + 58}">Container</text>
-            <text class="t-sm t-mut" x="364" y="${y + 76}">isolated process</text>
+            <text class="t-b" x="364" y="${y + 60}">Container</text>
+            <text class="t-sm t-mut" x="364" y="${y + 78}">isolated process</text>
           </g>
-          <line class="flow" data-s="${ks}" x1="488" y1="${y + 60}" x2="554" y2="${y + 60}" marker-end="url(#ah-mut)"/>
-          <g data-s="${ks}">
+          <line class="flow" data-s="${ks}" data-calm="container-${n}-kernel-${n}" x1="488" y1="${y + 60}" x2="554" y2="${y + 60}" marker-end="url(#ah-mut)"/>
+          <g data-s="${ks}" data-calm="kernel-${n}">
             <rect class="box" x="556" y="${y + 28}" width="128" height="64" rx="8"/>
             ${icon('cpu', 568, y + 48)}
-            <text class="t-b" x="600" y="${y + 58}">Kernel</text>
-            <text class="t-sm t-mut" x="600" y="${y + 76}">shared</text>
+            <text class="t-b" x="600" y="${y + 60}">Kernel</text>
+            <text class="t-sm t-mut" x="600" y="${y + 78}">shared</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" x1="246" y1="112" x2="314" y2="84" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="246" y1="176" x2="314" y2="216" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="image-container-1" x1="246" y1="112" x2="314" y2="84" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="image-container-2" x1="246" y1="176" x2="314" y2="216" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 224, 44, '1')}
+        ${badge(1, 224, 68, '1')}
         ${badge(2, 280, 98, '2')}
-        ${badge(3, 668, 66, '3')}
+        ${badge(3, 521, 84, '3')}
         ${badge(4, 280, 196, '4')}
       </svg>`,
 
@@ -4198,73 +4201,91 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     react: () => `
       <svg class="dg" viewBox="0 0 720 268" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A component tree renders from state; data flows down to children as props.">
-        <g data-s="1 3">
+        <g data-s="1 3" data-calm="root">
           <rect class="box" x="112" y="20" width="160" height="56" rx="8"/>
           ${icon('component', 128, 36)}
           <text class="t-b" x="160" y="45">Root</text>
           <text class="t-sm t-mut" x="160" y="63">holds state</text>
         </g>
-        ${[24, 200].map((x) => `
-          <g data-s="1 2">
+        ${[['child-1', 24], ['child-2', 200]].map(([id, x]) => `
+          <g data-s="1 2" data-calm="${id}">
             <rect class="box" x="${x}" y="140" width="160" height="56" rx="8"/>
             ${icon('component', x + 16, 156)}
             <text class="t-b" x="${x + 48}" y="165">Child</text>
             <text class="t-sm t-mut" x="${x + 48}" y="183">gets props</text>
           </g>`).join('')}
-        <line class="flow" data-s="2" x1="170" y1="78" x2="110" y2="138" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="214" y1="78" x2="274" y2="138" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="root-child-1" x1="170" y1="78" x2="110" y2="138" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="root-child-2" x1="214" y1="78" x2="274" y2="138" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="126" y="106" text-anchor="end">props</text>
         <text class="t-sm" data-s="2" x="268" y="106">props</text>
 
-        <line class="flow" data-s="3" x1="274" y1="48" x2="438" y2="48" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="root-virtual-dom" x1="274" y1="48" x2="438" y2="48" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="370" y="40" text-anchor="middle">re-render</text>
-        <g data-s="4">
-          <rect class="box" x="440" y="20" width="256" height="76" rx="8"/>
+        <g data-s="4" data-calm="virtual-dom">
+          ${doc(440, 20, 256, 76)}
           ${icon('code', 456, 34)}
           <text class="t-b" x="488" y="50">Virtual DOM</text>
           <text class="t-sm t-mut" x="488" y="68">virtual representation</text>
           <text class="t-sm t-mut" x="488" y="84">diffed on change</text>
         </g>
-        <line class="flow" data-s="5" x1="568" y1="98" x2="568" y2="174" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="virtual-dom-dom" x1="568" y1="98" x2="568" y2="174" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="5" x="558" y="124" text-anchor="end">patch only what changed</text>
-        <g data-s="5">
-          <rect class="box" x="440" y="176" width="256" height="64" rx="8"/>
+        <g data-s="5" data-calm="dom">
+          <rect class="box" x="440" y="176" width="256" height="64" rx="20"/>
           ${icon('monitor', 456, 196)}
           <text class="t-b" x="488" y="205">DOM</text>
           <text class="t-sm t-mut" x="488" y="223">only changes patched</text>
         </g>
 
-        ${badge(1, 256, 34, '1')}
+        ${badge(1, 96, 48, '1')}
         ${badge(2, 140, 108, '2')}
         ${badge(3, 300, 48, '3')}
-        ${badge(4, 680, 34, '4')}
+        ${badge(4, 664, 48, '4')}
         ${badge(5, 568, 150, '5')}
       </svg>`,
 
     django: () => `
       <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="MTV request flow — URL routing to a view, models for data, a template for the response.">
-        ${[['globe', 'Request', 24, 118, 116, '1'], ['route', 'URL router', 172, 118, 164, '1'], ['code', 'View', 368, 118, 144, '1 2 3'],
-           ['layout-template', 'Template', 368, 16, 144, '3'], ['file-code', 'Response', 552, 16, 144, '4'],
-           ['table', 'Model', 368, 216, 144, '2'], ['database', 'Database', 552, 216, 144, '2']].map(([ico, name, x, y, w, s]) => `
-          <g data-s="${s}">
+        <g data-s="1" data-note="call-out">
+          <rect class="box" x="24" y="118" width="116" height="52" rx="8"/>
+          ${icon('globe', 36, 132)}
+          <text class="t-b" x="68" y="149">Request</text>
+        </g>
+        ${[['url-router', 'route', 'URL router', 172, 118, 164, '1'], ['view', 'code', 'View', 368, 118, 144, '1 2 3'], ['model', 'table', 'Model', 368, 216, 144, '2']].map(([id, ico, name, x, y, w, s]) => `
+          <g data-s="${s}" data-calm="${id}">
             <rect class="box" x="${x}" y="${y}" width="${w}" height="52" rx="8"/>
             ${icon(ico, x + 12, y + 14)}
             <text class="t-b" x="${x + 44}" y="${y + 31}">${name}</text>
           </g>`).join('')}
-        <g data-s="5">
+        <g data-s="3" data-calm="template">
+          ${doc(368, 16, 144, 52)}
+          ${icon('layout-template', 380, 30)}
+          <text class="t-b" x="412" y="47">Template</text>
+        </g>
+        <g data-s="4" data-note="call-out">
+          <rect class="box" x="552" y="16" width="144" height="52" rx="8"/>
+          ${icon('file-code', 564, 30)}
+          <text class="t-b" x="596" y="47">Response</text>
+        </g>
+        <g data-s="2" data-calm="database">
+          ${cyl(552, 208, 144, 68)}
+          ${icon('database', 564, 228)}
+          <text class="t-b" x="596" y="245">Database</text>
+        </g>
+        <g data-s="5" data-note="call-out">
           <rect class="box" x="24" y="216" width="312" height="52" rx="8"/>
           ${icon('package', 40, 230)}
           <text class="t-b" x="72" y="238">Out of the box</text>
           <text class="t-sm t-mut" x="72" y="256">ORM · admin · auth · routing</text>
         </g>
-        <line class="flow" data-s="1" x1="142" y1="144" x2="170" y2="144" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1" x1="338" y1="144" x2="366" y2="144" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="440" y1="172" x2="440" y2="214" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-note="call-out" x1="142" y1="144" x2="170" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="url-router-view" x1="338" y1="144" x2="366" y2="144" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="view-model" x1="440" y1="172" x2="440" y2="214" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="456" y="198">pulls data</text>
-        <line class="flow" data-s="2" x1="514" y1="242" x2="550" y2="242" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="440" y1="116" x2="440" y2="70" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="model-database" x1="514" y1="242" x2="550" y2="242" marker-start="url(#ah-mut)" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="template-view" x1="440" y1="116" x2="440" y2="70" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="456" y="98">renders</text>
-        <line class="flow" data-s="4" x1="514" y1="42" x2="550" y2="42" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-note="becomes" x1="514" y1="42" x2="550" y2="42" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 320, 130, '1')}
         ${badge(2, 440, 193, '2')}
@@ -6910,66 +6931,67 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     doca: () => `
-      <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement.">
-        <g data-s="1">
-          <rect class="zone" x="24" y="16" width="400" height="208" rx="10"/>
+      <svg class="dg" viewBox="0 0 720 328" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement.">
+        <g data-s="1" data-calm="doca">
+          <rect class="box-soft" x="24" y="16" width="672" height="208" rx="10"/>
           ${icon('layers', 36, 24)}
           <text class="t-b" x="68" y="42">DOCA</text>
         </g>
-        ${[['Microservices', 'containerised, production-ready', 56], ['Libraries', 'C/C++', 112], ['Drivers', 'hardware', 168]].map(([name, sub, y]) => `
-          <g data-s="2">
+        ${[['microservices', 'Microservices', 'containerised, production-ready', 56], ['libraries', 'Libraries', 'C/C++', 112], ['drivers', 'Drivers', 'hardware', 168]].map(([id, name, sub, y]) => `
+          <g data-s="2" data-calm="${id}">
             <rect class="box" x="40" y="${y}" width="280" height="48" rx="6"/>
             <text class="t-b" x="56" y="${y + 21}">${name}</text>
             <text class="t-sm t-mut" x="56" y="${y + 38}">${sub}</text>
           </g>`).join('')}
-        <g data-s="3">
+        <g data-s="3" data-note="call-out">
           <rect class="box" x="336" y="56" width="72" height="160" rx="6"/>
           <text class="t-sm" x="372" y="112" text-anchor="middle">DPDK</text>
           <text class="t-sm" x="372" y="136" text-anchor="middle">SPDK</text>
           <text class="t-sm" x="372" y="160" text-anchor="middle">Netlink</text>
           <text class="t-sm t-mut" x="372" y="200" text-anchor="middle">standard</text>
         </g>
-        <g data-s="1">
-          <rect class="box" x="24" y="240" width="400" height="56" rx="8"/>
-          ${icon('cpu', 40, 256)}
-          <text class="t-b" x="72" y="264">BlueField DPU / SuperNIC</text>
-          <text class="t-sm t-mut" x="72" y="282">the silicon DOCA programs</text>
+        <text class="t-sm t-mut" x="424" y="42">zero-trust components</text>
+        <g data-s="5" data-calm="crypto-libraries">
+          <rect class="box" x="424" y="56" width="256" height="48" rx="8"/>
+          ${icon('key-round', 436, 68)}
+          <text class="t-b" x="468" y="77">Crypto libraries</text>
+          <text class="t-sm t-mut" x="468" y="94">hardware-accelerated</text>
+        </g>
+        <g data-s="5" data-calm="ipsec-gateway">
+          <rect class="box" x="424" y="112" width="256" height="48" rx="8"/>
+          ${icon('lock', 436, 124)}
+          <text class="t-b" x="468" y="133">IPsec gateway</text>
+          <text class="t-sm t-mut" x="468" y="150">wire-speed tunnels</text>
+        </g>
+        <g data-s="4" data-calm="argus">
+          <rect class="box" x="424" y="168" width="256" height="48" rx="8"/>
+          ${icon('scan-eye', 436, 180)}
+          <text class="t-b" x="468" y="189">Argus</text>
+          <text class="t-sm t-mut" x="468" y="206">isolated DPU cores</text>
         </g>
 
-        <g data-s="4">
-          <rect class="box" x="480" y="16" width="216" height="64" rx="8"/>
-          ${icon('server', 496, 30)}
-          <text class="t-b" x="528" y="44">Host</text>
-          <text class="t-sm t-mut" x="528" y="62">memory, processes</text>
+        <line class="flow" data-s="1" data-calm="doca-bluefield" x1="216" y1="226" x2="216" y2="254" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="228" y="245">programs</text>
+        <g data-s="1" data-calm="bluefield">
+          <rect class="box" x="24" y="256" width="384" height="56" rx="8"/>
+          ${icon('cpu', 40, 272)}
+          <text class="t-b" x="72" y="280">BlueField DPU / SuperNIC</text>
+          <text class="t-sm t-mut" x="72" y="298">the silicon DOCA programs</text>
         </g>
-        <line class="flow" data-s="4" x1="660" y1="136" x2="660" y2="82" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="650" y="94" text-anchor="end">inspects</text>
-        <rect class="zone" x="464" y="100" width="240" height="208" rx="10"/>
-        <text class="t-sm t-mut" x="476" y="124">zero-trust components</text>
-        <g data-s="4">
-          <rect class="box" x="480" y="138" width="212" height="52" rx="8"/>
-          ${icon('scan-eye', 492, 152)}
-          <text class="t-b" x="524" y="160">Argus</text>
-          <text class="t-sm t-mut" x="524" y="178">isolated DPU cores</text>
-        </g>
-        <g data-s="5">
-          <rect class="box" x="480" y="198" width="212" height="48" rx="8"/>
-          ${icon('key-round', 492, 210)}
-          <text class="t-b" x="524" y="219">Crypto libraries</text>
-          <text class="t-sm t-mut" x="524" y="236">hardware-accelerated</text>
-        </g>
-        <g data-s="5">
-          <rect class="box" x="480" y="252" width="212" height="48" rx="8"/>
-          ${icon('lock', 492, 264)}
-          <text class="t-b" x="524" y="273">IPsec gateway</text>
-          <text class="t-sm t-mut" x="524" y="290">wire-speed tunnels</text>
+        <line class="flow" data-s="4" data-calm="argus-host" x1="552" y1="218" x2="552" y2="254" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="564" y="245">inspects</text>
+        <g data-s="4" data-calm="host">
+          <rect class="box" x="424" y="256" width="272" height="56" rx="8"/>
+          ${icon('server', 440, 272)}
+          <text class="t-b" x="472" y="280">Host</text>
+          <text class="t-sm t-mut" x="472" y="298">memory, processes</text>
         </g>
 
-        ${badge(1, 408, 256, '1')}
+        ${badge(1, 392, 272, '1')}
         ${badge(2, 304, 72, '2')}
         ${badge(3, 372, 76, '3')}
-        ${badge(4, 660, 116, '4')}
-        ${badge(5, 676, 214, '5')}
+        ${badge(4, 664, 184, '4')}
+        ${badge(5, 664, 72, '5')}
       </svg>`,
 
     ovs: () => `
@@ -7458,71 +7480,71 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     keda: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds.">
-        <g data-s="1 3">
+      <svg class="dg" viewBox="0 0 720 324" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds.">
+        <g data-s="1 3" data-calm="event-source">
           <rect class="box" x="24" y="20" width="200" height="72" rx="8"/>
           ${icon('inbox', 40, 34)}
           <text class="t-b" x="72" y="52">Event source</text>
           <text class="t-sm t-mut" x="72" y="70">queue depth, lag</text>
           <text class="t-sm t-mut" x="72" y="85">messages pile up</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="24" y="148" width="200" height="72" rx="8"/>
+        <g data-s="2" data-calm="scaledobject">
+          ${doc(24, 148, 200, 72)}
           ${icon('file-text', 40, 162)}
           <text class="t-b" x="72" y="180">ScaledObject</text>
-          <text class="t-sm t-mut" x="72" y="198">triggers, and the</text>
-          <text class="t-sm t-mut" x="72" y="213">Deployment to scale</text>
+          <text class="t-sm t-mut" x="72" y="198">Deployment to scale,</text>
+          <text class="t-sm t-mut" x="72" y="213">triggers</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="24" y="236" width="200" height="56" rx="8"/>
-          ${icon('key-round', 40, 252)}
-          <text class="t-sm t-b" x="72" y="260">TriggerAuthentication</text>
-          <text class="t-sm t-mut" x="72" y="278">holds credentials</text>
-        </g>
-        <g data-s="2 3">
-          <rect class="box" x="276" y="20" width="192" height="72" rx="8"/>
+        <g data-s="2 3" data-calm="operator">
+          <rect class="box" x="276" y="20" width="200" height="72" rx="8"/>
           ${icon('cog', 292, 34)}
           <text class="t-b" x="324" y="52">Operator</text>
           <text class="t-sm t-mut" x="324" y="70">handles zero</text>
           <text class="t-sm t-mut" x="324" y="85">to one itself</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="276" y="148" width="192" height="72" rx="8"/>
-          ${icon('server', 292, 162)}
-          <text class="t-b" x="324" y="180">Metrics server</text>
-          <text class="t-sm t-mut" x="324" y="198">external</text>
-          <text class="t-sm t-mut" x="324" y="213">metrics API</text>
+        <g data-s="5" data-calm="triggerauthentication">
+          ${doc(276, 148, 200, 72)}
+          ${icon('key-round', 292, 162)}
+          <text class="t-sm t-b" x="324" y="180">TriggerAuthentication</text>
+          <text class="t-sm t-mut" x="324" y="198">holds credentials</text>
         </g>
-        <g data-s="1 3 4">
-          <rect class="box" x="520" y="20" width="176" height="72" rx="8"/>
-          ${icon('boxes', 536, 34)}
-          <text class="t-b" x="568" y="52">Workload</text>
-          <text class="t-sm t-mut" x="568" y="70">idle on CPU</text>
-          <text class="t-sm t-mut" x="568" y="85">zero or more pods</text>
+        <g data-s="4" data-calm="metrics-server">
+          <rect class="box" x="276" y="236" width="200" height="72" rx="8"/>
+          ${icon('server', 292, 250)}
+          <text class="t-b" x="324" y="268">Metrics server</text>
+          <text class="t-sm t-mut" x="324" y="286">external</text>
+          <text class="t-sm t-mut" x="324" y="301">metrics API</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="520" y="148" width="176" height="72" rx="8"/>
-          ${icon('scale', 536, 162)}
-          <text class="t-b" x="568" y="180">HPA</text>
-          <text class="t-sm t-mut" x="568" y="198">from one</text>
-          <text class="t-sm t-mut" x="568" y="213">replica upward</text>
+        <g data-s="1 3 4" data-calm="workload">
+          <rect class="box" x="524" y="20" width="172" height="72" rx="8"/>
+          ${icon('boxes', 540, 34)}
+          <text class="t-b" x="572" y="52">Workload</text>
+          <text class="t-sm t-mut" x="572" y="70">idle on CPU</text>
+          <text class="t-sm t-mut" x="572" y="85">zero or more pods</text>
+        </g>
+        <g data-s="4" data-calm="hpa">
+          <rect class="box" x="524" y="236" width="172" height="72" rx="8"/>
+          ${icon('scale', 540, 250)}
+          <text class="t-b" x="572" y="268">HPA</text>
+          <text class="t-sm t-mut" x="572" y="286">from one</text>
+          <text class="t-sm t-mut" x="572" y="301">replica upward</text>
         </g>
 
-        <line class="flow" data-s="2" x1="226" y1="160" x2="274" y2="84" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="226" y1="44" x2="274" y2="44" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="470" y1="56" x2="518" y2="56" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="494" y="46" text-anchor="middle">0 to 1</text>
-        <line class="flow" data-s="4" x1="470" y1="184" x2="518" y2="184" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="608" y1="146" x2="608" y2="94" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="618" y="124">1 to N</text>
-        <path class="flow" data-s="5" d="M226 264 H372 V222" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="5" x="384" y="268">a credential for each poll</text>
+        <line class="flow" data-s="2" data-calm="scaledobject-operator" x1="226" y1="160" x2="274" y2="84" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="operator-event-source" x1="226" y1="44" x2="274" y2="44" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="operator-workload" x1="478" y1="56" x2="522" y2="56" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="500" y="46" text-anchor="middle">0 to 1</text>
+        <line class="flow" data-s="4" data-calm="metrics-server-hpa" x1="478" y1="272" x2="522" y2="272" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="hpa-workload" x1="610" y1="234" x2="610" y2="94" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="620" y="168">1 to N</text>
+        <line class="flow" data-s="5" data-calm="triggerauthentication-operator" x1="376" y1="146" x2="376" y2="94" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="388" y="124">a credential for each poll</text>
 
-        ${badge(1, 208, 36, '1')}
+        ${badge(1, 208, 76, '1')}
         ${badge(2, 250, 122, '2')}
         ${badge(3, 250, 44, '3')}
-        ${badge(4, 494, 184, '4')}
-        ${badge(5, 372, 243, '5')}
+        ${badge(4, 500, 252, '4')}
+        ${badge(5, 356, 120, '5')}
       </svg>`,
 
     spinnaker: () => `
@@ -11024,6 +11046,171 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           "transitions": [
             { "relationship-unique-id": "phone-system-sbc", "sequence-number": 1, "description": "A call's SIP signalling, and usually the call's RTP media, leaves the phone system and terminates on the SBC." },
             { "relationship-unique-id": "sbc-carrier", "sequence-number": 2, "description": "The SBC re-originates the call towards the carrier, so the organisation's network and the carrier's never touch directly." }
+          ] }
+      ]
+    },
+    docker: {
+      "nodes": [
+        { "unique-id": "image", "node-type": "data-asset", "name": "Image", "description": "An image, built in stacked, cacheable, read-only layers that bundle an application with everything the application needs to run; the same image runs identically on any host, which makes works-on-my-machine reproducible." },
+        { "unique-id": "layer-application", "node-type": "data-asset", "name": "application", "description": "The application, bundled into the image in one of the image's stacked, cacheable, read-only layers." },
+        { "unique-id": "layer-needs", "node-type": "data-asset", "name": "what it needs", "description": "Everything the application needs to run, bundled into the image in the image's stacked, cacheable, read-only layers." },
+        { "unique-id": "layer-base", "node-type": "data-asset", "name": "base layer", "description": "The base layer of the image's stack of cacheable, read-only layers." },
+        { "unique-id": "host-1", "node-type": "system", "name": "Host 1", "description": "A host on which a container runs from the image, sharing the host's kernel." },
+        { "unique-id": "container-1", "node-type": "container", "name": "Container", "description": "A container run from the image on Host 1, one of the lightweight, isolated processes Docker popularised, which bundle an application with everything the application needs to run and share the host's kernel instead of booting a whole virtual machine; the container is the unit that most deployment platforms, including Kubernetes, build upon, and because containers share the host's kernel, their isolation is weaker than a virtual machine's: a kernel vulnerability or a privileged container can expose the host." },
+        { "unique-id": "kernel-1", "node-type": "kernel", "name": "Kernel", "description": "Host 1's kernel, which the host's containers share instead of booting a whole virtual machine." },
+        { "unique-id": "host-2", "node-type": "system", "name": "Host 2", "description": "A second host, on which the same image runs identically." },
+        { "unique-id": "container-2", "node-type": "container", "name": "Container", "description": "A container run from the same image on Host 2, a lightweight, isolated process that shares the host's kernel and runs identically on any host." },
+        { "unique-id": "kernel-2", "node-type": "kernel", "name": "Kernel", "description": "Host 2's kernel, which the host's containers share instead of booting a whole virtual machine." }
+      ],
+      "relationships": [
+        { "unique-id": "image-layers", "description": "An image is built in stacked, cacheable, read-only layers: the application, everything the application needs to run, and a base layer.",
+          "relationship-type": { "composed-of": { "container": "image", "nodes": ["layer-application", "layer-needs", "layer-base"] } } },
+        { "unique-id": "host-1-container-kernel", "description": "A container runs on Host 1 alongside Host 1's kernel, which the container shares.",
+          "relationship-type": { "deployed-in": { "container": "host-1", "nodes": ["container-1", "kernel-1"] } } },
+        { "unique-id": "host-2-container-kernel", "description": "A container runs on Host 2 alongside Host 2's kernel, which the container shares.",
+          "relationship-type": { "deployed-in": { "container": "host-2", "nodes": ["container-2", "kernel-2"] } } },
+        { "unique-id": "image-container-1", "description": "A container runs from the image on Host 1 as a lightweight, isolated process.",
+          "relationship-type": { "connects": { "source": { "node": "image" }, "destination": { "node": "container-1" } } } },
+        { "unique-id": "container-1-kernel-1", "description": "The container on Host 1 shares Host 1's kernel instead of booting a whole virtual machine.",
+          "relationship-type": { "connects": { "source": { "node": "container-1" }, "destination": { "node": "kernel-1" } } } },
+        { "unique-id": "image-container-2", "description": "The same image runs identically as a container on Host 2.",
+          "relationship-type": { "connects": { "source": { "node": "image" }, "destination": { "node": "container-2" } } } },
+        { "unique-id": "container-2-kernel-2", "description": "The container on Host 2 shares Host 2's kernel instead of booting a whole virtual machine.",
+          "relationship-type": { "connects": { "source": { "node": "container-2" }, "destination": { "node": "kernel-2" } } } }
+      ],
+      "flows": [
+        { "unique-id": "run-on-any-host", "name": "Run from the image on any host",
+          "description": "An image is a stack of read-only layers; containers share the host kernel.",
+          "transitions": [
+            { "relationship-unique-id": "image-container-1", "sequence-number": 1, "description": "A container runs from the image on Host 1 as a lightweight, isolated process." },
+            { "relationship-unique-id": "container-1-kernel-1", "sequence-number": 2, "description": "The container shares Host 1's kernel instead of booting a whole virtual machine." },
+            { "relationship-unique-id": "image-container-2", "sequence-number": 3, "description": "The same image runs identically on Host 2, which makes works-on-my-machine reproducible." },
+            { "relationship-unique-id": "container-2-kernel-2", "sequence-number": 4, "description": "The container on Host 2 shares Host 2's kernel." }
+          ] }
+      ]
+    },
+    react: {
+      "nodes": [
+        { "unique-id": "root", "node-type": "component", "name": "Root", "description": "The root of the tree of reusable components that React lets you build a user interface as, holding state; each component's output is a function of the component's state and props, React's declarative model (describe what the UI should look like, not the steps to mutate the UI) made React the dominant front-end approach, and React covers only the view layer: routing and data fetching come from a framework or other libraries you must choose." },
+        { "unique-id": "child-1", "node-type": "component", "name": "Child", "description": "A reusable child component in the tree, which gets data from the root as props and whose output is a function of the child's state and props." },
+        { "unique-id": "child-2", "node-type": "component", "name": "Child", "description": "A reusable child component in the tree, which gets data from the root as props and whose output is a function of the child's state and props." },
+        { "unique-id": "virtual-dom", "node-type": "data-asset", "name": "Virtual DOM", "description": "A lightweight virtual representation of the DOM, which React diffs when state changes so that only what changed is patched." },
+        { "unique-id": "dom", "node-type": "webclient", "name": "DOM", "description": "The DOM, in which React patches only what changed." }
+      ],
+      "relationships": [
+        { "unique-id": "root-child-1", "description": "Data flows down from the root component to the first child component as props.",
+          "relationship-type": { "connects": { "source": { "node": "root" }, "destination": { "node": "child-1" } } } },
+        { "unique-id": "root-child-2", "description": "Data flows down from the root component to the second child component as props.",
+          "relationship-type": { "connects": { "source": { "node": "root" }, "destination": { "node": "child-2" } } } },
+        { "unique-id": "root-virtual-dom", "description": "When the root component's state changes, React re-renders efficiently by diffing a lightweight virtual representation of the DOM.",
+          "relationship-type": { "connects": { "source": { "node": "root" }, "destination": { "node": "virtual-dom" } } } },
+        { "unique-id": "virtual-dom-dom", "description": "Only what changed, found by diffing the virtual representation, is patched in the DOM.",
+          "relationship-type": { "connects": { "source": { "node": "virtual-dom" }, "destination": { "node": "dom" } } } }
+      ],
+      "flows": [
+        { "unique-id": "props-render-patch", "name": "Props down, re-render, patch",
+          "description": "A component tree renders from state; data flows down to children as props.",
+          "transitions": [
+            { "relationship-unique-id": "root-child-1", "sequence-number": 1, "description": "Data flows down to the first child component as props." },
+            { "relationship-unique-id": "root-child-2", "sequence-number": 2, "description": "Data flows down to the second child component as props." },
+            { "relationship-unique-id": "root-virtual-dom", "sequence-number": 3, "description": "When state changes, React re-renders, diffing a lightweight virtual representation of the DOM." },
+            { "relationship-unique-id": "virtual-dom-dom", "sequence-number": 4, "description": "Only what changed is patched in the DOM." }
+          ] }
+      ]
+    },
+    django: {
+      "nodes": [
+        { "unique-id": "url-router", "node-type": "service", "name": "URL router", "description": "Django's URL routing, one of the batteries Django ships out of the box, which routes each incoming request by the request's URL to a view." },
+        { "unique-id": "view", "node-type": "service", "name": "View", "description": "The view, to which each request is routed and which pulls data through models and renders a template: model, template and view make up the MTV pattern followed by Django, a high-level Python framework whose philosophy is to handle the plumbing so you can focus on the application." },
+        { "unique-id": "template", "node-type": "data-asset", "name": "Template", "description": "The template that the view renders, and that, rendered, becomes the response." },
+        { "unique-id": "model", "node-type": "service", "name": "Model", "description": "The model through which the view pulls data, using the ORM (object-relational mapper for database access) that Django ships out of the box; the batteries are opinionated: a project that fits Django's ORM and conventions poorly ends up working around the framework." },
+        { "unique-id": "database", "node-type": "database", "name": "Database", "description": "The database, which the model accesses through Django's ORM." }
+      ],
+      "relationships": [
+        { "unique-id": "url-router-view", "description": "The URL router routes each incoming request by the request's URL to a view.",
+          "relationship-type": { "connects": { "source": { "node": "url-router" }, "destination": { "node": "view" } } } },
+        { "unique-id": "view-model", "description": "The view pulls data through the model.",
+          "relationship-type": { "connects": { "source": { "node": "view" }, "destination": { "node": "model" } } } },
+        { "unique-id": "model-database", "description": "Data passes between the model and the database through Django's ORM (object-relational mapper for database access).",
+          "relationship-type": { "connects": { "source": { "node": "model" }, "destination": { "node": "database" } } } },
+        { "unique-id": "template-view", "description": "The view renders the template.",
+          "relationship-type": { "connects": { "source": { "node": "template" }, "destination": { "node": "view" } } } }
+      ],
+      "flows": [
+        { "unique-id": "mtv-request", "name": "MTV request flow",
+          "description": "MTV request flow — URL routing to a view, models for data, a template for the response.",
+          "transitions": [
+            { "relationship-unique-id": "url-router-view", "sequence-number": 1, "description": "The URL router routes an incoming request by the request's URL to a view." },
+            { "relationship-unique-id": "view-model", "sequence-number": 2, "description": "The view pulls data through the model." },
+            { "relationship-unique-id": "model-database", "sequence-number": 3, "description": "The model reaches the database through the ORM." },
+            { "relationship-unique-id": "model-database", "sequence-number": 4, "description": "The data comes back from the database to the model.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "template-view", "sequence-number": 5, "description": "The view renders the template.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    doca: {
+      "nodes": [
+        { "unique-id": "doca", "node-type": "framework", "name": "DOCA", "description": "DOCA, NVIDIA's software framework for programming BlueField DPUs and SuperNICs and the developer platform NVIDIA positions as the DPU's equivalent of CUDA for the GPU, layered with hardware drivers at the base, C/C++ libraries in the middle and production-ready containerised microservices on top, exposed through industry-standard interfaces such as DPDK, SPDK and Netlink rather than a closed silo; by standardising the interface, DOCA keeps security and networking software portable across BlueField generations, and with DOCA the silicon becomes a working zero-trust enforcement point; the cost is lock-in: software written against DOCA's libraries runs only on NVIDIA hardware." },
+        { "unique-id": "microservices", "node-type": "layer", "name": "Microservices", "description": "DOCA's top layer: production-ready containerised microservices." },
+        { "unique-id": "libraries", "node-type": "layer", "name": "Libraries", "description": "DOCA's middle layer: C/C++ libraries." },
+        { "unique-id": "drivers", "node-type": "layer", "name": "Drivers", "description": "DOCA's base layer: hardware drivers." },
+        { "unique-id": "crypto-libraries", "node-type": "library", "name": "Crypto libraries", "description": "DOCA's crypto libraries, which with the IPsec gateway terminate encrypted tunnels at wire speed." },
+        { "unique-id": "ipsec-gateway", "node-type": "service", "name": "IPsec gateway", "description": "DOCA's IPsec gateway, which with the crypto libraries terminates encrypted tunnels at wire speed." },
+        { "unique-id": "argus", "node-type": "service", "name": "Argus", "description": "DOCA Argus, which runs on the DPU's isolated cores and inspects the host's live memory and processes to detect reverse shells, injected code and hidden processes: agentless intrusion detection that host malware cannot see and, once the card is in zero-trust (restricted) mode, cannot switch off; Argus supersedes the older App Shield library, which NVIDIA drops after DOCA 3.5." },
+        { "unique-id": "bluefield", "node-type": "chip", "name": "BlueField DPU / SuperNIC", "description": "A BlueField DPU or SuperNIC, the silicon DOCA programs; without DOCA a BlueField card is an uninitialised accelerator." },
+        { "unique-id": "host", "node-type": "system", "name": "Host", "description": "The host, whose live memory and processes DOCA Argus inspects from the DPU." }
+      ],
+      "relationships": [
+        { "unique-id": "doca-parts", "description": "DOCA is layered, with production-ready containerised microservices on top, C/C++ libraries in the middle and hardware drivers at the base, and several of DOCA's components are squarely zero-trust tooling: DOCA Argus, the IPsec gateway and the crypto libraries.",
+          "relationship-type": { "composed-of": { "container": "doca", "nodes": ["microservices", "libraries", "drivers", "crypto-libraries", "ipsec-gateway", "argus"] } } },
+        { "unique-id": "doca-bluefield", "description": "DOCA programs BlueField DPUs and SuperNICs.",
+          "relationship-type": { "connects": { "source": { "node": "doca" }, "destination": { "node": "bluefield" } } } },
+        { "unique-id": "argus-host", "description": "DOCA Argus inspects the host's live memory and processes from the DPU's isolated cores.",
+          "relationship-type": { "connects": { "source": { "node": "argus" }, "destination": { "node": "host" } } } }
+      ],
+      "flows": [
+        { "unique-id": "program-and-inspect", "name": "Program the DPU, inspect the host",
+          "description": "DOCA is to the DPU what CUDA is to the GPU: drivers, libraries, and services — including Argus agentless host introspection — that turn BlueField silicon into zero-trust enforcement.",
+          "transitions": [
+            { "relationship-unique-id": "doca-bluefield", "sequence-number": 1, "description": "DOCA programs the BlueField DPU or SuperNIC." },
+            { "relationship-unique-id": "argus-host", "sequence-number": 2, "description": "DOCA Argus inspects the host's live memory and processes, as agentless intrusion detection that host malware cannot see." }
+          ] }
+      ]
+    },
+    keda: {
+      "nodes": [
+        { "unique-id": "event-source", "node-type": "service", "name": "Event source", "description": "An event source that a scaler polls, such as a queue, topic or database the cluster scales on, where a million messages can pile up behind a worker blocked on a queue read." },
+        { "unique-id": "scaledobject", "node-type": "data-asset", "name": "ScaledObject", "description": "The ScaledObject you write, pointing at an existing Deployment (or a ScaledJob for batch work) and declaring triggers, such as Kafka consumer lag, SQS queue depth, a Prometheus query or a cron window, drawn from some eighty built-in scalers; KEDA's admission webhooks reject broken configuration at apply time." },
+        { "unique-id": "triggerauthentication", "node-type": "data-asset", "name": "TriggerAuthentication", "description": "The TriggerAuthentication resource, which keeps the credentials every scaler needs to authenticate to whatever the scaler polls out of the ScaledObject, sourced from a Secret, a bound service account token, Vault, a cloud secret manager or, best of all, a pod identity provider so nothing long-lived is stored at all; namespaced TriggerAuthentication is safer than the cluster-wide variant." },
+        { "unique-id": "operator", "node-type": "service", "name": "Operator", "description": "KEDA's operator, which watches ScaledObjects, owns the HPA lifecycle and drives the zero-to-one transition itself, waking an idle workload when the first event lands and returning the workload to zero after a cooldown (five minutes by default); the operator is the single place where every tenant's credentials pile up: one controller able to reach every queue, topic and database the cluster scales on." },
+        { "unique-id": "metrics-server", "node-type": "service", "name": "Metrics server", "description": "KEDA's metrics API server, which publishes each scaler's reading through Kubernetes' external metrics API." },
+        { "unique-id": "workload", "node-type": "workload", "name": "Workload", "description": "The workload of an existing Deployment, zero or more pods, which while blocked on a queue read burns almost no CPU, so an HPA scaling on CPU and memory sees a healthy, idle deployment and does nothing; KEDA scales pods, not machines: scaling to zero saves nothing until Cluster Autoscaler or Karpenter drains the nodes underneath, and the first event after an idle period pays a full cold start, fine for a backlog worker, wrong for a synchronous request path." },
+        { "unique-id": "hpa", "node-type": "service", "name": "HPA", "description": "Kubernetes' built-in Horizontal Pod Autoscaler, which scales on what the pods are doing, CPU and memory, the wrong signal for anything event-driven, and which from one replica upward reads the external metrics KEDA publishes, so the familiar scaling behaviour still applies; a plain HPA could not scale to zero without an alpha feature gate until Kubernetes 1.37 enabled that gate by default, and still cannot on CPU or memory, only on object and external metrics." }
+      ],
+      "relationships": [
+        { "unique-id": "scaledobject-operator", "description": "The operator watches ScaledObjects.",
+          "relationship-type": { "connects": { "source": { "node": "scaledobject" }, "destination": { "node": "operator" } } } },
+        { "unique-id": "operator-event-source", "description": "The operator reaches the event source through a scaler, which must authenticate to the event source and should hold only read-only metadata rights: queue length, not message consumption.",
+          "relationship-type": { "connects": { "source": { "node": "operator" }, "destination": { "node": "event-source" } } } },
+        { "unique-id": "operator-workload", "description": "The operator drives the zero-to-one transition itself, waking the idle workload when the first event lands and returning the workload to zero after a cooldown.",
+          "relationship-type": { "connects": { "source": { "node": "operator" }, "destination": { "node": "workload" } } } },
+        { "unique-id": "metrics-server-hpa", "description": "The metrics server publishes each scaler's reading through Kubernetes' external metrics API, which the HPA reads.",
+          "relationship-type": { "connects": { "source": { "node": "metrics-server" }, "destination": { "node": "hpa" } } } },
+        { "unique-id": "hpa-workload", "description": "From one replica upward, the HPA scales the workload, so the familiar scaling behaviour still applies.",
+          "relationship-type": { "connects": { "source": { "node": "hpa" }, "destination": { "node": "workload" } } } },
+        { "unique-id": "triggerauthentication-operator", "description": "TriggerAuthentication supplies the credential each scaler needs for every poll, keeping that credential out of the ScaledObject, which makes the operator the single place where every tenant's credentials pile up.",
+          "relationship-type": { "connects": { "source": { "node": "triggerauthentication" }, "destination": { "node": "operator" } } } }
+      ],
+      "flows": [
+        { "unique-id": "zero-to-one-to-many", "name": "Zero to one, then one to many",
+          "description": "The operator handles zero-to-one itself; from one replica up it hands over to a standard HPA reading the scaler's metric — and every poll needs a credential, which is what TriggerAuthentication holds.",
+          "transitions": [
+            { "relationship-unique-id": "scaledobject-operator", "sequence-number": 1, "description": "The operator watches the ScaledObject, which points at an existing Deployment and declares triggers." },
+            { "relationship-unique-id": "operator-event-source", "sequence-number": 2, "description": "The first event lands, and the scaler's reading from the event source reaches the operator.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "operator-workload", "sequence-number": 3, "description": "The operator wakes the idle workload, driving the zero-to-one transition itself." },
+            { "relationship-unique-id": "metrics-server-hpa", "sequence-number": 4, "description": "The metrics server publishes each scaler's reading through the external metrics API to the HPA." },
+            { "relationship-unique-id": "hpa-workload", "sequence-number": 5, "description": "From one replica upward, an ordinary HPA does the scaling." },
+            { "relationship-unique-id": "triggerauthentication-operator", "sequence-number": 6, "description": "TriggerAuthentication supplies the credential every poll needs, kept out of the ScaledObject." }
           ] }
       ]
     },
