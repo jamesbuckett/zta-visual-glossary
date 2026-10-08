@@ -1,7 +1,7 @@
 # CALM models behind every diagram — design
 
 Date: 2026-10-06
-Status: approved on 6 October 2026; plan in `docs/superpowers/plans/2026-10-06-calm-models.md`
+Status: implemented; a CALM model became mandatory on 8 October 2026; plan in `docs/superpowers/plans/2026-10-06-calm-models.md`
 
 ## Goal
 
