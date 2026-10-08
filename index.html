@@ -6968,64 +6968,71 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     ovs: () => `
-      <svg class="dg" viewBox="0 0 720 288" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="VMs and containers plug into OVS, which forwards them by OpenFlow rules — and can offload those flows to a DPU at line rate.">
-        <g data-s="2">
+      <svg class="dg" viewBox="0 0 720 312" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="VMs and containers plug into OVS, which forwards them by OpenFlow rules — and can offload those flows to a DPU at line rate.">
+        <g data-s="2" data-calm="controller">
           <rect class="box" x="236" y="12" width="248" height="52" rx="8"/>
           ${icon('cog', 252, 26)}
           <text class="t-b" x="284" y="34">Controller</text>
           <text class="t-sm t-mut" x="284" y="52">OpenFlow, OVSDB</text>
         </g>
-        <rect class="zone" x="16" y="84" width="504" height="192" rx="10"/>
-        <text class="t-sm t-mut" x="28" y="102">host or hypervisor</text>
-        <g data-s="1">
+        <g data-calm="host">
+          <rect class="zone" x="16" y="84" width="504" height="216" rx="10"/>
+          <text class="t-sm t-mut" x="28" y="102">host or hypervisor</text>
+        </g>
+        <g data-s="1" data-calm="vm">
           <rect class="box" x="32" y="112" width="152" height="48" rx="8"/>
           ${icon('monitor', 44, 124)}
           <text class="t-b" x="76" y="141">VM</text>
+        </g>
+        <g data-s="1" data-calm="container">
           <rect class="box" x="200" y="112" width="152" height="48" rx="8"/>
           ${icon('box', 212, 124)}
           <text class="t-b" x="244" y="141">Container</text>
         </g>
-        <line class="flow" data-s="1" x1="108" y1="162" x2="108" y2="178" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="1" x1="276" y1="162" x2="276" y2="178" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="440" y1="66" x2="440" y2="178" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="428" y="130" text-anchor="end">flow rules</text>
-        <g data-s="1 2 3 4">
-          <rect class="box" x="32" y="180" width="472" height="84" rx="8"/>
-          ${icon('network', 48, 192)}
-          <text class="t-b" x="80" y="210">Open vSwitch</text>
-          <text class="t-sm t-mut" x="208" y="210">flow tables</text>
+        <g data-s="1 2 3 4" data-calm="ovs">
+          <rect class="box-soft" x="32" y="196" width="472" height="92" rx="8"/>
+          ${icon('network', 48, 208)}
+          <text class="t-b" x="80" y="226">Open vSwitch</text>
         </g>
-        <g data-s="3">
-          ${[['forward', 48, 96], ['tunnel: VXLAN, Geneve', 156, 200], ['filter', 368, 120]].map(([t, x, w]) => `
-            <rect class="box" x="${x}" y="222" width="${w}" height="30" rx="4"/>
-            <text class="t-sm" x="${x + w / 2}" y="241" text-anchor="middle">${t}</text>`).join('')}
+        <g data-s="2 4" data-calm="flow-tables">
+          ${cyl(376, 216, 112, 64)}
+          <text class="t-b" x="432" y="252" text-anchor="middle">Flow tables</text>
         </g>
-        <line class="flow" data-s="4" x1="506" y1="222" x2="558" y2="222" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="box" x="560" y="180" width="136" height="84" rx="8"/>
-          ${icon('cpu', 576, 194)}
-          <text class="t-b" x="608" y="212">DPU</text>
-          <text class="t-sm t-mut" x="576" y="236">same flows,</text>
-          <text class="t-sm t-mut" x="576" y="252">line rate</text>
+        <g data-s="3" data-note="call-out">
+          ${[['forward', 48, 80], ['tunnel: VXLAN, Geneve', 136, 160], ['filter', 304, 64]].map(([t, x, w]) => `
+            <rect class="box" x="${x}" y="244" width="${w}" height="30" rx="4"/>
+            <text class="t-sm" x="${x + w / 2}" y="263" text-anchor="middle">${t}</text>`).join('')}
+        </g>
+        <line class="flow" data-s="1" data-calm="vm-ovs" x1="108" y1="162" x2="108" y2="194" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="container-ovs" x1="276" y1="162" x2="276" y2="194" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="controller-flow-tables" x1="432" y1="66" x2="432" y2="214" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="444" y="130">flow rules</text>
+        <line class="flow" data-s="4" data-calm="ovs-dpu" x1="506" y1="244" x2="558" y2="244" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="dpu">
+          <rect class="box" x="560" y="196" width="136" height="92" rx="8"/>
+          ${icon('cpu', 576, 210)}
+          <text class="t-b" x="608" y="228">DPU</text>
+          <text class="t-sm t-mut" x="576" y="252">same flows,</text>
+          <text class="t-sm t-mut" x="576" y="268">line rate</text>
         </g>
 
         ${badge(1, 168, 126, '1')}
-        ${badge(2, 440, 150, '2')}
-        ${badge(3, 490, 196, '3')}
-        ${badge(4, 680, 194, '4')}
+        ${badge(2, 432, 150, '2')}
+        ${badge(3, 356, 226, '3')}
+        ${badge(4, 680, 210, '4')}
       </svg>`,
 
     ovn: () => `
-      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OVN compiles logical switches, routers, and ACLs into the flows every OVS node runs — one segmented virtual network across the whole cluster.">
-        <g data-s="1">
-          <rect class="box" x="24" y="16" width="220" height="80" rx="8"/>
-          ${icon('database', 40, 30)}
-          <text class="t-b" x="72" y="48">Northbound DB</text>
-          <text class="t-sm t-mut" x="40" y="72">logical switches,</text>
-          <text class="t-sm t-mut" x="40" y="88">routers, ACLs</text>
+      <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="OVN compiles logical switches, routers, and ACLs into the flows every OVS node runs — one segmented virtual network across the whole cluster.">
+        <g data-s="1" data-calm="northbound-db">
+          ${cyl(24, 12, 220, 88)}
+          ${icon('database', 40, 34)}
+          <text class="t-b" x="72" y="52">Northbound DB</text>
+          <text class="t-sm t-mut" x="40" y="74">logical switches,</text>
+          <text class="t-sm t-mut" x="40" y="90">routers, ACLs</text>
         </g>
-        <line class="flow" data-s="2" x1="246" y1="56" x2="290" y2="56" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3">
+        <line class="flow" data-s="2" data-calm="ovn-daemons-northbound-db" x1="246" y1="56" x2="290" y2="56" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3" data-calm="ovn-daemons">
           <rect class="box" x="292" y="16" width="216" height="80" rx="8"/>
           ${icon('cog', 308, 30)}
           <text class="t-b" x="340" y="48">OVN daemons</text>
@@ -7034,120 +7041,122 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <text class="t-sm" data-s="3" x="24" y="128">one overlay across hosts</text>
         ${[24, 252, 480].map((x, i) => `
-          <rect class="zone" x="${x}" y="140" width="216" height="132" rx="10"/>
-          <text class="t-sm t-mut" x="${x + 12}" y="156">node ${i + 1}</text>
-          <g data-s="3 4">
+          <g data-calm="node-${i + 1}">
+            <rect class="zone" x="${x}" y="140" width="216" height="144" rx="10"/>
+            <text class="t-sm t-mut" x="${x + 12}" y="156">node ${i + 1}</text>
+          </g>
+          <g data-s="3 4" data-calm="ovs-${i + 1}">
             <rect class="box" x="${x + 12}" y="164" width="192" height="48" rx="6"/>
             ${icon('network', x + 22, 176)}
             <text class="t-sm t-b" x="${x + 54}" y="184">OVS</text>
             <text class="t-sm t-mut" x="${x + 54}" y="200">route, DHCP, DNS, fw</text>
           </g>
-          ${[x + 12, x + 108].map((wx) => `
-            <g data-s="5">
-              <rect class="box" x="${wx}" y="224" width="84" height="36" rx="6"/>
-              <text class="t-sm" x="${wx + 10}" y="238">workload</text>
-              <text class="t-sm t-mut" x="${wx + 10}" y="252">own ACL</text>
+          ${['a', 'b'].map((k, j) => `
+            <g data-s="5" data-calm="workload-${i + 1}${k}">
+              <rect class="box" x="${x + 12 + j * 100}" y="220" width="92" height="52" rx="6"/>
+              <text class="t-sm" x="${x + 22 + j * 100}" y="236">workload</text>
+              <text class="t-sm t-mut" x="${x + 22 + j * 100}" y="251">own ACL</text>
             </g>`).join('')}`).join('')}
-        <line class="flow" data-s="3" x1="380" y1="98" x2="160" y2="162" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="400" y1="98" x2="360" y2="162" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="420" y1="98" x2="580" y2="162" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="ovn-daemons-ovs-1" x1="360" y1="98" x2="120" y2="162" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="ovn-daemons-ovs-2" x1="400" y1="98" x2="360" y2="162" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="ovn-daemons-ovs-3" x1="440" y1="98" x2="588" y2="162" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 228, 30, '1')}
-        ${badge(2, 268, 56, '2')}
+        ${badge(1, 226, 40, '1')}
+        ${badge(2, 268, 36, '2')}
         ${badge(3, 490, 30, '3')}
-        ${badge(4, 188, 180, '4')}
-        ${badge(5, 228, 242, '5')}
+        ${badge(4, 96, 152, '4')}
+        ${badge(5, 216, 232, '5')}
       </svg>`,
 
     ndlp: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Egress traffic is decrypted and inspected inline at the network edge; clean transfers continue re-encrypted, a policy breach is blocked before it leaves.">
-        <g data-s="1">
-          <rect class="box" x="24" y="88" width="152" height="80" rx="12"/>
+        <g data-s="1" data-calm="devices">
+          <rect class="box" x="24" y="88" width="152" height="80" rx="8"/>
           ${icon('laptop', 40, 102)}
           <text class="t-b" x="72" y="120">Devices</text>
           <text class="t-sm t-mut" x="72" y="138">managed</text>
           <text class="t-sm t-mut" x="72" y="154">or not</text>
         </g>
-        <line class="flow" data-s="1" x1="178" y1="96" x2="238" y2="96" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3 4">
+        <line class="flow" data-s="1" data-calm="devices-ndlp-gateway" x1="178" y1="96" x2="238" y2="96" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2 3 4" data-calm="ndlp-gateway">
           <rect class="box" x="240" y="16" width="240" height="220" rx="8"/>
           ${icon('shield', 256, 30)}
           <text class="t-b" x="288" y="48">nDLP gateway</text>
           <text class="t-sm t-mut" x="288" y="66">inline, at egress</text>
         </g>
-        ${[['decrypt', 80, '2'], ['inspect content', 132, '3'], ['re-encrypt', 184, '2']].map(([t, y, s], i) => `
-          <g data-s="${s}">
+        ${[['decrypt', 76, '2'], ['inspect content', 128, '3'], ['re-encrypt', 180, '2']].map(([t, y, s], i) => `
+          <g data-s="${s}" data-note="call-out">
             <rect class="box" x="256" y="${y}" width="208" height="36" rx="4"/>
             <text class="t-sm" x="360" y="${y + 22}" text-anchor="middle">${t}</text>
           </g>
-          ${i < 2 ? `<line class="flow" data-s="${s}" x1="360" y1="${y + 38}" x2="360" y2="${y + 50}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
-        <line class="flow-ok" data-s="4" x1="482" y1="202" x2="542" y2="68" marker-end="url(#ah-ok)"/>
-        <line class="flow-bad" data-s="4" x1="482" y1="150" x2="542" y2="176" marker-end="url(#ah-bad)"/>
-        <g data-s="4">
-          <rect class="box" x="544" y="36" width="152" height="64" rx="8"/>
+          ${i < 2 ? `<line class="flow" data-s="${s}" data-note="call-out" x1="360" y1="${y + 38}" x2="360" y2="${y + 50}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+        <line class="flow-ok" data-s="4" data-calm="ndlp-gateway-internet" x1="482" y1="198" x2="542" y2="68" marker-end="url(#ah-ok)"/>
+        <line class="flow-bad" data-s="4" data-note="call-out" x1="482" y1="146" x2="542" y2="176" marker-end="url(#ah-bad)"/>
+        <g data-s="4" data-calm="internet">
+          <rect class="zone" x="544" y="36" width="152" height="64" rx="10"/>
           ${icon('globe', 560, 52)}
           <text class="t-b" x="592" y="70">Internet</text>
           <text class="t-sm t-mut" x="560" y="90">clean, re-encrypted</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="544" y="144" width="152" height="64" rx="8"/>
           <text class="t-sm t-b" x="560" y="170">breach blocked</text>
           <text class="t-sm bad" x="560" y="188">quarantine, alert</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="252" width="672" height="40" rx="8"/>
           ${icon('hard-drive', 36, 260)}
           <text class="t-sm" x="68" y="277">blind spots: USB, clipboard, printing: pair with endpoint DLP</text>
         </g>
 
         ${badge(1, 208, 96, '1')}
-        ${badge(2, 448, 98, '2')}
-        ${badge(3, 448, 150, '3')}
+        ${badge(2, 448, 94, '2')}
+        ${badge(3, 448, 146, '3')}
         ${badge(4, 680, 158, '4')}
         ${badge(5, 680, 272, '5')}
       </svg>`,
 
     sbc: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Enterprise calls terminate on the SBC at the border and re-originate encrypted towards the carrier — topology hidden, toll fraud and DoS dropped at the edge.">
-        <g data-s="1">
+        <g data-s="1" data-calm="organisation">
           <rect class="zone" x="16" y="16" width="224" height="228" rx="10"/>
           <text class="t-sm t-mut" x="28" y="34">organisation</text>
         </g>
-        <g data-s="1 2">
+        <g data-s="1 2" data-calm="phone-system">
           <rect class="box" x="32" y="100" width="192" height="64" rx="8"/>
           ${icon('phone', 48, 114)}
           <text class="t-b" x="80" y="132">Phone system</text>
           <text class="t-sm t-mut" x="80" y="150">internal</text>
         </g>
-        <line class="flow" data-s="2" x1="226" y1="132" x2="286" y2="132" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="256" y="124" text-anchor="middle">leg 1</text>
-        <g data-s="1 2 3 4">
+        <line class="flow" data-s="2" data-calm="phone-system-sbc" x1="226" y1="132" x2="286" y2="132" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="264" y="124" text-anchor="middle">leg 1</text>
+        <g data-s="1 2 3 4" data-calm="sbc">
           <rect class="box" x="288" y="16" width="176" height="228" rx="8"/>
           ${icon('shield', 304, 30)}
           <text class="t-b" x="336" y="48">SBC</text>
           <text class="t-sm t-mut" x="336" y="66">back-to-back</text>
         </g>
         ${[['hide topology', 84, '3'], ['SIP/TLS, SRTP', 128, '3'], ['DoS, fraud, NAT', 172, '4']].map(([t, y, s]) => `
-          <g data-s="${s}">
+          <g data-s="${s}" data-note="call-out">
             <rect class="box" x="304" y="${y}" width="144" height="32" rx="4"/>
             <text class="t-sm" x="316" y="${y + 20}">${t}</text>
           </g>`).join('')}
-        <line class="flow" data-s="2 3" x1="466" y1="132" x2="518" y2="132" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2 3" data-calm="sbc-carrier" x1="466" y1="132" x2="518" y2="132" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="492" y="124" text-anchor="middle">leg 2</text>
-        <g data-s="1 2">
-          <rect class="box" x="520" y="100" width="176" height="64" rx="8"/>
+        <g data-s="1 2" data-calm="carrier">
+          <rect class="zone" x="520" y="100" width="176" height="64" rx="10"/>
           ${icon('radio-tower', 536, 114)}
           <text class="t-b" x="568" y="132">Carrier</text>
           <text class="t-sm t-mut" x="568" y="150">SIP trunk</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="520" y="188" width="176" height="56" rx="12"/>
           ${icon('skull', 536, 204)}
           <text class="t-b" x="568" y="213">Attacker</text>
           <text class="t-sm t-mut" x="568" y="231">DoS, toll fraud</text>
         </g>
-        <line class="flow-bad" data-s="4" x1="518" y1="216" x2="466" y2="200" marker-end="url(#ah-bad)"/>
-        <g data-s="5">
+        <line class="flow-bad" data-s="4" data-note="call-out" x1="518" y1="216" x2="466" y2="200" marker-end="url(#ah-bad)"/>
+        <g data-s="5" data-note="footer">
           <rect class="box" x="16" y="256" width="680" height="36" rx="8"/>
           ${icon('brick-wall', 28, 262)}
           <text class="t-sm" x="60" y="278">firewalls struggle: SIP carries addresses and opens dynamic media ports</text>
@@ -10885,6 +10894,130 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "supernic-3-fabric", "sequence-number": 6, "description": "The third SuperNIC delivers the traffic onto the Spectrum-X Ethernet fabric as RoCE." },
             { "relationship-unique-id": "gpu-4-supernic-4", "sequence-number": 7, "description": "The fourth GPU's east-west traffic goes to the fourth SuperNIC." },
             { "relationship-unique-id": "supernic-4-fabric", "sequence-number": 8, "description": "The fourth SuperNIC delivers the traffic onto the Spectrum-X Ethernet fabric as RoCE." }
+          ] }
+      ]
+    },
+    ovs: {
+      "nodes": [
+        { "unique-id": "controller", "node-type": "service", "name": "Controller", "description": "An external controller, which installs OpenFlow rules into Open vSwitch's flow tables." },
+        { "unique-id": "host", "node-type": "system", "name": "host or hypervisor", "description": "The hypervisor or host in which Open vSwitch runs." },
+        { "unique-id": "vm", "node-type": "workload", "name": "VM", "description": "A virtual machine, one of the virtual machines that Open vSwitch connects." },
+        { "unique-id": "container", "node-type": "workload", "name": "Container", "description": "A container, one of the containers that Open vSwitch connects." },
+        { "unique-id": "ovs", "node-type": "system", "name": "Open vSwitch", "description": "Open vSwitch (OVS), a production-grade, multilayer virtual switch (Apache 2.0) that runs in the hypervisor or host and connects virtual machines, containers and the physical NIC; where a plain Linux bridge forwards by MAC address, OVS is programmable: an external controller installs OpenFlow rules into OVS's flow tables and the OVSDB management protocol configures OVS's bridges and ports, so forwarding, tunnelling (VXLAN/Geneve) and filtering are driven by policy rather than hard-wired; OVS also speaks the operational protocols data centres expect (NetFlow, sFlow, IPFIX, LACP, 802.1ag) and is the default switch under OpenStack and many Kubernetes networks; OVS forwards packets on its own, but OVS needs a control plane to decide what those flows should be, which is where OVN comes in." },
+        { "unique-id": "flow-tables", "node-type": "database", "name": "Flow tables", "description": "Open vSwitch's flow tables, into which an external controller installs OpenFlow rules; Open vSwitch's data plane is just flow tables, which is why Open vSwitch can be offloaded to hardware." },
+        { "unique-id": "dpu", "node-type": "chip", "name": "DPU", "description": "A SmartNIC or DPU, hardware that can execute the same Open vSwitch flows at line rate, freeing host CPU." }
+      ],
+      "relationships": [
+        { "unique-id": "host-ovs-workloads", "description": "Open vSwitch runs in the hypervisor or host, alongside the virtual machines and containers that Open vSwitch connects.",
+          "relationship-type": { "deployed-in": { "container": "host", "nodes": ["vm", "container", "ovs"] } } },
+        { "unique-id": "ovs-flow-tables", "description": "Open vSwitch holds the flow tables that make up Open vSwitch's data plane.",
+          "relationship-type": { "composed-of": { "container": "ovs", "nodes": ["flow-tables"] } } },
+        { "unique-id": "vm-ovs", "description": "The virtual machine plugs into Open vSwitch, which forwards the virtual machine's packets by OpenFlow rules.",
+          "relationship-type": { "connects": { "source": { "node": "vm" }, "destination": { "node": "ovs" } } } },
+        { "unique-id": "container-ovs", "description": "The container plugs into Open vSwitch, which forwards the container's packets by OpenFlow rules.",
+          "relationship-type": { "connects": { "source": { "node": "container" }, "destination": { "node": "ovs" } } } },
+        { "unique-id": "controller-flow-tables", "description": "The external controller installs OpenFlow rules into Open vSwitch's flow tables.",
+          "relationship-type": { "connects": { "source": { "node": "controller" }, "destination": { "node": "flow-tables" } } } },
+        { "unique-id": "ovs-dpu", "description": "Open vSwitch's flows can be offloaded to a SmartNIC or DPU, which executes the same flows at line rate, freeing host CPU.",
+          "relationship-type": { "connects": { "source": { "node": "ovs" }, "destination": { "node": "dpu" } } } }
+      ],
+      "flows": [
+        { "unique-id": "plug-in-program-offload", "name": "Plug in, program, offload",
+          "description": "VMs and containers plug into OVS, which forwards them by OpenFlow rules — and can offload those flows to a DPU at line rate.",
+          "transitions": [
+            { "relationship-unique-id": "vm-ovs", "sequence-number": 1, "description": "A virtual machine plugs into Open vSwitch." },
+            { "relationship-unique-id": "container-ovs", "sequence-number": 2, "description": "A container plugs into Open vSwitch too." },
+            { "relationship-unique-id": "controller-flow-tables", "sequence-number": 3, "description": "An external controller installs OpenFlow rules into Open vSwitch's flow tables, so forwarding, tunnelling and filtering are driven by policy rather than hard-wired." },
+            { "relationship-unique-id": "ovs-dpu", "sequence-number": 4, "description": "Because Open vSwitch's data plane is just flow tables, a SmartNIC or DPU can execute the same flows at line rate, freeing host CPU." }
+          ] }
+      ]
+    },
+    ovn: {
+      "nodes": [
+        { "unique-id": "northbound-db", "node-type": "database", "name": "Northbound DB", "description": "OVN's northbound database, in which, instead of writing raw flows, you declare logical switches, logical routers and Access Control Lists; OVN's northbound and southbound databases are central components every node depends on." },
+        { "unique-id": "ovn-daemons", "node-type": "service", "name": "OVN daemons", "description": "OVN's daemons, which translate the intent declared in the northbound database into OpenFlow and program every OVS instance across the cluster, so one logical network spans many hosts as an overlay; Open Virtual Network (OVN) is the software-defined networking (SDN) control plane that sits on top of Open vSwitch and gives Open vSwitch real network abstractions, and running routing, DHCP, DNS and a stateful distributed firewall in the data plane on each node makes OVN a microsegmentation engine; OVN is the networking layer behind OpenStack Neutron and the ovn-kubernetes CNI that enforces Kubernetes NetworkPolicy, and if OVS is the distributed switch, OVN is the brain that turns thousands of OVS instances into one programmable, segmented virtual network; troubleshooting OVN means tracing logical flows through thousands of generated OpenFlow rules." },
+        { "unique-id": "node-1", "node-type": "system", "name": "node 1", "description": "Node 1, one of the many hosts across the cluster that one logical network spans as an overlay." },
+        { "unique-id": "ovs-1", "node-type": "system", "name": "OVS", "description": "The OVS instance on node 1, which OVN's daemons program, and in whose data plane routing, DHCP, DNS and a stateful distributed firewall run on node 1 rather than at a central choke point." },
+        { "unique-id": "workload-1a", "node-type": "workload", "name": "workload", "description": "A workload on node 1, which per-port ACLs isolate from other workloads east-west, not just at the perimeter." },
+        { "unique-id": "workload-1b", "node-type": "workload", "name": "workload", "description": "A workload on node 1, which per-port ACLs isolate from other workloads east-west, not just at the perimeter." },
+        { "unique-id": "node-2", "node-type": "system", "name": "node 2", "description": "Node 2, one of the many hosts across the cluster that one logical network spans as an overlay." },
+        { "unique-id": "ovs-2", "node-type": "system", "name": "OVS", "description": "The OVS instance on node 2, which OVN's daemons program, and in whose data plane routing, DHCP, DNS and a stateful distributed firewall run on node 2 rather than at a central choke point." },
+        { "unique-id": "workload-2a", "node-type": "workload", "name": "workload", "description": "A workload on node 2, which per-port ACLs isolate from other workloads east-west, not just at the perimeter." },
+        { "unique-id": "workload-2b", "node-type": "workload", "name": "workload", "description": "A workload on node 2, which per-port ACLs isolate from other workloads east-west, not just at the perimeter." },
+        { "unique-id": "node-3", "node-type": "system", "name": "node 3", "description": "Node 3, one of the many hosts across the cluster that one logical network spans as an overlay." },
+        { "unique-id": "ovs-3", "node-type": "system", "name": "OVS", "description": "The OVS instance on node 3, which OVN's daemons program, and in whose data plane routing, DHCP, DNS and a stateful distributed firewall run on node 3 rather than at a central choke point." },
+        { "unique-id": "workload-3a", "node-type": "workload", "name": "workload", "description": "A workload on node 3, which per-port ACLs isolate from other workloads east-west, not just at the perimeter." },
+        { "unique-id": "workload-3b", "node-type": "workload", "name": "workload", "description": "A workload on node 3, which per-port ACLs isolate from other workloads east-west, not just at the perimeter." }
+      ],
+      "relationships": [
+        { "unique-id": "ovn-daemons-northbound-db", "description": "OVN's daemons take the intent declared in the northbound database (logical switches, logical routers and ACLs) and translate that intent into OpenFlow.",
+          "relationship-type": { "connects": { "source": { "node": "ovn-daemons" }, "destination": { "node": "northbound-db" } } } },
+        { "unique-id": "ovn-daemons-ovs-1", "description": "OVN's daemons program the OVS instance on node 1 with the OpenFlow translated from the declared intent.",
+          "relationship-type": { "connects": { "source": { "node": "ovn-daemons" }, "destination": { "node": "ovs-1" } } } },
+        { "unique-id": "ovn-daemons-ovs-2", "description": "OVN's daemons program the OVS instance on node 2 with the OpenFlow translated from the declared intent.",
+          "relationship-type": { "connects": { "source": { "node": "ovn-daemons" }, "destination": { "node": "ovs-2" } } } },
+        { "unique-id": "ovn-daemons-ovs-3", "description": "OVN's daemons program the OVS instance on node 3 with the OpenFlow translated from the declared intent.",
+          "relationship-type": { "connects": { "source": { "node": "ovn-daemons" }, "destination": { "node": "ovs-3" } } } },
+        { "unique-id": "node-1-ovs-workloads", "description": "An OVS instance and two workloads run on node 1.",
+          "relationship-type": { "deployed-in": { "container": "node-1", "nodes": ["ovs-1", "workload-1a", "workload-1b"] } } },
+        { "unique-id": "node-2-ovs-workloads", "description": "An OVS instance and two workloads run on node 2.",
+          "relationship-type": { "deployed-in": { "container": "node-2", "nodes": ["ovs-2", "workload-2a", "workload-2b"] } } },
+        { "unique-id": "node-3-ovs-workloads", "description": "An OVS instance and two workloads run on node 3.",
+          "relationship-type": { "deployed-in": { "container": "node-3", "nodes": ["ovs-3", "workload-3a", "workload-3b"] } } }
+      ],
+      "flows": [
+        { "unique-id": "intent-to-flows", "name": "Intent compiled to flows",
+          "description": "OVN compiles logical switches, routers, and ACLs into the flows every OVS node runs — one segmented virtual network across the whole cluster.",
+          "transitions": [
+            { "relationship-unique-id": "ovn-daemons-northbound-db", "sequence-number": 1, "description": "OVN's daemons take the logical switches, logical routers and ACLs declared in the northbound database and translate that intent into OpenFlow.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "ovn-daemons-ovs-1", "sequence-number": 2, "description": "OVN's daemons program the OVS instance on node 1." },
+            { "relationship-unique-id": "ovn-daemons-ovs-2", "sequence-number": 3, "description": "OVN's daemons program the OVS instance on node 2." },
+            { "relationship-unique-id": "ovn-daemons-ovs-3", "sequence-number": 4, "description": "OVN's daemons program the OVS instance on node 3, so one logical network spans many hosts as an overlay." }
+          ] }
+      ]
+    },
+    ndlp: {
+      "nodes": [
+        { "unique-id": "devices", "node-type": "system", "name": "Devices", "description": "Devices on the monitored path, managed or not, all of which network DLP covers without an agent; an unmanaged device that does not trust the proxy can have the device's TLS traffic blocked but not inspected." },
+        { "unique-id": "ndlp-gateway", "node-type": "service", "name": "nDLP gateway", "description": "A network Data Loss Prevention gateway, DLP applied to data in motion, which sits inline where traffic leaves the organisation (a secure web gateway, email gateway, next-generation firewall, or the cloud edge of a SASE/SSE stack) and inspects email, web uploads and file transfers against the organisation's data classifications, using pattern matching, exact data matching and machine-learning classifiers; when a transfer breaks policy the gateway blocks, quarantines or encrypts the transfer and alerts the security team; because most traffic is TLS-encrypted, inline inspection depends on TLS interception (decrypt, inspect, re-encrypt at a proxy the fleet is configured to trust), which carries privacy and performance trade-offs, and traffic network DLP cannot decrypt, network DLP cannot content-inspect; network DLP's blind spots are the channels that never touch the network path (USB drives, clipboard, printing), which is why network DLP pairs with endpoint DLP rather than replacing endpoint DLP." },
+        { "unique-id": "internet", "node-type": "network", "name": "Internet", "description": "The far end of the traffic that leaves the organisation, which clean transfers reach re-encrypted." }
+      ],
+      "relationships": [
+        { "unique-id": "devices-ndlp-gateway", "description": "Email, web uploads and file transfers leaving the organisation from the devices pass inline through the nDLP gateway, where TLS-encrypted traffic is decrypted, inspected and re-encrypted at a proxy the fleet is configured to trust.",
+          "relationship-type": { "connects": { "source": { "node": "devices" }, "destination": { "node": "ndlp-gateway" } } } },
+        { "unique-id": "ndlp-gateway-internet", "description": "Clean transfers continue from the nDLP gateway, re-encrypted, out of the organisation.",
+          "relationship-type": { "connects": { "source": { "node": "ndlp-gateway" }, "destination": { "node": "internet" } } } }
+      ],
+      "flows": [
+        { "unique-id": "inspect-at-egress", "name": "Inspected at egress",
+          "description": "Egress traffic is decrypted and inspected inline at the network edge; clean transfers continue re-encrypted, a policy breach is blocked before it leaves.",
+          "transitions": [
+            { "relationship-unique-id": "devices-ndlp-gateway", "sequence-number": 1, "description": "A device's email, web upload or file transfer reaches the nDLP gateway, inline where traffic leaves the organisation." },
+            { "relationship-unique-id": "ndlp-gateway-internet", "sequence-number": 2, "description": "Decrypted, inspected and found clean, the transfer continues re-encrypted." }
+          ] }
+      ]
+    },
+    sbc: {
+      "nodes": [
+        { "unique-id": "organisation", "node-type": "network", "name": "organisation", "description": "The organisation's network, on which the organisation's phone system sits, whose internal topology the SBC hides, and which never touches the carrier's network directly." },
+        { "unique-id": "phone-system", "node-type": "system", "name": "Phone system", "description": "The organisation's phone system, on one side of the network boundary where the SBC sits, with the organisation's SIP trunk provider on the other." },
+        { "unique-id": "sbc", "node-type": "service", "name": "SBC", "description": "A Session Border Controller (SBC), the border element for real-time communications, which sits where VoIP traffic crosses a network boundary (between an organisation's phone system and the organisation's SIP trunk provider, or at a carrier's peering edge) and acts as a back-to-back user agent: each call's SIP signalling, and usually the call's RTP media, terminates on the SBC and is re-originated towards the far side, so the two networks never touch directly; that position lets an SBC hide internal topology, encrypt signalling and media (SIP over TLS, and Secure RTP), police access against denial-of-service and toll fraud, maintain NAT bindings, repair the SIP dialects of different vendors, transcode codecs, and enforce call-admission limits so voice quality holds; SBCs exist because ordinary firewalls handle VoIP poorly, since SIP embeds addresses inside SIP messages and negotiates dynamic media ports per call; Microsoft Teams Direct Routing requires a certified SBC, and SIP trunk providers commonly expect one at the customer edge; an SBC secures only the boundary the SBC sits on: calls placed with stolen credentials from a compromised internal phone or PBX look legitimate to the SBC." },
+        { "unique-id": "carrier", "node-type": "network", "name": "Carrier", "description": "The carrier, the organisation's SIP trunk provider, whose network on the far side of the boundary never touches the organisation's network directly." }
+      ],
+      "relationships": [
+        { "unique-id": "organisation-phone-system", "description": "The phone system sits on the organisation's network.",
+          "relationship-type": { "deployed-in": { "container": "organisation", "nodes": ["phone-system"] } } },
+        { "unique-id": "phone-system-sbc", "description": "Each call's SIP signalling, and usually the call's RTP media, passes from the phone system to the SBC and terminates on the SBC.",
+          "relationship-type": { "connects": { "source": { "node": "phone-system" }, "destination": { "node": "sbc" } } } },
+        { "unique-id": "sbc-carrier", "description": "The SBC re-originates each call's SIP signalling, and usually the call's RTP media, towards the carrier on the far side, and can encrypt the signalling and media with SIP over TLS and Secure RTP.",
+          "relationship-type": { "connects": { "source": { "node": "sbc" }, "destination": { "node": "carrier" } } } }
+      ],
+      "flows": [
+        { "unique-id": "back-to-back", "name": "Terminate and re-originate",
+          "description": "Enterprise calls terminate on the SBC at the border and re-originate encrypted towards the carrier — topology hidden, toll fraud and DoS dropped at the edge.",
+          "transitions": [
+            { "relationship-unique-id": "phone-system-sbc", "sequence-number": 1, "description": "A call's SIP signalling, and usually the call's RTP media, leaves the phone system and terminates on the SBC." },
+            { "relationship-unique-id": "sbc-carrier", "sequence-number": 2, "description": "The SBC re-originates the call towards the carrier, so the organisation's network and the carrier's never touch directly." }
           ] }
       ]
     },
