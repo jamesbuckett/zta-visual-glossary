@@ -6934,8 +6934,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         ${[[1, 24], [2, 200], [3, 376], [4, 552]].map(([n, x]) => `
           <g data-s="1" data-calm="gpu-${n}">
             <rect class="box" x="${x}" y="16" width="144" height="44" rx="8"/>
-            ${icon('cpu', x + 12, 26)}
-            <text class="t-b" x="${x + 44}" y="43">GPU</text>
+            ${icon('cpu', x + 8, 26)}
+            <text class="t-b" x="${x + 40}" y="43">GPU</text>
           </g>
           <line class="flow" data-s="1 2" data-calm="gpu-${n}-supernic-${n}" x1="${x + 72}" y1="62" x2="${x + 72}" y2="72" marker-end="url(#ah-mut)"/>
           <g data-s="2" data-calm="supernic-${n}">
@@ -8838,12 +8838,12 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
   const CALM = {
     dns: {
       "nodes": [
-        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "Needs the IP address behind a human-readable name such as example.com." },
-        { "unique-id": "resolver", "node-type": "service", "name": "Resolver", "description": "Walks the hierarchy and caches answers along the way to stay fast." },
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client needs the IP address behind a human-readable name such as example.com." },
+        { "unique-id": "resolver", "node-type": "service", "name": "Resolver", "description": "The resolver walks a hierarchy (root servers, the top-level domain, then the authoritative server for the domain) and caches answers along the way to stay fast." },
         { "unique-id": "root", "node-type": "service", "name": "Root servers", "description": "The first level of the hierarchy the resolver walks." },
         { "unique-id": "tld", "node-type": "service", "name": "TLD", "description": "The server for the top-level domain, the second level of the hierarchy." },
         { "unique-id": "authoritative", "node-type": "service", "name": "Authoritative", "description": "The authoritative server for the domain, the last level of the hierarchy." },
-        { "unique-id": "cache", "node-type": "database", "name": "Cache", "description": "Answers the resolver has cached to stay fast." }
+        { "unique-id": "cache", "node-type": "database", "name": "Cache", "description": "The cache holds the answers the resolver caches along the way to stay fast." }
       ],
       "relationships": [
         { "unique-id": "client-resolver", "description": "The client asks the resolver to resolve a name into an IP address.",
@@ -8864,9 +8864,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "client-resolver", "sequence-number": 1, "description": "The client asks the resolver for the IP address behind a name." },
             { "relationship-unique-id": "resolver-root", "sequence-number": 2, "description": "The resolver starts with the root servers." },
             { "relationship-unique-id": "resolver-root", "sequence-number": 3, "description": "The root servers answer.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "resolver-tld", "sequence-number": 4, "description": "Next it asks the server for the top-level domain." },
+            { "relationship-unique-id": "resolver-tld", "sequence-number": 4, "description": "Next the resolver asks the server for the top-level domain." },
             { "relationship-unique-id": "resolver-tld", "sequence-number": 5, "description": "The top-level domain server answers.", "direction": "destination-to-source" },
-            { "relationship-unique-id": "resolver-authoritative", "sequence-number": 6, "description": "Last it reaches the authoritative server for the domain." },
+            { "relationship-unique-id": "resolver-authoritative", "sequence-number": 6, "description": "Last the resolver reaches the authoritative server for the domain." },
             { "relationship-unique-id": "resolver-authoritative", "sequence-number": 7, "description": "The authoritative server answers.", "direction": "destination-to-source" },
             { "relationship-unique-id": "resolver-cache", "sequence-number": 8, "description": "The resolver caches the answer." },
             { "relationship-unique-id": "client-resolver", "sequence-number": 9, "description": "The resolver returns the IP address to the client.", "direction": "destination-to-source" }
@@ -8875,8 +8875,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     kubernetes: {
       "nodes": [
-        { "unique-id": "desired-state", "node-type": "data-asset", "name": "Desired state", "description": "What you declare: how many replicas, which images, what networking." },
-        { "unique-id": "control-plane", "node-type": "service", "name": "Control plane", "description": "Continuously reconciles reality to match the desired state." },
+        { "unique-id": "desired-state", "node-type": "data-asset", "name": "Desired state", "description": "The desired state is what you declare: how many replicas, which images, what networking." },
+        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane continuously reconciles reality to match the desired state." },
         { "unique-id": "worker-1", "node-type": "system", "name": "worker node 1", "description": "A machine in the cluster that runs pods." },
         { "unique-id": "worker-2", "node-type": "system", "name": "worker node 2", "description": "A machine in the cluster that runs pods." },
         { "unique-id": "pod-scheduled-1", "node-type": "pod", "name": "Pod", "description": "A pod, the smallest deployable unit, scheduled onto worker node 1." },
@@ -8909,8 +8909,8 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     oauth: {
       "nodes": [
-        { "unique-id": "user", "node-type": "actor", "name": "You", "description": "Logs in and consents, without handing the app any credentials." },
-        { "unique-id": "app", "node-type": "system", "name": "App", "description": "Receives a token to call the API on your behalf." },
+        { "unique-id": "user", "node-type": "actor", "name": "You", "description": "You log in and consent, without handing the app any credentials." },
+        { "unique-id": "app", "node-type": "system", "name": "App", "description": "The app receives a token to call the API on your behalf." },
         { "unique-id": "authz", "node-type": "service", "name": "Authorisation server", "description": "The resource's authorisation server, which issues the scoped, revocable access token." },
         { "unique-id": "api", "node-type": "service", "name": "API", "description": "The resource the app calls on your behalf." }
       ],
@@ -8938,10 +8938,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     jwt: {
       "nodes": [
-        { "unique-id": "jwt", "node-type": "data-asset", "name": "JSON Web Token", "description": "Packs claims into three base64url-encoded parts." },
+        { "unique-id": "jwt", "node-type": "data-asset", "name": "JSON Web Token", "description": "A JSON Web Token packs claims into three base64url-encoded parts: header, payload and signature." },
         { "unique-id": "header", "node-type": "data-asset", "name": "header", "description": "The first of the three base64url-encoded parts." },
-        { "unique-id": "payload", "node-type": "data-asset", "name": "payload", "description": "Carries the claims: who you are, what you may do, when it expires." },
-        { "unique-id": "signature", "node-type": "data-asset", "name": "signature", "description": "Lets anyone with the verification key confirm the token has not been tampered with." }
+        { "unique-id": "payload", "node-type": "data-asset", "name": "payload", "description": "The payload carries the claims: who you are, what you may do, when the token expires." },
+        { "unique-id": "signature", "node-type": "data-asset", "name": "signature", "description": "The signature lets anyone with the verification key confirm the token has not been tampered with." }
       ],
       "relationships": [
         { "unique-id": "jwt-parts", "description": "A JSON Web Token is made of a header, a payload and a signature.",
@@ -8951,11 +8951,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     owasp: {
       "nodes": [
         { "unique-id": "top10", "node-type": "data-asset", "name": "OWASP Top 10:2025", "description": "A periodically updated, ranked list of the most critical web application security risks." },
-        { "unique-id": "risk-1", "node-type": "risk", "name": "1 · Broken Access Control", "description": "Kept at number one in the 2025 edition." },
-        { "unique-id": "risk-3", "node-type": "risk", "name": "3 · Software Supply Chain Failures", "description": "Enters at number three, expanded from 2021's Vulnerable and Outdated Components." },
-        { "unique-id": "developers", "node-type": "actor", "name": "Developers", "description": "Code against the list." },
-        { "unique-id": "wafs", "node-type": "service", "name": "WAFs", "description": "Ship rule sets named after the list." },
-        { "unique-id": "auditors", "node-type": "actor", "name": "Auditors", "description": "Check for the risks on the list." }
+        { "unique-id": "risk-1", "node-type": "risk", "name": "1 · Broken Access Control", "description": "Broken Access Control is kept at number one in the 2025 edition." },
+        { "unique-id": "risk-3", "node-type": "risk", "name": "3 · Software Supply Chain Failures", "description": "Software Supply Chain Failures enters at number three, expanded from 2021's Vulnerable and Outdated Components." },
+        { "unique-id": "developers", "node-type": "actor", "name": "Developers", "description": "Developers code against the OWASP Top 10." },
+        { "unique-id": "wafs", "node-type": "service", "name": "WAFs", "description": "WAFs ship rule sets named after the OWASP Top 10." },
+        { "unique-id": "auditors", "node-type": "actor", "name": "Auditors", "description": "Auditors check for the risks on the OWASP Top 10." }
       ],
       "relationships": [
         { "unique-id": "top10-risks", "description": "The list ranks ten risks; the first and third are shown here.",
@@ -9427,7 +9427,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "filter-chains", "node-type": "filter-chain", "name": "Filter chains", "description": "A filter chain of L3/L4 network filters and, for HTTP, a second, L7 chain added by the connection manager: in those chains Envoy terminates mTLS and can require a client certificate, the JWT authentication filter validates end-user tokens, the RBAC filter matches on the authenticated principal, and the ext_authz filter calls out to an external decision point for a per-request allow or deny." },
         { "unique-id": "router", "node-type": "router", "name": "Router", "description": "The router at the end of the filter chains, which selects a cluster." },
         { "unique-id": "cluster", "node-type": "cluster", "name": "Cluster", "description": "A cluster, a group of logically similar upstream hosts, where a load-balancing policy picks an endpoint." },
-        { "unique-id": "control-plane", "node-type": "service", "name": "Control plane", "description": "The management server that streams configuration to Envoy over xDS; adopting Envoy in practice means adopting a control plane, which then becomes the most security-critical component you run, because whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once." }
+        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The management server that streams configuration to Envoy over xDS; adopting Envoy in practice means adopting a control plane, which then becomes the most security-critical component you run, because whoever can push xDS to the fleet can silently reroute traffic, swap a certificate or disable an authorisation filter across every proxy at once." }
       ],
       "relationships": [
         { "unique-id": "envoy-parts", "description": "A listener, filter chains and a router are parts of Envoy's internal model.",
@@ -10278,7 +10278,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     fapi: {
       "nodes": [
-        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The OAuth client, which under FAPI 2.0, the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, pushes the full authorisation request over a client-authenticated back channel, authenticates with mTLS or private_key_jwt so there are no shared secrets, and holds the key the client's access tokens are bound to; the cost of FAPI 2.0 is operational, since mTLS or DPoP means real key management in the client and, with the round trip Pushed Authorization Requests add, is why FAPI 2.0's adoption clusters in regulated ecosystems that were told to implement it rather than spreading on merit." },
+        { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The OAuth client, which under FAPI 2.0, the OpenID Foundation's security profile for OAuth 2.0 and OpenID Connect, pushes the full authorisation request over a client-authenticated back channel, authenticates with mTLS or private_key_jwt so there are no shared secrets, and holds the key the client's access tokens are bound to; the cost of FAPI 2.0 is operational, which is why adoption of FAPI 2.0 clusters in regulated ecosystems that were told to implement the profile rather than spreading on merit." },
         { "unique-id": "private-key", "node-type": "data-asset", "name": "private key", "description": "The private key the client holds, matching the mTLS client certificate or the DPoP (Demonstrating Proof-of-Possession) key that access tokens must be bound to, so an attacker who lifts a token cannot spend the token without the matching private key; mTLS or DPoP means real key management in the client." },
         { "unique-id": "authz", "node-type": "service", "name": "Authorisation server", "description": "The authorisation server, which receives the full authorisation request over the back channel and returns an opaque request_uri, and whose authorisation response must carry the iss parameter from RFC 9207, which closes the mix-up attack that appears once a client talks to more than one authorisation server." },
         { "unique-id": "browser", "node-type": "webclient", "name": "Browser", "description": "The browser, which carries only the opaque request_uri handle, leaving nothing in the URL to tamper with or to leak through referrers, history and logs." },
@@ -10970,10 +10970,10 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     supernic: {
       "nodes": [
-        { "unique-id": "gpu-1", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
-        { "unique-id": "gpu-2", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
-        { "unique-id": "gpu-3", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
-        { "unique-id": "gpu-4", "node-type": "processor", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-1", "node-type": "accelerator", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-2", "node-type": "accelerator", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-3", "node-type": "accelerator", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
+        { "unique-id": "gpu-4", "node-type": "accelerator", "name": "GPU", "description": "A GPU in a large AI cluster, one of the thousands of GPUs that exchange gradients over east-west, GPU-to-GPU traffic." },
         { "unique-id": "supernic-1", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's class of network accelerator built for the east-west, GPU-to-GPU traffic of large AI clusters rather than the broad infrastructure offload a DPU targets: where a DPU is an infrastructure computer, a SuperNIC is a throughput engine and a pillar of NVIDIA's Spectrum-X Ethernet platform, delivering 400 Gb/s to 1.6 Tb/s of RDMA (remote direct memory access) over Converged Ethernet (RoCE) per GPU; the name covers two structurally different products, the BlueField-3 SuperNIC, a slimmed-down DPU with eight Arm cores, and the ConnectX-8/9 SuperNICs, pure network adapters with no separate operating system; either way the remit is performance over policy, so a SuperNIC's zero-trust story is thinner than a full DPU's, since the agentless host-introspection service, DOCA Argus, runs only on BlueField in DPU mode, though SuperNICs still encrypt traffic in flight at line rate." },
         { "unique-id": "supernic-2", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's network accelerator for east-west, GPU-to-GPU traffic, delivering 400 Gb/s to 1.6 Tb/s of RDMA over Converged Ethernet (RoCE) per GPU." },
         { "unique-id": "supernic-3", "node-type": "nic", "name": "SuperNIC", "description": "A SuperNIC, NVIDIA's network accelerator for east-west, GPU-to-GPU traffic, delivering 400 Gb/s to 1.6 Tb/s of RDMA over Converged Ethernet (RoCE) per GPU." },
