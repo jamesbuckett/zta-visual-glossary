@@ -4837,29 +4837,36 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     siem: () => `
       <svg class="dg" viewBox="0 0 720 272" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Logs from many sources are normalised and correlated into prioritised alerts for the SOC.">
-        ${[['brick-wall', 'Firewalls', 24], ['server', 'Servers', 84], ['app-window', 'Applications', 144], ['cloud', 'Cloud', 204]].map(([ico, name, y]) => `
-          <g data-s="1">
-            <rect class="box" x="24" y="${y}" width="168" height="44" rx="8"/>
-            ${icon(ico, 36, y + 10)}
-            <text class="t-b" x="68" y="${y + 27}">${name}</text>
-          </g>
-          <line class="flow" data-s="1" x1="194" y1="${y + 22}" x2="262" y2="${136 + (y - 114) / 4}" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="1 2 3 4">
-          <rect class="box" x="264" y="16" width="192" height="240" rx="8"/>
+        <g data-s="1 2 3 4" data-calm="siem">
+          <rect class="box-soft" x="264" y="16" width="192" height="240" rx="8"/>
           ${icon('activity', 280, 30)}
           <text class="t-b" x="312" y="48">SIEM</text>
         </g>
-        ${[['normalise', 72, '2'], ['store', 124, '2'], ['correlate', 176, '3']].map(([t, y, s]) => `
-          <g data-s="${s}">
-            <rect class="box" x="280" y="${y}" width="160" height="40" rx="6"/>
-            <text class="t-sm" x="360" y="${y + 24}" text-anchor="middle">${t}</text>
-          </g>`).join('')}
-        <line class="flow" data-s="2" x1="360" y1="114" x2="360" y2="122" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="360" y1="166" x2="360" y2="174" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="458" y1="196" x2="534" y2="152" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="462" y="150">alerts</text>
-        <g data-s="4">
-          <rect class="box" x="536" y="96" width="160" height="96" rx="12"/>
+        ${[['firewalls', 'brick-wall', 'Firewalls', 24], ['servers', 'server', 'Servers', 84], ['applications', 'app-window', 'Applications', 144], ['cloud', 'cloud', 'Cloud', 204]].map(([id, ico, name, y]) => `
+          <g data-s="1" data-calm="${id}">
+            <rect class="box" x="24" y="${y}" width="192" height="44" rx="8"/>
+            ${icon(ico, 36, y + 10)}
+            <text class="t-b" x="68" y="${y + 27}">${name}</text>
+          </g>
+          <line class="flow" data-s="1" data-calm="${id}-siem" x1="218" y1="${y + 22}" x2="262" y2="${136 + (y - 114) / 4}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="2" data-note="call-out">
+          <rect class="box" x="280" y="72" width="160" height="40" rx="6"/>
+          <text class="t-sm" x="360" y="96" text-anchor="middle">normalise</text>
+        </g>
+        <g data-s="2" data-calm="store">
+          ${cyl(280, 124, 160, 60)}
+          <text class="t-sm" x="360" y="158" text-anchor="middle">store</text>
+        </g>
+        <g data-s="3" data-note="call-out">
+          <rect class="box" x="280" y="196" width="160" height="40" rx="6"/>
+          <text class="t-sm" x="360" y="220" text-anchor="middle">correlate</text>
+        </g>
+        <line class="flow" data-s="2" data-note="call-out" x1="360" y1="114" x2="360" y2="122" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-note="call-out" x1="360" y1="186" x2="360" y2="194" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="soc-siem" x1="458" y1="216" x2="534" y2="152" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="466" y="160">alerts</text>
+        <g data-s="4" data-calm="soc">
+          <rect class="box" x="536" y="96" width="160" height="96" rx="20"/>
           ${icon('users', 552, 110)}
           <text class="t-b" x="584" y="128">SOC</text>
           <text class="t-sm t-mut" x="552" y="156">detect, investigate,</text>
@@ -4868,7 +4875,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
         ${badge(1, 228, 124, '1')}
         ${badge(2, 424, 92, '2')}
-        ${badge(3, 424, 196, '3')}
+        ${badge(3, 424, 216, '3')}
         ${badge(4, 680, 110, '4')}
       </svg>`,
 
@@ -5469,60 +5476,60 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     edr: () => `
       <svg class="dg" viewBox="0 0 720 280" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access.">
-        <g data-s="1 3">
-          <rect class="box" x="24" y="24" width="172" height="136" rx="12"/>
+        <g data-s="1 3" data-calm="endpoint">
+          <rect class="zone" x="24" y="24" width="172" height="136" rx="10"/>
           ${icon('laptop', 40, 38)}
           <text class="t-b" x="72" y="56">Endpoint</text>
         </g>
-        <g data-s="1">
-          <rect class="box" x="40" y="72" width="140" height="72" rx="6"/>
-          <text class="t-sm t-b" x="52" y="92">agent records</text>
+        <g data-s="1" data-calm="agent">
+          <rect class="box" x="40" y="72" width="140" height="64" rx="6"/>
+          <text class="t-sm t-b" x="52" y="92">Agent</text>
           <text class="t-sm t-mut" x="52" y="110">process, file,</text>
           <text class="t-sm t-mut" x="52" y="126">network, registry</text>
         </g>
-        <line class="flow" data-s="1" x1="198" y1="64" x2="274" y2="64" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="274" y1="136" x2="198" y2="136" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="agent-detection" x1="182" y1="88" x2="274" y2="88" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="detection-endpoint" x1="274" y1="136" x2="198" y2="136" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="236" y="156" text-anchor="middle">isolate</text>
-        <g data-s="1 2 3 4 5">
+        <g data-s="1 2 3 4 5" data-calm="detection">
           <rect class="box" x="276" y="24" width="200" height="136" rx="8"/>
           ${icon('activity', 292, 38)}
           <text class="t-b" x="324" y="56">Detection</text>
         </g>
-        <g data-s="2">
-          <rect class="box" x="292" y="72" width="168" height="72" rx="6"/>
+        <g data-s="2" data-note="call-out">
+          <rect class="box" x="292" y="72" width="168" height="64" rx="6"/>
           <text class="t-sm t-b" x="304" y="92">known attack</text>
           <text class="t-sm t-b" x="304" y="108">patterns</text>
           <text class="t-sm t-mut" x="304" y="126">flag behaviour</text>
         </g>
-        ${[['mail', 'email', 24], ['user', 'identity', 72], ['cloud', 'cloud', 120]].map(([ico, t, y]) => `
-          <g data-s="4">
-            <rect class="box" x="552" y="${y}" width="144" height="40" rx="6"/>
-            ${icon(ico, 562, y + 8)}
-            <text class="t-sm" x="594" y="${y + 25}">${t}</text>
+        ${[['email', 'mail', 24], ['identity', 'user', 72], ['cloud', 'cloud', 120]].map(([t, ico, y]) => `
+          <g data-s="4" data-calm="${t}">
+            <rect class="box" x="536" y="${y}" width="160" height="40" rx="6"/>
+            ${icon(ico, 546, y + 8)}
+            <text class="t-sm" x="578" y="${y + 25}">${t}</text>
           </g>
-          <line class="flow" data-s="4" x1="550" y1="${y + 20}" x2="478" y2="${y + 20 > 92 ? 120 : (y + 20 < 92 ? 64 : 92)}" marker-end="url(#ah-mut)"/>`).join('')}
+          <line class="flow" data-s="4" data-calm="${t}-detection" x1="534" y1="${y + 20}" x2="478" y2="${y + 20 > 92 ? 120 : (y + 20 < 92 ? 64 : 92)}" marker-end="url(#ah-mut)"/>`).join('')}
 
-        <line class="flow" data-s="5" x1="376" y1="162" x2="376" y2="198" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="detection-policy-engine" x1="376" y1="162" x2="376" y2="198" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="5" x="388" y="184">posture</text>
-        <g data-s="5">
+        <g data-s="5" data-calm="policy-engine">
           <rect class="box" x="276" y="200" width="200" height="64" rx="8"/>
-          ${icon('scale', 292, 214)}
-          <text class="t-b" x="324" y="232">Policy engine</text>
-          <text class="t-sm t-mut" x="324" y="250">weighs posture</text>
+          ${icon('scale', 292, 210)}
+          <text class="t-b" x="324" y="228">Policy engine</text>
+          <text class="t-sm t-mut" x="324" y="246">weighs posture</text>
         </g>
-        <line class="flow-bad" data-s="5" x1="478" y1="232" x2="550" y2="232" marker-end="url(#ah-bad)"/>
-        <g data-s="5">
-          <rect class="box" x="552" y="200" width="144" height="64" rx="8"/>
-          <text class="t-sm t-b" x="564" y="222">access denied</text>
-          <text class="t-sm t-mut" x="564" y="240">even with valid</text>
-          <text class="t-sm t-mut" x="564" y="254">credentials</text>
+        <line class="flow-bad" data-s="5" data-note="call-out" x1="478" y1="232" x2="534" y2="232" marker-end="url(#ah-bad)"/>
+        <g data-s="5" data-note="call-out">
+          <rect class="box" x="536" y="200" width="160" height="64" rx="8"/>
+          <text class="t-sm t-b" x="548" y="222">access denied</text>
+          <text class="t-sm t-mut" x="548" y="240">even with valid</text>
+          <text class="t-sm t-mut" x="548" y="254">credentials</text>
         </g>
 
-        ${badge(1, 236, 64, '1')}
+        ${badge(1, 236, 88, '1')}
         ${badge(2, 444, 86, '2')}
         ${badge(3, 236, 136, '3')}
-        ${badge(4, 514, 44, '4')}
-        ${badge(5, 514, 232, '5')}
+        ${badge(4, 506, 40, '4')}
+        ${badge(5, 506, 232, '5')}
       </svg>`,
 
     waf: () => `
@@ -5857,55 +5864,63 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     idsips: () => `
-      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.">
+      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.">
         <text class="t-sm" data-s="1" x="24" y="18">looks for: signatures · protocol anomalies · deviations from a baseline</text>
-        ${[32, 172].map((y) => `
-          <g data-s="1">
-            <rect class="box" x="24" y="${y}" width="120" height="48" rx="12"/>
+        ${[['1', 32], ['2', 208]].map(([n, y]) => `
+          <g data-s="1" data-calm="network-${n}">
+            <rect class="zone" x="24" y="${y}" width="136" height="48" rx="10"/>
             ${icon('globe', 36, y + 12)}
-            <text class="t-b" x="68" y="${y + 29}">Traffic</text>
+            <text class="t-b" x="68" y="${y + 31}">Network</text>
           </g>
-          <g data-s="1">
-            <rect class="box" x="576" y="${y}" width="120" height="48" rx="8"/>
-            ${icon('server', 588, y + 12)}
-            <text class="t-b" x="620" y="${y + 29}">Hosts</text>
+          <g data-s="1" data-calm="hosts-${n}">
+            <rect class="box" x="552" y="${y}" width="144" height="48" rx="8"/>
+            ${icon('server', 564, y + 12)}
+            <text class="t-b" x="596" y="${y + 29}">Hosts</text>
           </g>`).join('')}
-        <line class="flow" data-s="1" x1="146" y1="56" x2="574" y2="56" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="328" y1="58" x2="328" y2="90" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2">
-          <rect class="box" x="248" y="92" width="160" height="44" rx="8"/>
-          ${icon('scan-eye', 260, 102)}
-          <text class="t-b" x="292" y="112">IDS</text>
-          <text class="t-sm t-mut" x="292" y="128">mirrored copy</text>
+        <line class="flow" data-s="1" data-calm="network-1-hosts-1" x1="162" y1="56" x2="550" y2="56" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="2" data-calm="network-1-ids" d="M92 82 V128 H246" marker-end="url(#ah-mut)"/>
+        <g data-s="1 2" data-calm="ids">
+          <rect class="box" x="248" y="104" width="160" height="48" rx="8"/>
+          ${icon('scan-eye', 260, 116)}
+          <text class="t-b" x="292" y="126">IDS</text>
+          <text class="t-sm t-mut" x="292" y="142">mirrored copy</text>
         </g>
-        <text class="t-sm bad" data-s="5" x="248" y="154">false positives</text>
+        <text class="t-sm bad" data-s="5" x="248" y="170">false positives</text>
 
-        <line class="flow-bad" data-s="3" x1="146" y1="196" x2="246" y2="196" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="3" x="196" y="188" text-anchor="middle">malicious</text>
-        <g data-s="1 3">
-          <rect class="box" x="248" y="172" width="160" height="48" rx="8"/>
-          ${icon('shield', 260, 184)}
-          <text class="t-b" x="292" y="194">IPS</text>
-          <text class="t-sm t-mut" x="292" y="210">inline: drops it</text>
+        <line class="flow-bad" data-s="3" data-calm="network-2-ips" x1="162" y1="232" x2="246" y2="232" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="3" x="204" y="224" text-anchor="middle">malicious</text>
+        <g data-s="1 3" data-calm="ips">
+          <rect class="box" x="248" y="208" width="160" height="48" rx="8"/>
+          ${icon('shield', 260, 220)}
+          <text class="t-b" x="292" y="230">IPS</text>
+          <text class="t-sm t-mut" x="292" y="246">inline: drops it</text>
         </g>
-        <line class="flow" data-s="1" x1="410" y1="186" x2="574" y2="186" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" data-s="1" x="500" y="178" text-anchor="middle">legitimate</text>
-        <text class="t-sm bad" data-s="5" x="248" y="240">may block legitimate traffic</text>
+        <line class="flow" data-s="1" data-calm="ips-hosts-2" x1="410" y1="232" x2="550" y2="232" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="1" x="480" y="250" text-anchor="middle">legitimate</text>
+        <text class="t-sm bad" data-s="5" x="248" y="276">may block legitimate traffic</text>
 
-        <path class="flow" data-s="4" d="M410 114 H436 V264 H446" marker-end="url(#ah-mut)"/>
-        <path class="flow" data-s="4" d="M410 210 H436" />
-        <g data-s="4">
-          <rect class="box" x="448" y="240" width="248" height="48" rx="8"/>
-          ${icon('activity', 460, 252)}
-          <text class="t-b" x="492" y="262">SIEM and SOC</text>
-          <text class="t-sm t-mut" x="492" y="278">correlate, respond</text>
+        <g data-s="4" data-calm="siem">
+          <rect class="box" x="448" y="112" width="128" height="72" rx="8"/>
+          ${icon('activity', 460, 124)}
+          <text class="t-b" x="492" y="141">SIEM</text>
+          <text class="t-sm t-mut" x="460" y="164">correlation</text>
         </g>
+        <g data-s="4" data-calm="soc">
+          <rect class="box" x="592" y="112" width="104" height="72" rx="20"/>
+          ${icon('users', 604, 124)}
+          <text class="t-b" x="636" y="141">SOC</text>
+          <text class="t-sm t-mut" x="604" y="164">response</text>
+        </g>
+        <line class="flow" data-s="4" data-calm="ids-siem" x1="410" y1="128" x2="446" y2="128" marker-end="url(#ah-mut)"/>
+        <path class="flow" data-s="4" data-calm="soc-ids" d="M340 102 V94 H644 V110" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="ips-siem" x1="392" y1="206" x2="476" y2="186" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="soc-ips" x1="410" y1="216" x2="628" y2="186" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 200, 56, '1')}
-        ${badge(2, 328, 74, '2')}
-        ${badge(3, 170, 206, '3')}
-        ${badge(4, 680, 254, '4')}
-        ${badge(5, 376, 150, '5')}
+        ${badge(2, 170, 128, '2')}
+        ${badge(3, 204, 246, '3')}
+        ${badge(4, 520, 94, '4')}
+        ${badge(5, 376, 166, '5')}
       </svg>`,
 
     ldap: () => `
@@ -6010,43 +6025,48 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     soar: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.">
-        <g data-s="1">
-          <rect class="box" x="24" y="112" width="148" height="64" rx="12"/>
-          ${icon('activity', 40, 126)}
-          <text class="t-b" x="72" y="144">Alert</text>
-          <text class="t-sm t-mut" x="72" y="162">from SIEM</text>
+        <g data-s="1" data-calm="siem">
+          <rect class="box" x="24" y="112" width="148" height="64" rx="8"/>
+          ${icon('activity', 40, 122)}
+          <text class="t-b" x="72" y="140">SIEM</text>
+          <text class="t-sm t-mut" x="72" y="158">alerts</text>
         </g>
-        <line class="flow" data-s="1" x1="174" y1="144" x2="234" y2="144" marker-end="url(#ah-mut)"/>
-        <g data-s="1 2 3 4">
-          <rect class="box" x="236" y="16" width="200" height="248" rx="8"/>
-          ${icon('list-checks', 252, 30)}
-          <text class="t-b" x="284" y="48">Playbook</text>
+        <g data-s="1" data-calm="soar">
+          <rect class="box-soft" x="232" y="8" width="220" height="284" rx="8"/>
+          ${icon('workflow', 244, 16)}
+          <text class="t-b" x="276" y="34">SOAR</text>
         </g>
-        ${[['enrich', 72, '2'], ['decide', 136, '3'], ['act', 200, '4 5']].map(([t, y, s], i) => `
-          <g data-s="${s}">
-            <rect class="box" x="252" y="${y}" width="168" height="44" rx="6"/>
-            <text class="t-sm t-b" x="336" y="${y + 27}" text-anchor="middle">${t}</text>
+        <g data-s="1 2 3 4" data-calm="playbook">
+          ${doc(244, 48, 196, 236)}
+          ${icon('list-checks', 256, 58)}
+          <text class="t-b" x="288" y="76">Playbook</text>
+        </g>
+        ${[['enrich', 92, '2'], ['decide', 152, '3'], ['act', 212, '4 5']].map(([t, y, s], i) => `
+          <g data-s="${s}" data-note="call-out">
+            <rect class="box" x="256" y="${y}" width="168" height="44" rx="6"/>
+            <text class="t-sm t-b" x="340" y="${y + 27}" text-anchor="middle">${t}</text>
           </g>
-          ${i < 2 ? `<line class="flow" data-s="${i === 0 ? 3 : 4}" x1="336" y1="${y + 46}" x2="336" y2="${y + 62}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+          ${i < 2 ? `<line class="flow" data-s="${i === 0 ? 3 : 4}" data-note="call-out" x1="340" y1="${y + 46}" x2="340" y2="${y + 58}" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+        <line class="flow" data-s="1" data-calm="siem-soar" x1="174" y1="144" x2="230" y2="144" marker-end="url(#ah-mut)"/>
         ${[['isolate a host', 24], ['disable an account', 80], ['block an IP', 136], ['open a case', 192]].map(([t, y]) => `
-          <g data-s="4">
+          <g data-s="4" data-note="call-out">
             <rect class="box" x="512" y="${y}" width="184" height="44" rx="8"/>
             <text class="t-sm" x="528" y="${y + 27}">${t}</text>
           </g>
-          <line class="flow" data-s="4" x1="422" y1="222" x2="510" y2="${y + 22}" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="5">
-          <rect class="box" x="512" y="248" width="184" height="44" rx="8"/>
+          <line class="flow" data-s="4" data-note="call-out" x1="426" y1="234" x2="510" y2="${y + 22}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="5" data-calm="human">
+          <rect class="box" x="512" y="248" width="184" height="44" rx="20"/>
           ${icon('user', 524, 258)}
-          <text class="t-sm t-b" x="556" y="268">human approval</text>
-          <text class="t-sm t-mut" x="556" y="284">destructive only</text>
+          <text class="t-sm t-b" x="556" y="268">Human</text>
+          <text class="t-sm t-mut" x="556" y="284">approves destructive</text>
         </g>
-        <line class="flow" data-s="5" x1="422" y1="232" x2="510" y2="268" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="human-playbook" x1="426" y1="246" x2="510" y2="268" marker-end="url(#ah-mut)"/>
 
-        ${badge(1, 204, 144, '1')}
-        ${badge(2, 404, 86, '2')}
-        ${badge(3, 404, 150, '3')}
-        ${badge(4, 404, 214, '4')}
-        ${badge(5, 466, 250, '5')}
+        ${badge(1, 202, 144, '1')}
+        ${badge(2, 408, 106, '2')}
+        ${badge(3, 408, 166, '3')}
+        ${badge(4, 408, 226, '4')}
+        ${badge(5, 470, 256, '5')}
       </svg>`,
 
     pqc: () => `
@@ -6361,24 +6381,24 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     dlp: () => `
       <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted.">
-        <g data-s="1 2">
-          <rect class="box" x="24" y="24" width="176" height="92" rx="8"/>
+        <g data-s="1 2" data-calm="sensitive-data">
+          ${doc(24, 24, 176, 92)}
           ${icon('file-text', 40, 38)}
           <text class="t-b" x="72" y="56">Sensitive data</text>
-          <text class="t-sm t-mut" x="40" y="84">cards, health,</text>
-          <text class="t-sm t-mut" x="40" y="100">code, secrets</text>
+          <text class="t-sm t-mut" x="40" y="76">cards, health,</text>
+          <text class="t-sm t-mut" x="40" y="92">code, secrets</text>
         </g>
-        <line class="flow" data-s="2" x1="202" y1="72" x2="262" y2="72" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="sensitive-data-dlp" x1="202" y1="72" x2="262" y2="72" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="40" y="138">leaving by email, upload,</text>
         <text class="t-sm" data-s="2" x="40" y="154">USB or chat</text>
-        <g data-s="5">
-          <rect class="box" x="24" y="176" width="176" height="56" rx="8"/>
+        <g data-s="5" data-calm="labels">
+          ${doc(24, 176, 176, 72)}
           ${icon('list-checks', 40, 192)}
           <text class="t-b" x="72" y="201">Labels</text>
           <text class="t-sm t-mut" x="72" y="219">classification</text>
         </g>
-        <line class="flow" data-s="5" x1="202" y1="204" x2="262" y2="170" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3 4 5">
+        <line class="flow" data-s="5" data-calm="labels-dlp" x1="202" y1="204" x2="262" y2="170" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4 5" data-calm="dlp">
           <rect class="box" x="264" y="24" width="192" height="176" rx="8"/>
           ${icon('shield', 280, 38)}
           <text class="t-b" x="312" y="56">DLP</text>
@@ -6387,23 +6407,23 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="280" y="128">and classifications</text>
         </g>
         ${[['warn', 24, ''], ['block', 84, 'card data by email'], ['encrypt', 144, '']].map(([t, y, sub]) => `
-          <g data-s="3">
+          <g data-s="3" data-note="call-out">
             <rect class="box" x="536" y="${y}" width="160" height="48" rx="8"/>
             <text class="t-sm t-b" x="552" y="${sub ? y + 21 : y + 29}">${t}</text>
             ${sub ? `<text class="t-sm bad" x="552" y="${y + 37}">${sub}</text>` : ''}
           </g>
-          <line class="flow" data-s="3" x1="458" y1="112" x2="534" y2="${y + 24}" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="4">
+          <line class="flow" data-s="3" data-note="call-out" x1="458" y1="112" x2="534" y2="${y + 24}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="264" y="228" width="432" height="44" rx="8"/>
           ${icon('network', 280, 238)}
           <text class="t-sm" x="312" y="255">endpoints · network · cloud and SaaS via CASB</text>
         </g>
 
-        ${badge(1, 184, 92, '1')}
+        ${badge(1, 172, 82, '1')}
         ${badge(2, 232, 72, '2')}
         ${badge(3, 680, 98, '3')}
         ${badge(4, 680, 250, '4')}
-        ${badge(5, 184, 190, '5')}
+        ${badge(5, 232, 187, '5')}
       </svg>`,
 
     pam: () => `
@@ -8324,52 +8344,59 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     sentrywire: () => `
-      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext.">
-        <line class="flow" data-s="1" x1="24" y1="36" x2="694" y2="36" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" data-s="1" x="360" y="28" text-anchor="middle">live traffic</text>
-        <line class="flow" data-s="1" x1="144" y1="38" x2="144" y2="118" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="156" y="84">tap copy</text>
-        <g data-s="1 2">
-          <rect class="box" x="24" y="120" width="240" height="76" rx="8"/>
-          ${icon('hard-drive', 40, 134)}
-          <text class="t-b" x="72" y="152">Capture</text>
-          <text class="t-sm t-mut" x="72" y="170">passive, out of band</text>
-          <text class="t-sm t-mut" x="72" y="186">every payload byte</text>
+      <svg class="dg" viewBox="0 0 720 304" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext.">
+        <line class="flow" data-s="1" data-note="call-out" x1="24" y1="36" x2="86" y2="36" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-note="call-out" x1="250" y1="36" x2="694" y2="36" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="1" x="472" y="28" text-anchor="middle">live traffic</text>
+        <g data-s="1" data-calm="tap">
+          <rect class="box" x="88" y="14" width="160" height="44" rx="8"/>
+          ${icon('git-branch', 100, 24)}
+          <text class="t-b" x="132" y="33">Tap</text>
+          <text class="t-sm t-mut" x="132" y="49">or packet broker</text>
         </g>
-        <line class="flow" data-s="2" x1="266" y1="158" x2="310" y2="158" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3 4">
-          <rect class="box" x="312" y="120" width="192" height="76" rx="8"/>
-          ${icon('database', 328, 134)}
-          <text class="t-b" x="360" y="152">PCAP store</text>
-          <text class="t-sm t-mut" x="360" y="170">kept for months</text>
-          <text class="t-sm t-mut" x="360" y="186">add nodes</text>
+        <line class="flow" data-s="1" data-calm="tap-capture" x1="168" y1="60" x2="168" y2="126" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="180" y="104">tap copy</text>
+        <g data-s="1 2" data-calm="capture">
+          <rect class="box" x="24" y="128" width="224" height="96" rx="8"/>
+          ${icon('hard-drive', 40, 150)}
+          <text class="t-b" x="72" y="168">Capture</text>
+          <text class="t-sm t-mut" x="72" y="186">passive, out of band</text>
+          <text class="t-sm t-mut" x="72" y="202">every payload byte</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="552" y="56" width="144" height="64" rx="8"/>
+        <line class="flow" data-s="2" data-calm="capture-pcap-store" x1="250" y1="176" x2="310" y2="176" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3 4" data-calm="pcap-store">
+          ${cyl(312, 128, 176, 96)}
+          ${icon('database', 328, 150)}
+          <text class="t-b" x="360" y="166">PCAP store</text>
+          <text class="t-sm t-mut" x="360" y="184">kept for months</text>
+          <text class="t-sm t-mut" x="360" y="200">add nodes</text>
+        </g>
+        <g data-s="3" data-calm="signature">
+          ${doc(552, 56, 144, 80)}
           ${icon('file-search', 564, 70)}
           <text class="t-b" x="596" y="88">Signature</text>
-          <text class="t-sm t-mut" x="564" y="110">published today</text>
+          <text class="t-sm t-mut" x="564" y="112">published today</text>
         </g>
-        <line class="flow" data-s="3" x1="550" y1="100" x2="506" y2="128" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="506" y1="176" x2="550" y2="176" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="box" x="552" y="140" width="144" height="64" rx="8"/>
-          ${icon('users', 564, 154)}
-          <text class="t-b" x="596" y="172">Analyst</text>
-          <text class="t-sm t-mut" x="564" y="194">matches as PCAP</text>
+        <line class="flow" data-s="3" data-calm="signature-pcap-store" x1="550" y1="112" x2="490" y2="150" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="analyst-pcap-store" x1="490" y1="192" x2="550" y2="192" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="analyst">
+          <rect class="box" x="552" y="160" width="144" height="64" rx="20"/>
+          ${icon('users', 564, 174)}
+          <text class="t-b" x="596" y="192">Analyst</text>
+          <text class="t-sm t-mut" x="564" y="214">matches as PCAP</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="24" y="224" width="672" height="56" rx="8"/>
-          ${icon('lock', 40, 240)}
-          <text class="t-sm bad" x="72" y="248">limits: TLS payloads stay ciphertext · only what crosses the tap</text>
-          <text class="t-sm bad" x="72" y="266">the archive itself needs protecting</text>
+        <g data-s="5" data-note="footer">
+          <rect class="box" x="24" y="240" width="672" height="56" rx="8"/>
+          ${icon('lock', 40, 256)}
+          <text class="t-sm bad" x="72" y="264">limits: TLS payloads stay ciphertext · only what crosses the tap</text>
+          <text class="t-sm bad" x="72" y="282">the archive itself needs protecting</text>
         </g>
 
-        ${badge(1, 144, 64, '1')}
-        ${badge(2, 288, 158, '2')}
-        ${badge(3, 680, 70, '3')}
-        ${badge(4, 680, 154, '4')}
-        ${badge(5, 680, 238, '5')}
+        ${badge(1, 168, 76, '1')}
+        ${badge(2, 280, 176, '2')}
+        ${badge(3, 520, 131, '3')}
+        ${badge(4, 520, 192, '4')}
+        ${badge(5, 680, 254, '5')}
       </svg>`,
 
     coreweave: () => `
@@ -11365,6 +11392,199 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "node-a-node-b", "sequence-number": 2, "description": "Node B's BGP daemon advertises Node B's block to Node A.", "direction": "destination-to-source" },
             { "relationship-unique-id": "pod-a-pod-b", "sequence-number": 3, "description": "The pod's packet crosses the wire carrying the pod's own source and destination address, with nothing wrapped around the packet." },
             { "relationship-unique-id": "platform-tier-default-tier", "sequence-number": 4, "description": "The platform tier, evaluated before the default tier, can Pass a packet down to the default tier." }
+          ] }
+      ]
+    },
+    siem: {
+      "nodes": [
+        { "unique-id": "firewalls", "node-type": "system", "name": "Firewalls", "description": "Firewalls, one of the sources across the estate whose logs and events a SIEM ingests." },
+        { "unique-id": "servers", "node-type": "system", "name": "Servers", "description": "Servers, one of the sources across the estate whose logs and events a SIEM ingests." },
+        { "unique-id": "applications", "node-type": "system", "name": "Applications", "description": "Applications, one of the sources across the estate whose logs and events a SIEM ingests." },
+        { "unique-id": "cloud", "node-type": "system", "name": "Cloud", "description": "Cloud services, one of the sources across the estate whose logs and events a SIEM ingests." },
+        { "unique-id": "siem", "node-type": "service", "name": "SIEM", "description": "A SIEM, which ingests logs and events from across the estate (firewalls, servers, applications and cloud services), then normalises, stores and correlates the logs and events to surface suspicious patterns as prioritised alerts, giving a security operations centre (SOC) one place to detect, investigate and report on threats, and to satisfy audit requirements; modern platforms layer on analytics and automated response; a SIEM sees only the logs the SIEM is sent, and untuned correlation rules bury analysts in false positives." },
+        { "unique-id": "store", "node-type": "database", "name": "store", "description": "The SIEM's store, in which a SIEM keeps the logs and events the SIEM ingests from across the estate, after normalising them and before correlating them." },
+        { "unique-id": "soc", "node-type": "actor", "name": "SOC", "description": "A security operations centre (SOC), to which a SIEM gives one place to detect, investigate and report on threats, and to satisfy audit requirements." }
+      ],
+      "relationships": [
+        { "unique-id": "firewalls-siem", "description": "Logs and events from the firewalls are ingested by the SIEM.",
+          "relationship-type": { "connects": { "source": { "node": "firewalls" }, "destination": { "node": "siem" } } } },
+        { "unique-id": "servers-siem", "description": "Logs and events from the servers are ingested by the SIEM.",
+          "relationship-type": { "connects": { "source": { "node": "servers" }, "destination": { "node": "siem" } } } },
+        { "unique-id": "applications-siem", "description": "Logs and events from the applications are ingested by the SIEM.",
+          "relationship-type": { "connects": { "source": { "node": "applications" }, "destination": { "node": "siem" } } } },
+        { "unique-id": "cloud-siem", "description": "Logs and events from cloud services are ingested by the SIEM.",
+          "relationship-type": { "connects": { "source": { "node": "cloud" }, "destination": { "node": "siem" } } } },
+        { "unique-id": "siem-store", "description": "The SIEM holds the store in which the SIEM keeps the logs and events the SIEM has normalised.",
+          "relationship-type": { "composed-of": { "container": "siem", "nodes": ["store"] } } },
+        { "unique-id": "soc-siem", "description": "The SIEM surfaces suspicious patterns to the security operations centre as prioritised alerts, and the SOC uses the SIEM as one place to detect, investigate and report on threats.",
+          "relationship-type": { "interacts": { "actor": "soc", "nodes": ["siem"] } } }
+      ],
+      "flows": [
+        { "unique-id": "ingest-correlate-alert", "name": "Ingest, correlate, alert",
+          "description": "Logs from many sources are normalised and correlated into prioritised alerts for the SOC.",
+          "transitions": [
+            { "relationship-unique-id": "firewalls-siem", "sequence-number": 1, "description": "The SIEM ingests logs and events from the firewalls." },
+            { "relationship-unique-id": "servers-siem", "sequence-number": 2, "description": "The SIEM ingests logs and events from the servers." },
+            { "relationship-unique-id": "applications-siem", "sequence-number": 3, "description": "The SIEM ingests logs and events from the applications." },
+            { "relationship-unique-id": "cloud-siem", "sequence-number": 4, "description": "The SIEM ingests logs and events from cloud services." },
+            { "relationship-unique-id": "soc-siem", "sequence-number": 5, "description": "Normalised, stored and correlated, the logs and events surface as prioritised alerts for the security operations centre.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    edr: {
+      "nodes": [
+        { "unique-id": "endpoint", "node-type": "system", "name": "Endpoint", "description": "An endpoint, one of the laptops, servers and workstations on which Endpoint Detection and Response places a lightweight agent; responders can isolate or roll back a compromised host, and a device that fails the device's posture check can be denied access even with valid user credentials." },
+        { "unique-id": "agent", "node-type": "system", "name": "Agent", "description": "A lightweight agent, which Endpoint Detection and Response places on laptops, servers and workstations to continuously record process, file, network and registry activity; the agent's live health verdict (patched, encrypted, not infected) becomes a device-posture signal, and an attacker who disables or evades the agent also silences the posture signal." },
+        { "unique-id": "detection", "node-type": "service", "name": "Detection", "description": "The detection backend, to which the agent streams behavioural telemetry and which scores posture: Endpoint Detection and Response flags behaviour that matches known attack patterns and lets responders isolate or roll back a compromised host, and Extended Detection and Response widens that lens, correlating endpoint telemetry with email, identity and cloud signals so a multi-stage attack is seen as one incident rather than scattered alerts; EDR is reactive detection, and EDR detects attacks already under way and does not prevent them." },
+        { "unique-id": "email", "node-type": "system", "name": "email", "description": "Email, a source of the email signals that Extended Detection and Response correlates with endpoint telemetry." },
+        { "unique-id": "identity", "node-type": "system", "name": "identity", "description": "Identity, a source of the identity signals that Extended Detection and Response correlates with endpoint telemetry." },
+        { "unique-id": "cloud", "node-type": "system", "name": "cloud", "description": "Cloud, a source of the cloud signals that Extended Detection and Response correlates with endpoint telemetry." },
+        { "unique-id": "policy-engine", "node-type": "service", "name": "Policy engine", "description": "The policy engine, which weighs the device-posture signal before granting access; for Zero Trust this is the Devices pillar, one of CISA's five pillars, in action, and posture turns EDR into an access input." }
+      ],
+      "relationships": [
+        { "unique-id": "endpoint-agent", "description": "Endpoint Detection and Response places the lightweight agent on the endpoint.",
+          "relationship-type": { "deployed-in": { "container": "endpoint", "nodes": ["agent"] } } },
+        { "unique-id": "agent-detection", "description": "The agent streams behavioural telemetry, the process, file, network and registry activity the agent records, to the detection backend.",
+          "relationship-type": { "connects": { "source": { "node": "agent" }, "destination": { "node": "detection" } } } },
+        { "unique-id": "detection-endpoint", "description": "From the detection backend, which can quarantine the host, responders can isolate or roll back a compromised endpoint.",
+          "relationship-type": { "connects": { "source": { "node": "detection" }, "destination": { "node": "endpoint" } } } },
+        { "unique-id": "email-detection", "description": "Email signals reach the detection backend, where Extended Detection and Response correlates the signals with endpoint telemetry.",
+          "relationship-type": { "connects": { "source": { "node": "email" }, "destination": { "node": "detection" } } } },
+        { "unique-id": "identity-detection", "description": "Identity signals reach the detection backend, where Extended Detection and Response correlates the signals with endpoint telemetry.",
+          "relationship-type": { "connects": { "source": { "node": "identity" }, "destination": { "node": "detection" } } } },
+        { "unique-id": "cloud-detection", "description": "Cloud signals reach the detection backend, where Extended Detection and Response correlates the signals with endpoint telemetry.",
+          "relationship-type": { "connects": { "source": { "node": "cloud" }, "destination": { "node": "detection" } } } },
+        { "unique-id": "detection-policy-engine", "description": "The agent's live health verdict (patched, encrypted, not infected), scored by the detection backend, reaches the policy engine as a device-posture signal.",
+          "relationship-type": { "connects": { "source": { "node": "detection" }, "destination": { "node": "policy-engine" } } } }
+      ],
+      "flows": [
+        { "unique-id": "detect-respond-gate", "name": "Detect, respond, gate access",
+          "description": "An endpoint agent streams behavioural telemetry to a detection backend, which scores posture and can quarantine the host or block its access.",
+          "transitions": [
+            { "relationship-unique-id": "agent-detection", "sequence-number": 1, "description": "The agent continuously records process, file, network and registry activity and streams the activity to the detection backend as behavioural telemetry." },
+            { "relationship-unique-id": "detection-endpoint", "sequence-number": 2, "description": "Responders can isolate or roll back the compromised host." },
+            { "relationship-unique-id": "email-detection", "sequence-number": 3, "description": "Extended Detection and Response correlates email signals with endpoint telemetry." },
+            { "relationship-unique-id": "identity-detection", "sequence-number": 4, "description": "Extended Detection and Response correlates identity signals with endpoint telemetry." },
+            { "relationship-unique-id": "cloud-detection", "sequence-number": 5, "description": "Extended Detection and Response correlates cloud signals with endpoint telemetry, so a multi-stage attack is seen as one incident." },
+            { "relationship-unique-id": "detection-policy-engine", "sequence-number": 6, "description": "The agent's live health verdict becomes a device-posture signal the policy engine weighs before granting access; a device that fails can be denied even with valid user credentials." }
+          ] }
+      ]
+    },
+    idsips: {
+      "nodes": [
+        { "unique-id": "network-1", "node-type": "network", "name": "Network", "description": "A network whose traffic passes to the hosts while an Intrusion Detection System inspects a mirrored copy of the traffic." },
+        { "unique-id": "hosts-1", "node-type": "system", "name": "Hosts", "description": "Hosts, the far end of the network traffic, which the traffic reaches while an Intrusion Detection System inspects a mirrored copy." },
+        { "unique-id": "ids", "node-type": "system", "name": "IDS", "description": "An Intrusion Detection System, which inspects a mirrored copy of network traffic, or host activity, for signs of an attack (known exploit signatures, protocol anomalies, or traffic that deviates from a learned baseline) and raises an alert when the IDS sees one; open-source engines like Snort and Suricata popularised the signature model, matching packets against community rule sets updated as new threats emerge, and the IDS complements endpoint EDR by watching the wire instead of the host; the weakness is false positives in detection mode." },
+        { "unique-id": "network-2", "node-type": "network", "name": "Network", "description": "A network whose traffic passes inline through an Intrusion Prevention System on the way to the hosts." },
+        { "unique-id": "ips", "node-type": "system", "name": "IPS", "description": "An Intrusion Prevention System, the same engine as an Intrusion Detection System placed inline so the engine can act, dropping or resetting the malicious connection rather than merely reporting the connection; the weakness is the risk of blocking legitimate traffic in prevention mode." },
+        { "unique-id": "hosts-2", "node-type": "system", "name": "Hosts", "description": "Hosts, the far end of the network traffic, which the traffic reaches inline through an Intrusion Prevention System." },
+        { "unique-id": "siem", "node-type": "service", "name": "SIEM", "description": "A SIEM, which the detection feeds for correlation." },
+        { "unique-id": "soc", "node-type": "actor", "name": "SOC", "description": "A security operations centre (SOC), which the detection feeds for response." }
+      ],
+      "relationships": [
+        { "unique-id": "network-1-hosts-1", "description": "Network traffic passes from the network to the hosts.",
+          "relationship-type": { "connects": { "source": { "node": "network-1" }, "destination": { "node": "hosts-1" } } } },
+        { "unique-id": "network-1-ids", "description": "A mirrored copy of the network traffic reaches the IDS.",
+          "relationship-type": { "connects": { "source": { "node": "network-1" }, "destination": { "node": "ids" } } } },
+        { "unique-id": "network-2-ips", "description": "Network traffic passes inline through the IPS, which drops or resets a malicious connection.",
+          "relationship-type": { "connects": { "source": { "node": "network-2" }, "destination": { "node": "ips" } } } },
+        { "unique-id": "ips-hosts-2", "description": "Legitimate traffic passes inline from the IPS on to the hosts.",
+          "relationship-type": { "connects": { "source": { "node": "ips" }, "destination": { "node": "hosts-2" } } } },
+        { "unique-id": "ids-siem", "description": "The IDS's detection feeds the SIEM for correlation.",
+          "relationship-type": { "connects": { "source": { "node": "ids" }, "destination": { "node": "siem" } } } },
+        { "unique-id": "ips-siem", "description": "The IPS's detection feeds the SIEM for correlation.",
+          "relationship-type": { "connects": { "source": { "node": "ips" }, "destination": { "node": "siem" } } } },
+        { "unique-id": "soc-ids", "description": "The IDS's detection feeds the security operations centre for response.",
+          "relationship-type": { "interacts": { "actor": "soc", "nodes": ["ids"] } } },
+        { "unique-id": "soc-ips", "description": "The IPS's detection feeds the security operations centre for response.",
+          "relationship-type": { "interacts": { "actor": "soc", "nodes": ["ips"] } } }
+      ],
+      "flows": [
+        { "unique-id": "detect-or-prevent", "name": "Detect on a copy, prevent inline",
+          "description": "Mirrored traffic feeds an IDS that alerts; placed inline as an IPS, the same engine drops the matching malicious flow.",
+          "transitions": [
+            { "relationship-unique-id": "network-1-hosts-1", "sequence-number": 1, "description": "Network traffic passes to the hosts, and the engine inspects the traffic for known exploit signatures, protocol anomalies or deviations from a learned baseline." },
+            { "relationship-unique-id": "ips-hosts-2", "sequence-number": 2, "description": "Where the engine sits inline, legitimate traffic passes through the engine on to the hosts." },
+            { "relationship-unique-id": "network-1-ids", "sequence-number": 3, "description": "An IDS works on a mirrored copy of the traffic and raises an alert when the IDS sees an attack." },
+            { "relationship-unique-id": "network-2-ips", "sequence-number": 4, "description": "An IPS is the same engine placed inline, so the IPS drops or resets the malicious connection rather than merely reporting the connection." },
+            { "relationship-unique-id": "ids-siem", "sequence-number": 5, "description": "The IDS's detection feeds a SIEM for correlation." },
+            { "relationship-unique-id": "ips-siem", "sequence-number": 6, "description": "The IPS's detection feeds the SIEM for correlation." },
+            { "relationship-unique-id": "soc-ids", "sequence-number": 7, "description": "The IDS's detection feeds a security operations centre (SOC) for response.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "soc-ips", "sequence-number": 8, "description": "The IPS's detection feeds the SOC for response.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    soar: {
+      "nodes": [
+        { "unique-id": "siem", "node-type": "service", "name": "SIEM", "description": "A SIEM, one of the tools an analyst would otherwise click through, on top of whose detection SOAR sits and from which SOAR picks up each alert." },
+        { "unique-id": "soar", "node-type": "service", "name": "SOAR", "description": "SOAR, which exists to automate the repetitive triage toil of security teams that drown in alerts: SOAR connects to the tools an analyst would otherwise click through (SIEM, EDR, threat intelligence, ticketing, firewalls) and runs codified playbooks; by orchestrating across systems, SOAR cuts response time for routine alerts from hours of manual work to minutes or less and frees analysts for the judgement calls machines cannot make; SOAR is the automation-and-response layer that sits on top of SIEM detection in a security operations centre (SOC), and SOAR's risk is automating a wrong decision at machine speed." },
+        { "unique-id": "playbook", "node-type": "data-asset", "name": "Playbook", "description": "A codified playbook, which SOAR runs to enrich an alert, drawing on tools such as threat intelligence, decide whether the alert is real, and take action across the tools (isolate a host, disable an account, block an IP, open a case); playbooks gate destructive actions behind human approval." },
+        { "unique-id": "human", "node-type": "actor", "name": "Human", "description": "A human, behind whose approval playbooks gate destructive actions." }
+      ],
+      "relationships": [
+        { "unique-id": "siem-soar", "description": "Each alert from SIEM detection passes to SOAR.",
+          "relationship-type": { "connects": { "source": { "node": "siem" }, "destination": { "node": "soar" } } } },
+        { "unique-id": "soar-playbook", "description": "SOAR runs the codified playbook.",
+          "relationship-type": { "composed-of": { "container": "soar", "nodes": ["playbook"] } } },
+        { "unique-id": "human-playbook", "description": "The playbook gates a destructive action behind the human's approval.",
+          "relationship-type": { "interacts": { "actor": "human", "nodes": ["playbook"] } } }
+      ],
+      "flows": [
+        { "unique-id": "alert-to-action", "name": "Alert to action",
+          "description": "An incoming alert triggers a playbook that enriches, decides, and acts across tools — isolating a host or disabling an account automatically.",
+          "transitions": [
+            { "relationship-unique-id": "siem-soar", "sequence-number": 1, "description": "An alert from SIEM detection arrives, and SOAR picks the alert up." },
+            { "relationship-unique-id": "human-playbook", "sequence-number": 2, "description": "Before a destructive action, the playbook waits for human approval.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    dlp: {
+      "nodes": [
+        { "unique-id": "sensitive-data", "node-type": "data-asset", "name": "Sensitive data", "description": "Sensitive information, such as card numbers, health records, source code and secrets, which Data Loss Prevention keeps from leaving the organisation through email, uploads, USB drives or chat." },
+        { "unique-id": "dlp", "node-type": "system", "name": "DLP", "description": "A DLP system, part of Data Loss Prevention, the set of controls that keep sensitive information from leaving the organisation, which inspects content against patterns and classifications, then warns, blocks or encrypts when a transfer breaks policy, for example a spreadsheet of customer card numbers attached to an outbound message; DLP operates at endpoints, on the network, and increasingly in cloud and SaaS via CASB integration, addressing the Data pillar of CISA's Zero Trust model, which network and identity controls leave untouched; overly blunt rules generate noise and tempt users to route around the control." },
+        { "unique-id": "labels", "node-type": "data-asset", "name": "Labels", "description": "Data classification labels, against which a DLP system inspects content; good DLP depends on good data classification, since you can only protect what you have labelled." }
+      ],
+      "relationships": [
+        { "unique-id": "sensitive-data-dlp", "description": "Content leaving the organisation through email, uploads, USB drives or chat passes the DLP system, which inspects the content against patterns and classifications.",
+          "relationship-type": { "connects": { "source": { "node": "sensitive-data" }, "destination": { "node": "dlp" } } } },
+        { "unique-id": "labels-dlp", "description": "The DLP system inspects content against the data classification labels.",
+          "relationship-type": { "connects": { "source": { "node": "labels" }, "destination": { "node": "dlp" } } } }
+      ],
+      "flows": [
+        { "unique-id": "inspect-what-leaves", "name": "Inspect what leaves",
+          "description": "Outbound content is inspected against classifications; a transfer that breaks policy — card data leaving by email — is warned, blocked, or encrypted.",
+          "transitions": [
+            { "relationship-unique-id": "sensitive-data-dlp", "sequence-number": 1, "description": "Content leaving through email, uploads, USB drives or chat is inspected by the DLP system against patterns and classifications." },
+            { "relationship-unique-id": "labels-dlp", "sequence-number": 2, "description": "The DLP system inspects content against the data classification labels, so good DLP depends on good data classification: you can only protect what you have labelled." }
+          ] }
+      ]
+    },
+    sentrywire: {
+      "nodes": [
+        { "unique-id": "tap", "node-type": "system", "name": "Tap", "description": "A tap or packet broker, which feeds SentryWire's appliances a copy of traffic; capture sees only what crosses the tap: traffic between virtual machines on one host, between pods on one node, or inside a cloud VPC never reaches the appliance unless the traffic is deliberately mirrored there." },
+        { "unique-id": "capture", "node-type": "system", "name": "Capture", "description": "The capture appliances of SentryWire, a commercial full packet capture platform built by a division of the Maryland-based Alliance Technology Group and aimed at US federal agencies, critical infrastructure operators and large enterprises: where most network monitoring keeps a summary of traffic and throws the traffic away, full packet capture keeps the packets, and SentryWire's answer to the volume is to scale capture, storage and search independently; the appliances sit passively out of band, fed a copy of traffic from a tap or packet broker, and record without truncating or slicing packets while filtering and compressing in real time, at capture rates the vendor quotes from 1 Mbps on a virtual machine up to 1 Tbps on the vendor's largest systems; in zero-trust terms full packet capture is the most literal reading of NIST SP 800-207's seventh tenet: collect as much information as possible about the network and its communications." },
+        { "unique-id": "pcap-store", "node-type": "database", "name": "PCAP store", "description": "The store, to which every header and every payload byte is written to disk as PCAP and kept for months, so an investigation can replay the conversation rather than infer the conversation from whatever a log happened to record; retention grows by adding cluster nodes rather than replacing the appliance, and searches run in parallel across the store; encryption hollows out the word 'full': with TLS nearly everywhere the stored payloads are ciphertext, and since TLS 1.3 removed the RSA key exchange that once let a holder of the server's private key decrypt a recording after the fact, what remains readable is metadata, timing and handshake fingerprints, and even JA3 fingerprints have grown unreliable since Chrome began randomising Chrome's TLS extension order; nothing from before deployment can be searched at all, and the archive is itself a liability (months of every credential and personal record that crossed the wire unencrypted), so the archive needs privileged-access control, a retention period defensible under data-protection law, and protection equal to the systems the archive watches." },
+        { "unique-id": "signature", "node-type": "data-asset", "name": "Signature", "description": "A signature, such as an indicator published today: an integrated Suricata engine alerts on live traffic, and the same signatures can be run backwards over months of stored packets, which the vendor calls IDS Search Back, so an indicator published today can be tested against what actually crossed the wire months earlier, answering the questions logs cannot: when the intruder arrived, how, and exactly what left." },
+        { "unique-id": "analyst", "node-type": "actor", "name": "Analyst", "description": "An analyst, to whom searches stream back only the matching sessions, as PCAP or as reconstructed files; JA3 fingerprints, GeoIP and file-hash enrichment, Kibana dashboards, and Splunk and Elastic integrations sit on top, so an analyst can pivot from a SIEM alert to the packets behind the alert." }
+      ],
+      "relationships": [
+        { "unique-id": "tap-capture", "description": "The tap or packet broker feeds the capture appliance a copy of traffic, with the appliance sitting passively out of band.",
+          "relationship-type": { "connects": { "source": { "node": "tap" }, "destination": { "node": "capture" } } } },
+        { "unique-id": "capture-pcap-store", "description": "The capture appliance writes every header and every payload byte to disk as PCAP, filtered and compressed in real time.",
+          "relationship-type": { "connects": { "source": { "node": "capture" }, "destination": { "node": "pcap-store" } } } },
+        { "unique-id": "signature-pcap-store", "description": "The signature is run backwards over months of stored packets.",
+          "relationship-type": { "connects": { "source": { "node": "signature" }, "destination": { "node": "pcap-store" } } } },
+        { "unique-id": "analyst-pcap-store", "description": "Searches run in parallel across the store and stream back only the matching sessions to the analyst, as PCAP or as reconstructed files.",
+          "relationship-type": { "interacts": { "actor": "analyst", "nodes": ["pcap-store"] } } }
+      ],
+      "flows": [
+        { "unique-id": "copy-keep-search-back", "name": "Copy, keep, search back",
+          "description": "Every packet is copied passively and kept for months; a signature published today is searched back across the stored sessions and the matches return as PCAP — though encrypted payloads stay ciphertext.",
+          "transitions": [
+            { "relationship-unique-id": "tap-capture", "sequence-number": 1, "description": "The tap or packet broker feeds the appliance a copy of traffic, and the appliance records every header and payload byte without truncating packets." },
+            { "relationship-unique-id": "capture-pcap-store", "sequence-number": 2, "description": "The packets are written to disk as PCAP, filtered and compressed in real time." },
+            { "relationship-unique-id": "signature-pcap-store", "sequence-number": 3, "description": "The same signatures the integrated Suricata engine alerts on in live traffic are run backwards over months of stored packets." },
+            { "relationship-unique-id": "analyst-pcap-store", "sequence-number": 4, "description": "Searches stream back only the matching sessions, as PCAP or reconstructed files, answering when an intruder arrived, how, and what left.", "direction": "destination-to-source" }
           ] }
       ]
     },
