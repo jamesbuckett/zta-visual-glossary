@@ -7281,109 +7281,113 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     rlhf: () => `
-      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.">
+      <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.">
         <text class="t-sm t-mut" x="24" y="24">stage 1</text>
         <text class="t-sm t-mut" x="260" y="24">stage 2</text>
         <text class="t-sm t-mut" x="496" y="24">stage 3</text>
-        <g data-s="1 4">
+        <g data-s="1 4" data-calm="fine-tuning">
           <rect class="box" x="24" y="36" width="200" height="88" rx="8"/>
           ${icon('file-text', 40, 50)}
           <text class="t-b" x="72" y="68">Fine-tuning</text>
           <text class="t-sm t-mut" x="40" y="96">imitates human</text>
           <text class="t-sm t-mut" x="40" y="112">demonstrations</text>
         </g>
-        <line class="flow" data-s="2" x1="226" y1="64" x2="258" y2="64" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
-          <rect class="box" x="260" y="36" width="200" height="56" rx="8"/>
+        <line class="flow" data-s="2" data-calm="labellers-fine-tuning" x1="226" y1="64" x2="258" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-calm="labellers">
+          <rect class="box" x="260" y="36" width="200" height="56" rx="20"/>
           ${icon('users', 276, 52)}
-          <text class="t-b" x="308" y="60">Labellers rank</text>
-          <text class="t-sm t-mut" x="308" y="78">candidate answers</text>
+          <text class="t-b" x="308" y="60">Labellers</text>
+          <text class="t-sm t-mut" x="308" y="78">rank answers</text>
         </g>
-        <line class="flow" data-s="3" x1="360" y1="94" x2="360" y2="114" marker-end="url(#ah-mut)"/>
-        <g data-s="3 4">
-          <rect class="box" x="260" y="116" width="200" height="56" rx="8"/>
+        <line class="flow" data-s="3" data-calm="labellers-reward-model" x1="360" y1="94" x2="360" y2="114" marker-end="url(#ah-mut)"/>
+        <g data-s="3 4" data-calm="reward-model">
+          ${doc(260, 116, 200, 64)}
           ${icon('scale', 276, 132)}
           <text class="t-b" x="308" y="140">Reward model</text>
           <text class="t-sm t-mut" x="308" y="158">predicts preference</text>
         </g>
-        <line class="flow" data-s="4" x1="462" y1="144" x2="494" y2="100" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
+        <line class="flow" data-s="4" data-calm="reward-model-ppo" x1="462" y1="144" x2="494" y2="100" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="ppo">
           <rect class="box" x="496" y="36" width="200" height="88" rx="8"/>
           ${icon('cog', 512, 50)}
           <text class="t-b" x="544" y="68">PPO</text>
           <text class="t-sm t-mut" x="512" y="96">optimises against</text>
           <text class="t-sm t-mut" x="512" y="112">the reward</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="496" y="136" width="200" height="36" rx="4"/>
-          <text class="t-sm" x="596" y="158" text-anchor="middle">KL leash to reference</text>
+        <path class="flow" data-s="4" data-calm="fine-tuning-reference" d="M124 126 V204 H494" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="4" x="140" y="196">the fine-tuned reference</text>
+        <g data-s="4" data-calm="reference">
+          ${doc(496, 160, 200, 56)}
+          ${icon('anchor', 512, 176)}
+          <text class="t-b" x="544" y="194">Reference</text>
         </g>
-        <path class="flow" data-s="4" d="M124 126 V196 H596 V174" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" data-s="4" x="140" y="190">the fine-tuned reference</text>
-        <g data-s="5">
-          <rect class="box" x="24" y="216" width="672" height="56" rx="8"/>
-          ${icon('shield', 40, 232)}
-          <text class="t-b" x="72" y="240">Safety lives in the weights</text>
-          <text class="t-sm bad" x="72" y="258">installed at training time; risk: reward hacking</text>
+        <line class="flow" data-s="4" data-calm="reference-ppo" x1="596" y1="158" x2="596" y2="126" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="608" y="146">KL leash</text>
+        <g data-s="5" data-note="footer">
+          <rect class="box" x="24" y="232" width="672" height="56" rx="8"/>
+          ${icon('shield', 40, 248)}
+          <text class="t-b" x="72" y="256">Safety lives in the weights</text>
+          <text class="t-sm bad" x="72" y="274">installed at training time; risk: reward hacking</text>
         </g>
 
         ${badge(1, 208, 50, '1')}
         ${badge(2, 444, 50, '2')}
-        ${badge(3, 444, 130, '3')}
+        ${badge(3, 436, 138, '3')}
         ${badge(4, 680, 50, '4')}
-        ${badge(5, 680, 230, '5')}
+        ${badge(5, 680, 246, '5')}
       </svg>`,
 
     dpo: () => `
       <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference.">
-        <g data-s="1">
-          <rect class="box" x="24" y="24" width="200" height="176" rx="8"/>
-          ${icon('list-checks', 40, 38)}
-          <text class="t-b" x="72" y="56">Preference</text>
-          <text class="t-b" x="72" y="72">pairs</text>
-          <rect class="box" x="40" y="88" width="168" height="28" rx="4"/>
-          <text class="t-sm" x="52" y="106">prompt</text>
-          <rect class="box" x="40" y="124" width="168" height="28" rx="4"/>
-          <text class="t-sm ok" x="52" y="142">chosen answer</text>
-          <rect class="box" x="40" y="160" width="168" height="28" rx="4"/>
-          <text class="t-sm bad" x="52" y="178">rejected answer</text>
+        <g data-s="1" data-calm="preference-pairs">
+          ${doc(24, 24, 200, 176)}
+          ${icon('list-checks', 40, 44)}
+          <text class="t-b" x="72" y="62">Preference pairs</text>
         </g>
-        <line class="flow" data-s="1 3" x1="226" y1="112" x2="274" y2="112" marker-end="url(#ah-mut)"/>
-        <g data-s="3 4">
-          <rect class="box" x="276" y="24" width="192" height="176" rx="8"/>
-          ${icon('cpu', 292, 38)}
-          <text class="t-b" x="324" y="56">Model</text>
-          <text class="t-sm t-mut" x="324" y="74">one training loop</text>
+        <g data-s="1" data-note="call-out">
+          <rect class="box" x="40" y="80" width="168" height="28" rx="4"/>
+          <text class="t-sm" x="52" y="98">prompt</text>
+          <rect class="box" x="40" y="114" width="168" height="28" rx="4"/>
+          <text class="t-sm ok" x="52" y="132">chosen answer</text>
+          <rect class="box" x="40" y="148" width="168" height="28" rx="4"/>
+          <text class="t-sm bad" x="52" y="166">rejected answer</text>
         </g>
-        <g data-s="3">
-          <rect class="box" x="292" y="100" width="160" height="36" rx="4"/>
-          <text class="t-sm ok" x="304" y="122">chosen: log-prob up</text>
-          <rect class="box" x="292" y="148" width="160" height="36" rx="4"/>
-          <text class="t-sm bad" x="304" y="170">rejected: down</text>
+        <line class="flow" data-s="1 3" data-calm="preference-pairs-model" x1="226" y1="112" x2="274" y2="112" marker-end="url(#ah-mut)"/>
+        <g data-s="3 4" data-calm="model">
+          ${doc(276, 24, 192, 176)}
+          ${icon('cpu', 292, 44)}
+          <text class="t-b" x="324" y="62">Model</text>
+          <text class="t-sm t-mut" x="324" y="80">one training loop</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="520" y="24" width="176" height="76" rx="8"/>
-          ${icon('lock', 536, 38)}
-          <text class="t-b" x="568" y="56">Reference</text>
+        <g data-s="3" data-note="call-out">
+          <rect class="box" x="292" y="94" width="160" height="36" rx="4"/>
+          <text class="t-sm ok" x="304" y="116">chosen: log-prob up</text>
+          <rect class="box" x="292" y="140" width="160" height="36" rx="4"/>
+          <text class="t-sm bad" x="304" y="162">rejected: down</text>
+        </g>
+        <g data-s="4" data-calm="reference">
+          ${doc(520, 24, 176, 76)}
+          ${icon('lock', 536, 44)}
+          <text class="t-b" x="568" y="62">Reference</text>
           <text class="t-sm t-mut" x="536" y="84">frozen copy</text>
         </g>
-        <line class="flow" data-s="4" x1="518" y1="62" x2="470" y2="62" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
+        <line class="flow" data-s="4" data-calm="reference-model" x1="518" y1="62" x2="470" y2="62" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-note="call-out">
           <rect class="box" x="520" y="124" width="176" height="76" rx="8"/>
           ${icon('scale', 536, 138)}
           <text class="t-b" x="568" y="156">Reward model</text>
           <text class="t-sm bad" x="536" y="184">and PPO: dropped</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="224" width="672" height="48" rx="8"/>
           ${icon('database', 40, 236)}
           <text class="t-sm" x="72" y="253">offline: learns only from pairs already collected, cannot explore</text>
         </g>
 
-        ${badge(1, 208, 38, '1')}
+        ${badge(1, 194, 36, '1')}
         ${badge(2, 680, 138, '2')}
         ${badge(3, 250, 112, '3')}
-        ${badge(4, 680, 38, '4')}
+        ${badge(4, 672, 50, '4')}
         ${badge(5, 680, 248, '5')}
       </svg>`,
 
@@ -7465,62 +7469,63 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     rag: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.">
-        <text class="t-sm t-mut" x="24" y="20">ahead of time</text>
-        ${[['file-text', 'Documents', 24], ['layers', 'Chunks', 196], ['binary', 'Embed', 368]].map(([ico, t, x], i) => `
-          <g data-s="1">
-            <rect class="box" x="${x}" y="32" width="136" height="48" rx="8"/>
-            ${icon(ico, x + 12, 44)}
-            <text class="t-b" x="${x + 44}" y="61">${t}</text>
+        <text class="t-sm t-mut" x="24" y="18">ahead of time</text>
+        ${[['documents', 'file-text', 'Documents', 24], ['chunks', 'layers', 'Chunks', 180]].map(([id, ico, t, x], i, rows) => `
+          <g data-s="1" data-calm="${id}">
+            ${doc(x, 28, 124, 64)}
+            ${icon(ico, x + 12, 48)}
+            <text class="t-b" x="${x + 44}" y="65">${t}</text>
           </g>
-          <line class="flow" data-s="1" x1="${x + 138}" y1="56" x2="${x + 170}" y2="56" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="1 3">
-          <rect class="box" x="540" y="32" width="156" height="48" rx="8"/>
-          ${icon('database', 552, 44)}
-          <text class="t-b" x="584" y="61">Index</text>
+          <line class="flow" data-s="1" data-calm="${id}-${i ? 'embedding-model' : rows[1][0]}" x1="${x + 126}" y1="60" x2="${x + 154}" y2="60" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="1 2" data-calm="embedding-model">
+          <rect class="box" x="336" y="28" width="200" height="64" rx="8"/>
+          ${icon('binary', 348, 48)}
+          <text class="t-b" x="380" y="65">Embedding model</text>
         </g>
-        <line class="divider" x1="16" y1="100" x2="704" y2="100"/>
-        <text class="t-sm t-mut" x="24" y="120">at query time</text>
-        <g data-s="2 3">
-          <rect class="box" x="24" y="132" width="136" height="64" rx="12"/>
-          ${icon('user', 36, 146)}
-          <text class="t-b" x="68" y="164">User</text>
-          <text class="t-sm t-mut" x="68" y="182">asks</text>
+        <line class="flow" data-s="1" data-calm="embedding-model-index" x1="538" y1="60" x2="566" y2="60" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3" data-calm="index">
+          ${cyl(568, 28, 128, 64)}
+          ${icon('database', 580, 48)}
+          <text class="t-b" x="612" y="65">Index</text>
         </g>
-        <line class="flow" data-s="2" x1="162" y1="164" x2="194" y2="164" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
-          <rect class="box" x="196" y="132" width="136" height="64" rx="8"/>
-          ${icon('binary', 208, 146)}
-          <text class="t-b" x="240" y="164">Embed</text>
-          <text class="t-sm t-mut" x="240" y="182">question</text>
+        <line class="divider" x1="16" y1="108" x2="704" y2="108"/>
+        <text class="t-sm t-mut" x="24" y="126">at query time</text>
+        <g data-s="2 3" data-calm="user">
+          <rect class="box" x="24" y="136" width="136" height="64" rx="20"/>
+          ${icon('user', 36, 150)}
+          <text class="t-b" x="68" y="168">User</text>
+          <text class="t-sm t-mut" x="68" y="186">asks</text>
         </g>
-        <line class="flow" data-s="2 3" x1="334" y1="164" x2="366" y2="164" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="368" y="124" width="156" height="92" rx="8"/>
-          ${icon('search', 380, 138)}
-          <text class="t-b" x="412" y="156">Retrieve</text>
-          <text class="t-sm t-mut" x="380" y="182">as the user</text>
-          <text class="t-sm bad" x="380" y="200">not allowed: dropped</text>
+        <line class="flow" data-s="2" data-calm="user-embedding-model" x1="162" y1="146" x2="370" y2="94" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="226" y="150">question</text>
+        <line class="flow" data-s="2 3" data-calm="embedding-model-retrieval" x1="436" y1="94" x2="436" y2="130" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="retrieval-index" x1="616" y1="94" x2="528" y2="130" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="retrieval">
+          <rect class="box" x="336" y="132" width="200" height="96" rx="8"/>
+          ${icon('search', 348, 146)}
+          <text class="t-b" x="380" y="164">Retrieval</text>
+          <text class="t-sm t-mut" x="348" y="190">as the user</text>
+          <text class="t-sm bad" x="348" y="208">not allowed: dropped</text>
         </g>
-        <line class="flow" data-s="3" x1="600" y1="82" x2="500" y2="122" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="526" y1="170" x2="566" y2="170" marker-end="url(#ah-mut)"/>
-        <g data-s="4 5">
-          <rect class="box" x="568" y="132" width="128" height="84" rx="8"/>
+        <line class="flow" data-s="4" data-calm="retrieval-model" x1="538" y1="180" x2="566" y2="180" marker-end="url(#ah-mut)"/>
+        <g data-s="4 5" data-calm="model">
+          <rect class="box" x="568" y="132" width="128" height="96" rx="8"/>
           ${icon('cpu', 580, 146)}
           <text class="t-b" x="612" y="164">Model</text>
           <text class="t-sm t-mut" x="580" y="190">answers from</text>
           <text class="t-sm t-mut" x="580" y="206">the passages</text>
         </g>
-        <g data-s="5">
-          <rect class="box" x="24" y="236" width="672" height="48" rx="8"/>
-          ${icon('skull', 40, 248)}
-          <text class="t-sm bad" x="72" y="265">retrieved text is untrusted: indirect prompt injection</text>
+        <g data-s="5" data-note="footer">
+          <rect class="box" x="24" y="240" width="672" height="44" rx="8"/>
+          ${icon('skull', 40, 250)}
+          <text class="t-sm bad" x="72" y="267">retrieved text is untrusted: indirect prompt injection</text>
         </g>
 
-        ${badge(1, 520, 56, '1')}
-        ${badge(2, 180, 164, '2')}
-        ${badge(3, 508, 138, '3')}
+        ${badge(1, 680, 52, '1')}
+        ${badge(2, 200, 136, '2')}
+        ${badge(3, 520, 148, '3')}
         ${badge(4, 680, 146, '4')}
-        ${badge(5, 680, 260, '5')}
+        ${badge(5, 680, 262, '5')}
       </svg>`,
 
     keda: () => `
@@ -8266,118 +8271,126 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     lora: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own.">
-        <g data-s="1 2">
+        <g data-s="1 2" data-note="call-out">
           <rect class="box" x="24" y="96" width="96" height="56" rx="8"/>
           <text class="t-b" x="40" y="120">x</text>
           <text class="t-sm t-mut" x="40" y="138">input</text>
         </g>
-        <line class="flow" data-s="1" x1="122" y1="110" x2="170" y2="60" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="122" y1="140" x2="170" y2="186" marker-end="url(#ah-mut)"/>
-        <g data-s="1 3">
-          <rect class="box" x="172" y="24" width="200" height="72" rx="8"/>
+        <g data-s="1 3" data-calm="w">
+          ${doc(172, 24, 200, 80)}
           ${icon('lock', 188, 40)}
           <text class="t-b" x="220" y="58">W</text>
           <text class="t-sm t-mut" x="220" y="76">frozen, pretrained</text>
         </g>
-        <g data-s="2 3">
-          <rect class="box" x="172" y="160" width="90" height="56" rx="6"/>
-          <text class="t-b" x="188" y="184">A</text>
-          <text class="t-sm t-mut" x="188" y="202">rank r</text>
-          <rect class="box" x="282" y="160" width="90" height="56" rx="6"/>
-          <text class="t-b" x="298" y="184">B</text>
-          <text class="t-sm t-mut" x="298" y="202">zero init</text>
+        <line class="flow" data-s="1" data-note="call-out" x1="122" y1="110" x2="170" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="2 4 5" data-calm="adapter">
+          <rect class="box-soft" x="160" y="132" width="224" height="96" rx="10"/>
+          <text class="t-sm t-mut" x="172" y="150">adapter</text>
         </g>
-        <line class="flow" data-s="2" x1="264" y1="188" x2="280" y2="188" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="374" y1="60" x2="422" y2="104" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="374" y1="188" x2="422" y2="146" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="424" y="100" width="88" height="48" rx="8"/>
-          <text class="t-b" x="468" y="130" text-anchor="middle">+</text>
-          <text class="t-sm" x="468" y="168" text-anchor="middle">Wx + BAx</text>
+        <g data-s="2 3" data-calm="a">
+          ${doc(172, 160, 90, 56)}
+          <text class="t-b" x="188" y="180">A</text>
+          <text class="t-sm t-mut" x="188" y="196">rank r</text>
         </g>
-        <line class="flow" data-s="3" x1="514" y1="124" x2="558" y2="124" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
+        <g data-s="2 3" data-calm="b">
+          ${doc(282, 160, 90, 56)}
+          <text class="t-b" x="298" y="180">B</text>
+          <text class="t-sm t-mut" x="298" y="196">zero init</text>
+        </g>
+        <line class="flow" data-s="2" data-note="call-out" x1="122" y1="140" x2="170" y2="186" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="a-b" x1="264" y1="188" x2="280" y2="188" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="w-layer" x1="374" y1="64" x2="410" y2="102" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="b-layer" x1="374" y1="188" x2="410" y2="158" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="layer">
+          <rect class="box" x="412" y="92" width="120" height="76" rx="8"/>
+          <text class="t-b" x="424" y="128">Adapted layer</text>
+          <text class="t-sm" x="424" y="146">Wx + BAx</text>
+        </g>
+        <line class="flow" data-s="3" data-note="call-out" x1="534" y1="124" x2="558" y2="124" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-note="call-out">
           <rect class="box" x="560" y="100" width="136" height="48" rx="8"/>
           <text class="t-b" x="576" y="129">output</text>
         </g>
-        <g data-s="4">
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="24" y="236" width="328" height="56" rx="8"/>
           ${icon('layers', 40, 252)}
           <text class="t-b" x="72" y="260">Merge BA into W</text>
           <text class="t-sm t-mut" x="72" y="278">same size and speed</text>
         </g>
-        <g data-s="4 5">
+        <g data-s="4 5" data-note="call-out">
           <rect class="box" x="368" y="236" width="328" height="56" rx="8"/>
           ${icon('package', 384, 252)}
           <text class="t-b" x="416" y="260">Or ship the adapter</text>
           <text class="t-sm t-mut" x="416" y="278">megabytes, hot-swap</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="call-out">
           <rect class="box" x="560" y="164" width="136" height="56" rx="8"/>
           <text class="t-sm bad" x="572" y="186">can strip safety:</text>
           <text class="t-sm t-mut" x="572" y="204">sign it</text>
         </g>
 
-        ${badge(1, 356, 38, '1')}
+        ${badge(1, 348, 46, '1')}
         ${badge(2, 146, 164, '2')}
-        ${badge(3, 536, 124, '3')}
+        ${badge(3, 518, 104, '3')}
         ${badge(4, 336, 250, '4')}
         ${badge(5, 680, 208, '5')}
       </svg>`,
 
     qlora: () => `
       <svg class="dg" viewBox="0 0 720 256" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM.">
-        <g data-s="5">
+        <g data-s="5" data-calm="gpu">
           <rect class="zone" x="16" y="16" width="544" height="228" rx="10"/>
           <text class="t-sm t-mut" x="28" y="34">one data-centre GPU</text>
+        </g>
+        <g data-s="5">
           <text class="t-sm" x="32" y="208">65B fine-tune: over 780 GB before, under 48 GB</text>
           <text class="t-sm bad" x="32" y="226">slower than plain LoRA</text>
         </g>
-        <g data-s="1 3">
-          <rect class="box" x="32" y="48" width="200" height="104" rx="8"/>
-          ${icon('database', 48, 62)}
+        <g data-s="1 3" data-calm="base-model">
+          ${doc(32, 48, 200, 116)}
+          ${icon('binary', 48, 62)}
           <text class="t-b" x="80" y="80">Base model</text>
           <text class="t-sm t-mut" x="80" y="98">frozen, 4-bit</text>
         </g>
-        <g data-s="2">
+        <g data-s="2" data-note="call-out">
           <rect class="box" x="48" y="112" width="64" height="28" rx="4"/>
           <text class="t-sm t-b" x="80" y="131" text-anchor="middle">NF4</text>
           <rect class="box" x="120" y="112" width="100" height="28" rx="4"/>
           <text class="t-sm" x="170" y="131" text-anchor="middle">double quant</text>
         </g>
-        <line class="flow" data-s="3" x1="234" y1="84" x2="250" y2="84" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
+        <line class="flow" data-s="3" data-note="call-out" x1="234" y1="84" x2="250" y2="84" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-note="call-out">
           <rect class="box" x="252" y="48" width="140" height="76" rx="8"/>
           ${icon('layers', 264, 62)}
           <text class="t-b" x="296" y="80">Dequantise</text>
           <text class="t-sm t-mut" x="296" y="98">to BF16,</text>
           <text class="t-sm t-mut" x="296" y="114">per layer</text>
         </g>
-        <line class="flow" data-s="3" x1="394" y1="84" x2="410" y2="84" marker-end="url(#ah-mut)"/>
-        <g data-s="1 3 4">
-          <rect class="box" x="412" y="48" width="132" height="76" rx="8"/>
+        <line class="flow" data-s="3" data-note="call-out" x1="394" y1="84" x2="410" y2="84" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3 4" data-calm="lora-adapters">
+          ${doc(412, 48, 132, 88)}
           ${icon('sigma', 424, 62)}
           <text class="t-b" x="456" y="80">LoRA</text>
           <text class="t-sm t-mut" x="456" y="98">16-bit,</text>
           <text class="t-sm t-mut" x="456" y="114">trained</text>
         </g>
-        <path class="flow" data-s="3" d="M478 126 V150 H322 V126" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="400" y="168" text-anchor="middle">gradients</text>
-        <line class="flow" data-s="4" x1="546" y1="86" x2="582" y2="86" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
-          <rect class="box" x="584" y="48" width="112" height="100" rx="8"/>
+        <path class="flow" data-s="3" data-calm="base-model-lora-adapters" d="M478 138 V152 H234" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="400" y="170" text-anchor="middle">gradients</text>
+        <line class="flow" data-s="4" data-calm="lora-adapters-cpu-ram" x1="546" y1="86" x2="582" y2="86" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-calm="cpu-ram">
+          <rect class="box" x="584" y="48" width="112" height="112" rx="8"/>
           ${icon('memory-stick', 596, 62)}
-          <text class="t-b" x="628" y="80">CPU</text>
+          <text class="t-b" x="628" y="80">CPU RAM</text>
           <text class="t-sm t-mut" x="596" y="106">paged</text>
           <text class="t-sm t-mut" x="596" y="122">optimiser</text>
           <text class="t-sm t-mut" x="596" y="138">state</text>
         </g>
 
-        ${badge(1, 216, 62, '1')}
-        ${badge(2, 216, 96, '2')}
-        ${badge(3, 322, 138, '3')}
+        ${badge(1, 208, 64, '1')}
+        ${badge(2, 208, 96, '2')}
+        ${badge(3, 322, 152, '3')}
         ${badge(4, 564, 70, '4')}
-        ${badge(5, 544, 32, '5')}
+        ${badge(5, 544, 226, '5')}
       </svg>`,
 
     sentrywire: () => `
@@ -8438,47 +8451,48 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     coreweave: () => `
       <svg class="dg" viewBox="0 0 720 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.">
-        <g data-s="2">
+        <g data-s="2" data-calm="control-plane">
           <rect class="box" x="200" y="12" width="320" height="52" rx="8"/>
           ${icon('cog', 216, 26)}
           <text class="t-b" x="248" y="34">Control plane</text>
           <text class="t-sm t-mut" x="248" y="52">drivers, node checks</text>
         </g>
-        <line class="flow" data-s="2" x1="300" y1="66" x2="128" y2="94" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="360" y1="66" x2="360" y2="94" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="420" y1="66" x2="592" y2="94" marker-end="url(#ah-mut)"/>
-        ${[24, 256, 488].map((x) => `
-          <g data-s="1 2">
-            <rect class="zone" x="${x}" y="96" width="208" height="128" rx="10"/>
+        <line class="flow" data-s="2" data-calm="control-plane-node-1" x1="300" y1="66" x2="128" y2="94" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="control-plane-node-2" x1="360" y1="66" x2="360" y2="94" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="control-plane-node-3" x1="420" y1="66" x2="592" y2="94" marker-end="url(#ah-mut)"/>
+        ${[[1, 24], [2, 256], [3, 488]].map(([n, x]) => `
+          <g data-s="1 2" data-calm="node-${n}">
+            <rect class="box-soft" x="${x}" y="96" width="208" height="128" rx="10"/>
             <text class="t-sm t-mut" x="${x + 12}" y="114">bare-metal node</text>
           </g>
-          <g data-s="1 4">
+          <g data-s="1 4" data-calm="gpus-${n}">
             <rect class="box" x="${x + 12}" y="122" width="176" height="40" rx="6"/>
             ${icon('cpu', x + 20, 130)}
             <text class="t-sm t-b" x="${x + 52}" y="140">GPUs</text>
             <text class="t-sm t-mut" x="${x + 52}" y="155">whole machine</text>
           </g>
-          <g data-s="3">
+          <g data-s="3" data-calm="dpu-${n}">
             <rect class="box" x="${x + 12}" y="172" width="176" height="44" rx="6"/>
             ${icon('shield', x + 20, 182)}
             <text class="t-sm t-b" x="${x + 52}" y="190">BlueField DPU</text>
             <text class="t-sm t-mut" x="${x + 52}" y="206">host security</text>
           </g>
-          <path class="flow" data-s="4" d="M${x + 190} 142 H${x + 198} V234" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="4">
-          <rect class="box" x="24" y="236" width="672" height="36" rx="8"/>
+          <path class="flow" data-s="4" data-calm="gpus-${n}-infiniband" d="M${x + 190} 142 H${x + 198} V234" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="4" data-calm="infiniband">
+          <rect class="zone" x="24" y="236" width="672" height="36" rx="10"/>
           ${icon('network', 36, 242)}
-          <text class="t-sm" x="68" y="258">InfiniBand fabric: GPU to GPU, non-blocking, SHARP optional</text>
+          <text class="t-sm t-b" x="68" y="258">InfiniBand fabric</text>
+          <text class="t-sm" x="192" y="258">GPU to GPU, non-blocking, SHARP optional</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="280" width="672" height="32" rx="6"/>
           <text class="t-sm bad" x="36" y="300">a specialist: usually run alongside another cloud</text>
         </g>
 
-        ${badge(1, 216, 110, '1')}
+        ${badge(1, 162, 110, '1')}
         ${badge(2, 504, 26, '2')}
         ${badge(3, 184, 206, '3')}
-        ${badge(4, 680, 254, '4')}
+        ${badge(4, 620, 254, '4')}
         ${badge(5, 680, 296, '5')}
       </svg>`,
 
@@ -8746,59 +8760,61 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     jev: () => `
       <svg class="dg" viewBox="0 0 720 316" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An application sends a state and typed questions in one request; Jev returns typed answers with no text, and code thresholds on confidence before acting or handing over to a person.">
-        <g data-s="1">
-          <rect class="box" x="24" y="30" width="152" height="80" rx="12"/>
+        <g data-s="1 4" data-calm="app">
+          <rect class="box" x="24" y="30" width="152" height="96" rx="8"/>
           ${icon('app-window', 36, 42)}
           <text class="t-b" x="68" y="59">Your app</text>
           <text class="t-sm t-mut" x="36" y="84">state: the ticket</text>
           <text class="t-sm t-mut" x="36" y="100">3 typed questions</text>
         </g>
-        <line class="flow" data-s="1" x1="178" y1="70" x2="250" y2="70" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="214" y="62" text-anchor="middle">request</text>
-        <g data-s="2">
-          <rect class="box-accent" x="252" y="30" width="152" height="80" rx="8"/>
+        <line class="flow" data-s="1" data-calm="app-jev" x1="178" y1="62" x2="250" y2="62" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="214" y="54" text-anchor="middle">request</text>
+        <line class="flow" data-s="2" data-calm="app-jev" x1="250" y1="94" x2="178" y2="94" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="214" y="110" text-anchor="middle">answers</text>
+        <g data-s="2" data-calm="jev">
+          <rect class="box-accent" x="252" y="30" width="152" height="96" rx="8"/>
           ${icon('cpu', 264, 42)}
           <text class="t-b" x="296" y="59">Jev</text>
           <text class="t-sm t-mut" x="264" y="84">System One model</text>
           <text class="t-sm t-mut" x="264" y="100">no generated text</text>
         </g>
-        <line class="flow" data-s="2" x1="406" y1="70" x2="478" y2="70" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-note="call-out" x1="406" y1="70" x2="478" y2="70" marker-end="url(#ah-mut)"/>
 
-        <g data-s="2 3">
+        <g data-s="2 3" data-note="call-out">
           <rect class="box" x="480" y="16" width="216" height="108" rx="8"/>
           <text class="t-sm t-b" x="492" y="36">typed answers</text>
         </g>
         ${[['Choice', 'which team?', 'billing', 46], ['Score', 'how frustrated?', '1.4', 70], ['Noul', 'refund asked?', '0.95', 94]].map(([type, q, v, y]) => `
-          <g data-s="3">
+          <g data-s="3" data-note="call-out">
             <rect class="box" x="488" y="${y}" width="200" height="22" rx="4"/>
             <text class="t-sm" x="496" y="${y + 15}">${type}</text>
             <text class="t-sm t-mut" x="544" y="${y + 15}">${q}</text>
             <text class="t-sm t-acc" x="680" y="${y + 15}" text-anchor="end">${v}</text>
           </g>`).join('')}
 
-        <line class="flow" data-s="4" x1="588" y1="126" x2="588" y2="150" marker-end="url(#ah-mut)"/>
-        <g data-s="4">
+        <line class="flow" data-s="4" data-note="call-out" x1="588" y1="126" x2="588" y2="150" marker-end="url(#ah-mut)"/>
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="480" y="152" width="216" height="84" rx="8"/>
           ${icon('gauge', 492, 164)}
           <text class="t-b" x="524" y="182">Confidence</text>
           <text class="t-sm t-mut" x="492" y="206">0 to 1, on Choice and Score</text>
           <text class="t-sm t-mut" x="492" y="222">thresholded in your code</text>
         </g>
-        <line class="flow-ok" data-s="4" x1="478" y1="172" x2="406" y2="172" marker-end="url(#ah-ok)"/>
-        <text class="t-sm ok" data-s="4" x="442" y="164" text-anchor="middle">high</text>
-        <g data-s="4">
+        <line class="flow-ok" data-s="4" data-note="call-out" x1="178" y1="122" x2="250" y2="164" marker-end="url(#ah-ok)"/>
+        <text class="t-sm ok" data-s="4" x="186" y="158">high</text>
+        <g data-s="4" data-note="call-out">
           <rect class="box" x="252" y="152" width="152" height="40" rx="8"/>
           <text class="t-b" x="328" y="177" text-anchor="middle">Act automatically</text>
         </g>
-        <line class="flow" data-s="4" x1="478" y1="216" x2="178" y2="216" marker-end="url(#ah-mut)"/>
-        <text class="t-sm t-mut" data-s="4" x="442" y="208" text-anchor="middle">low</text>
-        <g data-s="4">
-          <rect class="box" x="24" y="192" width="152" height="48" rx="12"/>
-          ${icon('user', 36, 204)}
-          <text class="t-b" x="68" y="221">Human review</text>
+        <line class="flow" data-s="4" data-calm="human-review-app" x1="100" y1="128" x2="100" y2="190" marker-end="url(#ah-mut)"/>
+        <text class="t-sm t-mut" data-s="4" x="112" y="164">low</text>
+        <g data-s="4" data-calm="human-review">
+          <rect class="box" x="24" y="192" width="152" height="56" rx="20"/>
+          ${icon('user', 36, 206)}
+          <text class="t-b" x="68" y="224">Human review</text>
         </g>
 
-        <g data-s="5">
+        <g data-s="5" data-note="footer">
           <rect class="box" x="24" y="260" width="672" height="40" rx="8"/>
           ${icon('skull', 40, 268)}
           <text class="t-sm bad" x="76" y="285">an instruction injected into the state can move the answer</text>
@@ -11825,6 +11841,220 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "esas-ict-third-party", "sequence-number": 6, "description": "The European Supervisory Authorities designate the ICT third party a Critical ICT Third-Party Provider." },
             { "relationship-unique-id": "esas-lead-overseer", "sequence-number": 7, "description": "The European Supervisory Authorities assign the critical provider a Lead Overseer." },
             { "relationship-unique-id": "lead-overseer-ict-third-party", "sequence-number": 8, "description": "The Lead Overseer inspects the provider directly and issues the provider recommendations: no European financial regulator had ever supervised a hyperscaler directly before." }
+          ] }
+      ]
+    },
+    rlhf: {
+      "nodes": [
+        { "unique-id": "fine-tuning", "node-type": "stage", "name": "Fine-tuning", "description": "Supervised fine-tuning, the first of the three stages RLHF runs in, which teaches the base model to imitate human-written demonstrations; RLHF is how a raw language model becomes one that follows instructions usefully and declines what it should, a technique that came from Christiano et al. in 2017 and was scaled to general instruction-following by InstructGPT, whose 1.3B-parameter RLHF model was preferred by human raters over 175B-parameter GPT-3." },
+        { "unique-id": "labellers", "node-type": "actor", "name": "Labellers", "description": "Labellers, who are shown several candidate answers to the same prompt and rank them." },
+        { "unique-id": "reward-model", "node-type": "data-asset", "name": "Reward model", "description": "A separate reward model, which the labellers' comparisons train to predict which output a human would prefer; RLHF's weakness is reward hacking: the policy optimises the reward model, which is only a proxy for human judgement." },
+        { "unique-id": "ppo", "node-type": "stage", "name": "PPO", "description": "Reinforcement learning, classically Proximal Policy Optimization (PPO), the last of RLHF's three stages, which optimises the model against the learned reward; refusal behaviour and safety policy are installed in RLHF, at training time, which is why they are a property of the weights rather than a runtime control anything downstream can inspect, audit, or enforce, and RLHF's three-model pipeline is expensive and notoriously fiddly to keep stable." },
+        { "unique-id": "reference", "node-type": "data-asset", "name": "Reference", "description": "The fine-tuned reference, from which a KL-divergence penalty measures how far the model has drifted." }
+      ],
+      "relationships": [
+        { "unique-id": "labellers-fine-tuning", "description": "After supervised fine-tuning, labellers are shown several candidate answers to the same prompt.",
+          "relationship-type": { "interacts": { "actor": "labellers", "nodes": ["fine-tuning"] } } },
+        { "unique-id": "labellers-reward-model", "description": "The labellers' comparisons train a separate reward model to predict which output a human would prefer.",
+          "relationship-type": { "interacts": { "actor": "labellers", "nodes": ["reward-model"] } } },
+        { "unique-id": "reward-model-ppo", "description": "PPO optimises the model against the reward the reward model has learned.",
+          "relationship-type": { "connects": { "source": { "node": "reward-model" }, "destination": { "node": "ppo" } } } },
+        { "unique-id": "fine-tuning-reference", "description": "The fine-tuned reference comes from supervised fine-tuning.",
+          "relationship-type": { "connects": { "source": { "node": "fine-tuning" }, "destination": { "node": "reference" } } } },
+        { "unique-id": "reference-ppo", "description": "A KL-divergence penalty measures how far the model PPO optimises has drifted from the fine-tuned reference, which stops the model wandering into degenerate text that happens to score well.",
+          "relationship-type": { "connects": { "source": { "node": "reference" }, "destination": { "node": "ppo" } } } }
+      ],
+      "flows": [
+        { "unique-id": "three-stages", "name": "Three stages",
+          "description": "Three stages — supervised fine-tuning, a reward model trained on human rankings, then PPO tuning the policy against that reward on a KL leash.",
+          "transitions": [
+            { "relationship-unique-id": "labellers-fine-tuning", "sequence-number": 1, "description": "After supervised fine-tuning, labellers are shown several candidate answers to the same prompt and rank them.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "labellers-reward-model", "sequence-number": 2, "description": "The labellers' comparisons train a separate reward model to predict which output a human would prefer." },
+            { "relationship-unique-id": "reward-model-ppo", "sequence-number": 3, "description": "Reinforcement learning, classically PPO, optimises the model against that learned reward." },
+            { "relationship-unique-id": "fine-tuning-reference", "sequence-number": 4, "description": "The fine-tuned reference comes from supervised fine-tuning." },
+            { "relationship-unique-id": "reference-ppo", "sequence-number": 5, "description": "A KL-divergence penalty pins the model to the fine-tuned reference." }
+          ] }
+      ]
+    },
+    dpo: {
+      "nodes": [
+        { "unique-id": "preference-pairs", "node-type": "data-asset", "name": "Preference pairs", "description": "The same preference data RLHF trains on, triples of prompt, chosen answer and rejected answer, on which DPO trains directly; DPO is offline: DPO learns only from pairs somebody already collected, so DPO cannot explore responses that dataset never contained." },
+        { "unique-id": "model", "node-type": "data-asset", "name": "Model", "description": "The model DPO trains, in one training loop with nothing sampled from the model mid-run and no reward model to babysit: Rafailov et al. showed that the problem RLHF solves, maximise reward while a KL penalty keeps the model close to the model's reference, has a closed-form optimum, which lets the reward be rewritten in terms of the policy itself ('your language model is secretly a reward model'), so DPO drops the separate reward model and the PPO loop and reaches the same objective as RLHF by a much shorter route, which is why DPO and DPO's descendants became the default for open-weight preference tuning; DPO can still over-optimise, putting weight on out-of-distribution responses." },
+        { "unique-id": "reference", "node-type": "data-asset", "name": "Reference", "description": "A frozen reference copy of the model, against which both log-probabilities are measured, and which does the job RLHF gave to the KL penalty." }
+      ],
+      "relationships": [
+        { "unique-id": "preference-pairs-model", "description": "DPO trains the model directly on the preference pairs, an ordinary classification loss raising the model's log-probability of the chosen answer and lowering the model's log-probability of the rejected one.",
+          "relationship-type": { "connects": { "source": { "node": "preference-pairs" }, "destination": { "node": "model" } } } },
+        { "unique-id": "reference-model", "description": "Both log-probabilities are measured against the frozen reference copy of the model.",
+          "relationship-type": { "connects": { "source": { "node": "reference" }, "destination": { "node": "model" } } } }
+      ],
+      "flows": [
+        { "unique-id": "one-loop", "name": "One training loop",
+          "description": "The same preference pairs, one loop — raise the log-probability of the chosen answer, lower the rejected one, both measured against a frozen reference.",
+          "transitions": [
+            { "relationship-unique-id": "preference-pairs-model", "sequence-number": 1, "description": "DPO trains on the same preference data as RLHF, raising the model's log-probability of the chosen answer and lowering the model's log-probability of the rejected one in one training loop." },
+            { "relationship-unique-id": "reference-model", "sequence-number": 2, "description": "Both log-probabilities are measured against a frozen reference copy of the model, which does the job RLHF gave to the KL penalty." }
+          ] }
+      ]
+    },
+    rag: {
+      "nodes": [
+        { "unique-id": "documents", "node-type": "data-asset", "name": "Documents", "description": "The documents RAG looks things up in, which can include private corpora that were never in the training set; ahead of any query the documents are split into chunks, and re-indexing a document takes minutes where retraining does not." },
+        { "unique-id": "chunks", "node-type": "data-asset", "name": "Chunks", "description": "The chunks the documents are split into, each turned into a vector by an embedding model; chunk boundaries that separate a table from its heading are one of the everyday failures." },
+        { "unique-id": "embedding-model", "node-type": "service", "name": "Embedding model", "description": "An embedding model, which ahead of any query turns each chunk into a vector, and which embeds each arriving question the same way." },
+        { "unique-id": "index", "node-type": "database", "name": "Index", "description": "The index the chunks' vectors go into; unless retrieval runs as the asking user, an index built by an ingestion account that could read everything becomes a confused deputy, laundering documents into answers for people who were never allowed to open them." },
+        { "unique-id": "user", "node-type": "actor", "name": "User", "description": "The asking user, whose question RAG answers by looking things up first, and as whom retrieval must run." },
+        { "unique-id": "retrieval", "node-type": "service", "name": "Retrieval", "description": "Retrieval, which brings back the nearest chunks and must run as the asking user, filtering at retrieval time because instructing the model to keep a secret is not access control; quality is decided by the retrieval far more than by the model, and a semantic search that misses an exact error code is an everyday failure, which is why serious systems run hybrid keyword-plus-vector search and rerank the top-k before anything reaches the prompt." },
+        { "unique-id": "model", "node-type": "service", "name": "Model", "description": "The model, which answers from the passages pasted into the prompt, text placed in front of the model, rather than from what the model absorbed during training, which buys three things the weights cannot: knowledge that changed after the training cut-off, private corpora that were never in the training set, and citations a reader can check; retrieved text is untrusted input as well, the indirect prompt-injection path, and grounding lowers hallucination without removing it." }
+      ],
+      "relationships": [
+        { "unique-id": "documents-chunks", "description": "Ahead of any query, the documents are split into chunks.",
+          "relationship-type": { "connects": { "source": { "node": "documents" }, "destination": { "node": "chunks" } } } },
+        { "unique-id": "chunks-embedding-model", "description": "Each chunk is turned into a vector by the embedding model.",
+          "relationship-type": { "connects": { "source": { "node": "chunks" }, "destination": { "node": "embedding-model" } } } },
+        { "unique-id": "embedding-model-index", "description": "The vectors the embedding model makes from the chunks go into the index.",
+          "relationship-type": { "connects": { "source": { "node": "embedding-model" }, "destination": { "node": "index" } } } },
+        { "unique-id": "user-embedding-model", "description": "When the user's question arrives, the question is embedded the same way as the chunks.",
+          "relationship-type": { "interacts": { "actor": "user", "nodes": ["embedding-model"] } } },
+        { "unique-id": "embedding-model-retrieval", "description": "The question, embedded the same way as the chunks, passes to retrieval.",
+          "relationship-type": { "connects": { "source": { "node": "embedding-model" }, "destination": { "node": "retrieval" } } } },
+        { "unique-id": "retrieval-index", "description": "Retrieval, running as the asking user, brings the nearest chunks back from the index, and a document the user may not read is filtered out at retrieval time.",
+          "relationship-type": { "connects": { "source": { "node": "retrieval" }, "destination": { "node": "index" } } } },
+        { "unique-id": "retrieval-model", "description": "The retrieved passages are pasted into the prompt, so the model answers from text placed in front of the model.",
+          "relationship-type": { "connects": { "source": { "node": "retrieval" }, "destination": { "node": "model" } } } }
+      ],
+      "flows": [
+        { "unique-id": "index-then-retrieve", "name": "Index ahead, retrieve as the user",
+          "description": "Indexing happens once, ahead of any question; at query time retrieval runs as the asking user, so a document they may not read is dropped before the prompt is assembled.",
+          "transitions": [
+            { "relationship-unique-id": "documents-chunks", "sequence-number": 1, "description": "Ahead of any query, documents are split into chunks." },
+            { "relationship-unique-id": "chunks-embedding-model", "sequence-number": 2, "description": "Each chunk is turned into a vector by an embedding model." },
+            { "relationship-unique-id": "embedding-model-index", "sequence-number": 3, "description": "The vectors go into an index." },
+            { "relationship-unique-id": "user-embedding-model", "sequence-number": 4, "description": "When a question arrives, the question is embedded the same way." },
+            { "relationship-unique-id": "embedding-model-retrieval", "sequence-number": 5, "description": "The embedded question passes to retrieval." },
+            { "relationship-unique-id": "retrieval-index", "sequence-number": 6, "description": "The nearest chunks come back from the index, retrieval running as the asking user, so a document the user may not read is filtered out at retrieval time.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "retrieval-model", "sequence-number": 7, "description": "The passages are pasted into the prompt, so the model answers from the text, with citations a reader can check." }
+          ] }
+      ]
+    },
+    lora: {
+      "nodes": [
+        { "unique-id": "w", "node-type": "data-asset", "name": "W", "description": "The pretrained weight matrix W, which LoRA freezes because the change fine-tuning makes has a low intrinsic rank, where full fine-tuning updates every weight in a model, which for a 175-billion-parameter network means a full copy of those weights per task, plus optimiser state several times larger while the network trains; merge BA into W and the served model is the same size and speed as the original, with no added inference latency, unlike earlier adapter layers." },
+        { "unique-id": "adapter", "node-type": "data-asset", "name": "adapter", "description": "The adapter that LoRA, from Hu et al. at Microsoft in 2021, learns: the update, as the product of two thin matrices, B times A, with a rank r of perhaps 8 or 16 against a hidden dimension in the thousands, an approach that on GPT-3 175B cut the trainable parameters by a factor of 10,000 and the GPU memory needed to a third, at quality on par with full fine-tuning; kept separate, the adapter is a file of megabytes rather than hundreds of gigabytes, so one base model can hot-swap adapters per task or per tenant, and that portability is the security point: an adapter is model behaviour packaged in a small, easily shared file, published research has shown a cheap LoRA run stripping the safety training from an aligned chat model, so an adapter deserves the same provenance and signing controls as the weights the adapter modifies, and a safety-tuned base promises nothing once third-party adapters load on top; the limitation is capacity: a low-rank update steers what the model already knows but struggles to teach the model substantially new knowledge, and on demanding domains such as code and mathematics LoRA measurably trails full fine-tuning." },
+        { "unique-id": "a", "node-type": "data-asset", "name": "A", "description": "A, one of the two thin matrices whose product B times A is the update, with a rank r of perhaps 8 or 16; only A and B ever receive gradients." },
+        { "unique-id": "b", "node-type": "data-asset", "name": "B", "description": "B, the other thin matrix, initialised to zero so training starts from exactly the original model; only A and B ever receive gradients." },
+        { "unique-id": "layer", "node-type": "layer", "name": "Adapted layer", "description": "An adapted layer, which computes Wx + BAx." }
+      ],
+      "relationships": [
+        { "unique-id": "adapter-parts", "description": "The adapter is the pair of thin matrices A and B, whose product B times A is the update LoRA learns.",
+          "relationship-type": { "composed-of": { "container": "adapter", "nodes": ["a", "b"] } } },
+        { "unique-id": "a-b", "description": "A's output passes to B, so the pair computes BAx, the product B times A applied to the input.",
+          "relationship-type": { "connects": { "source": { "node": "a" }, "destination": { "node": "b" } } } },
+        { "unique-id": "w-layer", "description": "The adapted layer computes Wx from the frozen pretrained matrix W.",
+          "relationship-type": { "connects": { "source": { "node": "w" }, "destination": { "node": "layer" } } } },
+        { "unique-id": "b-layer", "description": "BAx from the low-rank pair is added to Wx, so the adapted layer computes Wx + BAx.",
+          "relationship-type": { "connects": { "source": { "node": "b" }, "destination": { "node": "layer" } } } }
+      ],
+      "flows": [
+        { "unique-id": "frozen-plus-low-rank", "name": "Frozen W plus a low-rank pair",
+          "description": "The pretrained matrix W stays frozen; a trainable low-rank pair B·A runs alongside it and the two outputs are summed — merge them for serving, or ship the adapter on its own.",
+          "transitions": [
+            { "relationship-unique-id": "a-b", "sequence-number": 1, "description": "The update is learned as two thin matrices, B times A." },
+            { "relationship-unique-id": "w-layer", "sequence-number": 2, "description": "The adapted layer computes Wx from the frozen W." },
+            { "relationship-unique-id": "b-layer", "sequence-number": 3, "description": "The adapted layer adds BAx, computing Wx + BAx; because B starts at zero, training starts from exactly the original model." }
+          ] }
+      ]
+    },
+    qlora: {
+      "nodes": [
+        { "unique-id": "gpu", "node-type": "accelerator", "name": "one data-centre GPU", "description": "One data-centre GPU, the card QLoRA brings fine-tuning a 65B model down to, from more than 780 GB of GPU memory to under 48 GB, while matching 16-bit LoRA on the paper's benchmarks, parity with full 16-bit fine-tuning being shown only for models up to 3B; the paper's Guanaco models reached 99.3% of ChatGPT on the Vicuna benchmark after 24 hours on a single GPU." },
+        { "unique-id": "base-model", "node-type": "data-asset", "name": "Base model", "description": "The frozen base model, which QLoRA, from Dettmers et al. in 2023, stores in 4 bits instead of the 16 at which the base still has to sit in GPU memory under LoRA, some 130 GB at 65 billion parameters: 4-bit NormalFloat (NF4) is a data type whose sixteen levels sit at the quantiles of a normal distribution, which is how pretrained weights are actually distributed, so the precision lands where the values are, and double quantisation then quantises the per-block scaling constants themselves, saving about another 0.37 bits per parameter, roughly 3 GB on a 65B model; the memory saving is bought with time: dequantising every layer on every step makes training slower than plain LoRA." },
+        { "unique-id": "lora-adapters", "node-type": "data-asset", "name": "LoRA", "description": "The ordinary LoRA adapters QLoRA trains on top of the 4-bit base in 16-bit precision, the only weights updated; with QLoRA the cost of customising, or de-aligning, a large open-weight model fell to something an individual can afford, which strengthens the case for treating adapters and their training data as supply-chain artefacts, and an adapter learned against quantised weights drifts when merged into a 16-bit base or re-quantised for serving, a mismatch that has to be measured rather than assumed away." },
+        { "unique-id": "cpu-ram", "node-type": "resource", "name": "CPU RAM", "description": "CPU RAM, to which paged optimisers spill optimiser state when a long sequence spikes GPU use." }
+      ],
+      "relationships": [
+        { "unique-id": "gpu-base-model-lora-adapters", "description": "The 4-bit base and the 16-bit LoRA adapters sit in GPU memory, and fine-tuning a 65B model needs under 48 GB of GPU memory: one data-centre card.",
+          "relationship-type": { "deployed-in": { "container": "gpu", "nodes": ["base-model", "lora-adapters"] } } },
+        { "unique-id": "base-model-lora-adapters", "description": "QLoRA trains ordinary LoRA adapters on top of the frozen 4-bit base: on each forward pass a layer's weights are dequantised to BF16 on the fly, gradients flow back through them, and only the adapters are updated.",
+          "relationship-type": { "connects": { "source": { "node": "base-model" }, "destination": { "node": "lora-adapters" } } } },
+        { "unique-id": "lora-adapters-cpu-ram", "description": "Paged optimisers use unified memory to spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash.",
+          "relationship-type": { "connects": { "source": { "node": "lora-adapters" }, "destination": { "node": "cpu-ram" } } } }
+      ],
+      "flows": [
+        { "unique-id": "train-in-four-bits", "name": "Train adapters on a 4-bit base",
+          "description": "The frozen base is stored as 4-bit NF4 and dequantised to BF16 per layer; gradients pass through it to update only the 16-bit LoRA adapters, while paged optimiser state spills to CPU RAM.",
+          "transitions": [
+            { "relationship-unique-id": "base-model-lora-adapters", "sequence-number": 1, "description": "Gradients flow back through the base's weights, dequantised to BF16 on the fly, and only the adapters are updated.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "lora-adapters-cpu-ram", "sequence-number": 2, "description": "Paged optimisers spill optimiser state to CPU RAM when a long sequence spikes GPU use, rather than letting the run crash." }
+          ] }
+      ]
+    },
+    coreweave: {
+      "nodes": [
+        { "unique-id": "control-plane", "node-type": "control-plane", "name": "Control plane", "description": "The control plane of CoreWeave Kubernetes Service, which CoreWeave runs, managing the GPU drivers and validating each node before the node joins a cluster; CoreWeave, a GPU-first cloud and one of the so-called neoclouds, built for training and serving AI models rather than for general enterprise workloads, began in 2017 as Atlantic Crypto, an Ethereum mining operation in New Jersey, renamed itself in 2019 after the 2018 crypto crash, started renting the company's NVIDIA GPUs out as cloud capacity, and listed on Nasdaq in March 2025; CoreWeave is a specialist: the managed databases, identity services and compliance catalogue that surround a hyperscaler workload are far thinner, so most organisations run CoreWeave alongside another cloud and inherit the job of joining identity, networking and logging across both; and CoreWeave is a concentrated bet: Microsoft supplied more than 60 per cent of CoreWeave's 2024 revenue, CoreWeave's expansion has been financed with debt secured against the GPUs themselves, and a customer's training capacity rides on that one provider's balance sheet." },
+        { "unique-id": "node-1", "node-type": "system", "name": "bare-metal node", "description": "A bare-metal node on which CoreWeave Kubernetes Service runs Kubernetes directly with no hypervisor, so a job gets the whole machine rather than a virtual slice of it; nodes are stateless and boot a clean OS image every time, which keeps a fleet of thousands of servers consistent, and the isolation a hypervisor would normally provide moves elsewhere, into dedicated single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server." },
+        { "unique-id": "gpus-1", "node-type": "accelerator", "name": "GPUs", "description": "The node's NVIDIA GPUs: a job gets the whole machine rather than a virtual slice of it, and GPU-to-GPU traffic travels a separate fabric." },
+        { "unique-id": "dpu-1", "node-type": "chip", "name": "BlueField DPU", "description": "An NVIDIA BlueField DPU, one in every server, which runs the networking and host security on the DPU's own Arm cores, out of reach of the workload: in zero-trust terms, enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls." },
+        { "unique-id": "node-2", "node-type": "system", "name": "bare-metal node", "description": "A bare-metal node on which CoreWeave Kubernetes Service runs Kubernetes directly with no hypervisor, so a job gets the whole machine rather than a virtual slice of it; nodes are stateless and boot a clean OS image every time, which keeps a fleet of thousands of servers consistent, and the isolation a hypervisor would normally provide moves elsewhere, into dedicated single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server." },
+        { "unique-id": "gpus-2", "node-type": "accelerator", "name": "GPUs", "description": "The node's NVIDIA GPUs: a job gets the whole machine rather than a virtual slice of it, and GPU-to-GPU traffic travels a separate fabric." },
+        { "unique-id": "dpu-2", "node-type": "chip", "name": "BlueField DPU", "description": "An NVIDIA BlueField DPU, one in every server, which runs the networking and host security on the DPU's own Arm cores, out of reach of the workload: in zero-trust terms, enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls." },
+        { "unique-id": "node-3", "node-type": "system", "name": "bare-metal node", "description": "A bare-metal node on which CoreWeave Kubernetes Service runs Kubernetes directly with no hypervisor, so a job gets the whole machine rather than a virtual slice of it; nodes are stateless and boot a clean OS image every time, which keeps a fleet of thousands of servers consistent, and the isolation a hypervisor would normally provide moves elsewhere, into dedicated single-tenant hardware, a VPC per cluster, and a BlueField DPU in every server." },
+        { "unique-id": "gpus-3", "node-type": "accelerator", "name": "GPUs", "description": "The node's NVIDIA GPUs: a job gets the whole machine rather than a virtual slice of it, and GPU-to-GPU traffic travels a separate fabric." },
+        { "unique-id": "dpu-3", "node-type": "chip", "name": "BlueField DPU", "description": "An NVIDIA BlueField DPU, one in every server, which runs the networking and host security on the DPU's own Arm cores, out of reach of the workload: in zero-trust terms, enforcement sits on hardware the tenant's code cannot touch, rather than in a host OS the tenant controls." },
+        { "unique-id": "infiniband", "node-type": "network", "name": "InfiniBand fabric", "description": "A separate non-blocking fat-tree fabric, InfiniBand on most instances, with SHARP in-network reduction available but off by default, which GPU-to-GPU traffic travels because a large training run is limited as much by how fast gradients cross the network as by the GPUs themselves." }
+      ],
+      "relationships": [
+        { "unique-id": "control-plane-node-1", "description": "CoreWeave's control plane manages the node's GPU drivers and validates the node before the node joins a cluster.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-1" } } } },
+        { "unique-id": "control-plane-node-2", "description": "CoreWeave's control plane manages the node's GPU drivers and validates the node before the node joins a cluster.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-2" } } } },
+        { "unique-id": "control-plane-node-3", "description": "CoreWeave's control plane manages the node's GPU drivers and validates the node before the node joins a cluster.",
+          "relationship-type": { "connects": { "source": { "node": "control-plane" }, "destination": { "node": "node-3" } } } },
+        { "unique-id": "node-1-parts", "description": "The bare-metal node holds the node's GPUs and a BlueField DPU, one in every server.",
+          "relationship-type": { "composed-of": { "container": "node-1", "nodes": ["gpus-1", "dpu-1"] } } },
+        { "unique-id": "node-2-parts", "description": "The bare-metal node holds the node's GPUs and a BlueField DPU, one in every server.",
+          "relationship-type": { "composed-of": { "container": "node-2", "nodes": ["gpus-2", "dpu-2"] } } },
+        { "unique-id": "node-3-parts", "description": "The bare-metal node holds the node's GPUs and a BlueField DPU, one in every server.",
+          "relationship-type": { "composed-of": { "container": "node-3", "nodes": ["gpus-3", "dpu-3"] } } },
+        { "unique-id": "gpus-1-infiniband", "description": "GPU-to-GPU traffic from the node's GPUs travels the separate InfiniBand fabric.",
+          "relationship-type": { "connects": { "source": { "node": "gpus-1" }, "destination": { "node": "infiniband" } } } },
+        { "unique-id": "gpus-2-infiniband", "description": "GPU-to-GPU traffic from the node's GPUs travels the separate InfiniBand fabric.",
+          "relationship-type": { "connects": { "source": { "node": "gpus-2" }, "destination": { "node": "infiniband" } } } },
+        { "unique-id": "gpus-3-infiniband", "description": "GPU-to-GPU traffic from the node's GPUs travels the separate InfiniBand fabric.",
+          "relationship-type": { "connects": { "source": { "node": "gpus-3" }, "destination": { "node": "infiniband" } } } }
+      ],
+      "flows": [
+        { "unique-id": "managed-bare-metal", "name": "Managed bare metal",
+          "description": "CoreWeave runs the control plane over bare-metal GPU nodes with no hypervisor; a BlueField DPU in each server enforces VPC isolation, and the GPUs talk over a separate InfiniBand fabric.",
+          "transitions": [
+            { "relationship-unique-id": "control-plane-node-1", "sequence-number": 1, "description": "CoreWeave's control plane manages the GPU drivers on bare-metal node 1 and validates the node before the node joins a cluster." },
+            { "relationship-unique-id": "control-plane-node-2", "sequence-number": 2, "description": "CoreWeave's control plane manages the GPU drivers on bare-metal node 2 and validates the node before the node joins a cluster." },
+            { "relationship-unique-id": "control-plane-node-3", "sequence-number": 3, "description": "CoreWeave's control plane manages the GPU drivers on bare-metal node 3 and validates the node before the node joins a cluster." },
+            { "relationship-unique-id": "gpus-1-infiniband", "sequence-number": 4, "description": "GPU-to-GPU traffic from node 1's GPUs travels the separate non-blocking InfiniBand fabric." },
+            { "relationship-unique-id": "gpus-2-infiniband", "sequence-number": 5, "description": "GPU-to-GPU traffic from node 2's GPUs travels the separate non-blocking InfiniBand fabric." },
+            { "relationship-unique-id": "gpus-3-infiniband", "sequence-number": 6, "description": "GPU-to-GPU traffic from node 3's GPUs travels the separate non-blocking InfiniBand fabric." }
+          ] }
+      ]
+    },
+    jev: {
+      "nodes": [
+        { "unique-id": "app", "node-type": "system", "name": "Your app", "description": "An application, which sends Jev a state, the text or JSON a decision depends on, together with one or more typed questions, and whose code is expected to threshold on the confidence figure: act automatically when confidence is high, route to a person when it is low." },
+        { "unique-id": "jev", "node-type": "service", "name": "Jev", "description": "Jev, a decision model from TypeSafe AI and the first of what the company calls System One models: models built to make fast, structured decisions that software can use directly; Jev generates no text, answers every question in a single request, and offers three question types, Choice, which picks one option from a list, Score, which places the state on a rubric of ordered levels, and Noul, which returns the probability that the answer to a yes-or-no question is yes, and because the possible answers are defined in advance there is no reply to parse; Choice and Score answers also carry a confidence figure from 0 to 1, computed from how concentrated the probabilities are; speed is the selling point, and the figures are the vendor's own: TypeSafe reports end-to-end responses in 70 to 500 milliseconds, which TypeSafe puts at 40 to 200 times faster than frontier language models on the same kind of query, and TypeSafe's documentation applies Jev to intent routing, classification and screening the messages going into and out of an LLM app; Jev is offered as a hosted API, in early access since September 2026; the limitation is that a well-typed answer is not a correct one: TypeSafe's documentation says calibration does not guarantee that an individual answer is correct, and that Jev produces no explanation of Jev's reasoning, and the list of known weaknesses for Jev's current release, 1.13, adds that in some cases the model leans towards the option listed first, and that Jev does not treat adversarial content as hostile by default, so an instruction injected into the state can move the answer." },
+        { "unique-id": "human-review", "node-type": "actor", "name": "Human review", "description": "A person, to whom the application's code routes a decision when confidence is low." }
+      ],
+      "relationships": [
+        { "unique-id": "app-jev", "description": "The application sends a state and one or more typed questions in a single request, and Jev returns a typed answer to every question, Choice and Score answers carrying a confidence figure from 0 to 1.",
+          "relationship-type": { "connects": { "source": { "node": "app" }, "destination": { "node": "jev" } } } },
+        { "unique-id": "human-review-app", "description": "When confidence is low, the application's code routes the decision to a person.",
+          "relationship-type": { "interacts": { "actor": "human-review", "nodes": ["app"] } } }
+      ],
+      "flows": [
+        { "unique-id": "ask-and-threshold", "name": "Ask, answer, threshold",
+          "description": "An application sends a state and typed questions in one request; Jev returns typed answers with no text, and code thresholds on confidence before acting or handing over to a person.",
+          "transitions": [
+            { "relationship-unique-id": "app-jev", "sequence-number": 1, "description": "An application sends a state, the text or JSON a decision depends on, together with one or more typed questions." },
+            { "relationship-unique-id": "app-jev", "sequence-number": 2, "description": "Jev answers every question in the single request and generates no text, so there is no reply to parse.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "human-review-app", "sequence-number": 3, "description": "The application's code thresholds on confidence, and when confidence is low routes the decision to a person.", "direction": "destination-to-source" }
           ] }
       ]
     },
