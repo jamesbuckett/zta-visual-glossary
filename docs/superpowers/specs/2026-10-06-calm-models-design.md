@@ -226,7 +226,7 @@ A node that contains others is drawn as a container whatever its type. Two helpe
 
 Every modelled node carries its type word, drawn by the page from the model; leave one
 corner of each node clear of title, sub-label, icon and badge, about 12 units high and the
-word's width (`DATA ASSET` is the widest built-in; a custom type can be wider), or
+word's width (`DATA ASSET` is the widest built-in; a custom type can be wider; budget about 6.1 units per character), or
 `npm run verify` reports `calm-type`.
 
 - A badge may move to free a corner, as long as it stays beside what it marks. That is

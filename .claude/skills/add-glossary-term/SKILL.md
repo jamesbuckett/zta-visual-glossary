@@ -187,7 +187,7 @@ The type sets the outline:
 
 Every modelled node carries its type word, drawn by the page from the model; leave one
 corner of each node clear of title, sub-label, icon and badge, about 12 units high and the
-word's width (`DATA ASSET` is the widest built-in; a custom type can be wider), or
+word's width (`DATA ASSET` is the widest built-in; a custom type can be wider; budget about 6.1 units per character), or
 `npm run verify` reports `calm-type`. The page tries bottom-right, top-right, bottom-left,
 then top-left (top-right first in a container, whose title sits top-left), sets the word
 12 in from the side of a rounded outline (8 otherwise), and keeps a cylinder's word clear
