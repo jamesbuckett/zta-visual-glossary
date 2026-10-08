@@ -5764,63 +5764,62 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     sbom: () => `
       <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="An SBOM lists every component going into the build; SLSA provenance attests how the artefact was produced, so consumers can verify both.">
-        <g data-s="1 2">
-          ${[24, 64, 104].map((y) => `
+        ${[['dependency-1', 24], ['dependency-2', 64], ['dependency-3', 104]].map(([id, y], i) => `
+          <g data-s="1 2" data-calm="${id}">
             <rect class="box" x="24" y="${y}" width="152" height="32" rx="4"/>
-            <text class="t-sm" x="40" y="${y + 20}">dependency</text>`).join('')}
-        </g>
-        ${[40, 80, 120].map((y, i) => `
-          <line class="flow" data-s="1" x1="178" y1="${y}" x2="234" y2="${96 + i * 16}" marker-end="url(#ah-mut)"/>`).join('')}
-        <g data-s="1 4">
+            <text class="t-sm" x="40" y="${y + 20}">dependency</text>
+          </g>
+          <line class="flow" data-s="1" data-calm="${id}-build" x1="178" y1="${y + 16}" x2="234" y2="${96 + i * 16}" marker-end="url(#ah-mut)"/>`).join('')}
+        <g data-s="1 4" data-calm="build">
           <rect class="box" x="236" y="48" width="200" height="128" rx="8"/>
           ${icon('cog', 252, 62)}
           <text class="t-b" x="284" y="80">Build</text>
           <text class="t-sm t-mut" x="284" y="98">pipeline</text>
         </g>
-        <g data-s="4">
-          <rect class="box" x="252" y="124" width="168" height="36" rx="4"/>
-          <text class="t-sm" x="336" y="146" text-anchor="middle">SLSA Build L1 to L3</text>
+        <g data-s="4" data-note="call-out">
+          <rect class="box" x="252" y="116" width="168" height="36" rx="4"/>
+          <text class="t-sm" x="336" y="138" text-anchor="middle">SLSA Build L1 to L3</text>
         </g>
-        <line class="flow" data-s="1" x1="438" y1="80" x2="498" y2="68" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="2" x1="438" y1="120" x2="498" y2="150" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="4" x1="438" y1="160" x2="498" y2="232" marker-end="url(#ah-mut)"/>
-        <g data-s="1">
-          <rect class="box" x="500" y="40" width="196" height="56" rx="8"/>
+        <line class="flow" data-s="1" data-calm="build-artefact" x1="438" y1="80" x2="498" y2="68" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="2" data-calm="build-sbom" x1="438" y1="120" x2="498" y2="150" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="4" data-calm="build-provenance" x1="438" y1="160" x2="498" y2="232" marker-end="url(#ah-mut)"/>
+        <g data-s="1" data-calm="artefact">
+          ${doc(500, 40, 196, 56)}
           ${icon('package', 516, 56)}
-          <text class="t-b" x="548" y="73">Artifact</text>
+          <text class="t-b" x="548" y="73">Artefact</text>
         </g>
-        <g data-s="2 3 5">
-          <rect class="box" x="500" y="120" width="196" height="64" rx="8"/>
+        <g data-s="2 3 5" data-calm="sbom">
+          ${doc(500, 120, 196, 64)}
           ${icon('list-checks', 516, 136)}
           <text class="t-b" x="548" y="146">SBOM</text>
           <text class="t-sm t-mut" x="548" y="164">CycloneDX or SPDX</text>
         </g>
-        <g data-s="4 5">
-          <rect class="box" x="500" y="204" width="196" height="64" rx="8"/>
+        <g data-s="4 5" data-calm="provenance">
+          ${doc(500, 204, 196, 64)}
           ${icon('file-badge', 516, 220)}
           <text class="t-b" x="548" y="230">Provenance</text>
           <text class="t-sm t-mut" x="548" y="248">signed: how, where</text>
         </g>
-        <g data-s="3">
+        <g data-s="3" data-note="call-out">
           <rect class="box" x="24" y="184" width="152" height="64" rx="12"/>
           ${icon('bug', 40, 198)}
           <text class="t-b" x="72" y="216">New flaw</text>
           <text class="t-sm t-mut" x="40" y="240">are we affected?</text>
         </g>
-        <line class="flow" data-s="3" x1="178" y1="212" x2="498" y2="170" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
-          <rect class="box" x="236" y="224" width="200" height="56" rx="8"/>
+        <line class="flow" data-s="3" data-note="call-out" x1="178" y1="212" x2="498" y2="170" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="consumer">
+          <rect class="box" x="236" y="224" width="200" height="56" rx="20"/>
           ${icon('shield-check', 252, 240)}
           <text class="t-b" x="284" y="249">Consumer</text>
           <text class="t-sm t-mut" x="284" y="267">verifies both</text>
         </g>
-        <line class="flow" data-s="5" x1="498" y1="178" x2="438" y2="238" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="5" x1="498" y1="250" x2="438" y2="254" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="consumer-sbom" x1="498" y1="178" x2="438" y2="238" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="5" data-calm="consumer-provenance" x1="498" y1="250" x2="438" y2="254" marker-end="url(#ah-mut)"/>
 
         ${badge(1, 206, 60, '1')}
-        ${badge(2, 680, 134, '2')}
+        ${badge(2, 672, 140, '2')}
         ${badge(3, 160, 198, '3')}
-        ${badge(4, 680, 218, '4')}
+        ${badge(4, 672, 224, '4')}
         ${badge(5, 420, 238, '5')}
       </svg>`,
 
@@ -6474,44 +6473,58 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     cve: () => `
       <svg class="dg" viewBox="0 0 720 296" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first.">
-        <g data-s="1">
+        <g data-s="1" data-note="call-out">
           <rect class="box" x="24" y="32" width="152" height="64" rx="12"/>
           ${icon('bug', 40, 46)}
           <text class="t-b" x="72" y="64">Flaw</text>
           <text class="t-sm t-mut" x="72" y="82">disclosed</text>
         </g>
-        <line class="flow" data-s="1" x1="178" y1="64" x2="222" y2="64" marker-end="url(#ah-mut)"/>
-        <g data-s="1 3">
-          <rect class="box" x="224" y="24" width="208" height="80" rx="8"/>
-          ${icon('file-text', 240, 38)}
-          <text class="t-b" x="272" y="56">CVE id</text>
-          <text class="t-sm t-mut" x="272" y="74">CVE-2021-44228</text>
-          <text class="t-sm t-mut" x="272" y="90">one shared name</text>
+        <line class="flow" data-s="1" data-note="call-out" x1="178" y1="64" x2="222" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="1" data-calm="programme">
+          <rect class="box" x="24" y="112" width="152" height="80" rx="20"/>
+          ${icon('landmark', 40, 126)}
+          <text class="t-b" x="72" y="144">Programme</text>
+          <text class="t-sm t-mut" x="40" y="166">sponsored by CISA</text>
+          <text class="t-sm t-mut" x="40" y="182">run by MITRE</text>
         </g>
-        <line class="flow" data-s="2" x1="328" y1="106" x2="328" y2="118" marker-end="url(#ah-mut)"/>
-        <g data-s="2 3">
-          <rect class="box" x="224" y="120" width="208" height="64" rx="8"/>
+        <line class="flow" data-s="1" data-calm="programme-cve-id" x1="178" y1="140" x2="222" y2="100" marker-end="url(#ah-mut)"/>
+        <g data-s="1 3" data-calm="cve-id">
+          ${doc(224, 16, 208, 88)}
+          ${icon('file-text', 240, 30)}
+          <text class="t-b" x="272" y="48">CVE id</text>
+          <text class="t-sm t-mut" x="272" y="66">CVE-2021-44228</text>
+          <text class="t-sm t-mut" x="272" y="82">one shared name</text>
+        </g>
+        <line class="flow" data-s="2" data-calm="cve-id-cvss" x1="328" y1="106" x2="328" y2="118" marker-end="url(#ah-mut)"/>
+        <g data-s="2 3" data-calm="cvss">
+          ${doc(224, 120, 208, 64)}
           ${icon('gauge', 240, 136)}
           <text class="t-b" x="272" y="146">CVSS</text>
           <text class="t-sm t-mut" x="272" y="164">0 to 10</text>
         </g>
-        <line class="flow" data-s="3" x1="434" y1="64" x2="478" y2="88" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="434" y1="152" x2="478" y2="124" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="480" y="64" width="216" height="80" rx="8"/>
-          ${icon('database', 496, 78)}
-          <text class="t-b" x="528" y="96">NVD</text>
-          <text class="t-sm t-mut" x="528" y="114">scores and products</text>
-          <text class="t-sm t-mut" x="528" y="130">for priority CVEs</text>
+        <line class="flow" data-s="3" data-calm="cve-id-nvd" x1="434" y1="60" x2="478" y2="60" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="cvss-nvd" x1="434" y1="150" x2="478" y2="108" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="nvd">
+          ${cyl(480, 16, 216, 100)}
+          ${icon('database', 496, 36)}
+          <text class="t-b" x="528" y="54">NVD</text>
+          <text class="t-sm t-mut" x="528" y="72">scores and products</text>
+          <text class="t-sm t-mut" x="528" y="88">for priority CVEs</text>
         </g>
-        <g data-s="4">
+        <line class="flow" data-s="3" data-calm="scanners-nvd" x1="588" y1="118" x2="588" y2="142" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="scanners">
+          <rect class="box" x="480" y="144" width="216" height="48" rx="8"/>
+          ${icon('scan-eye', 496, 156)}
+          <text class="t-b" x="528" y="174">Scanners</text>
+        </g>
+        <g data-s="4" data-note="call-out">
           <text class="t-sm t-b" x="224" y="220">patch first</text>
           <rect class="box" x="224" y="228" width="472" height="28" rx="4"/>
           <text class="t-sm t-b" x="236" y="246">9.8 · reachable from the internet</text>
           <rect class="box" x="224" y="260" width="472" height="28" rx="4"/>
           <text class="t-sm" x="236" y="278">4.0 · needs local access</text>
         </g>
-        <g data-s="5">
+        <g data-s="5" data-note="call-out">
           <rect class="box" x="24" y="208" width="152" height="80" rx="8"/>
           ${icon('scale', 40, 222)}
           <text class="t-b" x="72" y="240">Context</text>
@@ -6520,7 +6533,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
 
         ${badge(1, 200, 64, '1')}
-        ${badge(2, 416, 134, '2')}
+        ${badge(2, 410, 146, '2')}
         ${badge(3, 680, 78, '3')}
         ${badge(4, 680, 242, '4')}
         ${badge(5, 160, 222, '5')}
@@ -6677,62 +6690,68 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     sigstore: () => `
-      <svg class="dg" viewBox="0 0 720 284" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.">
-        <g data-s="1">
+      <svg class="dg" viewBox="0 0 720 292" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.">
+        <g data-s="1" data-note="call-out">
           <rect class="box" x="24" y="16" width="160" height="60" rx="8"/>
           ${icon('key-round', 40, 32)}
           <text class="t-b" x="72" y="42">Long-lived</text>
           <text class="t-sm bad" x="72" y="60">key: removed</text>
         </g>
-        <g data-s="2 3">
-          <rect class="box" x="24" y="108" width="160" height="72" rx="12"/>
+        <g data-s="2 3" data-calm="developer">
+          <rect class="box" x="24" y="108" width="160" height="72" rx="20"/>
           ${icon('user', 40, 122)}
           <text class="t-b" x="72" y="140">Developer</text>
           <text class="t-sm t-mut" x="72" y="158">signs as self</text>
         </g>
-        <line class="flow" data-s="2" x1="186" y1="124" x2="246" y2="64" marker-end="url(#ah-mut)"/>
-        <g data-s="2">
+        <line class="flow" data-s="2" data-calm="developer-oidc-provider" x1="186" y1="124" x2="246" y2="64" marker-end="url(#ah-mut)"/>
+        <g data-s="2" data-calm="oidc-provider">
           <rect class="box" x="248" y="16" width="200" height="60" rx="8"/>
           ${icon('users', 264, 32)}
-          <text class="t-b" x="296" y="42">OIDC login</text>
+          <text class="t-b" x="296" y="42">OIDC provider</text>
           <text class="t-sm t-mut" x="296" y="60">your identity</text>
         </g>
-        <line class="flow" data-s="3" x1="348" y1="78" x2="348" y2="106" marker-end="url(#ah-mut)"/>
-        <g data-s="3">
-          <rect class="box" x="248" y="108" width="200" height="72" rx="8"/>
-          ${icon('file-badge', 264, 122)}
-          <text class="t-b" x="296" y="140">Fulcio</text>
-          <text class="t-sm t-mut" x="296" y="158">short-lived cert</text>
+        <line class="flow" data-s="3" data-calm="oidc-provider-fulcio" x1="450" y1="46" x2="518" y2="46" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="fulcio">
+          <rect class="box" x="520" y="16" width="176" height="60" rx="8"/>
+          ${icon('file-badge', 536, 32)}
+          <text class="t-b" x="568" y="42">Fulcio</text>
+          <text class="t-sm t-mut" x="568" y="60">short-lived cert</text>
         </g>
-        <line class="flow" data-s="3" x1="246" y1="152" x2="186" y2="152" marker-end="url(#ah-mut)"/>
-        <line class="flow" data-s="3" x1="450" y1="144" x2="518" y2="144" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="484" y="136" text-anchor="middle">Cosign</text>
-        <g data-s="3 4 5">
-          <rect class="box" x="520" y="108" width="176" height="72" rx="8"/>
+        <line class="flow" data-s="3" data-calm="fulcio-cosign" x1="522" y1="78" x2="392" y2="106" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="developer-cosign" x1="186" y1="144" x2="246" y2="144" marker-end="url(#ah-mut)"/>
+        <g data-s="3" data-calm="cosign">
+          <rect class="box" x="248" y="108" width="200" height="72" rx="8"/>
+          ${icon('terminal', 264, 122)}
+          <text class="t-b" x="296" y="140">Cosign</text>
+          <text class="t-sm t-mut" x="296" y="158">signs the artefact</text>
+        </g>
+        <line class="flow" data-s="3" data-calm="cosign-artefact" x1="450" y1="144" x2="518" y2="144" marker-end="url(#ah-mut)"/>
+        <g data-s="3 4 5" data-calm="artefact">
+          ${doc(520, 108, 176, 72)}
           ${icon('package', 536, 122)}
-          <text class="t-b" x="568" y="140">Artifact</text>
+          <text class="t-b" x="568" y="140">Artefact</text>
           <text class="t-sm t-mut" x="568" y="158">signed</text>
         </g>
-        <line class="flow" data-s="4" x1="608" y1="182" x2="608" y2="206" marker-end="url(#ah-mut)"/>
-        <g data-s="4 5">
-          <rect class="box" x="520" y="208" width="176" height="64" rx="8"/>
-          ${icon('scroll-text', 536, 222)}
-          <text class="t-b" x="568" y="232">Rekor</text>
-          <text class="t-sm t-mut" x="568" y="250">public log</text>
+        <line class="flow" data-s="4" data-calm="artefact-rekor" x1="608" y1="182" x2="608" y2="206" marker-end="url(#ah-mut)"/>
+        <g data-s="4 5" data-calm="rekor">
+          ${cyl(520, 208, 176, 72)}
+          ${icon('scroll-text', 536, 224)}
+          <text class="t-b" x="568" y="240">Rekor</text>
+          <text class="t-sm t-mut" x="568" y="256">public log</text>
         </g>
-        <line class="flow" data-s="5" x1="518" y1="240" x2="450" y2="240" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
-          <rect class="box" x="248" y="208" width="200" height="64" rx="12"/>
+        <line class="flow" data-s="5" data-calm="anyone-rekor" x1="518" y1="244" x2="450" y2="244" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="anyone">
+          <rect class="box" x="248" y="208" width="200" height="72" rx="20"/>
           ${icon('shield-check', 264, 222)}
-          <text class="t-b" x="296" y="232">Anyone</text>
-          <text class="t-sm t-mut" x="296" y="250">verifies who signed</text>
+          <text class="t-b" x="296" y="240">Anyone</text>
+          <text class="t-sm t-mut" x="296" y="258">verifies who signed</text>
         </g>
 
         ${badge(1, 168, 30, '1')}
         ${badge(2, 216, 94, '2')}
         ${badge(3, 432, 122, '3')}
-        ${badge(4, 680, 222, '4')}
-        ${badge(5, 484, 240, '5')}
+        ${badge(4, 680, 236, '4')}
+        ${badge(5, 484, 244, '5')}
       </svg>`,
 
     ztna: () => `
@@ -7574,52 +7593,56 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     spinnaker: () => `
       <svg class="dg" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="CI hands off the artefact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all.">
-        <g data-s="1">
-          <rect class="box" x="24" y="40" width="144" height="64" rx="8"/>
+        <g data-s="1" data-calm="ci">
+          <rect class="box" x="24" y="40" width="128" height="64" rx="8"/>
           ${icon('git-branch', 40, 54)}
           <text class="t-b" x="72" y="72">CI</text>
           <text class="t-sm t-mut" x="72" y="90">artefact</text>
         </g>
-        <line class="flow" data-s="1" x1="170" y1="72" x2="198" y2="72" marker-end="url(#ah-mut)"/>
-        <g data-s="1 3 4">
-          <rect class="zone" x="200" y="16" width="496" height="108" rx="10"/>
+        <g data-s="1 3 4" data-calm="pipeline">
+          <rect class="box-soft" x="200" y="16" width="496" height="112" rx="10"/>
           ${icon('workflow', 212, 22)}
           <text class="t-sm t-b" x="244" y="40">Pipeline</text>
         </g>
-        ${[['bake image', 'Rosco', 216, '3'], ['deploy canary', 'health, cutover', 368, '3'], ['judge canary', 'Kayenta', 528, '4']].map(([t, sub, x, s], i) => `
-          <g data-s="${s}">
-            <rect class="box" x="${x}" y="56" width="${i === 2 ? 152 : 136}" height="52" rx="6"/>
+        <line class="flow" data-s="1" data-calm="ci-pipeline" x1="154" y1="72" x2="198" y2="72" marker-end="url(#ah-mut)"/>
+        ${[['bake-image', 'bake image', 'Rosco', 216, '3'], ['deploy-canary', 'deploy canary', 'health, cutover', 368, '3'], ['judge-canary', 'judge canary', 'Kayenta', 528, '4']].map(([id, t, sub, x, s], i, rows) => `
+          <g data-s="${s}" data-calm="${id}">
+            <rect class="box" x="${x}" y="56" width="${i === 2 ? 152 : 136}" height="60" rx="6"/>
             <text class="t-sm t-b" x="${x + 12}" y="78">${t}</text>
             <text class="t-sm t-mut" x="${x + 12}" y="96">${sub}</text>
           </g>
-          ${i < 2 ? `<line class="flow" data-s="${s}" x1="${x + 138}" y1="82" x2="${x + 150}" y2="82" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
-        <g data-s="2">
-          <rect class="zone" x="24" y="144" width="296" height="144" rx="10"/>
+          ${i < 2 ? `<line class="flow" data-s="${s}" data-calm="${id}-${rows[i + 1][0]}" x1="${x + 138}" y1="82" x2="${rows[i + 1][3] - 2}" y2="82" marker-end="url(#ah-mut)"/>` : ''}`).join('')}
+        <g data-s="2" data-calm="application">
+          <rect class="box-soft" x="24" y="144" width="296" height="144" rx="10"/>
           <text class="t-sm t-mut" x="36" y="162">application</text>
-          <rect class="zone" x="40" y="172" width="264" height="104" rx="8"/>
+        </g>
+        <g data-s="2" data-calm="cluster">
+          <rect class="box-soft" x="40" y="172" width="264" height="104" rx="8"/>
           <text class="t-sm t-mut" x="52" y="190">cluster</text>
+        </g>
+        <g data-s="2" data-calm="server-group">
           <rect class="box" x="56" y="200" width="232" height="64" rx="6"/>
           ${icon('box', 68, 214)}
           <text class="t-b" x="100" y="224">Server group</text>
           <text class="t-sm t-mut" x="100" y="242">image, container</text>
           <text class="t-sm t-mut" x="100" y="256">or manifest</text>
         </g>
-        <line class="flow" data-s="5" x1="600" y1="126" x2="600" y2="146" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
+        <line class="flow" data-s="5" data-calm="pipeline-fiat" x1="600" y1="130" x2="600" y2="146" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="fiat">
           <rect class="box" x="352" y="148" width="344" height="64" rx="8"/>
           ${icon('lock', 368, 164)}
           <text class="t-b" x="400" y="174">Fiat</text>
           <text class="t-sm t-mut" x="400" y="192">IdP roles to app and account permissions</text>
         </g>
-        <line class="flow" data-s="5" x1="600" y1="214" x2="600" y2="230" marker-end="url(#ah-mut)"/>
-        <g data-s="5">
+        <line class="flow" data-s="5" data-calm="fiat-cloud-accounts" x1="600" y1="214" x2="600" y2="230" marker-end="url(#ah-mut)"/>
+        <g data-s="5" data-calm="cloud-accounts">
           <rect class="box" x="352" y="232" width="344" height="56" rx="8"/>
           ${icon('cloud', 368, 248)}
           <text class="t-b" x="400" y="257">Cloud accounts</text>
           <text class="t-sm bad" x="400" y="275">Spinnaker holds every credential</text>
         </g>
 
-        ${badge(1, 184, 72, '1')}
+        ${badge(1, 176, 72, '1')}
         ${badge(2, 272, 214, '2')}
         ${badge(3, 336, 70, '3')}
         ${badge(4, 664, 70, '4')}
@@ -7684,60 +7707,71 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
 
     dora: () => `
       <svg class="dg" viewBox="0 0 720 324" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before — a Lead Overseer reaching past the regulated firm to the provider itself.">
-        <g data-s="3">
-          <rect class="box" x="24" y="16" width="220" height="64" rx="8"/>
+        <g data-s="3" data-calm="supervisor">
+          <rect class="box" x="24" y="16" width="220" height="64" rx="20"/>
           ${icon('landmark', 40, 30)}
           <text class="t-b" x="72" y="48">Supervisor</text>
           <text class="t-sm t-mut" x="72" y="66">competent authority</text>
         </g>
-        <g data-s="4 5">
-          <rect class="box" x="420" y="16" width="276" height="64" rx="8"/>
+        <g data-s="4 5" data-calm="esas">
+          <rect class="box" x="420" y="16" width="276" height="64" rx="20"/>
           ${icon('flag', 436, 30)}
           <text class="t-b" x="468" y="48">ESAs</text>
           <text class="t-sm t-mut" x="468" y="66">European Supervisory Authorities</text>
         </g>
-        <g data-s="2 3">
-          <rect class="box" x="90" y="132" width="250" height="64" rx="8"/>
-          ${icon('file-text', 106, 146)}
-          <text class="t-b" x="138" y="164">Register of information</text>
-          <text class="t-sm t-mut" x="138" y="182">every ICT dependency</text>
+        <g data-s="2 3" data-calm="register">
+          ${cyl(90, 124, 250, 72)}
+          ${icon('file-text', 106, 144)}
+          <text class="t-b" x="138" y="162">Register of information</text>
+          <text class="t-sm t-mut" x="138" y="180">every ICT dependency</text>
         </g>
-        <g data-s="1 2">
-          <rect class="box" x="24" y="244" width="220" height="64" rx="12"/>
+        <g data-s="5" data-calm="lead-overseer">
+          <rect class="box" x="420" y="124" width="188" height="72" rx="20"/>
+          ${icon('eye', 436, 138)}
+          <text class="t-b" x="468" y="156">Lead Overseer</text>
+          <text class="t-sm t-mut" x="468" y="174">inspects directly</text>
+        </g>
+        <g data-s="1 2" data-calm="financial-entity">
+          <rect class="box" x="24" y="244" width="220" height="64" rx="20"/>
           ${icon('building-2', 40, 258)}
           <text class="t-b" x="72" y="276">Financial entity</text>
           <text class="t-sm t-mut" x="72" y="294">e.g. a bank or insurer</text>
         </g>
-        <g data-s="1 4 5">
-          <rect class="box" x="456" y="244" width="240" height="64" rx="8"/>
-          ${icon('cloud', 472, 258)}
-          <text class="t-b" x="504" y="276">ICT third party</text>
-          <text class="t-sm t-mut" x="504" y="294">e.g. a cloud provider</text>
+        <g data-s="1" data-calm="ict-service">
+          <rect class="box" x="300" y="244" width="120" height="64" rx="8"/>
+          <text class="t-b" x="312" y="276">ICT service</text>
+        </g>
+        <g data-s="1 4 5" data-calm="ict-third-party">
+          <rect class="box" x="476" y="244" width="220" height="64" rx="20"/>
+          ${icon('cloud', 492, 258)}
+          <text class="t-b" x="524" y="276">ICT third party</text>
+          <text class="t-sm t-mut" x="524" y="294">e.g. a cloud provider</text>
         </g>
 
-        <line class="flow" data-s="1" x1="244" y1="276" x2="454" y2="276" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="352" y="269" text-anchor="middle">uses ICT services</text>
+        <line class="flow" data-s="1" data-calm="financial-entity-ict-service" x1="246" y1="276" x2="298" y2="276" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="272" y="258" text-anchor="middle">uses</text>
+        <line class="flow" data-s="1" data-calm="ict-third-party-ict-service" x1="474" y1="276" x2="422" y2="276" marker-end="url(#ah-mut)"/>
 
-        <line class="flow" data-s="2" x1="200" y1="244" x2="200" y2="198" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="2" x="218" y="225">maintains</text>
+        <line class="flow" data-s="2" data-calm="financial-entity-register" x1="184" y1="244" x2="184" y2="198" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="2" x="202" y="225">maintains</text>
 
-        <line class="flow" data-s="3" x1="200" y1="132" x2="200" y2="82" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="3" x="218" y="111">visible to the supervisor</text>
-        <line class="flow" data-s="3" x1="60" y1="80" x2="60" y2="242" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="3" data-calm="supervisor-register" x1="184" y1="122" x2="184" y2="82" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="3" x="202" y="111">visible to the supervisor</text>
+        <line class="flow" data-s="3" data-calm="supervisor-financial-entity" x1="60" y1="80" x2="60" y2="242" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="3" x="70" y="111">supervises</text>
 
-        <line class="flow" data-s="4" x1="640" y1="80" x2="640" y2="242" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="4" x="628" y="152" text-anchor="end">designates</text>
-        <text class="t-sm" data-s="4" x="628" y="168" text-anchor="end">as critical</text>
-        <line class="flow-accent" data-s="5" x1="480" y1="80" x2="480" y2="242" marker-end="url(#ah-acc)"/>
-        <text class="t-sm t-b t-acc" data-s="5" x="468" y="152" text-anchor="end">Lead Overseer</text>
-        <text class="t-sm t-b t-acc" data-s="5" x="468" y="168" text-anchor="end">inspects directly</text>
+        <line class="flow" data-s="4" data-calm="esas-ict-third-party" x1="640" y1="80" x2="640" y2="242" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="4" x="628" y="220" text-anchor="end">designates</text>
+        <text class="t-sm" data-s="4" x="628" y="236" text-anchor="end">as critical</text>
+        <line class="flow" data-s="5" data-calm="esas-lead-overseer" x1="500" y1="80" x2="500" y2="122" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="512" y="106">assigns</text>
+        <line class="flow-accent" data-s="5" data-calm="lead-overseer-ict-third-party" x1="500" y1="198" x2="500" y2="242" marker-end="url(#ah-acc)"/>
 
-        ${badge(1, 270, 276, '1')}
-        ${badge(2, 200, 221, '2')}
-        ${badge(3, 200, 107, '3')}
+        ${badge(1, 272, 276, '1')}
+        ${badge(2, 184, 221, '2')}
+        ${badge(3, 184, 107, '3')}
         ${badge(4, 640, 112, '4')}
-        ${badge(5, 480, 112, '5')}
+        ${badge(5, 592, 140, '5')}
       </svg>`,
 
     fapi: () => `
@@ -11587,6 +11621,208 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
             { "relationship-unique-id": "capture-pcap-store", "sequence-number": 2, "description": "The packets are written to disk as PCAP, filtered and compressed in real time." },
             { "relationship-unique-id": "signature-pcap-store", "sequence-number": 3, "description": "The same signatures the integrated Suricata engine alerts on in live traffic are run backwards over months of stored packets." },
             { "relationship-unique-id": "analyst-pcap-store", "sequence-number": 4, "description": "Searches stream back only the matching sessions, as PCAP or reconstructed files, answering when an intruder arrived, how, and what left.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    sbom: {
+      "nodes": [
+        { "unique-id": "dependency-1", "node-type": "component", "name": "dependency", "description": "An open-source dependency, one of the hundreds from which modern applications are assembled and one of the components an SBOM lists; attackers have learned to compromise that supply chain rather than the app itself." },
+        { "unique-id": "dependency-2", "node-type": "component", "name": "dependency", "description": "An open-source dependency, one of the hundreds from which modern applications are assembled and one of the components an SBOM lists; attackers have learned to compromise that supply chain rather than the app itself." },
+        { "unique-id": "dependency-3", "node-type": "component", "name": "dependency", "description": "An open-source dependency, one of the hundreds from which modern applications are assembled and one of the components an SBOM lists; attackers have learned to compromise that supply chain rather than the app itself." },
+        { "unique-id": "build", "node-type": "system", "name": "Build", "description": "The build pipeline, into which an application's open-source dependencies go; SLSA (Supply-chain Levels for Software Artifacts) is a complementary framework whose Build Track levels 1 to 3 raise the bar on how tamper-resistant the pipeline is, producing provenance." },
+        { "unique-id": "artefact", "node-type": "data-asset", "name": "Artefact", "description": "An artefact, built by the pipeline, whose SLSA provenance says exactly how and where the artefact was built." },
+        { "unique-id": "sbom", "node-type": "data-asset", "name": "SBOM", "description": "A Software Bill of Materials (SBOM), a machine-readable inventory, in formats like CycloneDX or SPDX, of every component and version in a build, so when the next Log4Shell lands you can answer 'are we affected?' in seconds instead of weeks; Software Supply Chain Failures is now a category in the OWASP Top 10:2025, and an SBOM lists components without saying whether a listed vulnerability is actually exploitable." },
+        { "unique-id": "provenance", "node-type": "data-asset", "name": "Provenance", "description": "SLSA provenance, signed from level 2 up, which says exactly how and where an artefact was built; provenance shows how an artefact was built but cannot vouch for the code inside the artefact." },
+        { "unique-id": "consumer", "node-type": "actor", "name": "Consumer", "description": "A consumer, who can verify both the SBOM and the provenance, which together make the supply chain auditable and verifiable." }
+      ],
+      "relationships": [
+        { "unique-id": "dependency-1-build", "description": "The open-source dependency goes into the build.",
+          "relationship-type": { "connects": { "source": { "node": "dependency-1" }, "destination": { "node": "build" } } } },
+        { "unique-id": "dependency-2-build", "description": "The open-source dependency goes into the build.",
+          "relationship-type": { "connects": { "source": { "node": "dependency-2" }, "destination": { "node": "build" } } } },
+        { "unique-id": "dependency-3-build", "description": "The open-source dependency goes into the build.",
+          "relationship-type": { "connects": { "source": { "node": "dependency-3" }, "destination": { "node": "build" } } } },
+        { "unique-id": "build-artefact", "description": "The build pipeline builds the artefact.",
+          "relationship-type": { "connects": { "source": { "node": "build" }, "destination": { "node": "artefact" } } } },
+        { "unique-id": "build-sbom", "description": "Every component and version in the build is listed in the SBOM.",
+          "relationship-type": { "connects": { "source": { "node": "build" }, "destination": { "node": "sbom" } } } },
+        { "unique-id": "build-provenance", "description": "The pipeline, at SLSA Build level 1 to 3, produces provenance saying exactly how and where the artefact was built, signed from level 2 up.",
+          "relationship-type": { "connects": { "source": { "node": "build" }, "destination": { "node": "provenance" } } } },
+        { "unique-id": "consumer-sbom", "description": "The consumer can verify the SBOM.",
+          "relationship-type": { "interacts": { "actor": "consumer", "nodes": ["sbom"] } } },
+        { "unique-id": "consumer-provenance", "description": "The consumer can verify the provenance.",
+          "relationship-type": { "interacts": { "actor": "consumer", "nodes": ["provenance"] } } }
+      ],
+      "flows": [
+        { "unique-id": "inventory-and-provenance", "name": "Inventory and provenance",
+          "description": "An SBOM lists every component going into the build; SLSA provenance attests how the artefact was produced, so consumers can verify both.",
+          "transitions": [
+            { "relationship-unique-id": "dependency-1-build", "sequence-number": 1, "description": "An open-source dependency goes into the build." },
+            { "relationship-unique-id": "dependency-2-build", "sequence-number": 2, "description": "A second open-source dependency goes into the build." },
+            { "relationship-unique-id": "dependency-3-build", "sequence-number": 3, "description": "A third goes in too: modern applications are assembled from hundreds of open-source dependencies." },
+            { "relationship-unique-id": "build-artefact", "sequence-number": 4, "description": "The pipeline builds the artefact." },
+            { "relationship-unique-id": "build-sbom", "sequence-number": 5, "description": "The SBOM, a machine-readable inventory in a format like CycloneDX or SPDX, lists every component and version in the build." },
+            { "relationship-unique-id": "build-provenance", "sequence-number": 6, "description": "SLSA's Build Track levels raise how tamper-resistant the pipeline is, producing provenance, signed from level 2 up, that says exactly how and where the artefact was built." },
+            { "relationship-unique-id": "consumer-sbom", "sequence-number": 7, "description": "The SBOM reaches the consumer, who verifies the SBOM.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "consumer-provenance", "sequence-number": 8, "description": "The provenance reaches the consumer, who verifies the provenance: together the SBOM and the provenance make the supply chain auditable and verifiable.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    cve: {
+      "nodes": [
+        { "unique-id": "programme", "node-type": "actor", "name": "Programme", "description": "The CVE programme, sponsored by CISA and run by MITRE, under which a disclosed vulnerability is assigned a CVE identifier." },
+        { "unique-id": "cve-id", "node-type": "data-asset", "name": "CVE id", "description": "A CVE (Common Vulnerabilities and Exposures) identifier, like CVE-2021-44228 for Log4Shell, the shared reference that gives a disclosed vulnerability a name everyone agrees on, so vendors, scanners and defenders all point at the same flaw." },
+        { "unique-id": "cvss", "node-type": "data-asset", "name": "CVSS", "description": "A Common Vulnerability Scoring System (CVSS) score, which rates a flaw's severity from 0 to 10 from characteristics like attack vector, complexity and impact; CVE, CVSS and the NVD together let teams prioritise: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access; the current CVSS v4.0 was released in November 2023, and the score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context." },
+        { "unique-id": "nvd", "node-type": "database", "name": "NVD", "description": "NIST's National Vulnerability Database, which adds CVSS scores and affected-product data that feed automated scanners, though since April 2026 the NVD enriches only a prioritised subset: flaws in CISA's Known Exploited Vulnerabilities catalogue, in software the US federal government uses, or in critical software." },
+        { "unique-id": "scanners", "node-type": "system", "name": "Scanners", "description": "Automated scanners, which the National Vulnerability Database's CVSS scores and affected-product data feed." }
+      ],
+      "relationships": [
+        { "unique-id": "programme-cve-id", "description": "Under the programme, a disclosed vulnerability is assigned a CVE identifier.",
+          "relationship-type": { "interacts": { "actor": "programme", "nodes": ["cve-id"] } } },
+        { "unique-id": "cve-id-cvss", "description": "CVSS rates the severity of the flaw the CVE identifier names, from 0 to 10.",
+          "relationship-type": { "connects": { "source": { "node": "cve-id" }, "destination": { "node": "cvss" } } } },
+        { "unique-id": "cve-id-nvd", "description": "The National Vulnerability Database adds affected-product data to the CVEs the NVD enriches.",
+          "relationship-type": { "connects": { "source": { "node": "cve-id" }, "destination": { "node": "nvd" } } } },
+        { "unique-id": "cvss-nvd", "description": "The National Vulnerability Database adds CVSS scores to the CVEs the NVD enriches.",
+          "relationship-type": { "connects": { "source": { "node": "cvss" }, "destination": { "node": "nvd" } } } },
+        { "unique-id": "scanners-nvd", "description": "The National Vulnerability Database's CVSS scores and affected-product data feed the automated scanners.",
+          "relationship-type": { "connects": { "source": { "node": "scanners" }, "destination": { "node": "nvd" } } } }
+      ],
+      "flows": [
+        { "unique-id": "name-score-enrich", "name": "Name, score, enrich",
+          "description": "A disclosed flaw gets a CVE id everyone shares and a 0–10 CVSS severity score, so teams can rank what to patch first.",
+          "transitions": [
+            { "relationship-unique-id": "programme-cve-id", "sequence-number": 1, "description": "A disclosed vulnerability gets a CVE identifier, like CVE-2021-44228 for Log4Shell, under the programme sponsored by CISA and run by MITRE." },
+            { "relationship-unique-id": "cve-id-cvss", "sequence-number": 2, "description": "CVSS then rates the flaw's severity from 0 to 10, from characteristics like attack vector, complexity and impact." },
+            { "relationship-unique-id": "cve-id-nvd", "sequence-number": 3, "description": "NIST's National Vulnerability Database adds affected-product data, since April 2026 only for a prioritised subset of CVEs." },
+            { "relationship-unique-id": "cvss-nvd", "sequence-number": 4, "description": "The National Vulnerability Database adds CVSS scores to the same prioritised subset." },
+            { "relationship-unique-id": "scanners-nvd", "sequence-number": 5, "description": "The scores and affected-product data feed automated scanners.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    sigstore: {
+      "nodes": [
+        { "unique-id": "developer", "node-type": "actor", "name": "Developer", "description": "A developer, who has had to guard long-lived private keys that, once leaked, let anyone forge a trusted signature, and who with Sigstore signs as who the developer is rather than as a key the developer must hoard." },
+        { "unique-id": "oidc-provider", "node-type": "service", "name": "OIDC provider", "description": "The OIDC provider behind the developer's OIDC identity, such as a Google, GitHub or corporate login; keyless signing shifts trust onto the OIDC provider and Sigstore's public infrastructure." },
+        { "unique-id": "fulcio", "node-type": "service", "name": "Fulcio", "description": "Fulcio, which issues a short-lived certificate against an OIDC identity." },
+        { "unique-id": "cosign", "node-type": "system", "name": "Cosign", "description": "Cosign, the tool with which Sigstore removes the long-lived key: Cosign signs an artefact using a short-lived certificate that Fulcio issues against an OIDC identity; Sigstore is an open-source project under the OpenSSF, now signing a large share of container images and packages, and pairs naturally with SBOMs and SLSA." },
+        { "unique-id": "artefact", "node-type": "data-asset", "name": "Artefact", "description": "An artefact, signed with Cosign, whose signature is recorded in Rekor; a signature proves who signed an artefact but says nothing about whether the artefact's contents are safe." },
+        { "unique-id": "rekor", "node-type": "database", "name": "Rekor", "description": "Rekor, a public, append-only transparency log in which every signature is recorded, so anyone can verify that an artefact was signed by a given identity and detect tampering after the fact." },
+        { "unique-id": "anyone", "node-type": "actor", "name": "Anyone", "description": "Anyone, who can verify that an artefact was signed by a given identity and detect tampering after the fact." }
+      ],
+      "relationships": [
+        { "unique-id": "developer-oidc-provider", "description": "The developer authenticates with an OIDC identity, such as a Google, GitHub or corporate login.",
+          "relationship-type": { "interacts": { "actor": "developer", "nodes": ["oidc-provider"] } } },
+        { "unique-id": "oidc-provider-fulcio", "description": "The OIDC identity from the OIDC provider is what Fulcio issues a short-lived certificate against.",
+          "relationship-type": { "connects": { "source": { "node": "oidc-provider" }, "destination": { "node": "fulcio" } } } },
+        { "unique-id": "fulcio-cosign", "description": "The short-lived certificate Fulcio issues passes to Cosign, which signs with the certificate.",
+          "relationship-type": { "connects": { "source": { "node": "fulcio" }, "destination": { "node": "cosign" } } } },
+        { "unique-id": "developer-cosign", "description": "The developer signs with Cosign, as who the developer is rather than as a key the developer must hoard.",
+          "relationship-type": { "interacts": { "actor": "developer", "nodes": ["cosign"] } } },
+        { "unique-id": "cosign-artefact", "description": "Cosign signs the artefact using the short-lived certificate.",
+          "relationship-type": { "connects": { "source": { "node": "cosign" }, "destination": { "node": "artefact" } } } },
+        { "unique-id": "artefact-rekor", "description": "The artefact's signature is recorded in Rekor, as every signature is.",
+          "relationship-type": { "connects": { "source": { "node": "artefact" }, "destination": { "node": "rekor" } } } },
+        { "unique-id": "anyone-rekor", "description": "From Rekor's public log, anyone can verify that an artefact was signed by a given identity and detect tampering after the fact.",
+          "relationship-type": { "interacts": { "actor": "anyone", "nodes": ["rekor"] } } }
+      ],
+      "flows": [
+        { "unique-id": "keyless-signing", "name": "Keyless signing",
+          "description": "Cosign signs with a short-lived cert tied to an OIDC identity; the signature lands in Rekor's public log for anyone to verify later.",
+          "transitions": [
+            { "relationship-unique-id": "developer-oidc-provider", "sequence-number": 1, "description": "The developer authenticates with an OIDC identity, such as a Google, GitHub or corporate login." },
+            { "relationship-unique-id": "oidc-provider-fulcio", "sequence-number": 2, "description": "Fulcio issues a short-lived certificate against that OIDC identity." },
+            { "relationship-unique-id": "fulcio-cosign", "sequence-number": 3, "description": "The short-lived certificate passes to Cosign." },
+            { "relationship-unique-id": "developer-cosign", "sequence-number": 4, "description": "The developer signs with Cosign, as who the developer is." },
+            { "relationship-unique-id": "cosign-artefact", "sequence-number": 5, "description": "Cosign signs the artefact using the short-lived certificate." },
+            { "relationship-unique-id": "artefact-rekor", "sequence-number": 6, "description": "The signature is recorded in Rekor, a public, append-only transparency log." },
+            { "relationship-unique-id": "anyone-rekor", "sequence-number": 7, "description": "Anyone can verify, from Rekor, that the artefact was signed by a given identity, and detect tampering after the fact.", "direction": "destination-to-source" }
+          ] }
+      ]
+    },
+    spinnaker: {
+      "nodes": [
+        { "unique-id": "ci", "node-type": "system", "name": "CI", "description": "Continuous integration (CI), which produces the artefact at which Spinnaker's part of the pipeline begins; a Jenkins build is one of the triggers that can start a Spinnaker pipeline." },
+        { "unique-id": "pipeline", "node-type": "system", "name": "Pipeline", "description": "A pipeline in Spinnaker, a continuous delivery platform open-sourced by Netflix in 2015 and now governed by the Continuous Delivery Foundation, which owns the part of the pipeline that begins once CI has produced an artefact: a sequence of stages triggered by a Jenkins build, a new image, a schedule or a person, in which deployment strategies (blue/green, Netflix's red/black by another name, rolling blue/green and canary) are configuration rather than scripts each team maintains; pipeline definitions should be treated as production code, because they execute with the credentials Spinnaker holds for every cloud account Spinnaker manages, so whoever controls Spinnaker's pipelines controls production without needing to touch a cloud console; Spinnaker is itself eleven microservices (Deck the UI, Gate the API front door, Orca the orchestrator, Clouddriver the cloud integration and cache, and so on), and Spinnaker's limitation is operational cost: eleven services to run, secure and upgrade is a great deal of platform for a team that only ships to Kubernetes, which is why much of that audience moved to lighter GitOps tooling." },
+        { "unique-id": "bake-image", "node-type": "stage", "name": "bake image", "description": "A stage in which Rosco bakes immutable machine images with Packer and Kubernetes manifests with Helm or Kustomize, the immutable-infrastructure argument made concrete: you replace a server group instead of mutating a running one, so what was tested is what runs." },
+        { "unique-id": "deploy-canary", "node-type": "stage", "name": "deploy canary", "description": "A stage that deploys a canary, one of the deployment strategies Spinnaker makes configuration, for which Spinnaker runs the health checks, the traffic cutover and the rollback." },
+        { "unique-id": "judge-canary", "node-type": "stage", "name": "judge canary", "description": "A stage in which Kayenta automates the canary judgement, comparing the canary's metrics against a baseline and passing or failing the stage on the statistics rather than on someone watching a dashboard." },
+        { "unique-id": "application", "node-type": "system", "name": "application", "description": "An application, which in Spinnaker's deliberately opinionated model is a set of clusters." },
+        { "unique-id": "cluster", "node-type": "cluster", "name": "cluster", "description": "A cluster, which in Spinnaker's model is a set of server groups." },
+        { "unique-id": "server-group", "node-type": "workload", "name": "Server group", "description": "A server group, the deployable thing in Spinnaker's model: a VM image, a container or a Kubernetes manifest, together with its configuration." },
+        { "unique-id": "fiat", "node-type": "service", "name": "Fiat", "description": "Fiat, Spinnaker's authorisation service and the answer to the privilege Spinnaker holds, which resolves a user's roles from the identity provider into permissions on specific applications, accounts and service accounts, so a team can run its own pipelines without gaining a route into anyone else's." },
+        { "unique-id": "cloud-accounts", "node-type": "account", "name": "Cloud accounts", "description": "The cloud accounts Spinnaker manages, across many clouds, VMs and containers alike; to deploy anywhere Spinnaker must hold credentials for every cloud account Spinnaker manages, which makes Spinnaker among the most privileged systems in an estate." }
+      ],
+      "relationships": [
+        { "unique-id": "ci-pipeline", "description": "Once CI has produced an artefact, the artefact passes to Spinnaker's pipeline.",
+          "relationship-type": { "connects": { "source": { "node": "ci" }, "destination": { "node": "pipeline" } } } },
+        { "unique-id": "pipeline-stages", "description": "The pipeline is a sequence of stages, here bake image, deploy canary and judge canary.",
+          "relationship-type": { "composed-of": { "container": "pipeline", "nodes": ["bake-image", "deploy-canary", "judge-canary"] } } },
+        { "unique-id": "bake-image-deploy-canary", "description": "The pipeline moves on from the stage that bakes the image to the stage that deploys the canary.",
+          "relationship-type": { "connects": { "source": { "node": "bake-image" }, "destination": { "node": "deploy-canary" } } } },
+        { "unique-id": "deploy-canary-judge-canary", "description": "The pipeline moves on from the stage that deploys the canary to the stage in which Kayenta judges the canary.",
+          "relationship-type": { "connects": { "source": { "node": "deploy-canary" }, "destination": { "node": "judge-canary" } } } },
+        { "unique-id": "application-clusters", "description": "An application is a set of clusters.",
+          "relationship-type": { "composed-of": { "container": "application", "nodes": ["cluster"] } } },
+        { "unique-id": "cluster-server-groups", "description": "A cluster is a set of server groups.",
+          "relationship-type": { "composed-of": { "container": "cluster", "nodes": ["server-group"] } } },
+        { "unique-id": "pipeline-fiat", "description": "Fiat decides which applications and cloud accounts the pipeline's user may touch at all, so a team can run its own pipelines without gaining a route into anyone else's.",
+          "relationship-type": { "connects": { "source": { "node": "pipeline" }, "destination": { "node": "fiat" } } } },
+        { "unique-id": "fiat-cloud-accounts", "description": "Fiat resolves a user's roles from the identity provider into permissions on specific cloud accounts.",
+          "relationship-type": { "connects": { "source": { "node": "fiat" }, "destination": { "node": "cloud-accounts" } } } }
+      ],
+      "flows": [
+        { "unique-id": "deliver-after-ci", "name": "Deliver after CI",
+          "description": "CI hands off the artefact; the pipeline drives a strategy — here a canary judged automatically by Kayenta — while Fiat decides which applications and cloud accounts the user may touch at all.",
+          "transitions": [
+            { "relationship-unique-id": "ci-pipeline", "sequence-number": 1, "description": "CI hands off the artefact, and Spinnaker's pipeline begins." },
+            { "relationship-unique-id": "bake-image-deploy-canary", "sequence-number": 2, "description": "Rosco bakes an immutable image, and the pipeline moves on to deploying the canary." },
+            { "relationship-unique-id": "deploy-canary-judge-canary", "sequence-number": 3, "description": "Spinnaker runs the health checks and the traffic cutover, and the pipeline moves on to Kayenta's judgement of the canary." },
+            { "relationship-unique-id": "pipeline-fiat", "sequence-number": 4, "description": "Fiat decides which applications and cloud accounts the user may touch at all." },
+            { "relationship-unique-id": "fiat-cloud-accounts", "sequence-number": 5, "description": "Fiat resolves the user's roles from the identity provider into permissions on specific cloud accounts." }
+          ] }
+      ]
+    },
+    dora: {
+      "nodes": [
+        { "unique-id": "supervisor", "node-type": "actor", "name": "Supervisor", "description": "The supervisor, a financial entity's competent authority, to which major ICT incidents are reported on a clock: an initial notification, an intermediate report as the picture firms up, and a final report with root cause; if a critical provider ignores a Lead Overseer's recommendations, firms' own supervisors can, as a last resort, order firms to stop using the provider." },
+        { "unique-id": "esas", "node-type": "actor", "name": "ESAs", "description": "The European Supervisory Authorities, which under the Oversight Framework, DORA's new mechanism, designate Critical ICT Third-Party Providers and assign each a Lead Overseer." },
+        { "unique-id": "register", "node-type": "database", "name": "Register of information", "description": "The register of information each financial entity maintains under DORA's third-party risk pillar, the pillar with the most operational bite, describing every ICT service dependency and where each one runs; the register absorbed enormous effort and is often kept as a compliance artefact rather than something operations uses." },
+        { "unique-id": "lead-overseer", "node-type": "actor", "name": "Lead Overseer", "description": "A Lead Overseer, which the European Supervisory Authorities assign to each Critical ICT Third-Party Provider, able to inspect the provider directly and to issue the provider recommendations; no European financial regulator had ever supervised a hyperscaler directly before." },
+        { "unique-id": "financial-entity", "node-type": "actor", "name": "Financial entity", "description": "A financial entity, one of around twenty categories of regulated firm (banks, insurers, investment firms, crypto-asset service providers, trading venues) bound by DORA, Regulation (EU) 2022/2554, in force since January 2023 and applying since 17 January 2025, whose premise is that a bank's ability to keep operating through an information and communication technology (ICT) failure is a supervisory question rather than an internal IT concern; DORA's five pillars put ICT risk management on the firm's management body, which cannot delegate the accountability, require major ICT incidents to be classified against common criteria and reported to the competent authority on a clock, mandate a standing resilience-testing programme and, for the most significant entities, threat-led penetration testing at least every three years against live production systems on the TIBER-EU model, require the firm to maintain a register of information, hold contracts guaranteeing audit and exit rights and show that the firm has reasoned about concentration, and give explicit cover to exchange threat intelligence; DORA specifies process rather than controls, so two firms can both be compliant with very different security postures." },
+        { "unique-id": "ict-service", "node-type": "service", "name": "ICT service", "description": "An ICT service a financial entity depends on, which the entity's register of information describes along with where the service runs." },
+        { "unique-id": "ict-third-party", "node-type": "actor", "name": "ICT third party", "description": "An ICT third-party provider, one of the suppliers DORA, unusually, reaches as well as the regulated firms; the European Supervisory Authorities designate Critical ICT Third-Party Providers, in practice the large cloud platforms plus major software, data, telecoms and IT-services suppliers, but designating a provider critical does not make the provider less concentrated: oversight gives supervisors visibility without reducing firms' dependence on the provider." }
+      ],
+      "relationships": [
+        { "unique-id": "financial-entity-ict-service", "description": "The financial entity uses the ICT service.",
+          "relationship-type": { "interacts": { "actor": "financial-entity", "nodes": ["ict-service"] } } },
+        { "unique-id": "ict-third-party-ict-service", "description": "The ICT third party supplies the ICT service.",
+          "relationship-type": { "interacts": { "actor": "ict-third-party", "nodes": ["ict-service"] } } },
+        { "unique-id": "financial-entity-register", "description": "The financial entity maintains the register of information, describing every ICT service dependency and where each one runs.",
+          "relationship-type": { "interacts": { "actor": "financial-entity", "nodes": ["register"] } } },
+        { "unique-id": "supervisor-register", "description": "The register makes each ICT dependency, and where the dependency runs, visible to the supervisor.",
+          "relationship-type": { "interacts": { "actor": "supervisor", "nodes": ["register"] } } },
+        { "unique-id": "supervisor-financial-entity", "description": "The supervisor, the financial entity's competent authority, supervises the financial entity, which reports major ICT incidents to the supervisor on a clock.",
+          "relationship-type": { "interacts": { "actor": "supervisor", "nodes": ["financial-entity"] } } },
+        { "unique-id": "esas-ict-third-party", "description": "The European Supervisory Authorities designate the ICT third party a Critical ICT Third-Party Provider.",
+          "relationship-type": { "interacts": { "actor": "esas", "nodes": ["ict-third-party"] } } },
+        { "unique-id": "esas-lead-overseer", "description": "The European Supervisory Authorities assign the critical provider a Lead Overseer.",
+          "relationship-type": { "interacts": { "actor": "esas", "nodes": ["lead-overseer"] } } },
+        { "unique-id": "lead-overseer-ict-third-party", "description": "The Lead Overseer inspects the critical provider directly and issues the provider recommendations, reaching past the regulated firm to the provider itself.",
+          "relationship-type": { "interacts": { "actor": "lead-overseer", "nodes": ["ict-third-party"] } } }
+      ],
+      "flows": [
+        { "unique-id": "register-and-oversight", "name": "Register and oversight",
+          "description": "The register makes each ICT dependency visible to the supervisor; the Oversight Framework adds the arrow that did not exist before — a Lead Overseer reaching past the regulated firm to the provider itself.",
+          "transitions": [
+            { "relationship-unique-id": "financial-entity-ict-service", "sequence-number": 1, "description": "The financial entity, a regulated firm DORA binds, uses an ICT service." },
+            { "relationship-unique-id": "ict-third-party-ict-service", "sequence-number": 2, "description": "An ICT third party supplies the ICT service, and DORA, unusually, reaches the supplier as well." },
+            { "relationship-unique-id": "financial-entity-register", "sequence-number": 3, "description": "The firm maintains a register of information describing every ICT service dependency and where each one runs." },
+            { "relationship-unique-id": "supervisor-register", "sequence-number": 4, "description": "The register makes each ICT dependency, and where the dependency runs, visible to the supervisor.", "direction": "destination-to-source" },
+            { "relationship-unique-id": "supervisor-financial-entity", "sequence-number": 5, "description": "The supervisor, the firm's competent authority, supervises the financial entity." },
+            { "relationship-unique-id": "esas-ict-third-party", "sequence-number": 6, "description": "The European Supervisory Authorities designate the ICT third party a Critical ICT Third-Party Provider." },
+            { "relationship-unique-id": "esas-lead-overseer", "sequence-number": 7, "description": "The European Supervisory Authorities assign the critical provider a Lead Overseer." },
+            { "relationship-unique-id": "lead-overseer-ict-third-party", "sequence-number": 8, "description": "The Lead Overseer inspects the provider directly and issues the provider recommendations: no European financial regulator had ever supervised a hyperscaler directly before." }
           ] }
       ]
     },
