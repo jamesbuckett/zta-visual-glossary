@@ -6744,7 +6744,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       </svg>`,
 
     dpu: () => `
-      <svg class="dg" viewBox="0 0 720 376" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.">
+      <svg class="dg" viewBox="0 0 720 436" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Infrastructure and security work moves off the host CPU onto the DPU's own cores — an isolated trust domain that holds even if the host is compromised.">
         <g data-s="1" data-calm="network">
           <rect class="zone" x="410" y="12" width="220" height="40" rx="10"/>
           ${icon('network', 426, 20)}
@@ -6753,7 +6753,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <text class="t-sm" data-s="1" x="538" y="80">all traffic</text>
 
         <g data-s="1 2 3" data-calm="dpu">
-          <rect class="box-soft" x="40" y="100" width="640" height="124" rx="10"/>
+          <rect class="box-soft" x="40" y="100" width="640" height="184" rx="10"/>
           <text class="t-b" x="56" y="122">DPU</text>
           <text class="t-sm t-mut" x="92" y="122">on the network card</text>
         </g>
@@ -6769,28 +6769,33 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           ${icon('shield', 396, 146)}
           <text class="t-b" x="428" y="164">Security policy</text>
           <text class="t-sm t-mut" x="428" y="182">microsegmentation, encryption</text>
-          <text class="t-sm t-mut" x="428" y="199">intrusion detection, keys</text>
+          <text class="t-sm t-mut" x="428" y="199">intrusion detection</text>
+        </g>
+        <g data-s="3" data-calm="keys">
+          ${doc(380, 224, 124, 48)}
+          ${icon('key-round', 396, 232)}
+          <text class="t-b" x="428" y="249">Keys</text>
         </g>
         <line class="flow" data-s="1" data-calm="network-security-policy" x1="520" y1="52" x2="520" y2="132" marker-end="url(#ah-mut)"/>
 
-        <line class="divider" data-s="2 4" x1="40" y1="248" x2="680" y2="248"/>
-        <text class="t-sm t-mut" data-s="2 4" x="680" y="242" text-anchor="end">trust boundary</text>
+        <line class="divider" data-s="2 4" x1="40" y1="308" x2="680" y2="308"/>
+        <text class="t-sm t-mut" data-s="2 4" x="680" y="302" text-anchor="end">trust boundary</text>
 
-        <line class="flow" data-s="1" data-calm="security-policy-host" x1="520" y1="212" x2="520" y2="314" marker-end="url(#ah-mut)"/>
-        <line class="flow-bad" data-s="4" data-note="struck-through" x1="420" y1="314" x2="420" y2="254" marker-end="url(#ah-bad)"/>
-        <text class="t-sm" data-s="4" x="408" y="280" text-anchor="end">attacker cannot reach the DPU</text>
+        <line class="flow" data-s="1" data-calm="security-policy-host" x1="520" y1="212" x2="520" y2="374" marker-end="url(#ah-mut)"/>
+        <line class="flow-bad" data-s="4" data-note="struck-through" x1="420" y1="374" x2="420" y2="314" marker-end="url(#ah-bad)"/>
+        <text class="t-sm" data-s="4" x="408" y="340" text-anchor="end">attacker cannot reach the DPU</text>
 
         <g data-s="1 4" data-calm="host">
-          <rect class="box" x="40" y="316" width="640" height="48" rx="8"/>
-          ${icon('server', 56, 328)}
-          <text class="t-b" x="88" y="345">Host</text>
-          <text class="t-sm t-mut" x="132" y="345">host CPU and OS</text>
+          <rect class="box" x="40" y="376" width="640" height="48" rx="8"/>
+          ${icon('server', 56, 388)}
+          <text class="t-b" x="88" y="405">Host</text>
+          <text class="t-sm t-mut" x="132" y="405">host CPU and OS</text>
         </g>
 
         ${badge(1, 520, 76, '1')}
         ${badge(2, 322, 194, '2')}
         ${badge(3, 642, 152, '3')}
-        ${badge(4, 420, 300, '4')}
+        ${badge(4, 420, 360, '4')}
       </svg>`,
 
     bluefield: () => `
@@ -10801,12 +10806,13 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "network", "node-type": "network", "name": "Network", "description": "The network, whose traffic passes through the DPU before the traffic ever reaches the host." },
         { "unique-id": "dpu", "node-type": "chip", "name": "DPU", "description": "A Data Processing Unit, a system-on-chip that fuses a high-speed network interface with the DPU's own general-purpose CPU cores (typically Arm) and hardware accelerators, so the data-centre infrastructure work (packet switching, encryption, storage virtualisation, telemetry, firewalling) runs on the card instead of stealing host CPU cycles; NVIDIA frames the DPU as the third pillar of computing after the CPU and GPU, the DPU is the hardware foundation for putting a zero-trust enforcement point on every server, and NVIDIA BlueField, AWS Nitro, Intel IPU and AMD Pensando are the leading implementations; the enforcement is only as trustworthy as the DPU's own firmware and software, a new privileged attack surface, and a DPU adds cost and vendor-specific tooling to every server." },
         { "unique-id": "cpu-cores", "node-type": "processor", "name": "Own CPU cores", "description": "The DPU's own general-purpose CPU cores, typically Arm; that the cores run their own operating system in a domain the host cannot see or control is what separates a DPU from an ordinary SmartNIC." },
-        { "unique-id": "security-policy", "node-type": "service", "name": "Security policy", "description": "The security policy that executes out-of-band on the DPU: the microsegmentation, line-rate encryption, intrusion detection and keys living on the DPU, which stay intact even if the host OS is completely compromised, because the enforcement an attacker would want to disable sits on a separate processor the attacker cannot reach." },
+        { "unique-id": "security-policy", "node-type": "service", "name": "Security policy", "description": "The security policy that executes out-of-band on the DPU: even if the host OS is completely compromised, the microsegmentation, line-rate encryption and intrusion detection living on the DPU stay intact, and the enforcement an attacker would want to disable sits on a separate processor the attacker cannot reach." },
+        { "unique-id": "keys", "node-type": "data-asset", "name": "Keys", "description": "The keys living on the DPU, which stay intact even if the host OS is completely compromised." },
         { "unique-id": "host", "node-type": "system", "name": "Host", "description": "The host CPU and OS, which traffic reaches only after passing through the DPU, and which cannot see or control the DPU's own domain." }
       ],
       "relationships": [
-        { "unique-id": "dpu-parts", "description": "The DPU's own CPU cores and the security policy that executes out-of-band both live on the DPU, a separate processor from the host.",
-          "relationship-type": { "composed-of": { "container": "dpu", "nodes": ["cpu-cores", "security-policy"] } } },
+        { "unique-id": "dpu-parts", "description": "The DPU's own CPU cores, the security policy that executes out-of-band and the keys all live on the DPU, a separate processor from the host.",
+          "relationship-type": { "composed-of": { "container": "dpu", "nodes": ["cpu-cores", "security-policy", "keys"] } } },
         { "unique-id": "network-security-policy", "description": "Traffic from the network passes through the DPU's security policy before the traffic ever reaches the host.",
           "relationship-type": { "connects": { "source": { "node": "network" }, "destination": { "node": "security-policy" } } } },
         { "unique-id": "security-policy-host", "description": "Traffic that has passed through the DPU's security policy reaches the host.",
