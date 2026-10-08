@@ -6481,9 +6481,9 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         </g>
         <line class="flow" data-s="1" data-note="call-out" x1="178" y1="64" x2="222" y2="64" marker-end="url(#ah-mut)"/>
         <g data-s="1" data-calm="programme">
-          <rect class="box" x="24" y="112" width="152" height="80" rx="20"/>
+          <rect class="box" x="24" y="112" width="152" height="80" rx="8"/>
           ${icon('landmark', 40, 126)}
-          <text class="t-b" x="72" y="144">Programme</text>
+          <text class="t-sm t-b" x="72" y="144">CVE programme</text>
           <text class="t-sm t-mut" x="40" y="166">sponsored by CISA</text>
           <text class="t-sm t-mut" x="40" y="182">run by MITRE</text>
         </g>
@@ -6744,7 +6744,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <rect class="box" x="248" y="208" width="200" height="72" rx="20"/>
           ${icon('shield-check', 264, 222)}
           <text class="t-b" x="296" y="240">Anyone</text>
-          <text class="t-sm t-mut" x="296" y="258">verifies who signed</text>
+          <text class="t-sm t-mut" x="296" y="256">verifies who signed</text>
         </g>
 
         ${badge(1, 168, 30, '1')}
@@ -7738,19 +7738,21 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
           <text class="t-sm t-mut" x="72" y="294">e.g. a bank or insurer</text>
         </g>
         <g data-s="1" data-calm="ict-service">
-          <rect class="box" x="300" y="244" width="120" height="64" rx="8"/>
-          <text class="t-b" x="312" y="276">ICT service</text>
+          <rect class="box" x="288" y="244" width="142" height="64" rx="8"/>
+          ${icon('server', 300, 258)}
+          <text class="t-b" x="332" y="276">ICT service</text>
         </g>
         <g data-s="1 4 5" data-calm="ict-third-party">
-          <rect class="box" x="476" y="244" width="220" height="64" rx="20"/>
-          ${icon('cloud', 492, 258)}
-          <text class="t-b" x="524" y="276">ICT third party</text>
-          <text class="t-sm t-mut" x="524" y="294">e.g. a cloud provider</text>
+          <rect class="box" x="496" y="244" width="200" height="64" rx="20"/>
+          ${icon('cloud', 512, 258)}
+          <text class="t-b" x="544" y="276">ICT third party</text>
+          <text class="t-sm t-mut" x="544" y="294">e.g. a cloud provider</text>
         </g>
 
-        <line class="flow" data-s="1" data-calm="financial-entity-ict-service" x1="246" y1="276" x2="298" y2="276" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="1" x="272" y="258" text-anchor="middle">uses</text>
-        <line class="flow" data-s="1" data-calm="ict-third-party-ict-service" x1="474" y1="276" x2="422" y2="276" marker-end="url(#ah-mut)"/>
+        <line class="flow" data-s="1" data-calm="financial-entity-ict-service" x1="246" y1="276" x2="286" y2="276" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="266" y="258" text-anchor="middle">uses</text>
+        <line class="flow" data-s="1" data-calm="ict-third-party-ict-service" x1="494" y1="276" x2="432" y2="276" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="1" x="463" y="258" text-anchor="middle">supplies</text>
 
         <line class="flow" data-s="2" data-calm="financial-entity-register" x1="184" y1="244" x2="184" y2="198" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="2" x="202" y="225">maintains</text>
@@ -7763,11 +7765,11 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         <line class="flow" data-s="4" data-calm="esas-ict-third-party" x1="640" y1="80" x2="640" y2="242" marker-end="url(#ah-mut)"/>
         <text class="t-sm" data-s="4" x="628" y="220" text-anchor="end">designates</text>
         <text class="t-sm" data-s="4" x="628" y="236" text-anchor="end">as critical</text>
-        <line class="flow" data-s="5" data-calm="esas-lead-overseer" x1="500" y1="80" x2="500" y2="122" marker-end="url(#ah-mut)"/>
-        <text class="t-sm" data-s="5" x="512" y="106">assigns</text>
-        <line class="flow-accent" data-s="5" data-calm="lead-overseer-ict-third-party" x1="500" y1="198" x2="500" y2="242" marker-end="url(#ah-acc)"/>
+        <line class="flow" data-s="5" data-calm="esas-lead-overseer" x1="520" y1="80" x2="520" y2="122" marker-end="url(#ah-mut)"/>
+        <text class="t-sm" data-s="5" x="532" y="106">assigns</text>
+        <line class="flow-accent" data-s="5" data-calm="lead-overseer-ict-third-party" x1="520" y1="198" x2="520" y2="242" marker-end="url(#ah-acc)"/>
 
-        ${badge(1, 272, 276, '1')}
+        ${badge(1, 266, 276, '1')}
         ${badge(2, 184, 221, '2')}
         ${badge(3, 184, 107, '3')}
         ${badge(4, 640, 112, '4')}
@@ -11670,15 +11672,15 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
     },
     cve: {
       "nodes": [
-        { "unique-id": "programme", "node-type": "actor", "name": "Programme", "description": "The CVE programme, sponsored by CISA and run by MITRE, under which a disclosed vulnerability is assigned a CVE identifier." },
+        { "unique-id": "programme", "node-type": "programme", "name": "CVE programme", "description": "The CVE programme, sponsored by CISA and run by MITRE, under which a disclosed vulnerability is assigned a CVE identifier." },
         { "unique-id": "cve-id", "node-type": "data-asset", "name": "CVE id", "description": "A CVE (Common Vulnerabilities and Exposures) identifier, like CVE-2021-44228 for Log4Shell, the shared reference that gives a disclosed vulnerability a name everyone agrees on, so vendors, scanners and defenders all point at the same flaw." },
-        { "unique-id": "cvss", "node-type": "data-asset", "name": "CVSS", "description": "A Common Vulnerability Scoring System (CVSS) score, which rates a flaw's severity from 0 to 10 from characteristics like attack vector, complexity and impact; CVE, CVSS and the NVD together let teams prioritise: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access; the current CVSS v4.0 was released in November 2023, and the score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context." },
+        { "unique-id": "cvss", "node-type": "data-asset", "name": "CVSS", "description": "A CVSS score, the severity rating from 0 to 10 that the Common Vulnerability Scoring System (CVSS) gives a flaw from characteristics like attack vector, complexity and impact; CVE, CVSS and the NVD together let teams prioritise: a 9.8 reachable from the internet jumps the queue over a 4.0 needing local access; the current CVSS v4.0 was released in November 2023, and the score is guidance, not gospel: real risk depends on whether the flaw is exploitable in your context." },
         { "unique-id": "nvd", "node-type": "database", "name": "NVD", "description": "NIST's National Vulnerability Database, which adds CVSS scores and affected-product data that feed automated scanners, though since April 2026 the NVD enriches only a prioritised subset: flaws in CISA's Known Exploited Vulnerabilities catalogue, in software the US federal government uses, or in critical software." },
         { "unique-id": "scanners", "node-type": "system", "name": "Scanners", "description": "Automated scanners, which the National Vulnerability Database's CVSS scores and affected-product data feed." }
       ],
       "relationships": [
         { "unique-id": "programme-cve-id", "description": "Under the programme, a disclosed vulnerability is assigned a CVE identifier.",
-          "relationship-type": { "interacts": { "actor": "programme", "nodes": ["cve-id"] } } },
+          "relationship-type": { "connects": { "source": { "node": "programme" }, "destination": { "node": "cve-id" } } } },
         { "unique-id": "cve-id-cvss", "description": "CVSS rates the severity of the flaw the CVE identifier names, from 0 to 10.",
           "relationship-type": { "connects": { "source": { "node": "cve-id" }, "destination": { "node": "cvss" } } } },
         { "unique-id": "cve-id-nvd", "description": "The National Vulnerability Database adds affected-product data to the CVEs the NVD enriches.",
@@ -11744,7 +11746,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
       "nodes": [
         { "unique-id": "ci", "node-type": "system", "name": "CI", "description": "Continuous integration (CI), which produces the artefact at which Spinnaker's part of the pipeline begins; a Jenkins build is one of the triggers that can start a Spinnaker pipeline." },
         { "unique-id": "pipeline", "node-type": "system", "name": "Pipeline", "description": "A pipeline in Spinnaker, a continuous delivery platform open-sourced by Netflix in 2015 and now governed by the Continuous Delivery Foundation, which owns the part of the pipeline that begins once CI has produced an artefact: a sequence of stages triggered by a Jenkins build, a new image, a schedule or a person, in which deployment strategies (blue/green, Netflix's red/black by another name, rolling blue/green and canary) are configuration rather than scripts each team maintains; pipeline definitions should be treated as production code, because they execute with the credentials Spinnaker holds for every cloud account Spinnaker manages, so whoever controls Spinnaker's pipelines controls production without needing to touch a cloud console; Spinnaker is itself eleven microservices (Deck the UI, Gate the API front door, Orca the orchestrator, Clouddriver the cloud integration and cache, and so on), and Spinnaker's limitation is operational cost: eleven services to run, secure and upgrade is a great deal of platform for a team that only ships to Kubernetes, which is why much of that audience moved to lighter GitOps tooling." },
-        { "unique-id": "bake-image", "node-type": "stage", "name": "bake image", "description": "A stage in which Rosco bakes immutable machine images with Packer and Kubernetes manifests with Helm or Kustomize, the immutable-infrastructure argument made concrete: you replace a server group instead of mutating a running one, so what was tested is what runs." },
+        { "unique-id": "bake-image", "node-type": "stage", "name": "bake image", "description": "A pipeline stage that bakes an image; Rosco bakes immutable machine images with Packer and Kubernetes manifests with Helm or Kustomize, the immutable-infrastructure argument made concrete: you replace a server group instead of mutating a running one, so what was tested is what runs." },
         { "unique-id": "deploy-canary", "node-type": "stage", "name": "deploy canary", "description": "A stage that deploys a canary, one of the deployment strategies Spinnaker makes configuration, for which Spinnaker runs the health checks, the traffic cutover and the rollback." },
         { "unique-id": "judge-canary", "node-type": "stage", "name": "judge canary", "description": "A stage in which Kayenta automates the canary judgement, comparing the canary's metrics against a baseline and passing or failing the stage on the statistics rather than on someone watching a dashboard." },
         { "unique-id": "application", "node-type": "system", "name": "application", "description": "An application, which in Spinnaker's deliberately opinionated model is a set of clusters." },
@@ -11789,7 +11791,7 @@ The limitation is that a well-typed answer is not a correct one. TypeSafe's docu
         { "unique-id": "esas", "node-type": "actor", "name": "ESAs", "description": "The European Supervisory Authorities, which under the Oversight Framework, DORA's new mechanism, designate Critical ICT Third-Party Providers and assign each a Lead Overseer." },
         { "unique-id": "register", "node-type": "database", "name": "Register of information", "description": "The register of information each financial entity maintains under DORA's third-party risk pillar, the pillar with the most operational bite, describing every ICT service dependency and where each one runs; the register absorbed enormous effort and is often kept as a compliance artefact rather than something operations uses." },
         { "unique-id": "lead-overseer", "node-type": "actor", "name": "Lead Overseer", "description": "A Lead Overseer, which the European Supervisory Authorities assign to each Critical ICT Third-Party Provider, able to inspect the provider directly and to issue the provider recommendations; no European financial regulator had ever supervised a hyperscaler directly before." },
-        { "unique-id": "financial-entity", "node-type": "actor", "name": "Financial entity", "description": "A financial entity, one of around twenty categories of regulated firm (banks, insurers, investment firms, crypto-asset service providers, trading venues) bound by DORA, Regulation (EU) 2022/2554, in force since January 2023 and applying since 17 January 2025, whose premise is that a bank's ability to keep operating through an information and communication technology (ICT) failure is a supervisory question rather than an internal IT concern; DORA's five pillars put ICT risk management on the firm's management body, which cannot delegate the accountability, require major ICT incidents to be classified against common criteria and reported to the competent authority on a clock, mandate a standing resilience-testing programme and, for the most significant entities, threat-led penetration testing at least every three years against live production systems on the TIBER-EU model, require the firm to maintain a register of information, hold contracts guaranteeing audit and exit rights and show that the firm has reasoned about concentration, and give explicit cover to exchange threat intelligence; DORA specifies process rather than controls, so two firms can both be compliant with very different security postures." },
+        { "unique-id": "financial-entity", "node-type": "actor", "name": "Financial entity", "description": "A financial entity, one of around twenty categories of regulated firm (banks, insurers, investment firms, crypto-asset service providers, trading venues) bound by DORA, Regulation (EU) 2022/2554, in force since January 2023 and applying since 17 January 2025, whose premise is that a bank's ability to keep operating through an information and communication technology (ICT) failure is a supervisory question rather than an internal IT concern; of DORA's five pillars, ICT risk management puts the framework and its failures on the management body, which cannot delegate the accountability; incident management requires major ICT incidents to be classified against common criteria and reported to the competent authority on a clock; resilience testing mandates a standing programme and, for the most significant entities, threat-led penetration testing at least every three years against live production systems on the TIBER-EU model; third-party risk requires firms to maintain a register of information, hold contracts guaranteeing audit and exit rights, and show they have reasoned about concentration; and information sharing gives explicit cover to exchange threat intelligence; DORA specifies process rather than controls, so two firms can both be compliant with very different security postures." },
         { "unique-id": "ict-service", "node-type": "service", "name": "ICT service", "description": "An ICT service a financial entity depends on, which the entity's register of information describes along with where the service runs." },
         { "unique-id": "ict-third-party", "node-type": "actor", "name": "ICT third party", "description": "An ICT third-party provider, one of the suppliers DORA, unusually, reaches as well as the regulated firms; the European Supervisory Authorities designate Critical ICT Third-Party Providers, in practice the large cloud platforms plus major software, data, telecoms and IT-services suppliers, but designating a provider critical does not make the provider less concentrated: oversight gives supervisors visibility without reducing firms' dependence on the provider." }
       ],
