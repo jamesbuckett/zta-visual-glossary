@@ -104,16 +104,17 @@ adds `$schema` and `metadata` itself; store only `nodes`, `relationships` and `f
 ```js
 kebabid: {
   "nodes": [
-    { "unique-id": "client", "node-type": "actor", "name": "Client", "description": "One sentence from the explainer." }
+    { "unique-id": "client", "node-type": "system", "name": "Client", "description": "The client needs the IP address behind a human-readable name." },
+    { "unique-id": "resolver", "node-type": "service", "name": "Resolver", "description": "The resolver walks the hierarchy and caches answers to stay fast." }
   ],
   "relationships": [
-    { "unique-id": "client-resolver", "description": "What passes between them.",
-      "relationship-type": { "interacts": { "actor": "client", "nodes": ["resolver"] } } }
+    { "unique-id": "client-resolver", "description": "The client asks the resolver to resolve a name into an IP address.",
+      "relationship-type": { "connects": { "source": { "node": "client" }, "destination": { "node": "resolver" } } } }
   ],
   "flows": [
-    { "unique-id": "resolve", "name": "Recursive resolution", "description": "The caption, or a sentence from the explainer.",
+    { "unique-id": "resolve", "name": "Recursive resolution", "description": "The resolver walks root, TLD, then authoritative, and caches the answer.",
       "transitions": [
-        { "relationship-unique-id": "client-resolver", "sequence-number": 1, "description": "The client asks." }
+        { "relationship-unique-id": "client-resolver", "sequence-number": 1, "description": "The client asks the resolver for the IP address behind a name." }
       ] }
   ]
 }
@@ -254,9 +255,9 @@ the switch" lights three links and adds nothing to the flow.
   architecture and says so with `data-note` on it or its group. The value is one of six,
   and `verify.mjs` rejects any other:
   - `call-out`: a box or arrow that explains a part of the drawing, including the practice
-    the subject replaces (a hard-coded password beside a vault)
-    A request box with no named sender is a `call-out`, because a request is what a link carries and a node for its sender would be invented (WAF's Benign and
-    Exploit, Django's Request).
+    the subject replaces (a hard-coded password beside a vault). A request box with no
+    named sender is a `call-out`, because a request is what a link carries and a node for
+    its sender would be invented (WAF's Benign and Exploit, Django's Request).
   - `footer`: a strip of text under the drawing, usually the limitation
   - `elided`: a row or box standing for things the explainer does not name
   - `self-loop`: a line from a component back to itself
@@ -299,12 +300,14 @@ npm run verify <id>    # the rendered checks for your term
 ```
 
 `verify.mjs` replaces the scratchpad harness this step used to describe. For your term it
-asserts the detail view and diagram render, the TOC entry exists, the console is clean,
-and runs the two geometry checks that have caught defects invisible at thumbnail size:
+asserts the detail view and diagram render, the TOC entry exists, the console is clean
+and no label runs outside the viewBox, and runs five checks, the first two of them the
+geometry checks that have caught defects invisible at thumbnail size:
 
-- **(a) Label clearance** — every `<text>` against every non-zone `<rect>`; a label
-  overlapping a box without sitting inside it, by more than 2 units, is an error. Caught
-  Calico's "no match" and "pod IP on the wire".
+- **(a) Label clearance** — every `<text>`, icon and badge against every outline that is
+  not a zone: a `<rect>`, a cylinder or a document. One that overlaps an outline without
+  sitting inside it, by more than 2 units, is an error. Caught Calico's "no match" and
+  "pod IP on the wire".
 - **(b) Stroke/text collision** — ~200 samples along every `<line>`/`<path>`; none may land
   inside a label. Caught istiod's arrows striking through Istio's SPIFFE ID line, which
   check (a) could not see.
@@ -315,8 +318,9 @@ and runs the two geometry checks that have caught defects invisible at thumbnail
   nothing overflows at 1440px or 375px.
 - **(e) CALM model** — every node drawn once under its name, in the outline its type
   calls for; every `connects` and `interacts` relationship drawn as a connector between
-  the right two nodes; contained nodes inside their container; the flow in the tour's
-  order; nothing with a `box`, `zone` or `flow` class left untagged; and, under the rule
+  the right two nodes; contained nodes inside their container, and no connector tagged
+  with a `deployed-in` or `composed-of` relationship; the flow in the tour's order;
+  nothing with a `box`, `zone` or `flow` class left untagged; and, under the rule
   `calm-type`, every node's type word present, inside its outline and clear of every
   other label, icon and badge. It also checks the "CALM model" disclosure: its JSON,
   Copy, Download and print.

@@ -1,9 +1,9 @@
 # CLAUDE.md
 
 A browsable visual glossary of IT, AI, networking and security terms. Everything ships in
-one self-contained `index.html` — markup, styles, the `TERMS` data array,
-hand-authored inline SVG diagrams, and the `CALM` models behind them. No build step and no runtime dependencies; the
-`.mjs` files at the root are tooling, not part of the page.
+one self-contained `index.html` — markup, styles, the `TERMS` data array, hand-authored
+inline SVG diagrams, and the `CALM` models behind them. No build step and no runtime
+dependencies; the `.mjs` files at the root are tooling, not part of the page.
 
 ## Adding or editing a term
 
@@ -32,7 +32,8 @@ verification loop.
 - **Every diagram has a CALM model and matches it.** The model in `CALM` is written from
   the explainer in the FINOS CALM 1.2 format; the drawing's shapes, connectors and
   containment follow it, tagged with `data-calm`. Anything drawn that is not a component
-  or a relationship is marked `data-note`. A model claims only what the explainer says.
+  or a relationship is marked `data-note`. A model claims only what the term's own copy
+  says (its explainer first, its caption and tour steps where the explainer is silent).
   `verify.mjs` checks the match; whether the model is a fair reading of the explainer is
   a review rule.
 - **Sources must be verified live**, and authoritative: NIST / IETF / the standards body
@@ -57,9 +58,10 @@ npm run test:calm     # proves validate/verify catch broken CALM models and draw
 `validate.mjs` is the style-guide linter — exactly one accent colour, no stray hex in
 component CSS, on-scale spacing values, no emoji — and it also checks that the `TERMS`,
 tag-array and `DIAGRAMS` declarations still parse, so an edit that breaks the array is
-caught on the write rather than at `npm run glossary`. It validates every model in `CALM` against the vendored CALM 1.2 schema
-(`test/calm-schema/1.2/`, through `ajv`) and checks its references. A project hook runs it after every
-`index.html` write, but it is still the gate before committing.
+caught on the write rather than at `npm run glossary`. It validates every model in `CALM`
+against the vendored CALM 1.2 schema (`test/calm-schema/1.2/`, through `ajv`) and checks
+its references. A project hook runs it after every `index.html` write, but it is still the
+gate before committing.
 
 `verify.mjs` is the rendered check: it opens each term's detail view in a headless
 browser and asserts the diagram appears, the counters match the data, no label sits
@@ -67,9 +69,8 @@ across a box border, and no connector runs through a label. For a term with `ste
 also drives the diagram tour: every chip, the panel text, keyboard stepping and reduced
 motion. It also checks every term's takeaway tiles against the data, the limitation
 marker, and the collapsed explainer and its print behaviour, at desktop and phone width.
-For a term with a CALM model it compares the drawing with the model (shapes, connectors,
-containment, flow order), and checks the model disclosure and that every node's type
-word sits clear.
+It compares every drawing with its CALM model (shapes, connectors, containment, flow
+order), and checks the model disclosure and that every node's type word sits clear.
 Pass term ids to narrow it (`npm run verify calico`).
 
 The three fixture suites run `verify.mjs` with `--offline`, which answers every network

@@ -147,7 +147,7 @@ entry, so nothing is stored twice:
   not give.
 - A trust anchor the copy says a party holds is a `data-asset` that party reads. An
   artefact the copy places nowhere is a separate node joined by an arrow: `data-asset` if
-  made once, `database` if written at run time. An artefact the copy says a component runs or executes (SOAR's playbooks, OPA's policy) is placed nowhere in that sense: a separate `data-asset` joined to the component by a "runs" arrow, not a `composed-of` part. A store the copy names only by the component's own verb ("stores", "keeps", "caches") is a `database` composed into that component (SIEM's store, OVS's flow tables). Instances of a class the copy names count
+  made once, `database` if written at run time. An artefact the copy says a component runs or executes (SOAR's playbooks, OPA's policy) is placed nowhere in that sense: a separate `data-asset` joined to the component by a "runs" arrow, not a `composed-of` part. A store the copy names only by the component's own verb ("stores", "keeps", "caches") is a `database` composed into that component (SIEM's store, OVS's flow tables). A node may be added for something the old drawing only labelled, when the term's copy names it (a "private network" label becomes a zone around its hosts); a node the copy does not name is never invented. Instances of a class the copy names count
   as named. A `call-out` may show the practice the subject replaces. A request box with no named sender is a `call-out`, because a request is
   what a link carries and a node for its sender would be invented (WAF's Benign and Exploit,
   Django's Request).
@@ -176,7 +176,7 @@ entry, so nothing is stored twice:
   instance, with the events as a lit list (batch 4 review). Where the tour's order differs from the protocol's, the
   transition descriptions say the protocol's order.
 - `protocol` appears only when CALM's list has the protocol. Otherwise the relationship's
-  `description` names it.
+  `description` names it, unless the term is itself that protocol.
 - A request and its reply are one relationship. The reply is a flow transition with
   `direction: "destination-to-source"`, not a second relationship.
 - A node is a container through `deployed-in` or through `composed-of`, never both.
@@ -218,7 +218,8 @@ Controls, interfaces, `options`, patterns, decorators, timelines and ADR links. 
 | `service`, `system`, custom types | Square-cornered box, `rx="8"` (any `rx` under 16 counts as square) | Today's convention |
 | `database`, `ldap` | Cylinder | New |
 | `data-asset` | Document with a folded corner | New |
-| `network`, `ecosystem`, and any node that contains others | Zone | Today's zone |
+| `network`, `ecosystem`, and a container through `deployed-in` | Dashed zone (`zone`) | Today's zone |
+| A container through `composed-of` | Solid container (`box-soft`) | Today's `box-soft` |
 
 A node that contains others is drawn as a container whatever its type. Two helpers join
 `icon()` and `badge()` and emit the new outlines: `<path class="box shape-cyl">` and
@@ -326,8 +327,10 @@ full-explainer disclosure.
 
 ### Behaviour
 
-- Copy writes the JSON to the clipboard and sets the status text to "Copied".
-- Download saves the same text as `<id>.calm.json` through a Blob URL.
+- Copy clears the status text, so a second press is announced too, writes the JSON to the
+  clipboard and sets the status text to "Copied", or "Copy failed" if the write fails.
+- Download saves the same text as `<id>.calm.json` through a Blob URL, released after 40
+  seconds because WebKit reads the blob after the click returns.
 - The disclosure is closed by default and is not forced open for print, unlike the
   explainer.
 
@@ -407,7 +410,8 @@ Model against drawing, measured in screen space like the existing checks:
 - A connector drawn against its relationship's direction has a
   `destination-to-source` transition on that relationship. A two-way arrow has a transition in each direction.
 - Every child of a `deployed-in` or `composed-of` relationship sits inside its container,
-  and the container's border is dashed or solid to match.
+  and the container's border is dashed or solid to match. A connector tagged with a
+  containment relationship is reported, since containment is drawn by nesting.
 - Walking the flow's transitions in sequence order, each has its own connector in the
   transition's direction, lit at a tour step no earlier than the one chosen for the
   previous transition. A connector lit at several steps can serve a transition at any of
