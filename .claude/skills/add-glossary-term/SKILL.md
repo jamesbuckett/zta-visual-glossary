@@ -156,7 +156,7 @@ the copy does not name. Instances of a class the copy names (your devices as Dev
 C; each startup stage as Firmware and OS) count as named, provided each description claims
 only what the copy says of the class. An endpoint the copy's named links require but never
 names (the far end of SD-WAN's transports, NAT's public side) stays a node, typed by what
-it is and described only as the far end of those links in the copy's words. An artefact the copy says stays inside its holder (a key sealed
+it is and described only as the far end of those links in the copy's words. A box that stands for where a mirrored or inline path begins (IDS/IPS's network traffic) is such a far end, a `network` node, not a request `call-out`: a request is what a link carries, while a path needs somewhere to start. An artefact the copy says stays inside its holder (a key sealed
 in a TPM) is a `composed-of` part drawn inside it; one that is presented, shared, fetched
 or handed on (a certificate, a public key, a config file) is a separate `data-asset`
 joined to its holder by an arrow. The two halves of a key pair are judged separately: the half
@@ -167,7 +167,7 @@ holder keeps as its own and presents stays a node. A network that a link only cr
 deployed in it, is a `call-out` zone named in the link's description, not a node. A trust anchor the copy says a party holds (a root CA's certificate) is a
 `data-asset` that party reads, like any other certificate. An artefact the copy places
 nowhere, neither inside its holder nor handed on (a policy, an audit log), is a separate
-node joined by an arrow: a `data-asset` if made once, a `database` if written at run time.
+node joined by an arrow: a `data-asset` if made once, a `database` if written at run time. An artefact the copy says a component runs or executes (SOAR's playbooks, OPA's policy) is placed nowhere in that sense: a separate `data-asset` joined to the component by a "runs" arrow, not a `composed-of` part. A store the copy names only by the component's own verb ("stores", "keeps", "caches") is a `database` composed into that component (SIEM's store, OVS's flow tables).
 A policy or set of rules is such an artefact only when the copy treats it as a thing of its
 own (authored, versioned, pushed, compiled, or given a default-deny of its own: OPA's policy,
 Immuta's, OpenZiti's service policy); rules the copy names only as what a component evaluates

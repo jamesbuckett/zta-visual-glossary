@@ -147,13 +147,13 @@ entry, so nothing is stored twice:
   not give.
 - A trust anchor the copy says a party holds is a `data-asset` that party reads. An
   artefact the copy places nowhere is a separate node joined by an arrow: `data-asset` if
-  made once, `database` if written at run time. Instances of a class the copy names count
+  made once, `database` if written at run time. An artefact the copy says a component runs or executes (SOAR's playbooks, OPA's policy) is placed nowhere in that sense: a separate `data-asset` joined to the component by a "runs" arrow, not a `composed-of` part. A store the copy names only by the component's own verb ("stores", "keeps", "caches") is a `database` composed into that component (SIEM's store, OVS's flow tables). Instances of a class the copy names count
   as named. A `call-out` may show the practice the subject replaces. A request box with no named sender is a `call-out`, because a request is
   what a link carries and a node for its sender would be invented (WAF's Benign and Exploit,
   Django's Request).
 - An endpoint the copy's named links require but never names (the far end of SD-WAN's
   transports, NAT's public side) stays a node, typed by what it is and described only as
-  the far end of those links in the copy's words.
+  the far end of those links in the copy's words. A box that stands for where a mirrored or inline path begins (IDS/IPS's network traffic) is such a far end, a `network` node, not a request `call-out`: a request is what a link carries, while a path needs somewhere to start.
 - An artefact is a node when it is what the term defines or exists to manage, or when a
   party holds it as its own; anything one party issues, returns or presents to another
   inside the narrated exchange (a token, a code, a challenge) is what the link carries,
